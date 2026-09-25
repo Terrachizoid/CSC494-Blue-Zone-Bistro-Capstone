@@ -10,22 +10,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: efffd39fa53906c4c9a0d0ee0d7c9237, type: 3}
-  m_Name: U004
+  m_Name: U006
   m_EditorClassIdentifier: Assembly-CSharp::CustomerData
-  id: U004
-  displayName: Sam
+  id: U006
+  displayName: Priya
   customerType: 0
-  unlockDay: 1
+  unlockDay: 3
   startingHealth: 50
   startingProsperity: 0
-  themeFromPlan: Soda and snacks
+  themeFromPlan: New vegan learning to look beyond packaged-food marketing
   preferredRecipes:
   - {fileID: 11400000, guid: 9de0de0c13d52fa45883ca220c94e37a, type: 2}
-  cravingTags: 02000000
+  - {fileID: 11400000, guid: d1bd3d2f6c0f9114dac793c92d259b92, type: 2}
+  cravingTags: 0200000003000000
   dialogueClaims: []
   approvalStatus: 0
-  reviewNotes: Draft character content; delight-based attendance is sampled once
-    per day. Preferences are metadata; craving resolution is deferred.
+  reviewNotes: Character theme from Capstone Plan S7 (stretch cast), reused as modest
+    greybox variety. No medical claims or new mechanics; draft dialogue pending review.
   portrait: {fileID: 0}
   customerSprite: {fileID: 0}
   dialogueAsset: {fileID: 0}

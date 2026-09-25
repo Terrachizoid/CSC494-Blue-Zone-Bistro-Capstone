@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 043b1264566193e458d4e1234d24beb2, type: 3}
+  m_Name: R007
+  m_EditorClassIdentifier: Assembly-CSharp::RecipeData
+  id: R007
+  displayName: Beans and vegetable plate
+  regionLabel: Gray City
+  slots:
+  - category: 1
+    servings: 1
+    optional: 0
+  - category: 3
+    servings: 2
+    optional: 0
+  - category: 10
+    servings: 1
+    optional: 1
+  allowNonGreenChoices: 1
+  unlockDay: 2
+  tier: 1
+  baseSalePrice: 8
+  delightValue: 3
+  cravingTags: 0100000006000000
+  claims: []
+  approvalStatus: 0
+  reviewNotes: Generic category template inspired by the plan plant-food meals and
+    dessert variety. Name is a suggestion, not an exact-ingredient constraint. Traffic
+    Light effects come from chosen foods; fictional balance values.
+  icon: {fileID: 0}

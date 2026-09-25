@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 962eb588fbc36be46aa88c726d70aec1, type: 3}
   m_Name: DialogueDatabase
   m_EditorClassIdentifier: Assembly-CSharp::DialogueDatabase
-  importedCsvFingerprint: 1B-F4-44-A9-1C-02-95-C4-87-90-42-05-50-31-1E-D0-BB-B7-A3-5D-DC-AB-07-A1-95-6D-78-93-59-2C-03-5D
+  importedCsvFingerprint: 1D-A4-D8-E2-50-D3-D9-1B-3D-63-C4-2B-58-A5-13-C3-7D-01-AE-20-36-99-A5-64-50-61-29-E2-CA-9B-FD-19
   dialogues:
   - {fileID: 11400000, guid: 96a9bef6900698f44a26e3d692e8a268, type: 2}
   - {fileID: 11400000, guid: d0e56a75e6c9c3849b09911dcc2a005e, type: 2}

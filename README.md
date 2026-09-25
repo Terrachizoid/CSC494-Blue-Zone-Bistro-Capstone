@@ -27,4 +27,8 @@ The CSV checks also run the isolated operation/dialogue checks. They use Unity s
 
 ## Web deployment
 
-No web-hosting destination or automated deployment configuration is currently recorded in this repository. Source pushes alone do not publish a new Unity Web build. Import content before building, then publish the resulting Web build through the existing host once that destination is identified. Generated build output is excluded from source control.
+The existing game is hosted on [Unity Play](https://play.unity.com/en/games/b5fffbe8-dd33-480e-ade1-8caca952edf1/bluezonebistro), with **Unlisted** visibility. Preserve that game entry and visibility when updating it.
+
+Source pushes alone do not publish a new Unity Web build. `BistroWebBuild.Build` is the editor batch-build entry point: it imports all CSV content, validates it, and builds the gameplay scene with gzip decompression fallback. Set `BISTRO_WEB_OUTPUT` to an output directory and invoke Unity with `-batchmode -nographics -quit -buildTarget WebGL -executeMethod BistroWebBuild.Build`. Use a separate project copy if the working project is open in Unity.
+
+Zip the output contents with `index.html` at the archive root. Sign in to Unity Play, open the existing game's **Options > Edit Game Details**, replace **Upload game build**, then click **Update**. Verify the hosted game loads afterward. Generated build output is excluded from source control; authentication is handled in the browser, not stored in this repository.

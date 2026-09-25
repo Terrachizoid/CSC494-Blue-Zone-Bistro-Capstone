@@ -10,22 +10,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: efffd39fa53906c4c9a0d0ee0d7c9237, type: 3}
-  m_Name: U004
+  m_Name: U005
   m_EditorClassIdentifier: Assembly-CSharp::CustomerData
-  id: U004
-  displayName: Sam
+  id: U005
+  displayName: Marco
   customerType: 0
-  unlockDay: 1
+  unlockDay: 2
   startingHealth: 50
   startingProsperity: 0
-  themeFromPlan: Soda and snacks
+  themeFromPlan: Fisherman exploring familiar meals and plant-food alternatives
   preferredRecipes:
-  - {fileID: 11400000, guid: 9de0de0c13d52fa45883ca220c94e37a, type: 2}
-  cravingTags: 02000000
+  - {fileID: 11400000, guid: 25c84bad0bbb85b4bab26b05c543b443, type: 2}
+  - {fileID: 11400000, guid: f507fad0959231b4e8cd10282e30275a, type: 2}
+  cravingTags: 0100000006000000
   dialogueClaims: []
   approvalStatus: 0
-  reviewNotes: Draft character content; delight-based attendance is sampled once
-    per day. Preferences are metadata; craving resolution is deferred.
+  reviewNotes: Character theme from Capstone Plan S7 (stretch cast), reused as modest
+    greybox variety. No medical claims or new mechanics; draft dialogue pending review.
   portrait: {fileID: 0}
   customerSprite: {fileID: 0}
   dialogueAsset: {fileID: 0}

@@ -19,7 +19,7 @@ MonoBehaviour:
   repeatRule: 1
   priority: 100
   randomWeight: 1
-  customer: {fileID: 0}
+  customer: {fileID: 11400000, guid: cfd22689b8c5c2c44a55f0cc5ec67744, type: 2}
   minDay: 2
   maxDay: -1
   minCustomerHealth: 0

@@ -24,8 +24,8 @@ MonoBehaviour:
   cravingTags: 06000000
   dialogueClaims: []
   approvalStatus: 0
-  reviewNotes: Prototype customer preferences; attendance remains once per unlocked
-    day. No claims or dialogue added; pending review.
+  reviewNotes: Draft character content; delight-based attendance is sampled once
+    per day. Preferences are metadata; craving resolution is deferred.
   portrait: {fileID: 0}
   customerSprite: {fileID: 0}
   dialogueAsset: {fileID: 0}

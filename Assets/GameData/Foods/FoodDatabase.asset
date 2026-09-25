@@ -12,6 +12,87 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 888536ccc07d9eb43852573d42de5bd4, type: 3}
   m_Name: FoodDatabase
   m_EditorClassIdentifier: Assembly-CSharp::FoodDatabase
+  minimumServingPrices:
+  - foodId: P001
+    price: 0.33333334
+  - foodId: P002
+    price: 0.75
+  - foodId: P003
+    price: 0.6666667
+  - foodId: P004
+    price: 1
+  - foodId: P005
+    price: 0.33333334
+  - foodId: P006
+    price: 0.5
+  - foodId: P007
+    price: 0.375
+  - foodId: P008
+    price: 0.5
+  - foodId: P009
+    price: 0.75
+  - foodId: P010
+    price: 0.6666667
+  - foodId: P011
+    price: 1.75
+  - foodId: P012
+    price: 0.75
+  - foodId: P013
+    price: 1
+  - foodId: P014
+    price: 0.5
+  - foodId: P015
+    price: 0.6666667
+  - foodId: P016
+    price: 1.25
+  - foodId: P017
+    price: 0.2777778
+  - foodId: P018
+    price: 0.75
+  - foodId: P019
+    price: 0.75
+  - foodId: P020
+    price: 0.5
+  - foodId: P021
+    price: 0.75
+  - foodId: P022
+    price: 0.44444445
+  - foodId: P023
+    price: 0.75
+  - foodId: P024
+    price: 0.33333334
+  - foodId: P025
+    price: 0.4
+  - foodId: P026
+    price: 0.75
+  - foodId: P027
+    price: 0.75
+  - foodId: P028
+    price: 0.5
+  - foodId: P029
+    price: 0.8333333
+  - foodId: P030
+    price: 0.6666667
+  - foodId: P031
+    price: 0.3
+  - foodId: P032
+    price: 0.125
+  - foodId: P033
+    price: 1
+  - foodId: P034
+    price: 0.75
+  - foodId: P035
+    price: 1
+  - foodId: P036
+    price: 0.5
+  - foodId: P037
+    price: 0.5
+  - foodId: P038
+    price: 0.44444445
+  - foodId: P039
+    price: 0.6666667
+  - foodId: P040
+    price: 0.4
   foods:
   - {fileID: 11400000, guid: ab23a5dfed8eaae48a37658da988dfab, type: 2}
   - {fileID: 11400000, guid: 806f08dcfb2f6d94792ec6b0827c0c7a, type: 2}
