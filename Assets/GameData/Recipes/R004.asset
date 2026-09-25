@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 043b1264566193e458d4e1234d24beb2, type: 3}
+  m_Name: R004
+  m_EditorClassIdentifier: Assembly-CSharp::RecipeData
+  id: R004
+  displayName: Oat and fruit breakfast
+  regionLabel: Gray City
+  slots:
+  - category: 4
+    servings: 1
+    optional: 0
+  - category: 2
+    servings: 1
+    optional: 0
+  - category: 10
+    servings: 1
+    optional: 1
+  allowNonGreenChoices: 1
+  unlockDay: 1
+  tier: 0
+  baseSalePrice: 6
+  delightValue: 2
+  cravingTags: 0200000006000000
+  claims: []
+  approvalStatus: 0
+  reviewNotes: Prototype category-slot meal; food choices determine effects. Mixed
+    colours allowed by solo GDD. Sale price and delight are game tuning; pending
+    review.
+  icon: {fileID: 0}

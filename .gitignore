@@ -11,3 +11,5 @@
 *.csproj
 *.sln
 *.slnx
+# Generated Unity Burst build output; Data/*.md contains project documentation.
+/Data/Plugins/

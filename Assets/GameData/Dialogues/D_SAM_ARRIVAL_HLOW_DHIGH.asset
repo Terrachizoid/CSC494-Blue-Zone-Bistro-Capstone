@@ -1,0 +1,58 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6852f3275b3b4254aa4113d5ddba5b29, type: 3}
+  m_Name: D_SAM_ARRIVAL_HLOW_DHIGH
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueSequenceData
+  id: D_SAM_ARRIVAL_HLOW_DHIGH
+  displayName: Sam arrives
+  mode: 0
+  trigger: 1
+  repeatRule: 1
+  priority: 90
+  randomWeight: 1
+  customer: {fileID: 11400000, guid: 85a88e42cac868d49a7f9d5c51e83c56, type: 2}
+  minDay: 1
+  maxDay: -1
+  minCustomerHealth: 0
+  maxCustomerHealth: 34
+  minCustomerDelight: 70
+  maxCustomerDelight: 100
+  requiredRecipe: {fileID: 0}
+  recipeBuildCondition: 0
+  mealHealthCondition: 0
+  requiredRecipeTiers: 
+  minServedMealDelight: -1
+  maxServedMealDelight: -1
+  requiredFlags: []
+  forbiddenFlags: []
+  setFlags: []
+  clearFlags: []
+  lines:
+  - lineOrder: 0
+    speakerId: U004
+    textTemplate: It has been a rough office day. I nearly skipped a proper lunch
+      again.
+    claim: {fileID: 0}
+    portrait: {fileID: 0}
+    emotion: Welcoming
+    voiceOver: {fileID: 0}
+  - lineOrder: 1
+    speakerId: U004
+    textTemplate: I have been looking forward to this break. Your lunches have made
+      it worth leaving my desk.
+    claim: {fileID: 0}
+    portrait: {fileID: 0}
+    emotion: Welcoming
+    voiceOver: {fileID: 0}
+  approvalStatus: 0
+  reviewNotes: Prototype narrative based on capstone character themes; pending supervisor
+    review. No medical claims authored.

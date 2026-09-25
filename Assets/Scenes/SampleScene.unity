@@ -222,6 +222,69 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!1 &317186749
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 317186751}
+  - component: {fileID: 317186750}
+  m_Layer: 0
+  m_Name: GameBootstrap
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &317186750
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 317186749}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8e9dc1f114241249a1ddd510fb139ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GameBootstrap
+  foods: {fileID: 11400000, guid: f5e0e58eaf0839645b710f18465fa15d, type: 2}
+  listings: {fileID: 11400000, guid: b2b1a17d08d171f4689330348c2bc90d, type: 2}
+  recipes: {fileID: 11400000, guid: 6c252e6c6c36bd74aa3f4115d57f0352, type: 2}
+  customers: {fileID: 11400000, guid: 724dac76081634142aa5070c1c9475b8, type: 2}
+  dialogues: {fileID: 11400000, guid: 5c52f47494095434fb62dfe1555259ac, type: 2}
+  balance: {fileID: 11400000, guid: 13db58f120d839e42a6b8e84616be0df, type: 2}
+  state:
+    currentDay: 1
+    money: 30
+    inventory: []
+    currentCustomerId: 
+    selectedRecipeId: 
+    customers: []
+    flags:
+      activeFlags: []
+    dialogueHistory:
+      completedOnceIds: []
+      lastPlayed: []
+    storeMembershipIds: []
+--- !u!4 &317186751
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 317186749}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.89751, y: 1.36015, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -759,3 +822,4 @@ SceneRoots:
   - {fileID: 1061382148}
   - {fileID: 41014617}
   - {fileID: 1419132110}
+  - {fileID: 317186751}

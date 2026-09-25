@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5922b8dc8b2945c9be4dd015a1b7ad69, type: 3}
+  m_Name: BalanceConfig
+  m_EditorClassIdentifier: Assembly-CSharp::BalanceConfig
+  totalDays: 6
+  freshDays: 2
+  frozenDays: 5
+  cannedDays: -1
+  dryDays: -1
+  shelfStableDays: -1
+  healthPerGreenServing: 1
+  healthPerGreenDailyDozenCategory: 1
+  healthPenaltyPerYellowServing: 1
+  healthPenaltyPerRedServing: 3
+  failedRecipeDelightPenalty: 30
+  failedRecipePaymentRate: 0.75
+  maxHealthPerDish: 20
+  maxDelightPerDish: 20
+  delightPerIngredientDollar: 1
+  maxDelight: 100
+  startingDelight: 50
+  startingFinance: 20
+  financeHealthLagDays: 2

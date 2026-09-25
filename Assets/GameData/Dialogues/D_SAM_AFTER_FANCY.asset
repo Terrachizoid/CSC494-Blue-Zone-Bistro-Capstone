@@ -1,0 +1,57 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6852f3275b3b4254aa4113d5ddba5b29, type: 3}
+  m_Name: D_SAM_AFTER_FANCY
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueSequenceData
+  id: D_SAM_AFTER_FANCY
+  displayName: Sam reacts to the meal
+  mode: 0
+  trigger: 3
+  repeatRule: 1
+  priority: 110
+  randomWeight: 1
+  customer: {fileID: 11400000, guid: 85a88e42cac868d49a7f9d5c51e83c56, type: 2}
+  minDay: 1
+  maxDay: -1
+  minCustomerHealth: -1
+  maxCustomerHealth: -1
+  minCustomerDelight: -1
+  maxCustomerDelight: -1
+  requiredRecipe: {fileID: 0}
+  recipeBuildCondition: 1
+  mealHealthCondition: 0
+  requiredRecipeTiers: 0200000003000000
+  minServedMealDelight: -1
+  maxServedMealDelight: -1
+  requiredFlags: []
+  forbiddenFlags: []
+  setFlags: []
+  clearFlags: []
+  lines:
+  - lineOrder: 0
+    speakerId: U004
+    textTemplate: The {servedRecipe} made this feel like a proper break.
+    claim: {fileID: 0}
+    portrait: {fileID: 0}
+    emotion: Pleased
+    voiceOver: {fileID: 0}
+  - lineOrder: 1
+    speakerId: U004
+    textTemplate: A treat is nice, but I cannot make an expensive lunch my everyday
+      plan.
+    claim: {fileID: 0}
+    portrait: {fileID: 0}
+    emotion: Pleased
+    voiceOver: {fileID: 0}
+  approvalStatus: 0
+  reviewNotes: Prototype narrative based on capstone character themes; pending supervisor
+    review. No medical claims authored.

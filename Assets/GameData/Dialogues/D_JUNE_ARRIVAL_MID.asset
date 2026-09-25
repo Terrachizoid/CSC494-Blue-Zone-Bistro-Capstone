@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6852f3275b3b4254aa4113d5ddba5b29, type: 3}
+  m_Name: D_JUNE_ARRIVAL_MID
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueSequenceData
+  id: D_JUNE_ARRIVAL_MID
+  displayName: June arrival at medium health
+  mode: 0
+  trigger: 1
+  repeatRule: 1
+  priority: 90
+  randomWeight: 1
+  customer: {fileID: 11400000, guid: 354c9165e8b342645aba4683c6f3b0f7, type: 2}
+  minDay: 1
+  maxDay: 6
+  minCustomerHealth: 35
+  maxCustomerHealth: 69
+  minCustomerDelight: -1
+  maxCustomerDelight: -1
+  requiredRecipe: {fileID: 0}
+  requiredRecipeTiers: 
+  minServedMealDelight: -1
+  maxServedMealDelight: -1
+  requiredFlags: []
+  forbiddenFlags: []
+  setFlags: []
+  clearFlags: []
+  lines:
+  - lineOrder: 0
+    speakerId: U001
+    textTemplate: I'm feeling a little better. What are you serving today?
+    claim: {fileID: 0}
+    portrait: {fileID: 0}
+    emotion: Neutral
+  approvalStatus: 0
+  reviewNotes: Full-customer example. Health ranges do not overlap.

@@ -1,0 +1,3 @@
+claim_id,short_text,codex_text,source_title,source_citation,source_url,usage_tags,tip_day,source_checked,approval_status,review_notes
+C001,,,,,,IngredientInspector|FoodCard,0,false,Pending,Placeholder for an approved sorting explanation.
+C002,,,,,,EvidenceCodex|DailyTip,0,false,Pending,Placeholder for a future source-backed entry.

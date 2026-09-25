@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9446ae550e60aa48b1f0538b9051a59, type: 3}
+  m_Name: L007
+  m_EditorClassIdentifier: Assembly-CSharp::StoreListingData
+  id: L007
+  food: {fileID: 11400000, guid: d515c8778a2d9b241b7b1a15d35b85ee, type: 2}
+  store: {fileID: 11400000, guid: 1e2f04681e0b8d44dbf8f2da98e8d959, type: 2}
+  shelfId: BACK_FREEZER
+  unlockDay: 1
+  requiredFlag: 
+  observedPriceCad: 0
+  servingsPerPackage: 4
+  gamePrice: 4
+  priceSource: Synthetic greybox game tuning; retail price not surveyed
+  priceDisplayStyle: 0
+  approvalStatus: 0
+  reviewNotes: Prototype game price and package servings; no retail observation.
+    Serving units are gameplay quantities. Discovery/membership flag deferred for
+    playable greybox.

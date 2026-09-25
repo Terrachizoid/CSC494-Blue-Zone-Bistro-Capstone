@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5bef15a7444fe0c45877e6a466458ef8, type: 3}
+  m_Name: S002
+  m_EditorClassIdentifier: Assembly-CSharp::StoreData
+  id: S002
+  displayName: CheapCart
+  roleDescription: Discounter
+  description: Discount store with prominent processed foods and affordable staples
+    in less visible areas.
+  unlockDay: 1
+  requiresMembership: 0
+  membershipCost: 0
+  defaultPriceDisplayStyle: 2
+  shelves:
+  - id: EYE_LEVEL
+    displayName: Eye-level shelves
+    artwork: {fileID: 0}
+  - id: BARGAIN_BIN
+    displayName: Bargain bin
+    artwork: {fileID: 0}
+  - id: BOTTOM_SHELF
+    displayName: Bottom shelf
+    artwork: {fileID: 0}
+  - id: BACK_FREEZER
+    displayName: Back freezer
+    artwork: {fileID: 0}
+  approvalStatus: 0
+  reviewNotes: 'Greybox: freezer listings available without discovery until discovery
+    interaction exists.'
+  exteriorIcon: {fileID: 0}
+  shopBackground: {fileID: 0}

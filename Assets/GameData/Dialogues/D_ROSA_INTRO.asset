@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6852f3275b3b4254aa4113d5ddba5b29, type: 3}
+  m_Name: D_ROSA_INTRO
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueSequenceData
+  id: D_ROSA_INTRO
+  displayName: Rosa introduces themselves
+  mode: 0
+  trigger: 2
+  repeatRule: 0
+  priority: 150
+  randomWeight: 1
+  customer: {fileID: 11400000, guid: 96092889bbf9f4e449e789a43c792f70, type: 2}
+  minDay: 1
+  maxDay: -1
+  minCustomerHealth: -1
+  maxCustomerHealth: -1
+  minCustomerDelight: -1
+  maxCustomerDelight: -1
+  requiredRecipe: {fileID: 0}
+  recipeBuildCondition: 0
+  mealHealthCondition: 0
+  requiredRecipeTiers: 
+  minServedMealDelight: -1
+  maxServedMealDelight: -1
+  requiredFlags: []
+  forbiddenFlags:
+  - rosa_introduction_complete
+  setFlags:
+  - rosa_introduction_complete
+  clearFlags: []
+  lines:
+  - lineOrder: 0
+    speakerId: U003
+    textTemplate: At home I reach for olive oil before I have even decided what to
+      cook. It is an old habit.
+    claim: {fileID: 0}
+    portrait: {fileID: 0}
+    emotion: Neutral
+    voiceOver: {fileID: 0}
+  - lineOrder: 1
+    speakerId: U003
+    textTemplate: I am curious about your oil-free meals. I want ideas I can actually
+      use in my own kitchen.
+    claim: {fileID: 0}
+    portrait: {fileID: 0}
+    emotion: Neutral
+    voiceOver: {fileID: 0}
+  approvalStatus: 0
+  reviewNotes: Prototype narrative based on capstone character themes; pending supervisor
+    review. No medical claims authored.

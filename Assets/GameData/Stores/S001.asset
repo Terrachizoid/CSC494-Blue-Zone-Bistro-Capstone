@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5bef15a7444fe0c45877e6a466458ef8, type: 3}
+  m_Name: S001
+  m_EditorClassIdentifier: Assembly-CSharp::StoreData
+  id: S001
+  displayName: Verdant & Co.
+  roleDescription: Premium health grocer
+  description: Premium store where healthy staples compete with expensive marketing
+    traps.
+  unlockDay: 1
+  requiresMembership: 0
+  membershipCost: 0
+  defaultPriceDisplayStyle: 1
+  shelves:
+  - id: PRODUCE
+    displayName: Produce
+    artwork: {fileID: 0}
+  - id: WELLNESS
+    displayName: Wellness aisle
+    artwork: {fileID: 0}
+  - id: LUXURY
+    displayName: Luxury shelf
+    artwork: {fileID: 0}
+  approvalStatus: 0
+  reviewNotes: Three-store framework example; wording and visuals remain editable.
+  exteriorIcon: {fileID: 0}
+  shopBackground: {fileID: 0}

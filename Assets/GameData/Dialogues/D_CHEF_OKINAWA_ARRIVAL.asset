@@ -1,0 +1,68 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6852f3275b3b4254aa4113d5ddba5b29, type: 3}
+  m_Name: D_CHEF_OKINAWA_ARRIVAL
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueSequenceData
+  id: D_CHEF_OKINAWA_ARRIVAL
+  displayName: D CHEF OKINAWA ARRIVAL
+  mode: 0
+  trigger: 5
+  repeatRule: 0
+  priority: 1000
+  randomWeight: 1
+  customer: {fileID: 0}
+  minDay: 3
+  maxDay: -1
+  minCustomerHealth: -1
+  maxCustomerHealth: -1
+  minCustomerDelight: -1
+  maxCustomerDelight: -1
+  requiredRecipe: {fileID: 0}
+  recipeBuildCondition: 0
+  mealHealthCondition: 0
+  requiredRecipeTiers: 
+  minServedMealDelight: -1
+  maxServedMealDelight: -1
+  requiredFlags: []
+  forbiddenFlags:
+  - okinawa_chef_arrived
+  setFlags:
+  - okinawa_chef_arrived
+  clearFlags: []
+  lines:
+  - lineOrder: 0
+    speakerId: Visiting Chef
+    textTemplate: Thank you for inviting me into your kitchen. I would like to share
+      a few plant-based meal ideas inspired by Okinawa.
+    claim: {fileID: 0}
+    portrait: {fileID: 0}
+    emotion: Welcoming
+    voiceOver: {fileID: 0}
+  - lineOrder: 1
+    speakerId: Visiting Chef
+    textTemplate: We can begin with sweet potato, tofu, and greens. These are starting
+      points for your menu, not a claim that one bowl represents an entire place.
+    claim: {fileID: 0}
+    portrait: {fileID: 0}
+    emotion: Welcoming
+    voiceOver: {fileID: 0}
+  - lineOrder: 2
+    speakerId: Visiting Chef
+    textTemplate: Let us make room for those ingredients and try the new bowls. Your
+      regulars can explore them at their own pace.
+    claim: {fileID: 0}
+    portrait: {fileID: 0}
+    emotion: Welcoming
+    voiceOver: {fileID: 0}
+  approvalStatus: 0
+  reviewNotes: 'Day 3 after Market: priority story encounter independent of customer
+    attendance; once only.'

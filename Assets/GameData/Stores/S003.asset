@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5bef15a7444fe0c45877e6a466458ef8, type: 3}
+  m_Name: S003
+  m_EditorClassIdentifier: Assembly-CSharp::StoreData
+  id: S003
+  displayName: MegaBulk Club
+  roleDescription: Warehouse club
+  description: Bulk store opens on day four; larger packages cost more upfront but
+    less per serving.
+  unlockDay: 4
+  requiresMembership: 0
+  membershipCost: 10
+  defaultPriceDisplayStyle: 3
+  shelves:
+  - id: PALLETS
+    displayName: Pallet displays
+    artwork: {fileID: 0}
+  - id: BULK_SACKS
+    displayName: Bulk sacks
+    artwork: {fileID: 0}
+  approvalStatus: 0
+  reviewNotes: Greybox membership disabled until purchase UI exists. Cost 10 is provisional
+    dormant tuning; unlock day 4 retained.
+  exteriorIcon: {fileID: 0}
+  shopBackground: {fileID: 0}

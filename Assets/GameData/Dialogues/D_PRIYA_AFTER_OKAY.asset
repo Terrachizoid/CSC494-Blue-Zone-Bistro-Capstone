@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6852f3275b3b4254aa4113d5ddba5b29, type: 3}
+  m_Name: D_PRIYA_AFTER_OKAY
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueSequenceData
+  id: D_PRIYA_AFTER_OKAY
+  displayName: Priya reacts to the meal
+  mode: 0
+  trigger: 3
+  repeatRule: 1
+  priority: 90
+  randomWeight: 1
+  customer: {fileID: 0}
+  minDay: 3
+  maxDay: -1
+  minCustomerHealth: -1
+  maxCustomerHealth: -1
+  minCustomerDelight: -1
+  maxCustomerDelight: -1
+  requiredRecipe: {fileID: 0}
+  recipeBuildCondition: 1
+  mealHealthCondition: 0
+  requiredRecipeTiers: 
+  minServedMealDelight: 0
+  maxServedMealDelight: 7
+  requiredFlags: []
+  forbiddenFlags: []
+  setFlags: []
+  clearFlags: []
+  lines:
+  - lineOrder: 0
+    speakerId: U006
+    textTemplate: Thanks for the {servedRecipe}. That gives me another lunch idea.
+    claim: {fileID: 0}
+    portrait: {fileID: 0}
+    emotion: Neutral
+    voiceOver: {fileID: 0}
+  - lineOrder: 1
+    speakerId: U006
+    textTemplate: Something dependable is useful while I find my routine.
+    claim: {fileID: 0}
+    portrait: {fileID: 0}
+    emotion: Neutral
+    voiceOver: {fileID: 0}
+  approvalStatus: 0
+  reviewNotes: Draft narrative inspired by Capstone Plan S7. Personal preferences
+    only; no medical claims. Review before release.

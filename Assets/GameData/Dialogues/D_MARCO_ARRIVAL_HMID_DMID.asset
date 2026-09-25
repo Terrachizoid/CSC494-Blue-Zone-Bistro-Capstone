@@ -1,0 +1,57 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6852f3275b3b4254aa4113d5ddba5b29, type: 3}
+  m_Name: D_MARCO_ARRIVAL_HMID_DMID
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueSequenceData
+  id: D_MARCO_ARRIVAL_HMID_DMID
+  displayName: Marco arrives
+  mode: 0
+  trigger: 1
+  repeatRule: 1
+  priority: 100
+  randomWeight: 1
+  customer: {fileID: 0}
+  minDay: 2
+  maxDay: -1
+  minCustomerHealth: 35
+  maxCustomerHealth: 69
+  minCustomerDelight: 35
+  maxCustomerDelight: 69
+  requiredRecipe: {fileID: 0}
+  recipeBuildCondition: 0
+  mealHealthCondition: 0
+  requiredRecipeTiers: 
+  minServedMealDelight: -1
+  maxServedMealDelight: -1
+  requiredFlags: []
+  forbiddenFlags: []
+  setFlags: []
+  clearFlags: []
+  lines:
+  - lineOrder: 0
+    speakerId: U005
+    textTemplate: I have finished the morning shift. Time to sit down with a proper
+      lunch.
+    claim: {fileID: 0}
+    portrait: {fileID: 0}
+    emotion: Neutral
+    voiceOver: {fileID: 0}
+  - lineOrder: 1
+    speakerId: U005
+    textTemplate: I am still finding my usual order here. Let us keep it simple.
+    claim: {fileID: 0}
+    portrait: {fileID: 0}
+    emotion: Neutral
+    voiceOver: {fileID: 0}
+  approvalStatus: 0
+  reviewNotes: Draft narrative inspired by Capstone Plan S7. Personal preferences
+    only; no medical claims. Review before release.
