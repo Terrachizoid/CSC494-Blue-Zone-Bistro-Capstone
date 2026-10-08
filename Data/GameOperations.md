@@ -1,6 +1,30 @@
 # Basic game operations
 
-`Core/GameLoop` coordinates Market -> Service -> Results -> Market (or Completed).
+`Core/GameLoop` coordinates Market -> FoodSorting -> Service -> Results -> Market (or Completed).
+FoodSorting is skipped for empty or entirely mastered-food carts.
+
+## Cart and sorting
+
+The UI holds uncommitted `CartEntry` quantities by listing ID. `QuoteCart` is read-only;
+`Checkout` validates the entire cart (including full-price affordability) before charging
+or creating inventory. Each package gets a separate batch ID plus its source listing ID.
+The bootstrap enables this flow; legacy `Buy` remains available to isolated service tests,
+but GameLoop rejects it when sorting is enabled.
+
+Checkout snapshots distinct food questions and the configured maximum discount in the
+session's `ShoppingReceipt`. `correctlySortedFoodIds` excludes previously correct foods.
+Wrong answers remain eligible on later purchases. UI submits only `SortingChoice` records;
+FoodSortingService returns feedback and applies `cart total * maximumSortingDiscount * accuracy`,
+rounded to cents, exactly once. Default maximum discount is 0.30. Empty question sets grant
+no refund. Purchased batches' historical unit costs and daily spending reflect the refund;
+minimum catalogue prices used for meal scoring are unchanged. Sorting feedback remains visible
+until Continue. No reattempt of that checkout is possible.
+
+Codex is available from market, cart, sorting and pantry cards. Pantry inspection is available
+in all phases; serving still selects by inventory batch ID. Optional FoodData.sortingExplanation
+can be authored in the Inspector or imported via the optional `sorting_explanation` CSV column.
+Omitting the column preserves authored text. Blank explanations explicitly show a pending
+placeholder; detailed research and final artwork are future content work.
 `Services` holds purchase, meal, and day operations behind interfaces. `Runtime` holds
 mutable session, customer, and inventory records. `Data` holds authored definitions.
 The existing name `GameSessionState` is retained rather than adding a competing `GameState`.
@@ -22,8 +46,8 @@ view. Bootstrap automatically adds GreyboxUIController at runtime. It uses Unity
 built-in immediate-mode text/buttons, so no Canvas, fonts, or button bindings need
 manual setup. This is temporary desktop greybox presentation, not the final card UI.
 
-Market: choose a store, buy packages, inspect the pantry, go back to stores, and
-Continue to service. Service shows one queued encounter at a time. Eligible story
+Market: choose stores, add packages, inspect the pantry, review the cart, and
+confirm checkout before sorting/service. Service shows one queued encounter at a time. Eligible story
 encounters run first in descending priority, then customers chosen by attendance.
 Customer arrival dialogue and first-visit introductions precede meal selection. All unlocked
 recipes are offered, labelled Can make or Substitution needed. Choose a recipe,

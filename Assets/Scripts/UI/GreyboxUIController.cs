@@ -1,4 +1,4 @@
-// File responsibility: Replaceable IMGUI presentation/controller for market, service, dialogue, and daily results.
+// File responsibility: Replaceable IMGUI presentation for cart, sorting, pantry/Codex, service, and results.
 // Buttons call GameLoop; labels query content/state. Keep economy and eligibility rules in services.
 
 using System.Collections.Generic;
@@ -18,6 +18,11 @@ public class GreyboxUIController : MonoBehaviour
     private ServeResult preview;
     private AudioSource voiceSource;
     private DialogueLineData voicedLine;
+    private readonly List<CartEntry> cart = new List<CartEntry>();
+    private readonly Dictionary<string, TrafficLight> sortingAnswers = new Dictionary<string, TrafficLight>();
+    private bool showCart;
+    private bool showPantry;
+    private string inspectedFoodId;
 
     private void Update()
     {
@@ -48,6 +53,9 @@ public class GreyboxUIController : MonoBehaviour
         ResetSelection();
         scroll = Vector2.zero;
         message = "";
+        showCart = false;
+        sortingAnswers.Clear();
+        inspectedFoodId = null;
     }
     private void ResetSelection() { selectedRecipe = null; selected.Clear(); pendingMeal = null; preview = null; }
 
@@ -64,9 +72,14 @@ public class GreyboxUIController : MonoBehaviour
         GUILayout.Label($"BLUE ZONE BISTRO — Day {game.State.currentDay} — {game.Loop.Phase} — ${game.State.money:0.00}");
         if (!string.IsNullOrEmpty(message)) GUILayout.Label(message);
         scroll = GUILayout.BeginScrollView(scroll);
+        if (GUILayout.Button(showPantry ? "Close pantry" : "Inspect pantry (all phases)"))
+        { showPantry = !showPantry; GUIUtility.ExitGUI(); }
+        if (showPantry) DrawInventory(false);
+        if (!string.IsNullOrEmpty(inspectedFoodId)) DrawCodex(inspectedFoodId);
         switch (game.Loop.Phase)
         {
             case GamePhase.Market: DrawMarket(); break;
+            case GamePhase.FoodSorting: DrawSorting(); break;
             case GamePhase.Service: DrawService(); break;
             case GamePhase.Results: DrawResults(false); break;
             case GamePhase.Completed: DrawResults(true); break;
@@ -77,6 +90,8 @@ public class GreyboxUIController : MonoBehaviour
 
     private void DrawMarket()
     {
+        if (showCart) { DrawCart(); return; }
+        if (GUILayout.Button("Shopping cart / checkout")) { showCart = true; GUIUtility.ExitGUI(); }
         if (selectedStore == null)
         {
             GUILayout.Label("MARKET — Choose a store");
@@ -98,22 +113,108 @@ public class GreyboxUIController : MonoBehaviour
             foreach (var listing in listings)
             {
                 GUILayout.BeginHorizontal();
-                GUILayout.Label($"{Label(listing.food.displayName, listing.food.id)} | {listing.food.trafficLight} | " +
+                GUILayout.Label($"{Label(listing.food.displayName, listing.food.id)} | " +
                     $"{listing.food.recipeCategory} | {listing.servingsPerPackage} servings | ${listing.gamePrice:0.00}");
-                GUI.enabled = member && game.State.money >= listing.gamePrice;
-                if (GUILayout.Button("Buy", GUILayout.Width(90)))
+                if (GUILayout.Button("Inspect / Codex", GUILayout.Width(120))) inspectedFoodId = listing.food.id;
+                GUI.enabled = member;
+                if (GUILayout.Button("Add to cart", GUILayout.Width(100)))
                 {
-                    var result = game.Loop.Buy(listing.id);
-                    message = result.success ? $"Bought {result.servingsAdded} servings. Shelf life: {ShelfLife(result.daysRemaining)}." : result.error;
+                    var item = cart.Find(c => c.listingId == listing.id);
+                    if (item == null) cart.Add(new CartEntry { listingId = listing.id });
+                    else if (item.packageQuantity < 10000) item.packageQuantity++;
+                    message = "Added to cart. No money spent yet.";
                 }
                 GUI.enabled = true;
                 GUILayout.EndHorizontal();
             }
         }
         GUILayout.Space(12);
-        DrawInventory(false);
-        if (GUILayout.Button("Continue to service"))
-        { game.Loop.BeginService(); GUIUtility.ExitGUI(); }
+        if (GUILayout.Button("Review cart / finish shopping"))
+        { showCart = true; GUIUtility.ExitGUI(); }
+    }
+
+    private void DrawCart()
+    {
+        GUILayout.Label("SHOPPING CART — packages from every store");
+        foreach (var item in cart.ToArray())
+        {
+            var listing = game.Queries.GetListing(item.listingId);
+            GUILayout.BeginHorizontal();
+            GUILayout.Label(listing == null ? item.listingId :
+                $"{listing.store.displayName}: {listing.food.displayName} | {item.packageQuantity} packages × ${listing.gamePrice:0.00}");
+            if (GUILayout.Button("−", GUILayout.Width(40)))
+            { if (--item.packageQuantity == 0) cart.Remove(item); GUIUtility.ExitGUI(); }
+            if (GUILayout.Button("+", GUILayout.Width(40)) && item.packageQuantity < 10000) item.packageQuantity++;
+            if (listing != null && GUILayout.Button("Codex", GUILayout.Width(70))) inspectedFoodId = listing.food.id;
+            GUILayout.EndHorizontal();
+        }
+        var quote = game.Loop.QuoteCart(cart);
+        GUILayout.Label(quote.success ? $"Total before sorting refund: ${quote.total:0.00} | Budget: ${game.State.money:0.00}" : quote.error);
+        GUILayout.Label("The full cart must be affordable. Sorting can refund part of this purchase afterward.");
+        if (GUILayout.Button("Back to shops")) { showCart = false; GUIUtility.ExitGUI(); }
+        if (GUILayout.Button(cart.Count == 0 ? "Buy nothing / continue" : "Confirm purchase / continue"))
+        {
+            var result = game.Loop.Checkout(cart);
+            if (result.success) cart.Clear();
+            message = result.success ? "Checkout complete." : result.error;
+            GUIUtility.ExitGUI();
+        }
+    }
+
+    private void DrawSorting()
+    {
+        GUILayout.Label("FOOD SORTING — one question per food you have not answered correctly");
+        var result = game.Loop.SortingResult;
+        if (result != null)
+        {
+            GUILayout.Label($"Correct: {result.correctCount}/{result.questionCount} | Accuracy: {result.accuracy:P0} | Discount: {result.discountRate:P0} | Refunded: ${result.refundAmount:0.00}");
+            foreach (var feedback in result.feedback)
+            {
+                var food = game.Queries.Foods.GetById(feedback.foodId);
+                GUILayout.Label($"{Label(food?.displayName, feedback.foodId)}: chose {feedback.chosen} — {(feedback.isCorrect ? "Correct" : "Incorrect; correct answer: " + feedback.correct)}");
+                if (!feedback.isCorrect) DrawCodex(feedback.foodId, feedback.explanation);
+                else if (GUILayout.Button("Codex: " + Label(food?.displayName, feedback.foodId))) inspectedFoodId = feedback.foodId;
+            }
+            GUILayout.Label("No retry for this round. Wrong foods return if purchased on a later day.");
+            if (GUILayout.Button("Continue to service")) { game.Loop.BeginService(); GUIUtility.ExitGUI(); }
+            return;
+        }
+        foreach (var question in game.Loop.SortingQuestions)
+        {
+            var food = game.Queries.Foods.GetById(question.foodId);
+            GUILayout.Label($"{Label(food?.displayName, question.foodId)} ({question.foodId}, offer {question.listingId})");
+            GUILayout.Label("Ingredients: " + food?.ingredientList);
+            GUILayout.BeginHorizontal();
+            sortingAnswers.TryGetValue(question.foodId, out var chosen);
+            foreach (var answer in new[] { TrafficLight.Green, TrafficLight.Yellow, TrafficLight.Red })
+                if (GUILayout.Button((chosen == answer ? "✓ " : "") + answer)) sortingAnswers[question.foodId] = answer;
+            if (GUILayout.Button("Inspect / Codex")) inspectedFoodId = question.foodId;
+            GUILayout.EndHorizontal();
+        }
+        if (GUILayout.Button("Submit answers (once)"))
+        {
+            var choices = sortingAnswers.Select(p => new SortingChoice { foodId = p.Key, answer = p.Value }).ToList();
+            var submitted = game.Loop.SubmitSorting(choices);
+            message = submitted.success ? "Sorting complete; refund applied." : submitted.error;
+            GUIUtility.ExitGUI();
+        }
+    }
+
+    private void DrawCodex(string foodId, string explanation = null)
+    {
+        var food = game.Queries.Foods.GetById(foodId);
+        if (food == null) { GUILayout.Label("Food details unavailable."); return; }
+        GUILayout.BeginVertical(GUI.skin.box);
+        GUILayout.Label("FOOD CODEX — " + Label(food.displayName, food.id));
+        GUILayout.Label($"ID: {food.id} | {food.recipeCategory} | Review: {food.approvalStatus}");
+        GUILayout.Label($"Ingredients ({food.ingredientCount}): {food.ingredientList}");
+        GUILayout.Label("Daily Dozen: " + string.Join(", ", food.dailyDozenCategories));
+        GUILayout.Label("Storage: " + food.storageType);
+        GUILayout.Label(explanation ?? (string.IsNullOrWhiteSpace(food.sortingExplanation)
+            ? "Detailed classification explanation and research pending." : food.sortingExplanation));
+        if (!string.IsNullOrWhiteSpace(food.claimId)) GUILayout.Label("Evidence reference: " + food.claimId + " (full research view pending)");
+        if (inspectedFoodId == foodId && GUILayout.Button("Close inspected food")) inspectedFoodId = null;
+        GUILayout.EndVertical();
     }
 
     private void DrawService()
@@ -229,8 +330,10 @@ public class GreyboxUIController : MonoBehaviour
             var food = game.Queries.Foods.GetById(entry.foodId);
             GUILayout.BeginHorizontal();
             GUILayout.Label($"{(food == null ? entry.foodId : Label(food.displayName, food.id))} | " +
-                $"{(food == null ? "Unknown" : food.recipeCategory + " / " + food.trafficLight)} | " +
+                $"{(food == null ? "Unknown" : food.recipeCategory.ToString())} | " +
                 $"{entry.servings} servings | {ShelfLife(entry.daysRemaining)}");
+            if (GUILayout.Button("Codex", GUILayout.Width(70))) inspectedFoodId = entry.foodId;
+            GUILayout.Label("Batch: " + entry.inventoryEntryId + " | Offer: " + entry.listingId);
             if (allowSelection)
             {
                 selected.TryGetValue(entry.inventoryEntryId, out int count);
@@ -258,7 +361,6 @@ public class GreyboxUIController : MonoBehaviour
             GUILayout.Label($"{(customer == null ? dish.customerId : Label(customer.displayName, customer.id))} — {dish.recipeId}");
             DrawDish(dish.result);
         }
-        DrawInventory(false);
         if (!completed && GUILayout.Button("Finish day / Continue"))
         {
             var result = game.Loop.FinishDay();
@@ -273,7 +375,7 @@ public class GreyboxUIController : MonoBehaviour
         GUILayout.Label($"Paid ingredient cost ${result.ingredientCost:0.00} | Minimum value ${result.minimumIngredientValue:0.00}");
         GUILayout.Label($"Payment ${result.basePayment:0.00} + tip ${result.tip:0.00} | Customer finance {result.customerFinance}");
         GUILayout.Label($"Health {result.healthDelta:+0;-0;0} | Delight {result.delightDelta:+0;-0;0} | Earned ${result.moneyEarned:0.00}");
-        GUILayout.Label($"Green {result.greenServings} / Yellow {result.yellowServings} / Red {result.redServings} servings");
+
         GUILayout.Label("Daily Dozen: " + string.Join(", ", result.dailyDozenCovered));
         if (result.rushCrashTriggered) GUILayout.Label("Rush/crash triggered (visual effect pending).");
     }

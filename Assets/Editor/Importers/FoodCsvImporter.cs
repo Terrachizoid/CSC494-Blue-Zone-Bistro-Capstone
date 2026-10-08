@@ -152,6 +152,8 @@ public static class FoodCsvImporter
 
             food.marketingLabel = Get(row, columns, "marketing_label");
             food.ingredientList = Get(row, columns, "ingredient_list");
+            if (columns.ContainsKey("sorting_explanation"))
+                food.sortingExplanation = Get(row, columns, "sorting_explanation");
             food.ingredientCount = ParseNonNegativeInt(
                 Get(row, columns, "ingredient_count"), id);
 

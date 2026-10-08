@@ -9,6 +9,7 @@ public class InventoryEntry
     public string inventoryEntryId = Guid.NewGuid().ToString("N");
     // Matches FoodData.id; store remaining servings rather than purchased packages.
     public string foodId;
+    public string listingId;
     public int servings;
     // Historical cost, captured at purchase; never recomputed from current shop prices.
     public float purchaseCostPerServing;

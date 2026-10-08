@@ -1,4 +1,4 @@
-# Week 3 developer guide
+# Greybox developer guide
 
 This is a six-day, button-driven greybox. The solo GDD supplies the scope and category-slot approach; the larger capstone plan supplies character themes and design context. The player's later decisions about flexible meals, delight, and delayed finance take precedence over the older plan formulas.
 
@@ -8,7 +8,7 @@ This is a six-day, button-driven greybox. The solo GDD supplies the scope and ca
 2. Run **Tools > Blue Zone Bistro > Import All CSV Content** after editing foods, stores, prices, recipes, or customers. This also imports dialogue in dependency order and validates the imported library.
 3. Run **Tools > Blue Zone Bistro > Validate Imported Content** to check the standard imported assets again without importing them.
 4. Open the gameplay scene with one active `GameBootstrap`. Missing default references are filled automatically; explicit Inspector assignments are preserved. Save the scene after setup.
-5. Press Play. Market → service encounters → meal preview → confirmation → reaction → daily results → next day.
+5. Press Play. Market/cart → food sorting and feedback → service encounters → meal preview → confirmation → reaction → daily results → next day. Empty/mastered-only carts skip sorting.
 
 Dialogue CSV changes are detected before Play and build. A failed dialogue import blocks Play with a Console error rather than silently using stale conversations. New character/recipe references require Import All first. Other CSVs still need the explicit import command. Imported `.asset` files are Unity's runtime representation; editing a CSV alone does not update every database.
 
@@ -19,6 +19,8 @@ Dialogue CSV changes are detected before Play and build. A failed dialogue impor
 | `Core/GameBootstrap` | Construct and connect the shared objects once | Gameplay formulas, long per-frame loops |
 | `Core/GameLoop` | Accept legal commands and coordinate phases/encounters | Drawing widgets, importing files, calculating meal scores |
 | `Services/PurchaseService`, `MealService`, `DayService` | Validate and commit operations | UI controls and presentation strings for screens |
+| `Services/FoodSortingService` | Validate choices, compute accuracy, apply one refund, remember correct food IDs | UI-provided scores or payment amounts |
+| `Services/ShoppingContracts` | Cart requests, checkout snapshot, sorting choices and results | Screen drawing or formulas |
 | `Services/CustomerVisitService` | Cache one attendance roll per day | Dialogue priority and line playback |
 | `Services/EncounterScheduler` | Put eligible stories before attending customers; build dialogue context | Mutating customer outcomes |
 | `Runtime/Dialogue/DialogueService` | Select dialogue and apply completion effects | Another copy of gameplay flags/history |

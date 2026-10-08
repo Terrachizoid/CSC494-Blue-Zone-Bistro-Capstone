@@ -2,6 +2,7 @@
 // Owns flow only; services calculate outcomes and mutate session data. Unity supplies the event loop.
 
 using System;
+using System.Collections.Generic;
 
 // Phase orchestration is separate from operations and presentation.
 public class GameLoop
@@ -11,6 +12,9 @@ public class GameLoop
     private readonly IDayService days;
     private readonly ICustomerVisitService visits;
     private readonly EncounterScheduler encounters;
+    private readonly FoodSortingService sorting;
+    public SortingResult SortingResult { get; private set; }
+    public List<SortingQuestion> SortingQuestions => sorting?.GetQuestions() ?? new List<SortingQuestion>();
     public DialoguePlaybackController Dialogue { get; }
     public ServiceSessionState Service { get; private set; } = new ServiceSessionState();
     public DaySummary Summary { get; private set; } = new DaySummary();
@@ -18,21 +22,52 @@ public class GameLoop
     public event Action<GamePhase> PhaseChanged;
 
     public GameLoop(IPurchaseService purchases, IMealService meals, IDayService days,
-        ICustomerVisitService visits, EncounterScheduler encounters = null)
+        ICustomerVisitService visits, EncounterScheduler encounters = null, FoodSortingService sorting = null)
     {
         this.purchases = purchases ?? throw new ArgumentNullException(nameof(purchases));
         this.meals = meals ?? throw new ArgumentNullException(nameof(meals));
         this.days = days ?? throw new ArgumentNullException(nameof(days));
         this.visits = visits ?? throw new ArgumentNullException(nameof(visits));
         this.encounters = encounters;
+        this.sorting = sorting;
         if (encounters != null) Dialogue = new DialoguePlaybackController(encounters.Dialogue);
     }
 
     public PurchaseResult Buy(string listingId)
     {
+        if (sorting != null) return new PurchaseResult { error = "Add items to the cart and confirm checkout." };
         if (Phase != GamePhase.Market) return new PurchaseResult { error = "Buying requires Market phase." };
         var result = purchases.Buy(listingId);
         if (result.success) Summary.moneySpent += result.moneySpent;
+        return result;
+    }
+
+    public CartResult QuoteCart(List<CartEntry> cart) => purchases is ICartPurchaseService carts
+        ? carts.Quote(cart) : new CartResult { error = "Cart service unavailable." };
+
+    public CartResult Checkout(List<CartEntry> cart)
+    {
+        if (Phase != GamePhase.Market || sorting == null || !(purchases is ICartPurchaseService carts))
+            return new CartResult { error = "Checkout requires Market phase and sorting services." };
+        var result = carts.Checkout(cart);
+        if (!result.success) return result;
+        Summary.moneySpent += result.total;
+        SortingResult = null;
+        if (sorting.IsComplete) BeginService();
+        else SetPhase(GamePhase.FoodSorting);
+        return result;
+    }
+
+    public SortingResult SubmitSorting(List<SortingChoice> choices)
+    {
+        if (Phase != GamePhase.FoodSorting || sorting == null)
+            return new SortingResult { error = "Sorting is not active." };
+        var result = sorting.Submit(choices);
+        if (result.success)
+        {
+            SortingResult = result;
+            Summary.moneySpent -= result.refundAmount;
+        }
         return result;
     }
 
@@ -60,7 +95,8 @@ public class GameLoop
 
     public bool BeginService()
     {
-        if (Phase != GamePhase.Market) return false;
+        if (Phase != GamePhase.Market && Phase != GamePhase.FoodSorting) return false;
+        if (sorting != null && !sorting.IsComplete) return false;
         var customers = visits.GetTodaysCustomers();
         Service = new ServiceSessionState();
         if (encounters != null) Service.encounters = encounters.Build(customers);
@@ -162,6 +198,7 @@ public class GameLoop
             {
                 Summary = new DaySummary();
                 Service = new ServiceSessionState();
+                SortingResult = null;
             }
             SetPhase(result.gameCompleted ? GamePhase.Completed : GamePhase.Market);
         }

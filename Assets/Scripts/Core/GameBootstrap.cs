@@ -12,9 +12,11 @@ public class GameBootstrap : MonoBehaviour
     [SerializeField] private CustomerDatabase customers;
     [SerializeField] private DialogueDatabase dialogues;
     [SerializeField] private BalanceConfig balance;
+    [SerializeField] private BistroUITheme uiTheme;
     [SerializeField] private GameSessionState state = new GameSessionState();
 
     public GameSessionState State => state;
+    public BalanceConfig Balance => balance;
     public GameLoop Loop { get; private set; }
     public GameContentQueries Queries { get; private set; }
 
@@ -30,10 +32,14 @@ public class GameBootstrap : MonoBehaviour
         foods.RebuildMinimumPrices(listings.Listings);
         Loop = new GameLoop(new PurchaseService(state, listings, balance),
             new MealService(state, foods, recipes, customers, balance), new DayService(state, balance, customers),
-            new CustomerVisitService(state, customers, balance), new EncounterScheduler(state, dialogues, customers, recipes));
+            new CustomerVisitService(state, customers, balance), new EncounterScheduler(state, dialogues, customers, recipes),
+            new FoodSortingService(state, foods));
         Queries = new GameContentQueries(state, foods, listings, recipes, customers);
         var ui = GetComponent<GreyboxUIController>();
         if (ui == null) ui = gameObject.AddComponent<GreyboxUIController>();
         ui.Initialize(this);
+        var cards = GetComponent<BistroUIScreen>();
+        if (cards == null) cards = gameObject.AddComponent<BistroUIScreen>();
+        cards.Initialize(this, ui, uiTheme);
     }
 }

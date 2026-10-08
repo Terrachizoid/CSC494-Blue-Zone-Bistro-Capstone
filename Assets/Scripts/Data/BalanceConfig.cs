@@ -6,6 +6,8 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "BalanceConfig", menuName = "Blue Zone Bistro/Balance")]
 public class BalanceConfig : ScriptableObject
 {
+    [Header("First successful food sorting reward")]
+    [Range(0, 1)] public float maximumSortingDiscount = 0.30f;
     [Header("Prototype tuning; game values, not real-world shelf life")]
     [Min(1)] public int totalDays = 6;
     [Min(1)] public int freshDays = 2;

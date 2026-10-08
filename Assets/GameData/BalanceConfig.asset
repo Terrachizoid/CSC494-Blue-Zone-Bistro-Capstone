@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: BalanceConfig
   m_EditorClassIdentifier: Assembly-CSharp::BalanceConfig
   totalDays: 6
+  maximumSortingDiscount: 0.3
   freshDays: 2
   frozenDays: 5
   cannedDays: -1

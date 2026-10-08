@@ -46,6 +46,12 @@ $files = @($stubPath)
 foreach ($path in $paths) { $files += (Get-ChildItem (Join-Path $projectRoot $path)).FullName }
 $files += Join-Path $PSScriptRoot 'GameOperationsChecks.cs'
 $files += Join-Path $PSScriptRoot 'DialogueChecks.cs'
+$files += Join-Path $PSScriptRoot 'ShoppingChecks.cs'
+$files += Join-Path $PSScriptRoot 'MealSlotChecks.cs'
 Add-Type -Path $files -CompilerOptions '/nowarn:0649'
 [GameOperationsChecks]::Run()
 [DialogueChecks]::Run()
+[ShoppingChecks]::Run()
+
+[MealSlotChecks]::Run()
+

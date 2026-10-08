@@ -18,6 +18,8 @@ public class IngredientSelection
 [Serializable]
 public class ServeInput
 {
+    // When supplied, replaces batch selections with food-level, explicitly assigned recipe slots.
+    public List<MealSlotSelection> slotSelections;
     public string customerId;
     public string recipeId;
     public List<IngredientSelection> ingredients = new List<IngredientSelection>();

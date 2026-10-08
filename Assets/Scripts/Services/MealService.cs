@@ -28,11 +28,19 @@ public class MealService : IMealService
 
     private ServeResult Evaluate(ServeInput input, bool commit)
     {
-        if (input == null || input.ingredients == null || input.ingredients.Count == 0)
+        if (input == null)
             return Fail("Select ingredients first.");
         var recipe = recipes.GetById(input.recipeId);
         var customer = customers.GetById(input.customerId);
         if (recipe == null || customer == null) return Fail("Recipe or customer was not found.");
+        var ingredients = input.ingredients;
+        if (input.slotSelections != null)
+        {
+            if (!RecipeRequirements.TryGetBounds(recipe, out _, out _)) return Fail("Invalid recipe slots.");
+            if (!MealAllocation.TryResolve(state, recipe, input.slotSelections, out ingredients, out var allocationError))
+                return Fail(allocationError);
+        }
+        if (ingredients == null || ingredients.Count == 0) return Fail("Select ingredients first.");
         if (recipe.unlockDay > state.currentDay || customer.unlockDay > state.currentDay)
             return Fail("Recipe or customer is locked.");
         var customerState = state.customers.Find(c => Same(c.customerId, customer.id));
@@ -53,7 +61,7 @@ public class MealService : IMealService
 
         // Aggregate repeated input rows before checking availability, preventing double consumption.
         var selected = new Dictionary<string, long>(StringComparer.OrdinalIgnoreCase);
-        foreach (var item in input.ingredients)
+        foreach (var item in ingredients)
         {
             if (item == null || string.IsNullOrWhiteSpace(item.inventoryEntryId) || item.servingsUsed <= 0)
                 return Fail("Each ingredient needs a batch ID and positive servings.");
@@ -63,6 +71,12 @@ public class MealService : IMealService
 
         var result = new ServeResult();
         var warnings = new List<string>();
+        if (input.slotSelections != null)
+            for (int index = -1; index < recipe.slots.Length; index++)
+            {
+                string warning = MealAllocation.SlotWarning(recipe, index, input.slotSelections, foods);
+                if (warning != null) warnings.Add(warning);
+            }
         double ingredientCost = 0;
         double minimumIngredientValue = 0;
         var coverage = new HashSet<DailyDozenCategory>();

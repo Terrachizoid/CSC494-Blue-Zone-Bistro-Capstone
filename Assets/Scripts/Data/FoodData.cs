@@ -25,6 +25,9 @@ public class FoodData : ScriptableObject
     [TextArea]
     public string ingredientList;
 
+    // Optional authored Codex explanation. Blank means the educational text is still pending.
+    [TextArea(3, 8)] public string sortingExplanation;
+
     [Min(0)]
     public int ingredientCount;
 

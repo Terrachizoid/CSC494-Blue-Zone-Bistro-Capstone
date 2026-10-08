@@ -54,5 +54,6 @@ public class GameContentQueries
         return result;
     }
     public CustomerData GetCustomer(string id) => customers.GetById(id);
+    public StoreListingData GetListing(string id) => listings.GetById(id);
     public bool TryGetMinimumServingPrice(string foodId, out float price) => Foods.TryGetMinimumServingPrice(foodId, out price);
 }

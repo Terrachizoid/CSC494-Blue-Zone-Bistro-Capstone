@@ -164,21 +164,32 @@ foreach ($customer in $customerItems) {
     if (!$selector.FindNext([DialogueTrigger]::AfterService,$context).id.EndsWith('_AFTER_HEALTH_LOSS')) { throw 'Negative meal health got positive reaction' }
 }
 Write-Output "PASS: $($customerItems.Count * 36) greeting boundary combinations, successful meals, failed green meals, delight-floor failures, and negative-health reactions."
-$loop=[GameLoop]::new($buy,$meals,$days,$visits,$scheduler)
+$sorting=[FoodSortingService]::new($state,$foodDb)
+$loop=[GameLoop]::new($buy,$meals,$days,$visits,$scheduler,$sorting)
 for ($day=1; $day -le 6; $day++) {
+    $cart=[System.Collections.Generic.List[CartEntry]]::new()
     # Stock for every unlocked customer so the test also covers a worst-case attendance roll.
     $requiredBowls=@($customerItems | Where-Object { $_.unlockDay -le $day -and $_.customerType -ne [CustomerType]::VisitingChef }).Count
     foreach ($foodId in @('P001','P002','P008')) {
         $stock=($state.inventory | Where-Object foodId -eq $foodId | Measure-Object servings -Sum).Sum
         $listing=$listingItems | Where-Object { $_.food.id -eq $foodId -and $_.store.id -eq 'S002' } | Select-Object -First 1
         while ($stock -lt $requiredBowls) {
-            $result=$loop.Buy($listing.id)
-            if (!$result.success) { throw "Day $day purchase failed: $($result.error)" }
-            $stock += $result.servingsAdded
+            $item=[CartEntry]::new(); $item.listingId=$listing.id; $cart.Add($item)
+            $stock += $listing.servingsPerPackage
         }
     }
+    $checkout=$loop.Checkout($cart)
+    if (!$checkout.success) { throw "Day $day checkout failed: $($checkout.error)" }
+    if ($loop.Phase -eq [GamePhase]::FoodSorting) {
+        $answers=[System.Collections.Generic.List[SortingChoice]]::new()
+        foreach ($question in $loop.SortingQuestions) {
+            $answer=[SortingChoice]::new(); $answer.foodId=$question.foodId
+            $answer.answer=$foodDb.GetById($question.foodId).trafficLight; $answers.Add($answer)
+        }
+        if (!$loop.SubmitSorting($answers).success) { throw 'CSV sorting failed' }
+        $loop.BeginService() | Out-Null
+    }
     if (!([RecipeCheck]::new($foodDb)).CanMake($recipeDb.GetById('R002'),$state)) { throw 'Daily bowl not makeable' }
-    $loop.BeginService() | Out-Null
     if ($day -eq 3 -and $loop.Dialogue.Sequence.id -ne 'D_CHEF_OKINAWA_ARRIVAL') { throw 'CSV chef not first on day three' }
     $dialogueSteps=0
     while ($loop.Phase -eq [GamePhase]::Service) {

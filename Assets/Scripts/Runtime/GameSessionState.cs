@@ -17,4 +17,7 @@ public class GameSessionState
     public GameFlagState flags = new GameFlagState();
     public DialogueHistoryState dialogueHistory = new DialogueHistoryState();
     public List<string> storeMembershipIds = new List<string>();
+    // Correct answers only. Wrong foods can return after a later day's purchase.
+    public List<string> correctlySortedFoodIds = new List<string>();
+    public ShoppingReceipt shoppingReceipt;
 }
