@@ -7,6 +7,22 @@ using System.Linq;
 
 public class EncounterScheduler
 {
+    // Only select authored conversations. A missing special trigger has no fabricated fallback.
+    public DialogueTrigger CustomerTrigger(DialogueTrigger requested, string customerId, ServeResult result)
+    {
+        var progress = state.customers.Find(c => string.Equals(c.customerId, customerId, StringComparison.OrdinalIgnoreCase));
+        if (requested == DialogueTrigger.CustomerArrival && progress != null && progress.crashDialoguePending)
+            return DialogueTrigger.CrashArrival;
+        if (requested == DialogueTrigger.AfterService && result != null && result.rushCrashTriggered)
+            return DialogueTrigger.RushAfterService;
+        return requested;
+    }
+    public void OnDialogueCompleted(DialogueSequenceData sequence, string customerId)
+    {
+        if (sequence == null || sequence.trigger != DialogueTrigger.CrashArrival) return;
+        var progress = state.customers.Find(c => string.Equals(c.customerId, customerId, StringComparison.OrdinalIgnoreCase));
+        if (progress != null) RushCrashProgress.CompleteCrash(progress, state.flags);
+    }
     private readonly GameSessionState state;
     private readonly DialogueDatabase dialogues;
     private readonly CustomerDatabase customers;
@@ -44,3 +60,4 @@ public class EncounterScheduler
             servedMealHealthDelta = result?.healthDelta ?? 0 };
     }
 }
+

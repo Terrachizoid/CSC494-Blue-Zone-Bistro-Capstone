@@ -53,6 +53,7 @@ public class GameBootstrapSetup : IProcessSceneWithReport, IPreprocessBuildWithR
         if (EditorApplication.isPlaying) return;
         EnsureBalance();
         DialogueCsvImporter.EnsureCurrent();
+        TutorialCsvImporter.EnsureCurrent();
         for (int i = 0; i < SceneManager.sceneCount; i++)
         {
             var scene = SceneManager.GetSceneAt(i);
@@ -88,6 +89,7 @@ public class GameBootstrapSetup : IProcessSceneWithReport, IPreprocessBuildWithR
             changed |= Fill<CustomerDatabase>(serialized, "customers", "Assets/GameData/Customers/CustomerDatabase.asset");
             changed |= Fill<DialogueDatabase>(serialized, "dialogues", "Assets/GameData/Dialogues/DialogueDatabase.asset");
             changed |= Fill<BalanceConfig>(serialized, "balance", BalancePath);
+            changed |= Fill<TutorialDatabase>(serialized, "tutorials", TutorialCsvImporter.AssetPath);
             if (changed)
             {
                 serialized.ApplyModifiedPropertiesWithoutUndo();
@@ -121,6 +123,7 @@ public class GameBootstrapSetup : IProcessSceneWithReport, IPreprocessBuildWithR
     {
         EnsureBalance();
         if (!DialogueCsvImporter.EnsureCurrent()) throw new BuildFailedException("Dialogue CSVs are not imported successfully. Fix dialogue import errors before building.");
+        if (!TutorialCsvImporter.EnsureCurrent()) throw new BuildFailedException("Tutorial CSV import failed.");
         if (!BistroContentValidator.Validate()) throw new BuildFailedException("Imported Bistro content has structural errors. See the Console and run Tools > Blue Zone Bistro > Validate Imported Content.");
     }
 }

@@ -491,6 +491,13 @@ public static class DialogueCsvImporter
             return fallback;
         }
 
+        // Optional dialogue bounds use -1 to mean unrestricted, just like a blank cell.
+        // Keep the ordinary range validation: max_day=0 and values below -1 remain invalid.
+        if (fallback == -1 && int.TryParse(text.Trim(),
+                System.Globalization.NumberStyles.Integer,
+                System.Globalization.CultureInfo.InvariantCulture, out int optionalValue) && optionalValue == -1)
+            return -1;
+
         return CsvImportUtility.ParseInt(
             text,
             fallback,

@@ -9,7 +9,19 @@ using System.Collections.Generic;
 public class GameSessionState
 {
     public int currentDay = 1;
+    public bool gameCompleted;
+    public List<TutorialRecord> tutorials = new List<TutorialRecord>();
+    public DaySummary completedDaySummary;
     public float money = 30f;
+    // Version marker distinguishes older checkpoints from a legitimate zero score.
+    public int communityStateVersion;
+    public float popularity = 300f;
+    public float communityWellbeing = 50f;
+    public int attendancePlanDay;
+    public float morningPopularity;
+    public int dailyCustomerCapacity;
+    public List<string> dailyCustomerIds = new List<string>();
+    public List<string> unlockedCustomerIds = new List<string>();
     public List<InventoryEntry> inventory = new List<InventoryEntry>();
     public string currentCustomerId;
     public string selectedRecipeId;

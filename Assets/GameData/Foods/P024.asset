@@ -17,12 +17,16 @@ MonoBehaviour:
   recipeCategory: 3
   dailyDozenCategories: 06000000
   trafficLight: 1
+  ingredientAppeal: 6
   marketingLabel: Plain staple
   ingredientList: Carrot
+  sortingExplanation: 
   ingredientCount: 1
   storageType: 1
   claimId: 
   approvalStatus: 0
   reviewNotes: Prototype composition and classification under supplied WFPB plan;
-    pending supervisor review. Not a real product label.
+    pending supervisor review. Not a real product label. Ingredient appeal is provisional
+    0-10 gameplay tuning for a serving-weighted mean; independent of price and Traffic
+    Light. Runtime import/calculation pending.
   icon: {fileID: 0}

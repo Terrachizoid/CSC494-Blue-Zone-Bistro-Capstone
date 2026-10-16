@@ -7,6 +7,7 @@ foreach ($row in (Read-ContentCsv 'Foods')) {
     if ($foodsById.ContainsKey($row.id)) { throw 'Duplicate food ID' }
     $food = New-Object FoodData
     $food.id = $row.id
+    $food.ingredientAppeal = [float]$row.ingredient_appeal
     $food.recipeCategory = [FoodCategory]$row.recipe_category
     $food.trafficLight = [TrafficLight]$row.traffic_light
     $food.storageType = [StorageType]$row.storage_type
@@ -56,6 +57,7 @@ $recipeDb=New-Object RecipeDatabase; $recipeDb.SetItems($recipeItems)
 $customerItems=New-Object 'System.Collections.Generic.List[CustomerData]'
 foreach ($row in (Read-ContentCsv 'Customers')) {
     $customer=New-Object CustomerData; $customer.id=$row.customer_id
+    $customer.cravingTags = @($row.craving_tags.Split('|') | ForEach-Object { [CravingTag]$_ })
     $customer.startingHealth=[int]$row.starting_health; $customer.unlockDay=[int]$row.unlock_day
     $customer.customerType=[CustomerType]$row.customer_type; $customer.displayName=$row.display_name
     foreach ($recipeId in $row.preferred_recipe_ids.Split('|')) { if ($recipeId -and !$recipeDb.GetById($recipeId)) { throw 'Unknown preferred recipe' } }
@@ -165,6 +167,17 @@ foreach ($customer in $customerItems) {
 }
 Write-Output "PASS: $($customerItems.Count * 36) greeting boundary combinations, successful meals, failed green meals, delight-floor failures, and negative-health reactions."
 $sorting=[FoodSortingService]::new($state,$foodDb)
+foreach ($customer in $customerItems) {
+    $context=New-Object DialogueRuntimeContext
+    $context.currentDay=[Math]::Max(3,$customer.unlockDay); $context.customerId=$customer.id
+    foreach ($trigger in @([DialogueTrigger]::RushAfterService,[DialogueTrigger]::CrashArrival)) {
+        $special=$selector.FindNext($trigger,$context)
+        if (!$special -or $special.customer.id -ne $customer.id -or !$special.lines.Count) {
+            throw "Missing authored special dialogue: $($customer.id) / $trigger"
+        }
+    }
+}
+Write-Output 'PASS: each customer has authored, character-specific rush and crash conversations.'
 $loop=[GameLoop]::new($buy,$meals,$days,$visits,$scheduler,$sorting)
 for ($day=1; $day -le 6; $day++) {
     $cart=[System.Collections.Generic.List[CartEntry]]::new()

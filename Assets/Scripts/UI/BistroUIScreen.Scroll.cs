@@ -1,6 +1,7 @@
 // Preserve browsing position across redraws caused by card placement/removal and modal panels.
 // Each logical screen and hierarchy path has its own position; never share shelf/recipe scroll state.
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 public partial class BistroUIScreen
@@ -18,7 +19,7 @@ public partial class BistroUIScreen
     private void RememberScroll()
     {
         if(screen==null || renderedContext==null)return;
-        foreach(var scroll in screen.GetComponentsInChildren<ScrollRect>())
+        foreach(var scroll in screen.GetComponentsInChildren<ScrollRect>().Where(s=>!s.horizontal))
             scrollPositions[renderedContext+"/"+ScrollKey(scroll)]=scroll.verticalNormalizedPosition;
     }
     private void RestoreScroll()
@@ -26,7 +27,9 @@ public partial class BistroUIScreen
         renderedContext=ScrollContext();
         // Layout must settle before ScrollRect can calculate a meaningful normalized position.
         Canvas.ForceUpdateCanvases();
-        foreach(var scroll in screen.GetComponentsInChildren<ScrollRect>())
+        foreach(var grid in screen.GetComponentsInChildren<BistroResponsiveGrid>())grid.Apply();
+        Canvas.ForceUpdateCanvases();
+        foreach(var scroll in screen.GetComponentsInChildren<ScrollRect>().Where(s=>!s.horizontal))
         {
             scroll.StopMovement();
             scroll.verticalNormalizedPosition=scrollPositions.TryGetValue(renderedContext+"/"+ScrollKey(scroll),out var position)

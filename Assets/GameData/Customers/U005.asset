@@ -22,11 +22,15 @@ MonoBehaviour:
   preferredRecipes:
   - {fileID: 11400000, guid: 25c84bad0bbb85b4bab26b05c543b443, type: 2}
   - {fileID: 11400000, guid: f507fad0959231b4e8cd10282e30275a, type: 2}
-  cravingTags: 0100000006000000
+  - {fileID: 11400000, guid: f273679da48ac2f45a0e2fe99caeca7b, type: 2}
+  cravingTags: 010000000600000003000000
   dialogueClaims: []
   approvalStatus: 0
-  reviewNotes: Character theme from Capstone Plan S7 (stretch cast), reused as modest
+  reviewNotes: 'Character theme from Capstone Plan S7 (stretch cast), reused as modest
     greybox variety. No medical claims or new mechanics; draft dialogue pending review.
+    craving_tags is the candidate pool, not simultaneous active requests. Intended
+    scheduling: sample 1-2 distinct tags once when queued from day 4; runtime scheduling
+    pending.'
   portrait: {fileID: 0}
   customerSprite: {fileID: 0}
   dialogueAsset: {fileID: 0}

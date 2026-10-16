@@ -60,8 +60,8 @@ advances the queue. Skip is available
 before submission and bypasses meal-reaction dialogue. Dialogue must finish before
 underlying service actions are available. Back returns to recipe selection.
 
-Each unlocked customer rolls attendance once per day with probability delight/maxDelight
-(initially 50/100). The roll is stored on CustomerState, so queries do not reroll it.
+Morning popularity caps attendance; personal delight weights selection without replacement.
+The morning plan is saved, so queries and resume do not reroll it. At least one eligible customer attends.
 A customer cannot attend twice that day. BeginService builds the encounter queue only
 once; empty queues immediately show Results. Story visitors do not roll attendance.
 No early ShowResults bypass is allowed:
@@ -70,8 +70,9 @@ and skipped customers. Finish day ages stock and opens the next market; the fina
 shows completion. Successful recipes earn authored base pay plus a finance/100 tip
 (finance starts at 20, so the initial tip is 20%). Mismatched recipes earn 75% of
 minimum ingredient value and no tip, and lose 30 delight before clamping to 0.
-Delight ranges from 0 to 100. Correct dishes gain recipe delight plus the floor of
-minimum ingredient value times delightPerIngredientDollar (default 1), capped at +20.
+Delight ranges from 0 to 100. Correct dishes gain serving-weighted ingredient appeal,
+recipe delight and resolved-craving bonuses, floored and capped at +20.
+See [Popularity and cravings](PopularityAndCravings.md) for global effects and configuration.
 Positive health change is also capped at +20; health remains 0–100 and negative
 health effects are not limited by the positive-gain cap. Mismatched dishes still
 apply food-based health effects and do not resolve cravings.
@@ -92,7 +93,7 @@ health 50 -> 54 on day 1 raises finance 20 -> 24 on day 3. Unchanged health adds
 zero, and health losses reduce finance after the same delay. The initial baseline is
 the customer's authored starting health. Finance is clamped to 0–100. The final
 day does not advance finance because there is no following market. These runtime
-histories and attendance decisions are serializable, but save/load is still future work.
+histories and attendance decisions are persisted in day-start checkpoints.
 
 GameContentQueries reads databases/state; RecipeCheck aggregates usable batches by
 category, sums repeated required slots, excludes expired stock, and enforces recipe

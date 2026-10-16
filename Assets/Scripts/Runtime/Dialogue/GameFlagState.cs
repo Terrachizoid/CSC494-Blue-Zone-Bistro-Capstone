@@ -9,6 +9,7 @@ using UnityEngine;
 [Serializable]
 public class GameFlagState : ISerializationCallbackReceiver
 {
+    [field: NonSerialized] public event Action<string> FlagSet;
     [SerializeField]
     private List<string> activeFlags = new List<string>();
 
@@ -43,6 +44,7 @@ public class GameFlagState : ISerializationCallbackReceiver
 
         activeFlags.Add(normalized);
         activeFlags.Sort(StringComparer.OrdinalIgnoreCase);
+        FlagSet?.Invoke(normalized);
         return true;
     }
 

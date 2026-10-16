@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6852f3275b3b4254aa4113d5ddba5b29, type: 3}
+  m_Name: D_MARCO_RUSH
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueSequenceData
+  id: D_MARCO_RUSH
+  displayName: Marco notices a brief lift
+  mode: 0
+  trigger: 6
+  repeatRule: 1
+  priority: 150
+  randomWeight: 1
+  customer: {fileID: 11400000, guid: cfd22689b8c5c2c44a55f0cc5ec67744, type: 2}
+  minDay: 2
+  maxDay: -1
+  minCustomerHealth: -1
+  maxCustomerHealth: -1
+  minCustomerDelight: -1
+  maxCustomerDelight: -1
+  requiredRecipe: {fileID: 0}
+  recipeBuildCondition: 0
+  mealHealthCondition: 0
+  requiredRecipeTiers: 
+  minServedMealDelight: -1
+  maxServedMealDelight: -1
+  requiredFlags: []
+  forbiddenFlags: []
+  setFlags: []
+  clearFlags: []
+  lines:
+  - lineOrder: 0
+    speakerId: U005
+    textTemplate: Feels like a gust filling the sails! Let's see whether it carries
+      me further than the harbour.
+    claim: {fileID: 0}
+    portrait: {fileID: 0}
+    emotion: Happy
+    voiceOver: {fileID: 0}
+  approvalStatus: 0
+  reviewNotes: Prototype rush/crash narrative; character experience only; pending
+    review.

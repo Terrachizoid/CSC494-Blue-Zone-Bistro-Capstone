@@ -22,7 +22,10 @@ public class DayService : IDayService
         if (state.currentDay < 1 || balance.totalDays < 1 || state.currentDay > balance.totalDays || balance.financeHealthLagDays < 1)
             return new DayResult { error = "Invalid day configuration." };
         if (state.currentDay == balance.totalDays)
+        {
+            state.gameCompleted = true;
             return new DayResult { success = true, currentDay = state.currentDay, gameCompleted = true };
+        }
 
         var expired = new List<string>();
         foreach (var entry in state.inventory)
@@ -49,6 +52,8 @@ public class DayService : IDayService
                 (long)customer.finance + source.healthDelta));
         }
         state.currentDay++;
+        foreach (var customer in state.customers) RushCrashProgress.StartDay(customer, state.currentDay);
+        state.shoppingReceipt = null;
         state.currentCustomerId = null;
         state.selectedRecipeId = null;
         return new DayResult { success = true, currentDay = state.currentDay,

@@ -17,12 +17,16 @@ MonoBehaviour:
   recipeCategory: 8
   dailyDozenCategories: 00000000
   trafficLight: 3
+  ingredientAppeal: 8
   marketingLabel: Convenient snack or ready-to-cook product
   ingredientList: Milk, Cultures, Salt, Enzymes
+  sortingExplanation: 
   ingredientCount: 4
   storageType: 1
   claimId: 
   approvalStatus: 0
   reviewNotes: Prototype processed dairy classification under supplied WFPB plan;
-    pending supervisor review. Not a real product label.
+    pending supervisor review. Not a real product label. Ingredient appeal is provisional
+    0-10 gameplay tuning for a serving-weighted mean; independent of price and Traffic
+    Light. Runtime import/calculation pending.
   icon: {fileID: 0}

@@ -21,6 +21,7 @@ public class MealService : IMealService
         this.recipes = recipes ?? throw new ArgumentNullException(nameof(recipes));
         this.customers = customers ?? throw new ArgumentNullException(nameof(customers));
         this.balance = balance ?? throw new ArgumentNullException(nameof(balance));
+        CommunityProgress.Initialize(state, balance);
     }
 
     public ServeResult Serve(ServeInput input) => Evaluate(input, true);
@@ -54,8 +55,8 @@ public class MealService : IMealService
         if (balance.healthPerGreenServing < 0 || balance.healthPerGreenDailyDozenCategory < 0 ||
             balance.healthPenaltyPerYellowServing < 0 || balance.healthPenaltyPerRedServing < 0 ||
             balance.failedRecipeDelightPenalty < 0 || balance.maxHealthPerDish < 0 || balance.maxDelightPerDish < 0 ||
-            balance.maxDelight < 1 || balance.delightPerIngredientDollar < 0 ||
-            float.IsNaN(balance.delightPerIngredientDollar) || float.IsInfinity(balance.delightPerIngredientDollar) ||
+            balance.maxDelight < 1 || !CommunityProgress.Valid(balance) ||
+            !CommunityProgress.Finite(state.popularity) || !CommunityProgress.Finite(state.communityWellbeing) ||
             float.IsNaN(balance.failedRecipePaymentRate) || balance.failedRecipePaymentRate < 0 || balance.failedRecipePaymentRate > 1)
             return Fail("Invalid balance tuning values.");
 
@@ -79,6 +80,8 @@ public class MealService : IMealService
             }
         double ingredientCost = 0;
         double minimumIngredientValue = 0;
+        double appealSum = 0;
+        long totalServings = 0;
         var coverage = new HashSet<DailyDozenCategory>();
         var greenCoverage = new HashSet<DailyDozenCategory>();
         var categories = new Dictionary<FoodCategory, long>();
@@ -95,6 +98,10 @@ public class MealService : IMealService
             var food = foods.GetById(entry.foodId);
             if (food == null || food.recipeCategory == FoodCategory.Unassigned)
                 return Fail("Food or category is missing.");
+            if(!CommunityProgress.Finite(food.ingredientAppeal)||food.ingredientAppeal<0||food.ingredientAppeal>10)
+                return Fail("Invalid ingredient appeal. Import the food CSV again.");
+            appealSum += food.ingredientAppeal * (double)pair.Value;
+            totalServings += pair.Value;
             switch (food.trafficLight)
             {
                 case TrafficLight.Green: green += pair.Value; break;
@@ -160,11 +167,19 @@ public class MealService : IMealService
             yellow * balance.healthPenaltyPerYellowServing - red * balance.healthPenaltyPerRedServing;
         healthChange = Math.Min(balance.maxHealthPerDish, healthChange); // Only positive gain is capped.
         int nextHealth = (int)Math.Max(0L, Math.Min(100L, oldHealth + healthChange));
+        result.ingredientAppeal=(float)(appealSum/totalServings);
+        result.activeCravings = state.currentDay>=balance.cravingsStartDay && customerState?.cravingDay==state.currentDay
+            ? (customerState.activeCravings??Array.Empty<CravingTag>()).Where(t=>t!=CravingTag.None).Distinct().ToArray() : Array.Empty<CravingTag>();
+        result.cravingsResolved = result.recipeBuilt ? result.activeCravings.Intersect(recipe.cravingTags??Array.Empty<CravingTag>()).ToArray() : Array.Empty<CravingTag>();
         int delightChange = result.recipeBuilt
-            ? (int)Math.Min(balance.maxDelightPerDish,
-                recipe.delightValue + Math.Floor(minimumIngredientValue * balance.delightPerIngredientDollar))
+            ? (int)Math.Min(balance.maxDelightPerDish, Math.Floor(
+                result.ingredientAppeal * (double)balance.ingredientAppealMultiplier + recipe.delightValue * (double)balance.recipeDelightMultiplier +
+                result.cravingsResolved.Length * (double)balance.delightPerResolvedCraving))
             : -balance.failedRecipeDelightPenalty;
         int nextDelight = (int)Math.Max(0L, Math.Min(balance.maxDelight, (long)oldDelight + delightChange));
+        result.dishDelight=delightChange;
+        result.dishHealthEffect=healthChange;
+        CommunityProgress.Evaluate(state,balance,result);
 
         // Commit only after all validation succeeds. Failed requests never spend or consume anything.
         if (commit)
@@ -179,6 +194,11 @@ public class MealService : IMealService
             customerState.health = nextHealth;
             customerState.delight = nextDelight;
             customerState.lastServedDay = state.currentDay;
+            state.popularity=CommunityProgress.Clamp(state.popularity+result.popularityDelta,balance.maximumPopularity);
+            state.communityWellbeing=CommunityProgress.Clamp(state.communityWellbeing+result.communityWellbeingDelta,balance.maximumCommunityWellbeing);
+            RushCrashProgress.Served(customerState, state.currentDay, red > 0);
+            state.flags.SetFlag(TutorialFlags.Served);
+            if (result.recipeBuilt) state.flags.SetFlag(TutorialFlags.BuiltRecipe);
             state.money += result.moneyEarned;
             state.currentCustomerId = customer.id;
             state.selectedRecipeId = recipe.id;

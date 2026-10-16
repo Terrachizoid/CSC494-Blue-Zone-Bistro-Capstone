@@ -68,6 +68,10 @@ public class DialogueService
         {
             return false;
         }
+        // Special reactions must belong to this exact character; never borrow another character's lines.
+        if ((trigger == DialogueTrigger.RushAfterService || trigger == DialogueTrigger.CrashArrival) &&
+            (sequence.customer == null || !string.Equals(sequence.customer.id, context.customerId, StringComparison.OrdinalIgnoreCase)))
+            return false;
 
         if (approvedOnly &&
             sequence.approvalStatus != ApprovalStatus.Approved)

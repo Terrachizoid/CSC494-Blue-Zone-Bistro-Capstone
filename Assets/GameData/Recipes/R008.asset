@@ -30,10 +30,12 @@ MonoBehaviour:
   tier: 1
   baseSalePrice: 7
   delightValue: 3
-  cravingTags: 0200000003000000
+  cravingTags: 020000000300000004000000
   claims: []
   approvalStatus: 0
   reviewNotes: Generic category template inspired by the plan plant-food meals and
     dessert variety. Name is a suggestion, not an exact-ingredient constraint. Traffic
-    Light effects come from chosen foods; fictional balance values.
+    Light effects come from chosen foods; fictional balance values. Creamy tag assumes
+    a mashed or blended fruit base with a crunchy seed topping; preparation is abstracted
+    by the recipe.
   icon: {fileID: 0}

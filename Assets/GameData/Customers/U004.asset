@@ -21,11 +21,15 @@ MonoBehaviour:
   themeFromPlan: Soda and snacks
   preferredRecipes:
   - {fileID: 11400000, guid: 9de0de0c13d52fa45883ca220c94e37a, type: 2}
-  cravingTags: 02000000
+  - {fileID: 11400000, guid: d1bd3d2f6c0f9114dac793c92d259b92, type: 2}
+  - {fileID: 11400000, guid: 9ec5c3cec5734484cbb661ccef13e9d0, type: 2}
+  cravingTags: 020000000300000004000000
   dialogueClaims: []
   approvalStatus: 0
-  reviewNotes: Draft character content; delight-based attendance is sampled once
-    per day. Preferences are metadata; craving resolution is deferred.
+  reviewNotes: 'Draft character content; delight-based attendance is sampled once
+    per day. Preferences are metadata; craving resolution is deferred. craving_tags
+    is the candidate pool, not simultaneous active requests. Intended scheduling:
+    sample 1-2 distinct tags once when queued from day 4; runtime scheduling pending.'
   portrait: {fileID: 0}
   customerSprite: {fileID: 0}
   dialogueAsset: {fileID: 0}

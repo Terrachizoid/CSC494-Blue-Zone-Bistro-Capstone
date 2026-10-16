@@ -20,6 +20,7 @@ public static class AllContentCsvImporter
         RecipeCsvImporter.ImportRecipes();
         CustomerCsvImporter.ImportCustomers();
         DialogueCsvImporter.ImportDialogues();
+        TutorialCsvImporter.Import();
         GameBootstrapSetup.SetupLoadedScenes();
         BistroContentValidator.Validate();
 

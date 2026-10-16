@@ -13,8 +13,14 @@ public class CustomerState
     public int finance = 20;
     public int healthAtLastDayEnd = 50;
     public int lastServedDay;
+    // Visual offset only: +10 rush on meal day, -15 on the next day, then neutral.
+    public int visualScore;
+    public int rushDay;
+    public bool crashDialoguePending;
     public int attendanceDay;
     public bool attending;
+    public int cravingDay;
+    public CravingTag[] activeCravings = Array.Empty<CravingTag>();
     public List<HealthSnapshot> healthHistory = new List<HealthSnapshot>();
 
     public static CustomerState Create(CustomerData data, BalanceConfig balance)

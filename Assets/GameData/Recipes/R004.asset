@@ -30,7 +30,7 @@ MonoBehaviour:
   tier: 0
   baseSalePrice: 6
   delightValue: 2
-  cravingTags: 0200000006000000
+  cravingTags: 020000000400000006000000
   claims: []
   approvalStatus: 0
   reviewNotes: Prototype category-slot meal; food choices determine effects. Mixed

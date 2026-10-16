@@ -10,11 +10,24 @@ public class BistroDropSlot : MonoBehaviour, IDropHandler, IPointerClickHandler,
     private Action open;
     private Outline rim;
     private bool warning;
+    private float hoverScale=1;
+    private bool reducedMotion;
+    private BistroFoodCard hoveringCard;
+    private void Update()
+    {
+        if(hoveringCard==null || !hoveringCard.IsDragging)hoverScale=1;
+        Vector3 target=Vector3.one*hoverScale;
+        if((transform.localScale-target).sqrMagnitude<.000001f)return;
+        var next=Vector3.Lerp(transform.localScale,target,1-Mathf.Exp(-20*Time.unscaledDeltaTime));
+        transform.localScale=(next-target).sqrMagnitude<.000001f?target:next;
+    }
+    private void OnDisable(){hoveringCard=null;hoverScale=1;transform.localScale=Vector3.one;}
     public static BistroDropSlot Create(Transform parent,string title,string contents,BistroUITheme theme,Vector2 min,Vector2 max,bool warning,Action<string,string> drop,Action open,string[] cardNames=null)
     {
         var rect=BistroWidgets.Box(parent,title,theme.panel,min,max);
         if(theme.slotFrame!=null)rect.GetComponent<Image>().sprite=theme.slotFrame;
         var slot=rect.gameObject.AddComponent<BistroDropSlot>();slot.drop=drop;slot.open=open;slot.warning=warning;
+        slot.reducedMotion=theme.reducedMotion;
         slot.rim=rect.gameObject.AddComponent<Outline>();slot.rim.effectColor=theme.warning;slot.rim.effectDistance=new Vector2(3,3);slot.rim.enabled=warning;
         BistroWidgets.Label(rect,title,theme,new Vector2(.05f,.74f),new Vector2(.95f,.98f),22);
         if(cardNames==null || cardNames.Length==0)
@@ -33,10 +46,10 @@ public class BistroDropSlot : MonoBehaviour, IDropHandler, IPointerClickHandler,
         BistroWidgets.Label(rect,"Drop here · click to inspect",theme,new Vector2(.03f,0),new Vector2(.97f,.12f),13);
         return slot;
     }
-    public void OnDrop(PointerEventData e){var card=e.pointerDrag?.GetComponent<BistroFoodCard>();if(card!=null && card.CanDrag)drop?.Invoke(card.Key,card.Kind);}
-    public void OnPointerClick(PointerEventData e){if(!e.dragging)open?.Invoke();}
-    public void OnPointerEnter(PointerEventData e){if(e.pointerDrag!=null)transform.localScale=Vector3.one*1.025f;}
-    public void OnPointerExit(PointerEventData e){transform.localScale=Vector3.one;rim.enabled=warning;}
+    public void OnDrop(PointerEventData e){hoverScale=1;hoveringCard=null;var card=e.pointerDrag?.GetComponent<BistroFoodCard>();if(drop!=null && card!=null && card.TryClaimDrop(e.pointerId))drop(card.Key,card.Kind);}
+    public void OnPointerClick(PointerEventData e){if(e.button==PointerEventData.InputButton.Left&&!e.dragging)open?.Invoke();}
+    public void OnPointerEnter(PointerEventData e){hoveringCard=e.pointerDrag?.GetComponent<BistroFoodCard>();if(!reducedMotion && hoveringCard!=null && hoveringCard.IsDragging)hoverScale=1.025f;}
+    public void OnPointerExit(PointerEventData e){hoveringCard=null;hoverScale=1;rim.enabled=warning;}
 }
 
 

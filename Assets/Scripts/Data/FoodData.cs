@@ -17,6 +17,7 @@ public class FoodData : ScriptableObject
     public DailyDozenCategory[] dailyDozenCategories =
         { DailyDozenCategory.None };
     public TrafficLight trafficLight = TrafficLight.Unassigned;
+    [Range(0, 10)] public float ingredientAppeal;
 
     [Header("Card Text")]
     [TextArea]

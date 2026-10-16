@@ -14,7 +14,9 @@ public enum DialogueTrigger
     BeforeService,
     AfterService,
     DayEnd,
-    ServiceEncounter
+    ServiceEncounter,
+    RushAfterService,
+    CrashArrival
 }
 
 public enum RecipeBuildCondition { Any, Built, Failed }

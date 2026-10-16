@@ -4,8 +4,8 @@ $projectRoot = Split-Path $PSScriptRoot -Parent
 $sources = @'
 using System;
 namespace UnityEngine {
- public class Object { }
- public class ScriptableObject : Object { }
+ public class Object { public static void Destroy(Object o) {} }
+ public class ScriptableObject : Object { public static T CreateInstance<T>() where T : new() => new T(); }
  public class Sprite : Object { }
  public class TextAsset : Object { }
  public class AudioClip : Object { }
@@ -48,10 +48,20 @@ $files += Join-Path $PSScriptRoot 'GameOperationsChecks.cs'
 $files += Join-Path $PSScriptRoot 'DialogueChecks.cs'
 $files += Join-Path $PSScriptRoot 'ShoppingChecks.cs'
 $files += Join-Path $PSScriptRoot 'MealSlotChecks.cs'
+$files += Join-Path $PSScriptRoot 'ProgressChecks.cs'
+$files += Join-Path $PSScriptRoot 'TutorialChecks.cs'
+$files += Join-Path $PSScriptRoot 'CommunityChecks.cs'
 Add-Type -Path $files -CompilerOptions '/nowarn:0649'
 [GameOperationsChecks]::Run()
 [DialogueChecks]::Run()
 [ShoppingChecks]::Run()
 
 [MealSlotChecks]::Run()
+
+
+
+[ProgressChecks]::Run()
+
+[TutorialChecks]::Run()
+[CommunityChecks]::Run()
 

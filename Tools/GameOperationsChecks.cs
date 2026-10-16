@@ -151,7 +151,7 @@ public static class GameOperationsChecks
         var chips = new FoodData { id = "chips", recipeCategory = FoodCategory.StarchyVegetable,
             trafficLight = TrafficLight.Red, storageType = StorageType.ShelfStable };
         var greens = new FoodData { id = "greens", recipeCategory = FoodCategory.Vegetable,
-            trafficLight = TrafficLight.Green, storageType = StorageType.Fresh,
+            trafficLight = TrafficLight.Green, storageType = StorageType.Fresh, ingredientAppeal = 2,
             dailyDozenCategories = new[] { DailyDozenCategory.Greens } };
         var foods = new FoodDatabase(); foods.SetItems(new List<FoodData> { chips, greens });
         var recipe = new RecipeData { id = "soup", baseSalePrice = 10, delightValue = 2,
@@ -205,7 +205,8 @@ public static class GameOperationsChecks
             "Large mismatched dish bypassed caps");
         recipe.slots[0].servings = 50;
         preview = service.Preview(input);
-        Check(preview.recipeBuilt && preview.delightDelta == 20 && preview.healthDelta == 20, "Correct dish bypassed gain caps");
+        Check(preview.recipeBuilt && preview.delightDelta == 4 && preview.healthDelta == 20, "Serving quantity multiplied appeal");
+        recipe.delightValue = 30; // Independently exercise the configured delight cap.
         state.customers.Add(new CustomerState { customerId = "C", health = 95, delight = 95, finance = 80 });
         preview = service.Preview(input);
         Check(preview.healthDelta == 5 && preview.delightDelta == 5 && preview.tip == 8, "State bounds or finance tip failed");
@@ -226,12 +227,12 @@ public static class GameOperationsChecks
         int rolls = 0;
         var visits = new CustomerVisitService(state, db, balance, () => ++rolls == 1 ? 0.49 : 0.5);
         var queue = visits.GetTodaysCustomers();
-        Check(queue.Count == 1 && queue[0] == "A" && state.customers[0].delight == 50 &&
-            state.customers[0].finance == 20, "Starting state or 50 percent threshold wrong");
+        Check(queue.Count == 2 && queue[0] == "A" && state.customers[0].delight == 50 &&
+            state.customers[0].finance == 20, "Starting state or weighted capacity wrong");
         visits.GetTodaysCustomers();
         Check(rolls == 2, "Attendance rerolled within same day");
         state.customers[0].lastServedDay = 1;
-        Check(visits.GetTodaysCustomers().Count == 0, "Customer visited twice");
+        Check(visits.GetTodaysCustomers().Count == 1 && visits.GetTodaysCustomers()[0] == "B", "Customer visited twice");
         state.customers[0].health = 70;
         state.customers[1].health = 30;
         var days = new DayService(state, balance, db);

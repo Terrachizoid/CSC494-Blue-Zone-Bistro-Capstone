@@ -28,6 +28,7 @@ public class PurchaseService : IPurchaseService, ICartPurchaseService
         var entry = CreateBatch(listing);
         state.inventory.Add(entry);
         state.money -= listing.gamePrice;
+        state.flags.SetFlag(TutorialFlags.Purchased);
         return new PurchaseResult { success = true, inventoryEntryId = entry.inventoryEntryId,
             foodId = entry.foodId, servingsAdded = entry.servings, daysRemaining = entry.daysRemaining,
             moneySpent = listing.gamePrice };
@@ -117,6 +118,7 @@ public class PurchaseService : IPurchaseService, ICartPurchaseService
         state.inventory.AddRange(batches);
         state.money -= quote.total;
         state.shoppingReceipt = receipt;
+        if (quote.packages > 0) state.flags.SetFlag(TutorialFlags.Purchased);
         return quote;
     }
 

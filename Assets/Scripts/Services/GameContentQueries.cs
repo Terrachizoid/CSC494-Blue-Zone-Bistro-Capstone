@@ -2,6 +2,7 @@
 // Queries do not purchase or serve; returned assets are shared definitions and must not be edited by UI.
 
 using System.Collections.Generic;
+using System.Linq;
 
 public class GameContentQueries
 {
@@ -56,4 +57,12 @@ public class GameContentQueries
     public CustomerData GetCustomer(string id) => customers.GetById(id);
     public StoreListingData GetListing(string id) => listings.GetById(id);
     public bool TryGetMinimumServingPrice(string foodId, out float price) => Foods.TryGetMinimumServingPrice(foodId, out price);
+    public List<CustomerData> GetExpectedCustomers()=>state.dailyCustomerIds.Select(customers.GetById).Where(c=>c!=null).ToList();
+    public CravingTag[] GetActiveCravings(string customerId)
+    {
+        var progress=state.customers.Find(c=>string.Equals(c.customerId,customerId,System.StringComparison.OrdinalIgnoreCase));
+        return progress!=null&&progress.cravingDay==state.currentDay ? (progress.activeCravings??System.Array.Empty<CravingTag>()).ToArray() : System.Array.Empty<CravingTag>();
+    }
+    // Normalized presentation input only. Apply to world art later, never UI text/cards.
+    public float GetCommunityVisualScore(BalanceConfig balance)=>CommunityProgress.Clamp(state.communityWellbeing/balance.maximumCommunityWellbeing,1);
 }

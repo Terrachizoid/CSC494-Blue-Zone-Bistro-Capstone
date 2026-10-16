@@ -20,7 +20,8 @@ namespace UnityEngine {
   public static List<string> Errors = new List<string>();
   public static void Log(object s) { }
   public static void LogError(object s, Object o = null) { Errors.Add(s.ToString()); }
-  public static void LogWarning(object s) { }
+  public static List<string> Warnings = new List<string>();
+  public static void LogWarning(object s) { Warnings.Add(s.ToString()); }
  }
 }
 namespace UnityEditor {
@@ -43,6 +44,8 @@ $stubPath=Join-Path $tempRoot 'EditorStubs.cs'
 Set-Content -LiteralPath $stubPath -Value $stubSource
 $sources=@($stubPath) + @(Get-ChildItem (Join-Path $projectRoot 'Assets/Scripts/Data') -Filter '*.cs' | ForEach-Object FullName)
 $sources += @('Assets/Editor/Importers/CsvImportUtility.cs','Assets/Editor/Importers/DialogueCsvImporter.cs') | ForEach-Object { Join-Path $projectRoot $_ }
+$sources += @('Assets/Editor/Importers/TutorialCsvImporter.cs','Assets/Scripts/Core/GamePhase.cs') | ForEach-Object { Join-Path $projectRoot $_ }
+$sources += Join-Path $projectRoot 'Assets/Editor/Importers/FoodCsvImporter.cs'
 Add-Type -Path $sources -CompilerOptions '/nowarn:0649'
 
 $originalDirectory=[Environment]::CurrentDirectory
@@ -53,6 +56,21 @@ try {
         Copy-Item -LiteralPath (Join-Path $projectRoot "Assets/GameData/CSV/Blue_Zone_Bistro_$name.csv") -Destination $csvDirectory
     }
     [Environment]::CurrentDirectory=$tempRoot
+    Copy-Item -LiteralPath (Join-Path $projectRoot 'Assets/GameData/CSV/Blue_Zone_Bistro_Foods.csv') -Destination $csvDirectory
+    [FoodCsvImporter]::ImportFoods()
+    $food=[UnityEditor.AssetDatabase]::Assets['Assets/GameData/Foods/P001.asset']
+    if (!$food -or $food.ingredientAppeal -ne 3 -or [UnityEngine.Debug]::Errors.Count) { throw 'Food appeal import failed' }
+    $foodPath=Join-Path $csvDirectory 'Blue_Zone_Bistro_Foods.csv'
+    $foodCsv=[IO.File]::ReadAllText($foodPath)
+    foreach ($bad in @('NaN','11')) {
+        $badCsv=[regex]::Replace($foodCsv,',3(\r?\n)',(","+$bad+'$1'))
+        [IO.File]::WriteAllText($foodPath,$badCsv)
+        [FoodCsvImporter]::ImportFoods()
+        if (![UnityEngine.Debug]::Errors.Count -or $food.ingredientAppeal -ne 3) { throw 'Invalid appeal import was not atomic' }
+        [UnityEngine.Debug]::Errors.Clear()
+    }
+    [IO.File]::WriteAllText($foodPath,$foodCsv)
+    Write-Output 'PASS: ingredient appeal import and atomic rejection of non-finite/out-of-range values.'
     foreach ($row in Import-Csv (Join-Path $projectRoot 'Assets/GameData/CSV/Blue_Zone_Bistro_Customers.csv')) {
         $customer=New-Object CustomerData; $customer.id=$row.customer_id
         [UnityEditor.AssetDatabase]::CreateAsset($customer,"Assets/GameData/Customers/$($customer.id).asset")
@@ -66,6 +84,20 @@ try {
     [DialogueCsvImporter]::ImportDialogues()
     $database=[UnityEditor.AssetDatabase]::Assets['Assets/GameData/Dialogues/DialogueDatabase.asset']
     if (!$database -or !$database.importedCsvFingerprint -or [UnityEngine.Debug]::Errors.Count) { throw 'Valid dialogue import failed' }
+    if (@([UnityEngine.Debug]::Warnings | Where-Object { $_ -match "'-1' is invalid" }).Count) {
+        throw 'Valid unrestricted dialogue bounds produced warnings'
+    }
+    $optionalParser=[DialogueCsvImporter].GetMethod('ParseOptionalInt',[Reflection.BindingFlags]'NonPublic,Static')
+    foreach ($minimum in @(0,1)) {
+        [UnityEngine.Debug]::Warnings.Clear()
+        $value=$optionalParser.Invoke($null,[object[]]@(' -1 ',-1,$minimum,100,'test','optional_bound'))
+        if ($value -ne -1 -or [UnityEngine.Debug]::Warnings.Count) { throw 'Explicit -1 sentinel rejected' }
+    }
+    foreach ($invalid in @('0','-2','invalid')) {
+        [UnityEngine.Debug]::Warnings.Clear()
+        $value=$optionalParser.Invoke($null,[object[]]@($invalid,-1,1,100,'test','max_day'))
+        if ($value -ne -1 -or [UnityEngine.Debug]::Warnings.Count -ne 1) { throw 'Invalid bound no longer warns' }
+    }
     $originalCount=$database.Dialogues.Count
     $originalFingerprint=$database.importedCsvFingerprint
     $sequencePath=Join-Path $csvDirectory 'Blue_Zone_Bistro_DialogueSequences.csv'
@@ -90,6 +122,20 @@ try {
     }
     [IO.File]::WriteAllText($sequencePath,$originalCsv)
     if (![DialogueCsvImporter]::EnsureCurrent()) { throw 'Unchanged valid dialogue not recognized as current' }
+    Copy-Item -LiteralPath (Join-Path $projectRoot 'Assets/GameData/CSV/Blue_Zone_Bistro_Tutorials.csv') -Destination $csvDirectory
+    if (![TutorialCsvImporter]::EnsureCurrent()) { throw 'Tutorial import failed' }
+    $tutorialDb=[UnityEditor.AssetDatabase]::Assets['Assets/GameData/TutorialDatabase.asset']
+    if ($tutorialDb.tutorials.Count -ne 4 -or ($tutorialDb.tutorials.steps | Measure-Object).Count -ne 6) { throw 'Tutorial definition/step count incorrect' }
+    $tutorialPath=Join-Path $csvDirectory 'Blue_Zone_Bistro_Tutorials.csv'
+    $tutorialCsv=[IO.File]::ReadAllText($tutorialPath)
+    $tutorialFingerprint=$tutorialDb.fingerprint
+    foreach ($invalidCsv in @($tutorialCsv.Replace('FirstMeal','UnknownBehaviour'),$tutorialCsv.Replace(',build,',',choose,'),$tutorialCsv.Replace(',FoodSorting,',',4,'))) {
+        [IO.File]::WriteAllText($tutorialPath,$invalidCsv)
+        if ([TutorialCsvImporter]::EnsureCurrent() -or $tutorialDb.fingerprint -ne $tutorialFingerprint) { throw 'Invalid tutorial import modified good content' }
+    }
+    [IO.File]::WriteAllText($tutorialPath,$tutorialCsv)
+    if (![TutorialCsvImporter]::EnsureCurrent()) { throw 'Tutorial freshness check failed' }
+    Write-Output 'PASS: four tutorial definitions, six steps, and atomic rejection of unknown behaviours, duplicate steps and invalid phases.'
     Write-Output "PASS: $originalCount dialogues imported by actual importer code; missing references and undefined enums preserve existing data; non-finite prices and duplicate headers rejected."
 } finally {
     [Environment]::CurrentDirectory=$originalDirectory

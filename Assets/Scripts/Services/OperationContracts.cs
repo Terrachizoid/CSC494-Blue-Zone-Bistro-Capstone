@@ -63,6 +63,12 @@ public class ServeResult : OperationResult
     public float tip;
     public int healthDelta;
     public int delightDelta;
+    public float ingredientAppeal;
+    public float dishDelight;
+    public float dishHealthEffect;
+    public float popularityDelta;
+    public float communityWellbeingDelta;
+    public CravingTag[] activeCravings = Array.Empty<CravingTag>();
     public bool rushCrashTriggered;
     public int greenServings;
     public int yellowServings;
@@ -70,7 +76,7 @@ public class ServeResult : OperationResult
     public float moneyEarned;
     public DailyDozenCategory[] dailyDozenCovered = Array.Empty<DailyDozenCategory>();
     public ConsumedIngredient[] consumedIngredients = Array.Empty<ConsumedIngredient>();
-    // Reserved for a later craving system; no craving resolution is implemented yet.
+    // Only today's active requests can resolve, and only for a successful recipe.
     public CravingTag[] cravingsResolved = Array.Empty<CravingTag>();
 }
 

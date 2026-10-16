@@ -21,11 +21,15 @@ MonoBehaviour:
   themeFromPlan: Oil-free cooking
   preferredRecipes:
   - {fileID: 11400000, guid: b4ddc141bf51b674998ea5971406e18f, type: 2}
-  cravingTags: 01000000
+  - {fileID: 11400000, guid: e1bc60f2d2bf23f4285a2916b96d7ae8, type: 2}
+  - {fileID: 11400000, guid: f273679da48ac2f45a0e2fe99caeca7b, type: 2}
+  cravingTags: 010000000400000003000000
   dialogueClaims: []
   approvalStatus: 0
-  reviewNotes: Draft character content; delight-based attendance is sampled once
-    per day. Preferences are metadata; craving resolution is deferred.
+  reviewNotes: 'Draft character content; delight-based attendance is sampled once
+    per day. Preferences are metadata; craving resolution is deferred. craving_tags
+    is the candidate pool, not simultaneous active requests. Intended scheduling:
+    sample 1-2 distinct tags once when queued from day 4; runtime scheduling pending.'
   portrait: {fileID: 0}
   customerSprite: {fileID: 0}
   dialogueAsset: {fileID: 0}

@@ -13,12 +13,63 @@ public class GameBootstrap : MonoBehaviour
     [SerializeField] private DialogueDatabase dialogues;
     [SerializeField] private BalanceConfig balance;
     [SerializeField] private BistroUITheme uiTheme;
+    [SerializeField] private TutorialDatabase tutorials;
     [SerializeField] private GameSessionState state = new GameSessionState();
 
     public GameSessionState State => state;
     public BalanceConfig Balance => balance;
     public GameLoop Loop { get; private set; }
     public GameContentQueries Queries { get; private set; }
+    public bool IsMainMenu { get; private set; } = true;
+    public string SaveMessage { get; private set; }
+    public bool SaveFailed { get; private set; }
+    public bool HasCheckpoint => saves.Exists;
+    private readonly CheckpointStore saves = new CheckpointStore();
+    private string pendingCheckpoint;
+    private EncounterScheduler scheduler;
+    private TutorialController tutorialController;
+    private void OnDestroy() { tutorialController?.Dispose(); }
+    public string ResumeLabel
+    {
+        get { return saves.TryLoad(out var saved, out _) ? saved.gameCompleted ? "View completed run" : $"Resume — Day {saved.currentDay} start" : "Resume (no readable checkpoint)"; }
+    }
+    public void ReturnToMenu() { IsMainMenu = true; }
+    public bool NewGame()
+    {
+        var fresh = new GameSessionState { money = balance.startingMoney };
+        PrepareMorning(fresh);
+        string snapshot = saves.Capture(fresh);
+        if (!saves.Save(snapshot, out var error)) { SaveMessage = error; return false; }
+        state = fresh; pendingCheckpoint = snapshot; SaveFailed = false; SaveMessage = "Day 1 checkpoint saved.";
+        BuildSession(); IsMainMenu = false; return true;
+    }
+    public bool Resume()
+    {
+        if (!saves.TryLoad(out var restored, out var message)) { SaveMessage = message; return false; }
+        if (restored.currentDay > balance.totalDays) { SaveMessage = "Saved day exceeds the current game configuration."; return false; }
+        foreach (var entry in restored.inventory) if (foods.GetById(entry.foodId) == null)
+        { SaveMessage = "Saved food is missing from the current content. Import all CSV content before resuming."; return false; }
+        foreach (var customer in restored.customers) if (customers.GetById(customer.customerId) == null)
+        { SaveMessage = "A saved customer is missing from the current content."; return false; }
+        bool migrated=restored.communityStateVersion==0 || (!restored.gameCompleted && restored.attendancePlanDay!=restored.currentDay);
+        PrepareMorning(restored);
+        if(migrated && !saves.Save(saves.Capture(restored),out var migrationError))
+        {SaveMessage="Could not save the migrated day plan: "+migrationError;return false;}
+        state = restored; pendingCheckpoint = saves.Capture(state); SaveFailed = false; SaveMessage = message;
+        BuildSession(); IsMainMenu = false; return true;
+    }
+    private void CaptureCheckpoint()
+    {
+        if (state.gameCompleted) state.completedDaySummary = Loop.Summary;
+        pendingCheckpoint = saves.Capture(state); RetrySave();
+    }
+    public void RetrySave()
+    {
+        if (pendingCheckpoint == null) return;
+        SaveFailed = !saves.Save(pendingCheckpoint, out var error);
+        SaveMessage = SaveFailed ? error : state.gameCompleted ? "Completed run saved." : $"Day {state.currentDay} start saved.";
+    }
+
 
     private void Awake()
     {
@@ -29,17 +80,36 @@ public class GameBootstrap : MonoBehaviour
             enabled = false;
             return;
         }
-        foods.RebuildMinimumPrices(listings.Listings);
-        Loop = new GameLoop(new PurchaseService(state, listings, balance),
-            new MealService(state, foods, recipes, customers, balance), new DayService(state, balance, customers),
-            new CustomerVisitService(state, customers, balance), new EncounterScheduler(state, dialogues, customers, recipes),
-            new FoodSortingService(state, foods));
-        Queries = new GameContentQueries(state, foods, listings, recipes, customers);
+        if(!CommunityProgress.Valid(balance))
+        {
+            Debug.LogError("Invalid popularity, craving or wellbeing settings in BalanceConfig. Check ranges and attendance thresholds.",this);
+            enabled=false;return;
+        }
+        BuildSession();
         var ui = GetComponent<GreyboxUIController>();
         if (ui == null) ui = gameObject.AddComponent<GreyboxUIController>();
         ui.Initialize(this);
         var cards = GetComponent<BistroUIScreen>();
         if (cards == null) cards = gameObject.AddComponent<BistroUIScreen>();
         cards.Initialize(this, ui, uiTheme);
+    }
+    private void BuildSession()
+    {
+        tutorialController?.Dispose();
+        foods.RebuildMinimumPrices(listings.Listings);
+        scheduler = new EncounterScheduler(state, dialogues, customers, recipes);
+        Loop = new GameLoop(new PurchaseService(state, listings, balance),
+            new MealService(state, foods, recipes, customers, balance), new DayService(state, balance, customers),
+            new CustomerVisitService(state, customers, balance, recipes:recipes, foods:foods, listings:listings), scheduler,
+            new FoodSortingService(state, foods), state.gameCompleted);
+        Loop.DayFinished += CaptureCheckpoint;
+        tutorialController=new TutorialController(state,tutorials,new IntroMealPlan(state,foods,recipes,listings,balance));
+        Loop.AttachTutorials(tutorialController);
+        Queries = new GameContentQueries(state, foods, listings, recipes, customers);
+    }
+    private void PrepareMorning(GameSessionState session)
+    {
+        CommunityProgress.Initialize(session,balance);
+        if(!session.gameCompleted)new CustomerVisitService(session,customers,balance,recipes:recipes,foods:foods,listings:listings).GetTodaysCustomers();
     }
 }

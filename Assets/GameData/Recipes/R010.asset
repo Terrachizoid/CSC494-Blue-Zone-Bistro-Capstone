@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 043b1264566193e458d4e1234d24beb2, type: 3}
+  m_Name: R010
+  m_EditorClassIdentifier: Assembly-CSharp::RecipeData
+  id: R010
+  displayName: Blended fruit and oat drink
+  regionLabel: Gray City
+  slots:
+  - category: 2
+    servings: 1
+    optional: 0
+  - category: 4
+    servings: 1
+    optional: 0
+  - category: 11
+    servings: 1
+    optional: 0
+  - category: 10
+    servings: 1
+    optional: 1
+  allowNonGreenChoices: 1
+  unlockDay: 3
+  tier: 1
+  baseSalePrice: 7
+  delightValue: 3
+  cravingTags: 0200000004000000
+  claims: []
+  approvalStatus: 0
+  reviewNotes: Category-slot template; serving preparation supplies the named texture.
+    Tags are resolution candidates only for a successfully built dish. All-green
+    builds possible. Sale price and recipe delight bonus are provisional game tuning;
+    runtime craving selection/resolution pending.
+  icon: {fileID: 0}

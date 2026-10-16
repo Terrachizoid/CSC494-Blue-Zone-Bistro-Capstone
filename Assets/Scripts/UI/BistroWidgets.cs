@@ -33,6 +33,7 @@ public static class BistroWidgets
     {
         var r=Box(parent,title,theme.accent,min,max); var b=r.gameObject.AddComponent<Button>();
         b.targetGraphic=r.GetComponent<Image>(); Label(r,title,theme,new Vector2(.04f,.05f),new Vector2(.96f,.95f),20,theme.ink);
+        if(!theme.reducedMotion)r.gameObject.AddComponent<BistroMotion>();
         b.onClick.AddListener(()=>action()); return b;
     }
     public static RectTransform Grid(Transform parent,BistroUITheme theme,Vector2 min,Vector2 max)
@@ -41,10 +42,17 @@ public static class BistroWidgets
         var content=Box(viewport,"Cards",Color.clear,new Vector2(0,1),Vector2.one);
         content.pivot=new Vector2(.5f,1);
         var grid=content.gameObject.AddComponent<GridLayoutGroup>(); grid.cellSize=new Vector2(166,238); grid.spacing=new Vector2(16,16); grid.padding=new RectOffset(18,18,18,18);
+        content.gameObject.AddComponent<BistroResponsiveGrid>();
         var fit=content.gameObject.AddComponent<ContentSizeFitter>(); fit.verticalFit=ContentSizeFitter.FitMode.PreferredSize;
         var scroll=viewport.gameObject.AddComponent<ScrollRect>(); scroll.viewport=viewport; scroll.content=content;
         scroll.horizontal=false; scroll.scrollSensitivity=35; scroll.movementType=ScrollRect.MovementType.Clamped;
         return content;
+    }
+
+    // A non-interactive hint above an empty shelf; it never becomes a grid item or drop target.
+    public static void EmptyShelf(RectTransform content,string message,BistroUITheme theme)
+    {
+        if(content.childCount==0)Label(content.parent,message,theme,new Vector2(.08f,.20f),new Vector2(.92f,.80f),22);
     }
 
     // Long feedback must scroll rather than shrink until unreadable or clip off-screen.

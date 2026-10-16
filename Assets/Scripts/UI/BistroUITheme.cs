@@ -14,6 +14,11 @@ public class BistroUITheme : ScriptableObject
     public Sprite cardFrame;
     public Sprite slotFrame;
     public Font font;
+    [Header("Procedural motion")]
+    [Tooltip("Instant flips and panels; disables hover scaling. Gameplay is unchanged.")]
+    public bool reducedMotion;
+    [Range(.1f,.5f)] public float cardFlipSeconds=.26f;
+    [Range(.08f,.4f)] public float panelRevealSeconds=.18f;
     [Tooltip("Extra classification labels only appear in editor/development builds.")]
     public bool debugCardDetails;
 }

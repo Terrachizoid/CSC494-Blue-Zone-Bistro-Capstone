@@ -28,7 +28,8 @@ public static class FoodCsvImporter
         "claim_id",
         "icon_path",
         "approval_status",
-        "review_notes"
+        "review_notes",
+        "ingredient_appeal"
     };
 
     private const string CsvPath =
@@ -77,6 +78,12 @@ public static class FoodCsvImporter
 
         HashSet<string> idsSeen = new HashSet<string>(
             StringComparer.OrdinalIgnoreCase);
+
+        // Reject invalid appeal before touching any asset, preserving the last good import.
+        foreach(var row in rows.Skip(1).Where(r=>!r.All(string.IsNullOrWhiteSpace)))
+            if(!float.TryParse(Get(row,columns,"ingredient_appeal"),System.Globalization.NumberStyles.Float,
+                System.Globalization.CultureInfo.InvariantCulture,out float appeal)||float.IsNaN(appeal)||float.IsInfinity(appeal)||appeal<0||appeal>10)
+            {Debug.LogError("Food CSV ingredient_appeal must be a finite number from 0 to 10. Import cancelled.");return;}
 
         // This list becomes the serialized contents of FoodDatabase.asset.
         List<FoodData> importedFoods = new List<FoodData>();
@@ -131,6 +138,7 @@ public static class FoodCsvImporter
             }
 
             food.id = id;
+            food.ingredientAppeal=float.Parse(Get(row,columns,"ingredient_appeal"),System.Globalization.CultureInfo.InvariantCulture);
             food.displayName = Get(row, columns, "display_name").Trim();
             food.recipeCategory = ParseEnum(
                 Get(row, columns, "recipe_category"),

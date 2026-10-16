@@ -17,7 +17,7 @@ public partial class BistroUIScreen
         slotSelections=mealSelections.Select(s=>new MealSlotSelection{slotIndex=s.slotIndex,foodId=s.foodId,servings=s.servings}).ToList()};
     private void SyncVoice()
     {
-        var line=game?.Loop?.Dialogue?.CurrentLine;if(ReferenceEquals(line,lastVoicedLine))return;lastVoicedLine=line;
+        var line=game?.Loop?.Tutorials?.IsText==true?null:game?.Loop?.Dialogue?.CurrentLine;if(ReferenceEquals(line,lastVoicedLine))return;lastVoicedLine=line;
         if(dialogueAudio!=null)dialogueAudio.Stop();
         if(line?.voiceOver==null)return;
         if(dialogueAudio==null){dialogueAudio=gameObject.AddComponent<AudioSource>();dialogueAudio.playOnAwake=false;}
@@ -41,19 +41,25 @@ public partial class BistroUIScreen
             BistroWidgets.Button(box,"Continue",theme,new Vector2(.77f,.02f),new Vector2(.97f,.20f),()=>Change(()=>game.Loop.AdvanceDialogue()));return;
         }
         var customer=game.Queries.GetCustomer(game.Loop.Service.CurrentCustomerId);
-        BistroWidgets.Label(scene,customer?.displayName??"Service",theme,new Vector2(.03f,.87f),new Vector2(.64f,.98f),28);
+        BistroWidgets.Label(scene,customer?.displayName??"Service",theme,new Vector2(.03f,.92f),new Vector2(.64f,.99f),26);
+        var cravings=game.Queries.GetActiveCravings(customer?.id);
+        BistroWidgets.Label(scene,cravings.Length==0?"No specific craving today":"Wants: "+string.Join(", ",cravings),theme,new Vector2(.03f,.86f),new Vector2(.70f,.92f),19);
         if(game.Loop.Service.awaitingDishAcknowledgement)
         {
             BistroWidgets.ReadingPanel(scene,DishText(game.Loop.Service.lastDishResult),theme,new Vector2(.06f,.24f),new Vector2(.94f,.83f));
             BistroWidgets.Button(scene,"Continue",theme,new Vector2(.63f,.06f),new Vector2(.96f,.18f),()=>Change(()=>{ResetMeal();game.Loop.ContinueAfterDish();}));return;
         }
-        BistroWidgets.Button(scene,"Skip customer",theme,new Vector2(.75f,.89f),new Vector2(.97f,.97f),()=>Change(()=>{ResetMeal();game.Loop.SkipCustomer();}));
+        BistroWidgets.Button(scene,"Skip customer",theme,new Vector2(.75f,.89f),new Vector2(.97f,.97f),()=>Change(()=>{
+            if(game.Loop.SkipCustomer())ResetMeal();else notice=game.Loop.Tutorials?.LastError??"Cannot skip right now.";}));
         if(mealRecipe==null)
         {
             var recipes=BistroWidgets.Grid(scene,theme,new Vector2(.03f,.04f),new Vector2(.97f,.84f));
-            recipes.GetComponent<GridLayoutGroup>().cellSize=new Vector2(245,135);
+            recipes.GetComponent<BistroResponsiveGrid>().SetPreferred(new Vector2(245,135));
             foreach(var recipe in game.Queries.GetUnlockedRecipes())
-                BistroWidgets.Button(recipes,recipe.displayName+"\n"+(game.Queries.CanMake(recipe)?"Ingredients available":"Substitutions possible"),theme,Vector2.zero,Vector2.one,()=>Change(()=>{mealRecipe=recipe;mealSelections.Clear();}));
+                BistroWidgets.Button(recipes,recipe.displayName+"\n"+(game.Queries.CanMake(recipe)?"Ingredients available":"Substitutions possible")+"\nSatisfies: "+string.Join(", ",recipe.cravingTags),theme,Vector2.zero,Vector2.one,()=>Change(()=>{
+                    var result=game.Loop.SelectRecipe(recipe.id);
+                    if(result.success){mealRecipe=recipe;mealSelections.Clear();notice="";}else notice=result.error;}));
+            BistroWidgets.EmptyShelf(recipes,"No recipes are unlocked yet.",theme);
             return;
         }
         BistroWidgets.Button(scene,"← Recipes",theme,new Vector2(.03f,.78f),new Vector2(.20f,.86f),()=>Change(ResetMeal));
@@ -61,7 +67,7 @@ public partial class BistroUIScreen
         BistroWidgets.Button(scene,"Review dish",theme,new Vector2(.72f,.78f),new Vector2(.97f,.86f),()=>Change(()=>{
             mealPreview=game.Loop.PreviewServe(MealInput());if(mealPreview.success)modal="meal-preview";else notice=mealPreview.error;}));
         var slots=BistroWidgets.Grid(scene,theme,new Vector2(.03f,.43f),new Vector2(.97f,.76f));
-        slots.GetComponent<GridLayoutGroup>().cellSize=new Vector2(230,185);
+        slots.GetComponent<BistroResponsiveGrid>().SetPreferred(new Vector2(230,185));
         for(int i=0;i<=mealRecipe.slots.Length;i++)
         {
             int index=i==mealRecipe.slots.Length?-1:i;
@@ -79,6 +85,7 @@ public partial class BistroUIScreen
             int expiry=group.Where(e=>e.daysRemaining>=0).Select(e=>e.daysRemaining).DefaultIfEmpty(-1).Min();
             BistroFoodCard.Create(pantry,game.Queries.Foods.GetById(group.Key),group.Key,"meal-food",$"{available} available servings\nEarliest: {Expiry(expiry)}",theme,available>0);
         }
+        BistroWidgets.EmptyShelf(pantry,"No usable food remains in your pantry.",theme);
     }
     private void AddServing(int index,string foodId)
     {
@@ -100,18 +107,22 @@ public partial class BistroUIScreen
         var grid=BistroWidgets.Grid(panel,theme,new Vector2(.03f,.25f),new Vector2(.97f,.83f));
         foreach(var item in mealSelections.Where(s=>s.slotIndex==index))
             BistroFoodCard.Create(grid,game.Queries.Foods.GetById(item.foodId),item.foodId,"remove-meal",$"{item.servings} selected servings\nDrag to return one",theme);
+        BistroWidgets.EmptyShelf(grid,"This ingredient slot is empty.\nClose this panel to add servings.",theme);
         BistroDropSlot.Create(panel,"RETURN ONE SERVING",MealAllocation.SlotWarning(mealRecipe,index,mealSelections,game.Queries.Foods)??"Slot requirement satisfied",theme,
             new Vector2(.06f,.025f),new Vector2(.94f,.22f),false,(id,kind)=>{if(kind=="remove-meal")Change(()=>{
                 var item=mealSelections.Find(s=>s.slotIndex==index&&s.foodId==id);if(item!=null&&--item.servings==0)mealSelections.Remove(item);});},null);
     }
     private static string DishText(ServeResult r)=>
         (r.recipeBuilt?"Recipe built successfully":"Recipe mismatch — reduced payment; no tip")+"\n\n"+string.Join("\n",r.recipeWarnings)+
-        $"\nHealth {r.healthDelta:+0;-0;0} · Delight {r.delightDelta:+0;-0;0}\nPayment ${r.basePayment:0.00} + tip ${r.tip:0.00}\nPaid ingredient cost ${r.ingredientCost:0.00}\nDaily Dozen: "+string.Join(", ",r.dailyDozenCovered);
+        $"\nHealth {r.healthDelta:+0;-0;0} · Delight {r.delightDelta:+0;-0;0}\nIngredient appeal {r.ingredientAppeal:0.0} · Popularity {r.popularityDelta:+0.#;-0.#;0}\nCravings resolved: "+(r.activeCravings.Length==0?"No request today":$"{string.Join(", ",r.cravingsResolved)} ({r.cravingsResolved.Length}/{r.activeCravings.Length})")+
+        $"\nPayment ${r.basePayment:0.00} + tip ${r.tip:0.00}\nPaid ingredient cost ${r.ingredientCost:0.00}\nDaily Dozen: "+string.Join(", ",r.dailyDozenCovered);
     private void ResultsScreen()
     {
         var summary=game.Loop.Summary;bool complete=game.Loop.Phase==GamePhase.Completed;
+        if(complete && game.State.completedDaySummary!=null)summary=game.State.completedDaySummary;
         BistroWidgets.Label(screen,complete?"YOUR BISTRO · COMPLETE":"DAY COMPLETE",theme,new Vector2(.05f,.72f),new Vector2(.95f,.87f),34);
         string totals=$"Spent ${summary.moneySpent:0.00}\nEarned ${summary.moneyEarned:0.00}\nServed {summary.dishes.Count} · Skipped {summary.skippedCustomerIds.Count}";
+        totals+=$"\nPopularity {game.State.popularity:0} ({summary.dishes.Sum(d=>d.result.popularityDelta):+0.#;-0.#;0} today)";
         string dishes=string.Join("\n\n",summary.dishes.Select(d=>
             $"{game.Queries.GetCustomer(d.customerId)?.displayName} · {d.recipeId}\n"+
             $"{(d.result.recipeBuilt?"Recipe built":"Recipe mismatch")} · Health {d.result.healthDelta:+0;-0;0} · Delight {d.result.delightDelta:+0;-0;0} · Earned ${d.result.moneyEarned:0.00}"));
@@ -120,4 +131,3 @@ public partial class BistroUIScreen
             var result=game.Loop.FinishDay();notice=result.success?$"Expired batches removed: {result.expiredInventoryEntryIds.Length}":result.error;}));
     }
 }
-
