@@ -399,7 +399,9 @@ public static class DialogueCsvImporter
                     row, lineColumns, "emotion").Trim(),
                 voiceOver = CsvImportUtility.LoadOptionalAsset(
                     lineColumns.ContainsKey("voice_over_path") ? CsvImportUtility.Get(row, lineColumns, "voice_over_path") : "",
-                    previousLine?.voiceOver, sequenceId, "voice_over_path")
+                    previousLine?.voiceOver, sequenceId, "voice_over_path"),
+                backgroundImage = lineColumns.ContainsKey("background_image_path") ? CsvImportUtility.LoadOptionalAsset(
+                    CsvImportUtility.Get(row,lineColumns,"background_image_path"), previousLine?.backgroundImage, sequenceId,"background_image_path") : previousLine?.backgroundImage
             };
 
             linesBySequence[sequenceId].Add(line);

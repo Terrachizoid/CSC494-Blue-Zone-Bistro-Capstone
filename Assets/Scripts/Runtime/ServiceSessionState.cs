@@ -33,7 +33,9 @@ public class EncounterEntry
 public class DaySummary
 {
     public float moneySpent;
-    public float moneyEarned;
+    public float moneyEarned; // Includes walkInIncome.
+    public float walkInIncome;
+    public float rentPaid; // Charged this morning, before the market opened.
     public List<DishRecord> dishes = new List<DishRecord>();
     public List<string> skippedCustomerIds = new List<string>();
 }

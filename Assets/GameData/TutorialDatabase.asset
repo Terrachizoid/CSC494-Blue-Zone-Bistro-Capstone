@@ -22,11 +22,11 @@ MonoBehaviour:
     - tutorial.shopping_lesson_complete
     steps:
     - stepId: shop
-      text: Welcome to your bistro! Your first dish will be {recipe}. You need at
-        least {requirements}. Explore the stores and shelves, then drag packages
-        into your cart. You may buy extras, but checkout must be affordable and leave
-        you enough ingredients for this dish. Open the cart to remove packages. Pantry
-        and Menu remain available.
+      text: Welcome to your bistro! Choose any recipe on today's menu and buy what
+        it needs. For example, {recipe} needs at least {requirements}. Explore the
+        stores and shelves, then drag packages into your cart. You may buy extras,
+        but checkout must be affordable and leave you enough ingredients for at least
+        one recipe. Open the cart to remove packages. Pantry and Menu remain available.
   - id: T_SORTING
     triggerFlag: tutorial.sorting_available
     behaviourId: TextOnly
@@ -52,15 +52,14 @@ MonoBehaviour:
     - tutorial.cooking_lesson_complete
     steps:
     - stepId: choose
-      text: Let's cook the ingredients you prepared. Choose {recipe} for this first
-        lesson. Other recipes will be available after the lesson. You can still inspect
-        your pantry or return to the main menu.
+      text: Let's cook the ingredients you prepared. Choose any recipe you have ingredients
+        for. You can still inspect your pantry or return to the main menu.
     - stepId: build
-      text: Drag one serving at a time into the recipe slots for {recipe}. Required
-        slots need the exact category and count. Optional slots may stay empty, or
-        be filled exactly. A red rim means something needs attention. Open a slot
-        to drag a serving back out. Review the dish whenever you like; this first
-        lesson requires a successful recipe before you can confirm serving.
+      text: Drag one serving at a time into the recipe slots. Required slots need
+        the exact category and count. Optional slots may stay empty, or be filled
+        exactly. A red rim means something needs attention. Open a slot to drag a
+        serving back out. Review the dish whenever you like; this first lesson requires
+        a successful recipe before you can confirm serving.
     - stepId: feedback
       text: 'Your first recipe is built! You used {ingredients}. This dish changed
         health by {healthDelta} and covered these Daily Dozen groups: {dailyDozen}.
@@ -84,4 +83,20 @@ MonoBehaviour:
         health penalty beyond the dish''s normal calculation. Think about the ingredients
         and the overall meal, rather than treating a burst of energy as proof of
         a good result.'
-  fingerprint: Ffdm1RRk33KiBXcyeCoBLwrrqlwPgsO8oBGRLMaSRNY=
+  - id: T_RENT
+    triggerFlag: tutorial.rent_started
+    behaviourId: TextOnly
+    priority: 95
+    activationPhase: Market
+    completionFlags:
+    - tutorial.rent_lesson_complete
+    steps:
+    - stepId: explain
+      text: 'The landlord''s opening grace period is over. From today, rent of {rent}
+        is charged every morning before the market opens, even on a quiet day. Your
+        money can dip below zero, but you can only shop while your balance is positive.
+        A popular bistro also earns walk-in takeaway each evening, so delighting
+        guests is what keeps the lights on. From tomorrow, guests start bringing
+        requests: answering them builds popularity, and ignoring them costs some.
+        Healthy staples remain the cheapest way to cook.'
+  fingerprint: UUPWG9w+pyXesp5ZfxF9ShPv/LJXzDZ1iUMjFwHoNXQ=

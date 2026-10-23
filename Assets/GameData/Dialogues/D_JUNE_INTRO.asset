@@ -45,6 +45,7 @@ MonoBehaviour:
       Now I want to pay closer attention to what is actually in a meal.
     claim: {fileID: 0}
     portrait: {fileID: 0}
+    backgroundImage: {fileID: 0}
     emotion: Neutral
     voiceOver: {fileID: 0}
   - lineOrder: 1
@@ -53,6 +54,7 @@ MonoBehaviour:
       than chase an expensive promise.
     claim: {fileID: 0}
     portrait: {fileID: 0}
+    backgroundImage: {fileID: 0}
     emotion: Neutral
     voiceOver: {fileID: 0}
   approvalStatus: 0

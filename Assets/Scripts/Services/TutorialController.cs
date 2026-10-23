@@ -67,7 +67,7 @@ public class TutorialController : IDisposable
             if(Active==null)return "";
             var text=Active.steps.Find(s=>s.stepId==Record.stepId)?.text??"";
             return text.Replace("{recipe}",plan.Recipe?.displayName??"recipe").Replace("{requirements}",plan.Requirements)
-                .Replace("{maxDiscount}",plan.MaximumDiscount.ToString("P0"))
+                .Replace("{maxDiscount}",plan.MaximumDiscount.ToString("P0")).Replace("{rent}",plan.RentPerDay.ToString("0.##"))
                 .Replace("{healthDelta}",LastMeal?.healthDelta.ToString()??"0")
                 .Replace("{dailyDozen}",LastMeal==null||LastMeal.dailyDozenCovered.Length==0?"none":string.Join(", ",LastMeal.dailyDozenCovered))
                 .Replace("{ingredients}",LastMeal==null?"":string.Join(", ",LastMeal.consumedIngredients

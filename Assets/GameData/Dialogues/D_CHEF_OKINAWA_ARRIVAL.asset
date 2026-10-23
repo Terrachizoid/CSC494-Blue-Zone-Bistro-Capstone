@@ -20,7 +20,7 @@ MonoBehaviour:
   priority: 1000
   randomWeight: 1
   customer: {fileID: 0}
-  minDay: 3
+  minDay: 4
   maxDay: -1
   minCustomerHealth: -1
   maxCustomerHealth: -1
@@ -45,6 +45,7 @@ MonoBehaviour:
       a few plant-based meal ideas inspired by Okinawa.
     claim: {fileID: 0}
     portrait: {fileID: 0}
+    backgroundImage: {fileID: 0}
     emotion: Welcoming
     voiceOver: {fileID: 0}
   - lineOrder: 1
@@ -53,6 +54,7 @@ MonoBehaviour:
       points for your menu, not a claim that one bowl represents an entire place.
     claim: {fileID: 0}
     portrait: {fileID: 0}
+    backgroundImage: {fileID: 0}
     emotion: Welcoming
     voiceOver: {fileID: 0}
   - lineOrder: 2
@@ -61,8 +63,9 @@ MonoBehaviour:
       regulars can explore them at their own pace.
     claim: {fileID: 0}
     portrait: {fileID: 0}
+    backgroundImage: {fileID: 0}
     emotion: Welcoming
     voiceOver: {fileID: 0}
   approvalStatus: 0
-  reviewNotes: 'Day 3 after Market: priority story encounter independent of customer
-    attendance; once only.'
+  reviewNotes: 'Day 4 after Market (opens Chapter 2 with MegaBulk and the Okinawa
+    recipes): priority story encounter independent of customer attendance; once only.'

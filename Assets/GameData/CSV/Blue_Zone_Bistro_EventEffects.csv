@@ -1,0 +1,6 @@
+"event_id","effect_type","target_type","target_id","operation","value"
+"EV_SALE","Price","Store","S002","Multiply","0.8"
+"EV_OATS","Price","Food","P001","Multiply","1.5"
+"EV_CLOSED","Availability","Store","S001","Close","0"
+"EV_PUBLICITY","AttendancePopularity","Bistro","","Add","500"
+"EV_PUBLICITY","Price","Store","S001","Multiply","0.9"

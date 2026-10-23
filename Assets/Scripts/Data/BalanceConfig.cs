@@ -6,6 +6,10 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "BalanceConfig", menuName = "Blue Zone Bistro/Balance")]
 public class BalanceConfig : ScriptableObject
 {
+    [Header("Morning events")]
+    [Min(2)] public int eventsStartDay=2;
+    [Range(0,1)] public float noEventChance=.25f;
+    [Range(0,1)] public float twoEventChance=.25f;
     [Min(0)] public float startingMoney = 30f;
     [Header("First successful food sorting reward")]
     [Range(0, 1)] public float maximumSortingDiscount = 0.30f;
@@ -41,13 +45,16 @@ public class BalanceConfig : ScriptableObject
     [Min(0)] public float failedRecipePopularityPenalty = 40f;
     [Min(0)] public float maximumPopularityGainPerDish = 100f;
     public float[] attendanceThresholds = { 0f, 250f, 500f, 750f };
-    public CustomerPopularityUnlock[] customerPopularityUnlocks = {
-        new CustomerPopularityUnlock { customerId="U005", popularity=500f },
-        new CustomerPopularityUnlock { customerId="U006", popularity=750f }
-    };
+    // Customer popularity unlocks are authored per customer in Customers.csv (unlock_popularity).
     [Min(1)] public float maximumCommunityWellbeing = 100f;
     [Min(0)] public float startingCommunityWellbeing = 50f;
     [Min(0)] public float wellbeingPerHealthPoint = .25f;
+    [Header("Rent, walk-ins and craving pressure (C# defaults off; tuned in BalanceConfig.asset)")]
+    [Tooltip("First day whose morning charges rent.")] [Min(1)] public int rentStartDay = 3;
+    [Tooltip("Charged each morning from rentStartDay. Money may go negative.")] [Min(0)] public float rentPerDay = 0f;
+    [Tooltip("Walk-in takeaway income per popularity point above the threshold, paid when service closes.")] [Min(0)] public float walkInIncomePerPopularity = 0f;
+    [Min(0)] public float walkInPopularityThreshold = 450f;
+    [Tooltip("Popularity lost per active craving a built dish leaves unresolved (day cravingsStartDay onward).")] [Min(0)] public float popularityPerMissedCraving = 0f;
     [Header("Customer visits and finance")]
     [Min(1)] public int maxDelight = 100;
     [Min(0)] public int startingDelight = 50;
@@ -66,11 +73,4 @@ public class BalanceConfig : ScriptableObject
             default: return 0; // Unconfigured storage cannot be purchased.
         }
     }
-}
-
-[System.Serializable]
-public class CustomerPopularityUnlock
-{
-    public string customerId;
-    [Min(0)] public float popularity;
 }

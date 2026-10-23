@@ -42,6 +42,7 @@ MonoBehaviour:
     textTemplate: That {servedRecipe} had a combination I would order again.
     claim: {fileID: 0}
     portrait: {fileID: 0}
+    backgroundImage: {fileID: 0}
     emotion: Happy
     voiceOver: {fileID: 0}
   - lineOrder: 1
@@ -50,6 +51,7 @@ MonoBehaviour:
       was left.
     claim: {fileID: 0}
     portrait: {fileID: 0}
+    backgroundImage: {fileID: 0}
     emotion: Happy
     voiceOver: {fileID: 0}
   approvalStatus: 0

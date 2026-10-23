@@ -43,6 +43,7 @@ MonoBehaviour:
       energy lasts beyond the first few minutes.
     claim: {fileID: 0}
     portrait: {fileID: 0}
+    backgroundImage: {fileID: 0}
     emotion: Happy
     voiceOver: {fileID: 0}
   approvalStatus: 0

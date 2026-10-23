@@ -43,6 +43,7 @@ MonoBehaviour:
       the ingredients run short.
     claim: {fileID: 0}
     portrait: {fileID: 0}
+    backgroundImage: {fileID: 0}
     emotion: Neutral
     voiceOver: {fileID: 0}
   - lineOrder: 1
@@ -50,6 +51,7 @@ MonoBehaviour:
     textTemplate: I came for a meal, not just a larger pile of whatever was left.
     claim: {fileID: 0}
     portrait: {fileID: 0}
+    backgroundImage: {fileID: 0}
     emotion: Neutral
     voiceOver: {fileID: 0}
   approvalStatus: 0

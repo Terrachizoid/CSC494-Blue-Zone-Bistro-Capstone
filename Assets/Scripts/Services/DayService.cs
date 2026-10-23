@@ -17,6 +17,16 @@ public class DayService : IDayService
         this.customers = customers;
     }
 
+    // Walk-in takeaway income for today, paid once when service closes (GameLoop.ShowResults).
+    public float CloseService()
+    {
+        float income = (float)Math.Round(Math.Max(0.0, state.popularity - balance.walkInPopularityThreshold) *
+            balance.walkInIncomePerPopularity, 2, MidpointRounding.AwayFromZero);
+        if (income <= 0 || float.IsNaN(income) || float.IsInfinity(income)) return 0f;
+        state.money += income;
+        return income;
+    }
+
     public DayResult FinishDay()
     {
         if (state.currentDay < 1 || balance.totalDays < 1 || state.currentDay > balance.totalDays || balance.financeHealthLagDays < 1)
@@ -53,10 +63,17 @@ public class DayService : IDayService
         }
         state.currentDay++;
         foreach (var customer in state.customers) RushCrashProgress.StartDay(customer, state.currentDay);
+        // Morning rent. Money may go negative; purchases then need a positive balance again.
+        float rent = state.currentDay >= balance.rentStartDay ? balance.rentPerDay : 0f;
+        if (rent > 0)
+        {
+            state.money -= rent;
+            state.flags.SetFlag(TutorialFlags.RentStarted);
+        }
         state.shoppingReceipt = null;
         state.currentCustomerId = null;
         state.selectedRecipeId = null;
         return new DayResult { success = true, currentDay = state.currentDay,
-            expiredInventoryEntryIds = expired.ToArray() };
+            expiredInventoryEntryIds = expired.ToArray(), rentCharged = rent };
     }
 }

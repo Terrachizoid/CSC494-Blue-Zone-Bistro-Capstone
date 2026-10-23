@@ -28,7 +28,7 @@ MonoBehaviour:
   allowNonGreenChoices: 1
   unlockDay: 4
   tier: 1
-  baseSalePrice: 8
+  baseSalePrice: 4.4
   delightValue: 3
   cravingTags: 020000000100000006000000
   claims: []

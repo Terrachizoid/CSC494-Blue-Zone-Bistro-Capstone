@@ -21,6 +21,11 @@ public class CustomerData : ScriptableObject
     [Range(0, 100)]
     public int startingHealth = 50;
 
+    // Bistro popularity needed before this customer first appears (0 = no requirement).
+    // Once reached, the unlock is permanent for the run even if popularity later drops.
+    [Min(0f)]
+    public float unlockPopularity;
+
     [Min(0)]
     public int startingProsperity;
 

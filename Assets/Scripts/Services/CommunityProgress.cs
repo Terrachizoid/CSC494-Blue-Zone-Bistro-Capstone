@@ -11,16 +11,13 @@ public static class CommunityProgress
         foreach(float v in new[]{b.maximumPopularity,b.startingPopularity,b.popularityPerDelight,
             b.failedRecipePopularityPenalty,b.maximumPopularityGainPerDish,b.maximumCommunityWellbeing,
             b.startingCommunityWellbeing,b.wellbeingPerHealthPoint,b.ingredientAppealMultiplier,
-            b.recipeDelightMultiplier,b.delightPerResolvedCraving})if(!Finite(v)||v<0)return false;
+            b.recipeDelightMultiplier,b.delightPerResolvedCraving,b.popularityPerMissedCraving,b.rentPerDay,b.walkInIncomePerPopularity,b.walkInPopularityThreshold})if(!Finite(v)||v<0)return false;
         if(b.maximumPopularity<=0||b.maximumCommunityWellbeing<=0||b.startingPopularity>b.maximumPopularity||
             b.startingCommunityWellbeing>b.maximumCommunityWellbeing||b.cravingsStartDay<1||
             b.minimumDailyCravings<1||b.maximumDailyCravings<b.minimumDailyCravings||b.maximumDailyCravings>6||
             b.attendanceThresholds==null||b.attendanceThresholds.Length==0||b.attendanceThresholds[0]!=0)return false;
         float previous=-1;
         foreach(float t in b.attendanceThresholds){if(!Finite(t)||t<=previous||t>b.maximumPopularity)return false;previous=t;}
-        var ids=new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-        foreach(var rule in b.customerPopularityUnlocks??Array.Empty<CustomerPopularityUnlock>())
-            if(rule==null||string.IsNullOrWhiteSpace(rule.customerId)||!ids.Add(rule.customerId)||!Finite(rule.popularity)||rule.popularity<0||rule.popularity>b.maximumPopularity)return false;
         return true;
     }
     public static void Initialize(GameSessionState s,BalanceConfig b)
@@ -43,6 +40,8 @@ public static class CommunityProgress
             double fraction=s.currentDay<b.cravingsStartDay?1:
                 r.activeCravings.Length==0?0:(double)r.cravingsResolved.Length/r.activeCravings.Length;
             gain=Math.Min(b.maximumPopularityGainPerDish,Math.Max(0,r.dishDelight)*b.popularityPerDelight*fraction);
+            // Ignoring a customer's request costs reputation. This depends on cravings only, never on health.
+            if(s.currentDay>=b.cravingsStartDay)gain-=b.popularityPerMissedCraving*(r.activeCravings.Length-r.cravingsResolved.Length);
         }
         r.popularityDelta=Clamp(s.popularity+gain,b.maximumPopularity)-s.popularity;
         r.communityWellbeingDelta=Clamp(s.communityWellbeing+(double)r.dishHealthEffect*b.wellbeingPerHealthPoint,b.maximumCommunityWellbeing)-s.communityWellbeing;

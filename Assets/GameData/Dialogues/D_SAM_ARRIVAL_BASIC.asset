@@ -42,6 +42,7 @@ MonoBehaviour:
     textTemplate: I actually made time to leave the desk today.
     claim: {fileID: 0}
     portrait: {fileID: 0}
+    backgroundImage: {fileID: 0}
     emotion: Neutral
     voiceOver: {fileID: 0}
   approvalStatus: 0

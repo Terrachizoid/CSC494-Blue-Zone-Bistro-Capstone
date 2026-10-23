@@ -42,6 +42,7 @@ MonoBehaviour:
     textTemplate: Thanks for the {servedRecipe}. That was a straightforward lunch.
     claim: {fileID: 0}
     portrait: {fileID: 0}
+    backgroundImage: {fileID: 0}
     emotion: Neutral
     voiceOver: {fileID: 0}
   - lineOrder: 1
@@ -49,6 +50,7 @@ MonoBehaviour:
     textTemplate: I could make room for something like this in my routine.
     claim: {fileID: 0}
     portrait: {fileID: 0}
+    backgroundImage: {fileID: 0}
     emotion: Neutral
     voiceOver: {fileID: 0}
   approvalStatus: 0

@@ -59,6 +59,7 @@ foreach ($row in (Read-ContentCsv 'Customers')) {
     $customer=New-Object CustomerData; $customer.id=$row.customer_id
     $customer.cravingTags = @($row.craving_tags.Split('|') | ForEach-Object { [CravingTag]$_ })
     $customer.startingHealth=[int]$row.starting_health; $customer.unlockDay=[int]$row.unlock_day
+    if ($row.unlock_popularity) { $customer.unlockPopularity=[float]$row.unlock_popularity }
     $customer.customerType=[CustomerType]$row.customer_type; $customer.displayName=$row.display_name
     foreach ($recipeId in $row.preferred_recipe_ids.Split('|')) { if ($recipeId -and !$recipeDb.GetById($recipeId)) { throw 'Unknown preferred recipe' } }
     $customerItems.Add($customer)
@@ -203,7 +204,7 @@ for ($day=1; $day -le 6; $day++) {
         $loop.BeginService() | Out-Null
     }
     if (!([RecipeCheck]::new($foodDb)).CanMake($recipeDb.GetById('R002'),$state)) { throw 'Daily bowl not makeable' }
-    if ($day -eq 3 -and $loop.Dialogue.Sequence.id -ne 'D_CHEF_OKINAWA_ARRIVAL') { throw 'CSV chef not first on day three' }
+    if ($day -eq 4 -and $loop.Dialogue.Sequence.id -ne 'D_CHEF_OKINAWA_ARRIVAL') { throw 'CSV chef not first on day four' }
     $dialogueSteps=0
     while ($loop.Phase -eq [GamePhase]::Service) {
         if ($loop.Dialogue.IsActive) {

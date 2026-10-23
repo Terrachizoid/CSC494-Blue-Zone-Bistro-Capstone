@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 public interface IPurchaseService { PurchaseResult Buy(string listingId); }
 public interface IMealService { ServeResult Serve(ServeInput input); ServeResult Preview(ServeInput input); }
-public interface IDayService { DayResult FinishDay(); }
+public interface IDayService { DayResult FinishDay(); float CloseService(); }
 
 [Serializable]
 public class IngredientSelection
@@ -86,4 +86,6 @@ public class DayResult : OperationResult
     public int currentDay;
     public bool gameCompleted;
     public string[] expiredInventoryEntryIds = Array.Empty<string>();
+    // Rent charged on the morning of currentDay (0 before rentStartDay).
+    public float rentCharged;
 }

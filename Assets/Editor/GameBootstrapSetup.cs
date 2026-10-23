@@ -53,6 +53,8 @@ public class GameBootstrapSetup : IProcessSceneWithReport, IPreprocessBuildWithR
         if (EditorApplication.isPlaying) return;
         EnsureBalance();
         DialogueCsvImporter.EnsureCurrent();
+        if(AssetDatabase.LoadAssetAtPath<EndingDatabase>(EndingCsvImporter.AssetPath)==null)EndingCsvImporter.Import();
+        if(AssetDatabase.LoadAssetAtPath<EventDatabase>(EventCsvImporter.AssetPath)==null)EventCsvImporter.Import();
         TutorialCsvImporter.EnsureCurrent();
         for (int i = 0; i < SceneManager.sceneCount; i++)
         {
@@ -88,6 +90,8 @@ public class GameBootstrapSetup : IProcessSceneWithReport, IPreprocessBuildWithR
             changed |= Fill<RecipeDatabase>(serialized, "recipes", "Assets/GameData/Recipes/RecipeDatabase.asset");
             changed |= Fill<CustomerDatabase>(serialized, "customers", "Assets/GameData/Customers/CustomerDatabase.asset");
             changed |= Fill<DialogueDatabase>(serialized, "dialogues", "Assets/GameData/Dialogues/DialogueDatabase.asset");
+            changed |= Fill<EndingDatabase>(serialized, "endings", EndingCsvImporter.AssetPath);
+            changed |= Fill<EventDatabase>(serialized, "events", EventCsvImporter.AssetPath);
             changed |= Fill<BalanceConfig>(serialized, "balance", BalancePath);
             changed |= Fill<TutorialDatabase>(serialized, "tutorials", TutorialCsvImporter.AssetPath);
             if (changed)
@@ -96,7 +100,7 @@ public class GameBootstrapSetup : IProcessSceneWithReport, IPreprocessBuildWithR
                 if (!building) EditorSceneManager.MarkSceneDirty(scene);
             }
             if (building)
-                foreach (string field in new[] { "foods", "listings", "recipes", "customers", "dialogues", "balance" })
+                foreach (string field in new[] { "foods", "listings", "recipes", "customers", "dialogues", "balance", "endings", "events" })
                     if (serialized.FindProperty(field).objectReferenceValue == null)
                         throw new BuildFailedException("GameBootstrap in scene '" + scene.name +
                             "' is missing " + field + ". Run Tools > Blue Zone Bistro > Import All CSV Content before building.");

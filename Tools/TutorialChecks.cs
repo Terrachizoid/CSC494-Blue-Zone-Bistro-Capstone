@@ -41,7 +41,7 @@ public static class TutorialChecks
         Check(!loop.SubmitSorting(answers).success&&!loop.BeginService(),"Sorting tutorial lock bypassed");
         Check(loop.ContinueTutorial()&&loop.SubmitSorting(answers).success&&loop.BeginService(),"Sorting lesson continuation failed");
         Check(lessons.Active.id=="cook"&&lessons.Record.stepId=="choose","Cooking start failed");
-        Check(!loop.SelectRecipe("OTHER").success&&!loop.SkipCustomer(),"Recipe/skip restrictions failed");
+        Check(!loop.SelectRecipe("OTHER").success&&!loop.SkipCustomer(),"Unknown recipe or skip was not blocked");
         Check(loop.SelectRecipe("R001").success&&lessons.Record.stepId=="build","Recipe step did not advance");
         var input=new ServeInput{customerId="U",recipeId="R001",slotSelections=new List<MealSlotSelection>{new MealSlotSelection{slotIndex=0,foodId="G",servings=1},new MealSlotSelection{slotIndex=1,foodId="V",servings=1}}};
         Check(loop.PreviewServe(input).success&&!loop.PreviewServe(input).recipeBuilt,"Mismatched preview was hidden");

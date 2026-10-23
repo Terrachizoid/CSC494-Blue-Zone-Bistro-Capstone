@@ -39,19 +39,19 @@ and rejects missing dependencies. Bootstrap creates one session and passes that 
 all services. UI code should call `bootstrap.Loop`, whose phase guards enforce order.
 No per-frame Update loop is needed for these button-driven commands.
 
-## Playing the greybox
+## Playing the game
 
-Press Play with the configured GameBootstrap scene object active, then open the Game
-view. Bootstrap automatically adds GreyboxUIController at runtime. It uses Unity's
-built-in immediate-mode text/buttons, so no Canvas, fonts, or button bindings need
-manual setup. This is temporary desktop greybox presentation, not the final card UI.
+Press Play with the configured GameBootstrap scene object active. Bootstrap adds
+`BistroUIScreen`, which builds the Canvas UI at runtime (see [UI framework](UIFramework.md)).
+The old IMGUI `GreyboxUIController` was removed from startup on 2026-10-22.
 
-Market: choose stores, add packages, inspect the pantry, review the cart, and
-confirm checkout before sorting/service. Service shows one queued encounter at a time. Eligible story
+Market: pan the city map, enter stores and shelves, drag packages into the cart,
+inspect the pantry, review the cart, and confirm checkout before sorting/service.
+Service shows one queued encounter at a time. Eligible story
 encounters run first in descending priority, then customers chosen by attendance.
 Customer arrival dialogue and first-visit introductions precede meal selection. All unlocked
-recipes are offered, labelled Can make or Substitution needed. Choose a recipe,
-adjust batch serving counts with +/- buttons, and Submit to preview the dish.
+recipes are offered. Choose a recipe, drag pantry food cards into its slots (one serving
+per drop), and Submit to preview the dish.
 The confirmation shows recipe success, missing/surplus categories, payment, and effects.
 Back to reconsider retains selections without consuming anything. Confirm and serve
 revalidates inventory and applies the result. Invalid requests keep selections.
@@ -67,8 +67,8 @@ once; empty queues immediately show Results. Story visitors do not roll attendan
 No early ShowResults bypass is allowed:
 serve or skip remaining customers. Daily Results records successful purchases/dishes
 and skipped customers. Finish day ages stock and opens the next market; the final day
-shows completion. Successful recipes earn authored base pay plus a finance/100 tip
-(finance starts at 20, so the initial tip is 20%). Mismatched recipes earn 75% of
+shows completion. Successful recipes earn authored base pay (4–5.5 after the 2026-10-22 tuning) plus a finance/100 tip
+(finance starts at 20, so the initial tip is 20%). Starting money is 15. Mismatched recipes earn 75% of
 minimum ingredient value and no tip, and lose 30 delight before clamping to 0.
 Delight ranges from 0 to 100. Correct dishes gain serving-weighted ingredient appeal,
 recipe delight and resolved-craving bonuses, floored and capped at +20.
@@ -124,9 +124,9 @@ Use the ServiceEncounter trigger for standalone story sequences such as the chef
 Their day/flag/history conditions determine eligibility at queue construction; priority
 orders them ahead of regular customers. Eligibility is checked again before playback.
 Newly unlocked story events not eligible at construction are considered next day.
-The chef event runs from day 3 onward, after Market, until completed, rather than only in a fragile
-one-day window. Its completion sets okinawa_chef_arrived; current regional content
-still retains its existing day-based availability.
+The chef event runs from day 4 onward (the start of Chapter 2, when MegaBulk and the
+Okinawa-inspired recipes unlock), after Market, until completed. Its completion sets
+okinawa_chef_arrived; regional content itself is still unlocked by day, not by that flag.
 
 Customer checkpoints select one eligible sequence each: CustomerArrival, BeforeService,
 and AfterService. Highest-priority mandatory wins; otherwise weighted ambient is used.
@@ -143,7 +143,7 @@ text and Next/Continue; optional voice playback stops when the line changes. No 
 or no usable lines skips that dialogue checkpoint. Flags are session-wide; showing a
 line or previewing a dish does not complete dialogue or set flags.
 
-97 sequences and 189 lines cover June, Dev, Rosa, Sam, Marco, Priya and the visiting chef. Narrative
+113 sequences and 213 lines (as of 2026-10-22) cover June, Dev, Rosa, Sam, Marco, Priya, the visiting chef, rush/crash conversations and the four endings. Narrative
 remains Pending review; no new clinical claims or claim-register entries were added.
 Greetings select one of nine combinations per customer: current health low/mid/high
 crossed with current delight low/mid/high (0–34, 35–69, 70–100). AfterService uses actual
@@ -185,8 +185,10 @@ customers; each is served at most once per day. Ending service with no meals is 
 
 Purchasing buys one package, reading price and servings from StoreListingData and
 storage type from its FoodData reference. Each purchase gets a unique batch ID.
-Membership stores require their store ID in `state.storeMembershipIds`; listing
-unlock flags use `state.flags`. Membership purchase UI is not implemented.
+Listing unlock flags use `state.flags`. Store memberships are intentionally cut
+(user decision, 2026-10-22): MegaBulk opens by `unlock_day` 4 with `requires_membership=false`.
+The dormant membership check (`StoreData.requiresMembership`, `state.storeMembershipIds`)
+remains in code until cleanup; do not build UI for it.
 
 Serving accepts batch IDs and quantities, not mutable InventoryEntry references.
 Repeated selections of the same batch are combined before stock validation.
@@ -203,8 +205,10 @@ Dozen categories from green foods times coverage weight, minus yellow and red
 serving penalties. All weights are on BalanceConfig. Health is clamped to 0–100;
 healthDelta reports the actual applied change. Coverage output includes all selected
 foods, but non-green foods do not earn coverage bonuses. Delight does not add health.
-Any red serving sets rushCrashTriggered; timed animation and crash scheduling are
-not implemented. cravingsResolved is reserved and currently empty.
+Any red serving sets rushCrashTriggered, which drives the visual-only rush/crash state and
+its dialogue (see [Checkpoints](Checkpoints.md)); no extra health penalty is applied.
+cravingsResolved lists active cravings matched by a successfully built recipe (day 4+;
+see [Popularity and cravings](PopularityAndCravings.md)).
 
 Fresh shelf life defaults to 2 game days, frozen to 5, and canned/dry/shelf-stable
 to -1 (no expiry). These are prototype game rules, not food safety guidance.
@@ -217,11 +221,12 @@ restriction remains available per recipe through allowNonGreenChoices. No approv
 content assets are changed. Numerical scoring is provisional because the plans give
 inputs rather than an exact equation.
 
-Polished UI, save/load, customer animation, cravings and broader chapter events remain
-future work. Editor setup can fill scene references; gameplay UI is added only at runtime.
+Save/load, cravings, events and endings are implemented in their own guides. Remaining
+work (final art, customer visuals, audio, balance, claims) is tracked in [KnownIssues](KnownIssues.md).
+Editor setup can fill scene references; gameplay UI is added only at runtime.
 
 Run `pwsh -File Tools/Test-GameOperations.ps1` for isolated operation checks using
 Unity stubs. These checks do not replace a Unity Play Mode or Web build test.
 
 See [DeveloperGuide.md](DeveloperGuide.md) for the architecture map, authoring workflow,
-structural validator, importer regression checks, and remaining Week 3 limitations.
+structural validator and importer regression checks.

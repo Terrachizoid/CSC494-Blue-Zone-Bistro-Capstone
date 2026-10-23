@@ -1,0 +1,6 @@
+"ending_id","title","min_popularity","max_popularity","min_wellbeing","max_wellbeing","priority","fallback","dialogue_id","image_path","min_money","max_money"
+"E_BLUE","A flourishing Blue Zone Bistro","750","","70","","100","false","D_END_BLUE","Assets/Art/Endings/blue_0.png","",""
+"E_NICHE","A neighbourhood favourite","","750","70","","90","false","D_END_NICHE","Assets/Art/Endings/niche_0.png","",""
+"E_POPULAR","A full house, an unfinished promise","750","","","70","80","false","D_END_POPULAR","Assets/Art/Endings/popular_0.png","",""
+"E_STRUGGLING","A chance to begin again","","","","","-100","true","D_END_STRUGGLING","Assets/Art/Endings/struggling_0.png","",""
+"E_BANKRUPT","Closed for now","","","","","200","false","D_END_BANKRUPT","Assets/Art/Endings/struggling_1.png","","-10"

@@ -17,6 +17,7 @@ MonoBehaviour:
   customerType: 0
   unlockDay: 2
   startingHealth: 50
+  unlockPopularity: 500
   startingProsperity: 0
   themeFromPlan: Fisherman exploring familiar meals and plant-food alternatives
   preferredRecipes:

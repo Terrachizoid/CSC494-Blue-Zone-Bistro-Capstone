@@ -11,6 +11,8 @@ public class GameLoop
     private readonly IMealService meals;
     private readonly IDayService days;
     private readonly ICustomerVisitService visits;
+    private readonly EndingService endings;
+    private readonly EventService events;
     private readonly EncounterScheduler encounters;
     private readonly FoodSortingService sorting;
     public SortingResult SortingResult { get; private set; }
@@ -37,12 +39,15 @@ public class GameLoop
     public bool ContinueTutorial() { bool done=Tutorials?.ContinueText()==true; RefreshTutorials(); return done; }
 
     public GameLoop(IPurchaseService purchases, IMealService meals, IDayService days,
-        ICustomerVisitService visits, EncounterScheduler encounters = null, FoodSortingService sorting = null, bool completed = false)
+        ICustomerVisitService visits, EncounterScheduler encounters = null, FoodSortingService sorting = null, bool completed = false, EndingService endings = null, EventService events = null)
     {
         this.purchases = purchases ?? throw new ArgumentNullException(nameof(purchases));
         this.meals = meals ?? throw new ArgumentNullException(nameof(meals));
         this.days = days ?? throw new ArgumentNullException(nameof(days));
         this.visits = visits ?? throw new ArgumentNullException(nameof(visits));
+        this.endings=endings;this.events=events;
+        if(!completed)events?.PrepareMorning();
+        if(completed)endings?.Complete();
         this.encounters = encounters;
         this.sorting = sorting;
         if (completed) Phase = GamePhase.Completed;
@@ -137,6 +142,9 @@ public class GameLoop
     public bool ShowResults()
     {
         if (Phase != GamePhase.Service || Service.CurrentEncounter != null || (Dialogue != null && Dialogue.IsActive)) return false;
+        float walkIns = days.CloseService(); // Once per day: the phase guard prevents a second call.
+        Summary.walkInIncome = walkIns;
+        Summary.moneyEarned += walkIns;
         SetPhase(GamePhase.Results);
         return true;
     }
@@ -229,11 +237,13 @@ public class GameLoop
         {
             if (!result.gameCompleted)
             {
-                Summary = new DaySummary();
+                Summary = new DaySummary { rentPaid = result.rentCharged };
                 Service = new ServiceSessionState();
                 SortingResult = null;
+                events?.PrepareMorning();
                 visits.GetTodaysCustomers();
             }
+            if(result.gameCompleted)endings?.Complete();
             SetPhase(result.gameCompleted ? GamePhase.Completed : GamePhase.Market);
             DayFinished?.Invoke();
         }

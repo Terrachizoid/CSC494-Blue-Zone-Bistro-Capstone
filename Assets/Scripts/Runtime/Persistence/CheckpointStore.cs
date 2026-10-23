@@ -28,7 +28,7 @@ public class CheckpointStore
             if(envelope==null || envelope.version!=1)throw new Exception("Unsupported save version.");
             if(string.IsNullOrEmpty(envelope.payload)||Digest(envelope.payload)!=envelope.checksum)throw new Exception("Checkpoint is incomplete or damaged.");
             var candidate=JsonUtility.FromJson<GameSessionState>(envelope.payload);
-            if(candidate==null || candidate.currentDay<1 || float.IsNaN(candidate.money) || float.IsInfinity(candidate.money) || candidate.money<0 ||
+            if(candidate==null || candidate.currentDay<1 || float.IsNaN(candidate.money) || float.IsInfinity(candidate.money) ||
                 candidate.inventory==null || candidate.customers==null || candidate.flags==null || candidate.dialogueHistory==null ||
                 candidate.storeMembershipIds==null || candidate.correctlySortedFoodIds==null)throw new Exception("Checkpoint has invalid session data.");
             foreach(var batch in candidate.inventory)
@@ -55,6 +55,10 @@ public class CheckpointStore
                         throw new Exception("Checkpoint contains an invalid craving.");
                 }
             }
+            if(candidate.events==null)candidate.events=new System.Collections.Generic.List<EventRecord>();
+            if(candidate.eventPlanDay<0||candidate.eventPlanDay>candidate.currentDay)throw new Exception("Invalid saved event day.");
+            foreach(var record in candidate.events)
+                if(record==null||string.IsNullOrWhiteSpace(record.eventId)||record.startDay<1||record.startDay>candidate.currentDay||record.expiresOnDay<=record.startDay||record.effects==null||record.effects.Count==0||record.effects.Exists(e=>!MarketEffects.ValidEffect(e)))throw new Exception("Invalid saved event effects.");
             // There is deliberately no in-progress transaction or UI selection on resume.
             candidate.shoppingReceipt=null;candidate.currentCustomerId=null;candidate.selectedRecipeId=null;
             state=candidate;return true;

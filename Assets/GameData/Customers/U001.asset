@@ -17,6 +17,7 @@ MonoBehaviour:
   customerType: 0
   unlockDay: 1
   startingHealth: 50
+  unlockPopularity: 0
   startingProsperity: 0
   themeFromPlan: Heart-health transition
   preferredRecipes:

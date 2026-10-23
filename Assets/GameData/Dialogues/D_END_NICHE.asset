@@ -1,0 +1,67 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6852f3275b3b4254aa4113d5ddba5b29, type: 3}
+  m_Name: D_END_NICHE
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueSequenceData
+  id: D_END_NICHE
+  displayName: A neighbourhood favourite
+  mode: 0
+  trigger: 8
+  repeatRule: 2
+  priority: 0
+  randomWeight: 1
+  customer: {fileID: 0}
+  minDay: 1
+  maxDay: -1
+  minCustomerHealth: -1
+  maxCustomerHealth: -1
+  minCustomerDelight: -1
+  maxCustomerDelight: -1
+  requiredRecipe: {fileID: 0}
+  recipeBuildCondition: 0
+  mealHealthCondition: 0
+  requiredRecipeTiers: 
+  minServedMealDelight: -1
+  maxServedMealDelight: -1
+  requiredFlags: []
+  forbiddenFlags: []
+  setFlags: []
+  clearFlags: []
+  lines:
+  - lineOrder: 0
+    speakerId: Narrator
+    textTemplate: Your bistro stayed small, but the meals made a positive difference.
+    claim: {fileID: 0}
+    portrait: {fileID: 0}
+    backgroundImage: {fileID: 21300000, guid: ab6b2e72d1aab6f43874bbc2a94a19fe, type: 3}
+    emotion: 
+    voiceOver: {fileID: 0}
+  - lineOrder: 1
+    speakerId: Narrator
+    textTemplate: A familiar circle kept returning. Beyond those tables, many neighbours
+      have yet to discover you.
+    claim: {fileID: 0}
+    portrait: {fileID: 0}
+    backgroundImage: {fileID: 21300000, guid: 102d341be4daca742899fcd00e56fe55, type: 3}
+    emotion: 
+    voiceOver: {fileID: 0}
+  - lineOrder: 2
+    speakerId: Narrator
+    textTemplate: You built a healthy foundation. Next time, help more people find
+      their seat.
+    claim: {fileID: 0}
+    portrait: {fileID: 0}
+    backgroundImage: {fileID: 21300000, guid: 272bb0b55e2f33c4392112803709ee76, type: 3}
+    emotion: 
+    voiceOver: {fileID: 0}
+  approvalStatus: 0
+  reviewNotes: Fictional prototype ending; thresholds require playtesting.

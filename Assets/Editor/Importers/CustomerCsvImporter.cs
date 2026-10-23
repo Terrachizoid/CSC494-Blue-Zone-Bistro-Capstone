@@ -104,6 +104,12 @@ public static class CustomerCsvImporter
             customer.startingHealth = CsvImportUtility.ParseInt(
                 CsvImportUtility.Get(row, columns, "starting_health"),
                 50, 0, 100, id, "starting_health");
+            // Optional column: older CSVs without it import with no popularity requirement.
+            customer.unlockPopularity = columns.ContainsKey("unlock_popularity")
+                ? CsvImportUtility.ParseFloat(
+                    CsvImportUtility.Get(row, columns, "unlock_popularity"),
+                    0f, 0f, id, "unlock_popularity")
+                : 0f;
             customer.startingProsperity = CsvImportUtility.ParseInt(
                 CsvImportUtility.Get(row, columns, "starting_prosperity"),
                 0, 0, int.MaxValue, id, "starting_prosperity");

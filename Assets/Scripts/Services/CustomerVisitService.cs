@@ -32,15 +32,15 @@ public class CustomerVisitService : ICustomerVisitService
     private void Prepare()
     {
         if(!CommunityProgress.Valid(balance))throw new InvalidOperationException("Invalid attendance tuning.");
-        state.morningPopularity=state.popularity;
+        state.morningPopularity=CommunityProgress.Clamp((double)state.popularity+new MarketEffects(state).Publicity,balance.maximumPopularity);
         state.dailyCustomerCapacity=CommunityProgress.Capacity(state.morningPopularity,balance);
         var eligible=new List<CustomerData>();
         foreach(var data in customers.Customers.Where(c=>c!=null && c.customerType!=CustomerType.VisitingChef && !string.IsNullOrWhiteSpace(c.id) && c.unlockDay<=state.currentDay).OrderBy(c=>c.id,StringComparer.OrdinalIgnoreCase))
         {
             if(eligible.Any(c=>Same(c.id,data.id)))continue;
-            var rule=(balance.customerPopularityUnlocks??Array.Empty<CustomerPopularityUnlock>()).FirstOrDefault(r=>Same(r.customerId,data.id));
             bool known=state.unlockedCustomerIds.Any(id=>Same(id,data.id));
-            if(!known && rule!=null && state.morningPopularity<rule.popularity)continue;
+            // Popularity requirement is authored per customer (Customers.csv unlock_popularity).
+            if(!known && data.unlockPopularity>0 && state.popularity<data.unlockPopularity)continue;
             if(!known)state.unlockedCustomerIds.Add(data.id);
             var progress=state.customers.Find(c=>Same(c.customerId,data.id));
             if(progress==null){progress=CustomerState.Create(data,balance);state.customers.Add(progress);}
@@ -72,7 +72,7 @@ public class CustomerVisitService : ICustomerVisitService
         if(foods!=null)foreach(var entry in state.inventory.Where(MealAllocation.Usable))
         {var food=foods.GetById(entry.foodId);if(food!=null){categories.Add(food.recipeCategory);if(food.trafficLight==TrafficLight.Green)greenCategories.Add(food.recipeCategory);}}
         if(listings!=null)foreach(var l in listings.Listings)
-            if(l!=null&&l.food!=null&&l.store!=null&&l.unlockDay<=state.currentDay&&l.store.unlockDay<=state.currentDay&&
+            if(l!=null&&l.food!=null&&l.store!=null&&new MarketEffects(state).ClosureReason(l.store.id)==null&&l.unlockDay<=state.currentDay&&l.store.unlockDay<=state.currentDay&&
                 (!l.store.requiresMembership||state.storeMembershipIds.Contains(l.store.id))&&
                 (string.IsNullOrEmpty(l.requiredFlag)||state.flags.HasFlag(l.requiredFlag))&&CommunityProgress.Finite(l.gamePrice)&&l.gamePrice>0&&l.servingsPerPackage>0)
                 {categories.Add(l.food.recipeCategory);if(l.food.trafficLight==TrafficLight.Green)greenCategories.Add(l.food.recipeCategory);}

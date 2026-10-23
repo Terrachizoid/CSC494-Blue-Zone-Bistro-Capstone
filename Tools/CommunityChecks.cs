@@ -50,7 +50,7 @@ public static class CommunityChecks
 
         var queueState=new GameSessionState{currentDay=4};int rolls=0;
         var roster=new CustomerDatabase();roster.SetItems(Enumerable.Range(1,6).Select(i=>new CustomerData{id="U"+i,cravingTags=new[]{CravingTag.Sweet,CravingTag.Hearty,CravingTag.Fizzy}}).ToList());
-        b.customerPopularityUnlocks=new[]{new CustomerPopularityUnlock{customerId="U6",popularity=750}};
+        roster.GetById("U6").unlockPopularity=750;
         var visits=new CustomerVisitService(queueState,roster,b,()=>{rolls++;return .2;},recipes,foods,listings);
         var queue=visits.GetTodaysCustomers();int originalRolls=rolls;
         Check(queue.Count==2&&!queue.Contains("U6")&&queue.Distinct().Count()==2,"Morning capacity/unlocks wrong");

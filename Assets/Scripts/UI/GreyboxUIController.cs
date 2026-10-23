@@ -114,7 +114,7 @@ public class GreyboxUIController : MonoBehaviour
             {
                 GUILayout.BeginHorizontal();
                 GUILayout.Label($"{Label(listing.food.displayName, listing.food.id)} | " +
-                    $"{listing.food.recipeCategory} | {listing.servingsPerPackage} servings | ${listing.gamePrice:0.00}");
+                    $"{listing.food.recipeCategory} | {listing.servingsPerPackage} servings | {game.Queries.GetPrice(listing).Display}");
                 if (GUILayout.Button("Inspect / Codex", GUILayout.Width(120))) inspectedFoodId = listing.food.id;
                 GUI.enabled = member;
                 if (GUILayout.Button("Add to cart", GUILayout.Width(100)))
@@ -141,7 +141,7 @@ public class GreyboxUIController : MonoBehaviour
             var listing = game.Queries.GetListing(item.listingId);
             GUILayout.BeginHorizontal();
             GUILayout.Label(listing == null ? item.listingId :
-                $"{listing.store.displayName}: {listing.food.displayName} | {item.packageQuantity} packages × ${listing.gamePrice:0.00}");
+                $"{listing.store.displayName}: {listing.food.displayName} | {item.packageQuantity} packages × {game.Queries.GetPrice(listing).Display}");
             if (GUILayout.Button("−", GUILayout.Width(40)))
             { if (--item.packageQuantity == 0) cart.Remove(item); GUIUtility.ExitGUI(); }
             if (GUILayout.Button("+", GUILayout.Width(40)) && item.packageQuantity < 10000) item.packageQuantity++;

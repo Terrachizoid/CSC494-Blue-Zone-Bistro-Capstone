@@ -11,6 +11,9 @@ public partial class BistroUIScreen
         ResetMeal();cart.Clear();answers.Clear();scrollPositions.Clear();renderedContext=null;
         store=null;shelf=null;modal=null;notice=game.SaveMessage??"";confirmNewGame=false;
         displayedTutorialStep=null;
+        endingLine=0;endingFinished=false;
+        announcedEvents.Clear();toastRecord=null;detailRecord=null;eventCodex=null;
+        if(eventToast!=null)Destroy(eventToast.gameObject);eventToast=null;if(eventAudio!=null)eventAudio.Stop();
         cardFaces.Clear();cityPosition=new Vector2(.5f,.5f);motionContext=null;overlayMotionContext=null;
     }
     private void MainMenu()

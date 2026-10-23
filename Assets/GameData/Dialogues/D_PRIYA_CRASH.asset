@@ -43,6 +43,7 @@ MonoBehaviour:
       on the front of the package today.
     claim: {fileID: 0}
     portrait: {fileID: 0}
+    backgroundImage: {fileID: 0}
     emotion: Concerned
     voiceOver: {fileID: 0}
   approvalStatus: 0

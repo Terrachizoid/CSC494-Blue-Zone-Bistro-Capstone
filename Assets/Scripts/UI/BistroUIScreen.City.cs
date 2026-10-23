@@ -32,7 +32,10 @@ public partial class BistroUIScreen
         for(int i=0;i<stores.Count;i++)
         {
             var item=stores[i];float x=.18f+(i%3)*.23f,y=.55f-(i/3)*.18f;
-            BistroWidgets.Button(world,item.displayName,theme,new Vector2(x,y),new Vector2(x+.18f,y+.09f),()=>Change(()=>store=item));
+            string closed=game.Queries.Market.ClosureReason(item.id);
+            var button=BistroWidgets.Button(world,item.displayName+(closed==null?"":"\nCLOSED"),theme,new Vector2(x,y),new Vector2(x+.18f,y+.09f),()=>Change(()=>store=item));
+            button.interactable=closed==null;
+            if(closed!=null)BistroWidgets.Label(world,closed,theme,new Vector2(x,y-.05f),new Vector2(x+.18f,y),14);
         }
         var scroll=viewport.gameObject.AddComponent<ScrollRect>();
         scroll.viewport=viewport;scroll.content=world;scroll.horizontal=true;scroll.vertical=true;

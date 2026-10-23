@@ -32,6 +32,8 @@ MonoBehaviour:
     displayName: Luxury shelf
     artwork: {fileID: 0}
   approvalStatus: 0
-  reviewNotes: Three-store framework example; wording and visuals remain editable.
+  reviewNotes: 'Restocked 2026-10-22: genuinely green but 2-3x priced produce and
+    superfoods; Wellness aisle sells yellow/red items as premium health food; Luxury
+    shelf (day 4) mixes green luxuries with traps.'
   exteriorIcon: {fileID: 0}
   shopBackground: {fileID: 0}

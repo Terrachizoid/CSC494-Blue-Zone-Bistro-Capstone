@@ -25,6 +25,7 @@ namespace UnityEngine {
 $paths = @(
     'Assets/Scripts/Data/*.cs',
     'Assets/Scripts/Runtime/GameSessionState.cs',
+    'Assets/Scripts/Runtime/EventRecord.cs',
     'Assets/Scripts/Runtime/InventoryEntry.cs',
     'Assets/Scripts/Runtime/CustomerState.cs',
     'Assets/Scripts/Runtime/ServiceSessionState.cs',
@@ -51,6 +52,7 @@ $files += Join-Path $PSScriptRoot 'MealSlotChecks.cs'
 $files += Join-Path $PSScriptRoot 'ProgressChecks.cs'
 $files += Join-Path $PSScriptRoot 'TutorialChecks.cs'
 $files += Join-Path $PSScriptRoot 'CommunityChecks.cs'
+$files += Join-Path $PSScriptRoot 'EventChecks.cs'
 Add-Type -Path $files -CompilerOptions '/nowarn:0649'
 [GameOperationsChecks]::Run()
 [DialogueChecks]::Run()
@@ -64,4 +66,5 @@ Add-Type -Path $files -CompilerOptions '/nowarn:0649'
 
 [TutorialChecks]::Run()
 [CommunityChecks]::Run()
+[EventChecks]::Run()
 

@@ -11,6 +11,8 @@ public class GameBootstrap : MonoBehaviour
     [SerializeField] private RecipeDatabase recipes;
     [SerializeField] private CustomerDatabase customers;
     [SerializeField] private DialogueDatabase dialogues;
+    [SerializeField] private EndingDatabase endings;
+    [SerializeField] private EventDatabase events;
     [SerializeField] private BalanceConfig balance;
     [SerializeField] private BistroUITheme uiTheme;
     [SerializeField] private TutorialDatabase tutorials;
@@ -51,8 +53,10 @@ public class GameBootstrap : MonoBehaviour
         { SaveMessage = "Saved food is missing from the current content. Import all CSV content before resuming."; return false; }
         foreach (var customer in restored.customers) if (customers.GetById(customer.customerId) == null)
         { SaveMessage = "A saved customer is missing from the current content."; return false; }
-        bool migrated=restored.communityStateVersion==0 || (!restored.gameCompleted && restored.attendancePlanDay!=restored.currentDay);
+        bool migrated=restored.eventPlanDay!=restored.currentDay || restored.communityStateVersion==0 || (!restored.gameCompleted && restored.attendancePlanDay!=restored.currentDay);
+        if(restored.eventPlanDay==0 && restored.attendancePlanDay==restored.currentDay)restored.eventPlanDay=restored.currentDay;
         PrepareMorning(restored);
+        if(restored.gameCompleted&&string.IsNullOrEmpty(restored.endingId)){new EndingService(restored,endings).Complete();migrated=true;}
         if(migrated && !saves.Save(saves.Capture(restored),out var migrationError))
         {SaveMessage="Could not save the migrated day plan: "+migrationError;return false;}
         state = restored; pendingCheckpoint = saves.Capture(state); SaveFailed = false; SaveMessage = message;
@@ -86,12 +90,9 @@ public class GameBootstrap : MonoBehaviour
             enabled=false;return;
         }
         BuildSession();
-        var ui = GetComponent<GreyboxUIController>();
-        if (ui == null) ui = gameObject.AddComponent<GreyboxUIController>();
-        ui.Initialize(this);
         var cards = GetComponent<BistroUIScreen>();
         if (cards == null) cards = gameObject.AddComponent<BistroUIScreen>();
-        cards.Initialize(this, ui, uiTheme);
+        cards.Initialize(this, uiTheme);
     }
     private void BuildSession()
     {
@@ -101,15 +102,16 @@ public class GameBootstrap : MonoBehaviour
         Loop = new GameLoop(new PurchaseService(state, listings, balance),
             new MealService(state, foods, recipes, customers, balance), new DayService(state, balance, customers),
             new CustomerVisitService(state, customers, balance, recipes:recipes, foods:foods, listings:listings), scheduler,
-            new FoodSortingService(state, foods), state.gameCompleted);
+            new FoodSortingService(state, foods), state.gameCompleted,new EndingService(state,endings),new EventService(state,events,balance,listings));
         Loop.DayFinished += CaptureCheckpoint;
         tutorialController=new TutorialController(state,tutorials,new IntroMealPlan(state,foods,recipes,listings,balance));
         Loop.AttachTutorials(tutorialController);
-        Queries = new GameContentQueries(state, foods, listings, recipes, customers);
+        Queries = new GameContentQueries(state, foods, listings, recipes, customers,endings,events);
     }
     private void PrepareMorning(GameSessionState session)
     {
         CommunityProgress.Initialize(session,balance);
+        new EventService(session,events,balance,listings).PrepareMorning();
         if(!session.gameCompleted)new CustomerVisitService(session,customers,balance,recipes:recipes,foods:foods,listings:listings).GetTodaysCustomers();
     }
 }

@@ -125,7 +125,7 @@ try {
     Copy-Item -LiteralPath (Join-Path $projectRoot 'Assets/GameData/CSV/Blue_Zone_Bistro_Tutorials.csv') -Destination $csvDirectory
     if (![TutorialCsvImporter]::EnsureCurrent()) { throw 'Tutorial import failed' }
     $tutorialDb=[UnityEditor.AssetDatabase]::Assets['Assets/GameData/TutorialDatabase.asset']
-    if ($tutorialDb.tutorials.Count -ne 4 -or ($tutorialDb.tutorials.steps | Measure-Object).Count -ne 6) { throw 'Tutorial definition/step count incorrect' }
+    if ($tutorialDb.tutorials.Count -ne 5 -or ($tutorialDb.tutorials.steps | Measure-Object).Count -ne 7) { throw 'Tutorial definition/step count incorrect' }
     $tutorialPath=Join-Path $csvDirectory 'Blue_Zone_Bistro_Tutorials.csv'
     $tutorialCsv=[IO.File]::ReadAllText($tutorialPath)
     $tutorialFingerprint=$tutorialDb.fingerprint

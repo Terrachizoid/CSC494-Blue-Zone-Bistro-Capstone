@@ -15,7 +15,6 @@ public partial class BistroUIScreen : MonoBehaviour
     private GameBootstrap game;
     private Canvas canvas;
     private RectTransform screen;
-    private GreyboxUIController legacy;
     private readonly List<CartEntry> cart=new List<CartEntry>();
     private readonly Dictionary<string,TrafficLight> answers=new Dictionary<string,TrafficLight>();
     private StoreData store;
@@ -23,9 +22,9 @@ public partial class BistroUIScreen : MonoBehaviour
     private bool dirty;
     private string motionContext;
     private bool ownsTheme;
-    public void Initialize(GameBootstrap bootstrap,GreyboxUIController fallback,BistroUITheme configuredTheme=null)
+    public void Initialize(GameBootstrap bootstrap,BistroUITheme configuredTheme=null)
     {
-        game=bootstrap;legacy=fallback;
+        game=bootstrap;
         if(configuredTheme!=null)theme=configuredTheme;
         if(theme==null){theme=ScriptableObject.CreateInstance<BistroUITheme>();ownsTheme=true;}
         var root=new GameObject("Bistro Canvas",typeof(RectTransform),typeof(Canvas),typeof(CanvasScaler),typeof(GraphicRaycaster));
@@ -36,26 +35,28 @@ public partial class BistroUIScreen : MonoBehaviour
         subscribedLoop=game.Loop;subscribedLoop.PhaseChanged+=PhaseChanged;Refresh();
     }
     private void PhaseChanged(GamePhase phase){ResetMeal();store=null;shelf=null;modal=null;answers.Clear();notice="";dirty=true;}
-    private void LateUpdate(){if(!game.IsMainMenu)SyncVoice();if(dirty){dirty=false;Refresh();}}
+    private void LateUpdate(){TickEventToast();if(!game.IsMainMenu)SyncVoice();if(dirty){dirty=false;Refresh();}}
     private void OnDestroy(){if(subscribedLoop!=null)subscribedLoop.PhaseChanged-=PhaseChanged;if(ownsTheme)Destroy(theme);}
     private void Change(Action action){action();dirty=true;}
     private void Refresh()
     {
-        canvas.gameObject.SetActive(true);legacy.enabled=false;
+        canvas.gameObject.SetActive(true);
         RememberScroll();
         RememberCardFaces();
         if(screen!=null){screen.gameObject.SetActive(false);Destroy(screen.gameObject);}
         screen=BistroWidgets.Box(canvas.transform,"Current screen",theme.background,Vector2.zero,Vector2.one);
         if(game.IsMainMenu){MainMenu();AnimateNavigation();return;}
+        if(game.Loop.Phase==GamePhase.Completed){EndingScreen();AnimateNavigation();return;}
         game.Loop.RefreshTutorials();
-        BistroWidgets.Label(screen,$"BLUE ZONE BISTRO / DAY {game.State.currentDay} / ${game.State.money:0.00}\nPopularity {game.State.popularity:0}/{game.Balance.maximumPopularity:0}",theme,new Vector2(.03f,.91f),new Vector2(.62f,.99f),23);
+        BistroWidgets.Label(screen,$"BLUE ZONE BISTRO / DAY {game.State.currentDay} / ${game.State.money:0.00}\nPopularity {game.State.popularity:0} {PublicityLabel()}",theme,new Vector2(.03f,.91f),new Vector2(.51f,.99f),23);
         BistroWidgets.Button(screen,"Menu",theme,new Vector2(.65f,.925f),new Vector2(.78f,.98f),()=>Change(()=>modal="main-menu"));
         BistroWidgets.Button(screen,"Pantry",theme,new Vector2(.80f,.925f),new Vector2(.96f,.98f),()=>Change(()=>modal="pantry"));
         BistroWidgets.Label(screen,game.SaveFailed?game.SaveMessage:notice,theme,new Vector2(.03f,0),new Vector2(.97f,.065f),18);
         if(game.Loop.Phase==GamePhase.Market)Market();else if(game.Loop.Phase==GamePhase.FoodSorting)Sorting();else if(game.Loop.Phase==GamePhase.Service)ServiceScreen();else ResultsScreen();
         if(game.SaveFailed)BistroWidgets.Button(screen,"Retry checkpoint save",theme,new Vector2(.72f,.005f),new Vector2(.98f,.06f),()=>Change(()=>game.RetrySave()));
+        BistroWidgets.Button(screen,"News",theme,new Vector2(.52f,.925f),new Vector2(.63f,.98f),()=>Change(()=>modal="news"));
         PresentTutorial();
-        if(modal=="main-menu")ReturnMenuPanel();else if(modal!=null && modal!="tutorial-help")Modal();
+        if(modal=="news"||modal=="event-detail")EventPanel();else if(modal=="main-menu")ReturnMenuPanel();else if(modal!=null && modal!="tutorial-help")Modal();
         RestoreScroll();
         RestoreCardFaces();
         AnimateNavigation();
@@ -84,7 +85,7 @@ public partial class BistroUIScreen : MonoBehaviour
             {
                 var grid=BistroWidgets.Grid(screen,theme,new Vector2(.03f,.20f),new Vector2(.73f,.79f));
                 foreach(var listing in listings.Where(l=>(string.IsNullOrEmpty(l.shelfId)?"All products":l.shelfId)==shelf))
-                    BistroFoodCard.Create(grid,listing.food,listing.id,"offer",$"${listing.gamePrice:0.00} · {listing.servingsPerPackage} servings\n{Expiry(game.Balance.GetShelfLife(listing.food.storageType))}",theme);
+                    BistroFoodCard.Create(grid,listing.food,listing.id,"offer",$"{game.Queries.GetPrice(listing).Display} · {listing.servingsPerPackage} servings\n{Expiry(game.Balance.GetShelfLife(listing.food.storageType))}",theme);
                 BistroWidgets.EmptyShelf(grid,"No products are available on this shelf.",theme);
                 var quote=game.Loop.QuoteCart(cart);
                 BistroDropSlot.Create(screen,$"CART · ${quote.total:0.00}",CartText(),theme,new Vector2(.76f,.28f),new Vector2(.97f,.77f),quote.success&&quote.total>game.State.money,AddToCart,()=>Change(()=>modal="cart"),cart.Select(c=>$"{game.Queries.GetListing(c.listingId)?.food.displayName} ×{c.packageQuantity}").ToArray());
@@ -156,7 +157,7 @@ public partial class BistroUIScreen : MonoBehaviour
         {
             bool isCart=modal=="cart";
             if(isCart)foreach(var c in cart)
-            {var listing=game.Queries.GetListing(c.listingId);BistroFoodCard.Create(grid,listing.food,c.listingId,"remove-cart",$"{c.packageQuantity} packages · ${listing.gamePrice*c.packageQuantity:0.00}\nDrag out to remove one",theme);}
+            {var listing=game.Queries.GetListing(c.listingId);BistroFoodCard.Create(grid,listing.food,c.listingId,"remove-cart",$"{c.packageQuantity} packages · ${game.Queries.GetPrice(listing).effectivePrice*c.packageQuantity:0.00}\nDrag out to remove one",theme);}
             else foreach(var p in answers.Where(p=>"sort:"+p.Value==modal))
                 BistroFoodCard.Create(grid,game.Queries.Foods.GetById(p.Key),p.Key,"remove-sort","Drag out to return",theme);
             BistroWidgets.EmptyShelf(grid,isCart?"Your cart is empty.\nOpen a store shelf and drag a food card into CART.":"This slot is empty.\nClose this panel to place a food card.",theme);

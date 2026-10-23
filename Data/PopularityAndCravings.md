@@ -13,7 +13,7 @@ All tuning lives in `BalanceConfig`. These are prototype balance values, not est
 
 Popularity starts at 300 and ranges from 0 to 1000. Morning popularity sets the daily capacity: 0–249 gives one customer; 250–499 two; 500–749 three; 750–1000 four. Distinct eligible customers are selected with weights equal to their personal delight. If none can be selected by weight, one eligible customer is selected uniformly. Chefs are separate encounters and do not occupy these seats.
 
-U005 unlocks at 500 and U006 at 750, in addition to their authored unlock days. Unlocks persist even if popularity drops. The day's queue and cravings never reroll on queries or resume. Popularity changes during service affect the next morning's capacity.
+A customer's popularity requirement is the optional `unlock_popularity` column in `Customers.csv` (0 = none; currently Marco U005 = 500, Priya U006 = 750), in addition to their unlock day. Unlocks persist even if popularity drops. The day's queue and cravings never reroll on queries or resume. Popularity changes during service affect the next morning's capacity.
 
 From day 4, select one or two distinct cravings from each visitor's CSV pool. A combination must have an unlocked recipe covering all selected tags, with required categories obtainable from accessible stores or usable pantry food (respecting green-only recipes). This is a content-feasibility check, not a guarantee that the player can currently afford every dish. Unsupported pools yield no requests rather than blocking service.
 
@@ -23,7 +23,7 @@ Ingredient appeal is a serving-weighted mean of food CSV `ingredient_appeal` val
 
 For a correctly built recipe, dish delight is the floored sum of weighted appeal, recipe delight, and 4 points per resolved craving, capped at +20. Each contribution has its own configurable multiplier. A failed recipe retains -30 delight, resolves no cravings, and pays 75% of minimum ingredient value with no tip. Ingredient price no longer adds delight.
 
-Before day 4, a valid recipe adds dish delight × 5 popularity. From day 4, multiply that gain by resolved cravings / active cravings; no resolved or active cravings means no gain. Positive gain is capped at 100 per dish. An invalid recipe loses 40 popularity. Skipping currently adds no new penalty.
+Before day 4, a valid recipe adds dish delight × `popularityPerDelight` popularity (3 in `BalanceConfig.asset` since the 2026-10-22 tuning; the C# default and the isolated tests still use 5). From day 4, multiply that gain by resolved cravings / active cravings; no resolved or active cravings means no gain. Positive gain is capped at 100 per dish. An invalid recipe loses 40 popularity. From day 4 a built dish also loses `popularityPerMissedCraving` (15 in the asset, 0 in C# defaults) per active craving it leaves unresolved (2026-10-22, see `Economy.md`). Skipping currently adds no new penalty.
 
 Community wellbeing starts at 50, ranges from 0 to 100, and changes by dish health effect × 0.25, independently of cravings and recipe success. Both global calculations use dish effects before clamping individual customer stats, so a customer already at 100 can still contribute. `GameContentQueries.GetCommunityVisualScore` supplies a normalized value for future visuals; no city saturation filter is added yet.
 

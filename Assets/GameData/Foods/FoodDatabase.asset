@@ -20,7 +20,7 @@ MonoBehaviour:
   - foodId: P003
     price: 0.6666667
   - foodId: P004
-    price: 1
+    price: 0.6
   - foodId: P005
     price: 0.33333334
   - foodId: P006
@@ -34,25 +34,25 @@ MonoBehaviour:
   - foodId: P010
     price: 0.6666667
   - foodId: P011
-    price: 1.75
+    price: 1.1999999
   - foodId: P012
     price: 0.75
   - foodId: P013
-    price: 1
+    price: 0.8
   - foodId: P014
-    price: 0.5
+    price: 0.2
   - foodId: P015
-    price: 0.6666667
+    price: 1.1999999
   - foodId: P016
-    price: 1.25
+    price: 0.8
   - foodId: P017
     price: 0.2777778
   - foodId: P018
-    price: 0.75
+    price: 0.375
   - foodId: P019
     price: 0.75
   - foodId: P020
-    price: 0.5
+    price: 0.3
   - foodId: P021
     price: 0.75
   - foodId: P022
@@ -62,7 +62,7 @@ MonoBehaviour:
   - foodId: P024
     price: 0.33333334
   - foodId: P025
-    price: 0.4
+    price: 0.28
   - foodId: P026
     price: 0.75
   - foodId: P027
@@ -84,15 +84,43 @@ MonoBehaviour:
   - foodId: P035
     price: 1
   - foodId: P036
-    price: 0.5
+    price: 0.25
   - foodId: P037
-    price: 0.5
+    price: 0.29999998
   - foodId: P038
     price: 0.44444445
   - foodId: P039
     price: 0.6666667
   - foodId: P040
     price: 0.4
+  - foodId: P041
+    price: 3.5
+  - foodId: P042
+    price: 3
+  - foodId: P043
+    price: 2
+  - foodId: P044
+    price: 2.25
+  - foodId: P045
+    price: 2
+  - foodId: P046
+    price: 1.8000001
+  - foodId: P047
+    price: 2
+  - foodId: P048
+    price: 2.5
+  - foodId: P049
+    price: 2.5
+  - foodId: P050
+    price: 2.5
+  - foodId: P051
+    price: 0.29999998
+  - foodId: P052
+    price: 0.35
+  - foodId: P053
+    price: 0.5
+  - foodId: P054
+    price: 0.5
   foods:
   - {fileID: 11400000, guid: ab23a5dfed8eaae48a37658da988dfab, type: 2}
   - {fileID: 11400000, guid: 806f08dcfb2f6d94792ec6b0827c0c7a, type: 2}
@@ -134,3 +162,17 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 936c8ac8fd67f284e9ffc8d1aae477cf, type: 2}
   - {fileID: 11400000, guid: cb62c3d3f806c1e4ba5d4f71a74c515f, type: 2}
   - {fileID: 11400000, guid: ea1e7ff9b5021674186bdc03bc4cf3f1, type: 2}
+  - {fileID: 11400000, guid: 708476728480c2347a222ddeb1162771, type: 2}
+  - {fileID: 11400000, guid: fc7612e792800ab42af46176cec23306, type: 2}
+  - {fileID: 11400000, guid: 6d02a3a2b2da7c647a2cc01b29522eea, type: 2}
+  - {fileID: 11400000, guid: 3a259083fbdc83c418a825aba7b5fb4d, type: 2}
+  - {fileID: 11400000, guid: 0e46066b574a6ea4790c294c07a331b9, type: 2}
+  - {fileID: 11400000, guid: 4ee6d1627a11d7145a7e7a708c1622a3, type: 2}
+  - {fileID: 11400000, guid: ac41532ee6b0d3e4bbb627b666bb2663, type: 2}
+  - {fileID: 11400000, guid: ae124cdba2fc7bb46952f7d0be9df82d, type: 2}
+  - {fileID: 11400000, guid: b6de392913ba7484bb1eedc7e8eb2e43, type: 2}
+  - {fileID: 11400000, guid: 3f59c20eac0c09b4ab3370d4995ed414, type: 2}
+  - {fileID: 11400000, guid: 47a134404e989ac4fa182e4e6e2e7117, type: 2}
+  - {fileID: 11400000, guid: 7fa29d52a44117a4a982dc2c1860b040, type: 2}
+  - {fileID: 11400000, guid: b1bd7c872cbd4174ea2965af3b332631, type: 2}
+  - {fileID: 11400000, guid: 65f2dc394718e1048afb725e7a78ca23, type: 2}

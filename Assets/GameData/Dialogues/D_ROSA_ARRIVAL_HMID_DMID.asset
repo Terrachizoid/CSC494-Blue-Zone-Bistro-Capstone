@@ -42,6 +42,7 @@ MonoBehaviour:
     textTemplate: I have been thinking about the ingredients in your bowls.
     claim: {fileID: 0}
     portrait: {fileID: 0}
+    backgroundImage: {fileID: 0}
     emotion: Neutral
     voiceOver: {fileID: 0}
   - lineOrder: 1
@@ -50,6 +51,7 @@ MonoBehaviour:
       would be lovely.
     claim: {fileID: 0}
     portrait: {fileID: 0}
+    backgroundImage: {fileID: 0}
     emotion: Neutral
     voiceOver: {fileID: 0}
   approvalStatus: 0

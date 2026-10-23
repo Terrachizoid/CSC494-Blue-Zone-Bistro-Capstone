@@ -15,3 +15,7 @@ MonoBehaviour:
   claims:
   - {fileID: 11400000, guid: 13cf19ef0ee20214597c38d62c36c00d, type: 2}
   - {fileID: 11400000, guid: e693e34760009f9418838ad1689cb6f7, type: 2}
+  - {fileID: 11400000, guid: 74c6b1316180a0146a8f36dc7b83a16d, type: 2}
+  - {fileID: 11400000, guid: a0867d82912d8a7439d40b5e7f66b648, type: 2}
+  - {fileID: 11400000, guid: 83427f32da1b7754fb628d15f4d4a98e, type: 2}
+  - {fileID: 11400000, guid: 25ac9f1e91102d542bae65285fe73c48, type: 2}

@@ -13,7 +13,10 @@ MonoBehaviour:
   m_Name: BalanceConfig
   m_EditorClassIdentifier: Assembly-CSharp::BalanceConfig
   totalDays: 6
-  startingMoney: 30
+  eventsStartDay: 2
+  noEventChance: 0.25
+  twoEventChance: 0.25
+  startingMoney: 20
   maximumSortingDiscount: 0.3
   freshDays: 2
   frozenDays: 5
@@ -36,7 +39,7 @@ MonoBehaviour:
   maximumDailyCravings: 2
   maximumPopularity: 1000
   startingPopularity: 300
-  popularityPerDelight: 5
+  popularityPerDelight: 3
   failedRecipePopularityPenalty: 40
   maximumPopularityGainPerDish: 100
   attendanceThresholds:
@@ -44,14 +47,14 @@ MonoBehaviour:
   - 250
   - 500
   - 750
-  customerPopularityUnlocks:
-  - customerId: U005
-    popularity: 500
-  - customerId: U006
-    popularity: 750
   maximumCommunityWellbeing: 100
   startingCommunityWellbeing: 50
   wellbeingPerHealthPoint: 0.25
+  rentStartDay: 3
+  rentPerDay: 9
+  walkInIncomePerPopularity: 0.08
+  walkInPopularityThreshold: 450
+  popularityPerMissedCraving: 15
   maxDelight: 100
   startingDelight: 50
   startingFinance: 20

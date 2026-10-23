@@ -1,0 +1,105 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 723540dee0598554b877ea98d762cf62, type: 3}
+  m_Name: EventDatabase
+  m_EditorClassIdentifier: Assembly-CSharp::EventDatabase
+  events:
+  - id: EV_SALE
+    headline: CheapCart announces a sale
+    summary: 20% off CheapCart packages for two days.
+    details: A neighbourhood promotion lowers package prices at CheapCart. The original
+      price remains visible beside the effective price. Other active price effects
+      can combine with this sale.
+    minDay: 2
+    maxDay: -1
+    durationDays: 2
+    weight: 1
+    image: {fileID: 21300000, guid: ab6b2e72d1aab6f43874bbc2a94a19fe, type: 3}
+    notificationAudio: {fileID: 0}
+    detailAudio: {fileID: 0}
+    codex:
+    - {fileID: 11400000, guid: 83427f32da1b7754fb628d15f4d4a98e, type: 2}
+    effects:
+    - type: 0
+      target: 0
+      targetId: S002
+      operation: 1
+      value: 0.8
+  - id: EV_OATS
+    headline: Oats go viral
+    summary: Oat prices rise 50% across stores today.
+    details: A fictional online trend has increased demand for rolled oats. All offers
+      for rolled oats cost more today. This popularity story is not evidence of a
+      new health benefit; food classifications and ingredient appeal are unchanged.
+    minDay: 2
+    maxDay: -1
+    durationDays: 1
+    weight: 1
+    image: {fileID: 21300000, guid: 58d09e4bf0f093b41a8338500a98219e, type: 3}
+    notificationAudio: {fileID: 0}
+    detailAudio: {fileID: 0}
+    codex:
+    - {fileID: 11400000, guid: 25ac9f1e91102d542bae65285fe73c48, type: 2}
+    effects:
+    - type: 0
+      target: 1
+      targetId: P001
+      operation: 1
+      value: 1.5
+  - id: EV_CLOSED
+    headline: Verdant & Co. closes for maintenance
+    summary: The store is closed today. Pantry food is unaffected.
+    details: Scheduled maintenance closes Verdant & Co. for the day. You can still
+      use ingredients already in your pantry. The store reopens tomorrow; another
+      accessible store remains available.
+    minDay: 2
+    maxDay: -1
+    durationDays: 1
+    weight: 1
+    image: {fileID: 21300000, guid: 927909a3902d09741b64d2196988524c, type: 3}
+    notificationAudio: {fileID: 0}
+    detailAudio: {fileID: 0}
+    codex:
+    - {fileID: 11400000, guid: 74c6b1316180a0146a8f36dc7b83a16d, type: 2}
+    effects:
+    - type: 1
+      target: 0
+      targetId: S001
+      operation: 2
+      value: 0
+  - id: EV_PUBLICITY
+    headline: The bistro makes local news
+    summary: Two days of publicity plus a Verdant & Co. promotion.
+    details: A local feature brings temporary attention to the bistro. Morning attendance
+      uses an additional 500 publicity points for two days. Earned popularity and
+      ending scores are unchanged. Verdant & Co. also offers 10% off packages during
+      the feature.
+    minDay: 2
+    maxDay: -1
+    durationDays: 2
+    weight: 1
+    image: {fileID: 21300000, guid: ddb2294adac35f942803fbc04b2334c3, type: 3}
+    notificationAudio: {fileID: 0}
+    detailAudio: {fileID: 0}
+    codex:
+    - {fileID: 11400000, guid: a0867d82912d8a7439d40b5e7f66b648, type: 2}
+    effects:
+    - type: 2
+      target: 2
+      targetId: 
+      operation: 0
+      value: 500
+    - type: 0
+      target: 0
+      targetId: S001
+      operation: 1
+      value: 0.9

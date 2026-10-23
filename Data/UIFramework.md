@@ -1,4 +1,24 @@
-# Card UI implementation checkpoint
+# Card UI framework
+
+Status (2026-10-22): this Canvas UI is the live player-facing interface for every phase,
+including main menu, news/events, tutorials and endings. The sections below are kept in
+the order the milestones were built.
+
+## How screens are built (read before the UI/art pass)
+
+- `BistroUIScreen` is a partial class: `.cs` (shell, market, sorting), `.City`, `.Service`,
+  `.Menu`, `.Events`, `.Ending`, `.Tutorial`, `.Motion`, `.Scroll`, `.CardMemory`.
+- Every command sets `dirty`; `LateUpdate` destroys the current screen object and rebuilds
+  it from scratch (`Refresh`). Scroll positions and card faces are remembered across rebuilds.
+- Layout uses hard-coded normalized anchors inside each draw method (reference resolution
+  1440×900) and literal English strings. There are no prefabs.
+- The legacy IMGUI `GreyboxUIController` is no longer created (2026-10-22). It used to draw a
+  text-only frame before the Canvas appeared. Delete `Assets/Scripts/UI/GreyboxUIController.cs`
+  (and its `.meta`) in Unity if it is still in the project; nothing references it.
+- Optional art hooks already exist: `BistroUITheme.cityBackground` / `serviceBackground`,
+  `StoreData.shopBackground`, `FoodData.icon`, dialogue portraits and line backgrounds.
+
+Consequences and recommended direction are in `KnownIssues.md` (UI section).
 
 ## Milestone 1 — implemented
 
@@ -67,7 +87,6 @@ then submit. Continue through existing service/results and verify the next marke
 Also test an empty checkout, known-food-only checkout, narrow window, and pantry inspection.
 
 Compilation and operation/content tests do not replace this visual/interaction walkthrough.
-This milestone has not been published or committed automatically.
 
 
 ## Follow-up polish

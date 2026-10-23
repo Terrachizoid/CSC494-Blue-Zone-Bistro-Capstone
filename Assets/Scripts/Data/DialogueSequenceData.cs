@@ -17,6 +17,7 @@ public class DialogueLineData
 
     public ClaimData claim;
     public Sprite portrait;
+    public Sprite backgroundImage;
     public string emotion;
     public AudioClip voiceOver;
 }

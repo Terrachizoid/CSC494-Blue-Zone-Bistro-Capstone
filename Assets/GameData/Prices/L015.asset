@@ -15,14 +15,14 @@ MonoBehaviour:
   id: L015
   food: {fileID: 11400000, guid: 7db71fc1cc88dd64e960ce3f01875a5e, type: 2}
   store: {fileID: 11400000, guid: 1e2f04681e0b8d44dbf8f2da98e8d959, type: 2}
-  shelfId: BOTTOM_SHELF
+  shelfId: EYE_LEVEL
   unlockDay: 1
   requiredFlag: 
   observedPriceCad: 0
   servingsPerPackage: 8
   gamePrice: 3
   priceSource: Synthetic greybox game tuning; retail price not surveyed
-  priceDisplayStyle: 0
+  priceDisplayStyle: 2
   approvalStatus: 0
-  reviewNotes: Prototype game price and package servings; no retail observation.
-    Serving units are gameplay quantities.
+  reviewNotes: Restocked 2026-10-22 to fit the store description; synthetic game
+    price, no retail observation. Serving units are gameplay quantities.

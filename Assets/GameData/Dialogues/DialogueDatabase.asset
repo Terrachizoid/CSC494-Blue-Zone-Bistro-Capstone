@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 962eb588fbc36be46aa88c726d70aec1, type: 3}
   m_Name: DialogueDatabase
   m_EditorClassIdentifier: Assembly-CSharp::DialogueDatabase
-  importedCsvFingerprint: A5-D7-06-B3-C2-92-54-11-08-2B-33-BE-3F-A8-0F-3B-EA-06-5E-B0-91-3D-8F-34-AD-0F-6F-AF-48-94-FF-84
+  importedCsvFingerprint: CA-B7-74-6B-68-09-6D-5F-4E-A9-4C-DA-EB-82-34-71-D0-2B-76-79-D5-05-EF-3A-09-2B-77-11-59-61-7F-9D
   dialogues:
   - {fileID: 11400000, guid: 96a9bef6900698f44a26e3d692e8a268, type: 2}
   - {fileID: 11400000, guid: d0e56a75e6c9c3849b09911dcc2a005e, type: 2}
@@ -34,6 +34,11 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 81790b064fc97244b8e5c5834ae9f62f, type: 2}
   - {fileID: 11400000, guid: 72b6c2720bf1f7a4990f27c936a39c7d, type: 2}
   - {fileID: 11400000, guid: 9502dc24367cff640a33ac282a77ddb9, type: 2}
+  - {fileID: 11400000, guid: 208c98f9a4d8c2c42bbcabc4a8cf827b, type: 2}
+  - {fileID: 11400000, guid: d26b562aea5e0a34b9622f7ada301ed0, type: 2}
+  - {fileID: 11400000, guid: 5772da432518bb84bbc1c160aafb21d0, type: 2}
+  - {fileID: 11400000, guid: 1ae2684f140e29d4eb2fef21f6b149fc, type: 2}
+  - {fileID: 11400000, guid: abcffda5db0695146beb0a82c8d583b6, type: 2}
   - {fileID: 11400000, guid: 619d84df1ed4d4841a42d2e35eaab0d3, type: 2}
   - {fileID: 11400000, guid: 70096a000f44c6c43ad0a0a292974628, type: 2}
   - {fileID: 11400000, guid: bfb7842a2b50ecb4dacbee54d445e2e0, type: 2}

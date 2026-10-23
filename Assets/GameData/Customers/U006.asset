@@ -17,6 +17,7 @@ MonoBehaviour:
   customerType: 0
   unlockDay: 3
   startingHealth: 50
+  unlockPopularity: 750
   startingProsperity: 0
   themeFromPlan: New vegan learning to look beyond packaged-food marketing
   preferredRecipes:

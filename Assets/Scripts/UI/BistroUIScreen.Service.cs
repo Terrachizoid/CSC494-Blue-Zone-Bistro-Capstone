@@ -123,6 +123,12 @@ public partial class BistroUIScreen
         BistroWidgets.Label(screen,complete?"YOUR BISTRO · COMPLETE":"DAY COMPLETE",theme,new Vector2(.05f,.72f),new Vector2(.95f,.87f),34);
         string totals=$"Spent ${summary.moneySpent:0.00}\nEarned ${summary.moneyEarned:0.00}\nServed {summary.dishes.Count} · Skipped {summary.skippedCustomerIds.Count}";
         totals+=$"\nPopularity {game.State.popularity:0} ({summary.dishes.Sum(d=>d.result.popularityDelta):+0.#;-0.#;0} today)";
+        if(summary.walkInIncome>0)totals+=$"\nWalk-in takeaway ${summary.walkInIncome:0.00} (included in earnings)";
+        else if(game.Balance.walkInIncomePerPopularity>0)totals+=$"\nNo walk-ins yet: passers-by start coming once popularity passes {game.Balance.walkInPopularityThreshold:0}.";
+        if(summary.rentPaid>0)totals+=$"\nRent paid this morning ${summary.rentPaid:0.00}";
+        if(!complete&&game.Balance.rentPerDay>0&&game.State.currentDay+1>=game.Balance.rentStartDay)
+            totals+=game.State.currentDay+1==game.Balance.rentStartDay?$"\nNotice from the landlord: rent of ${game.Balance.rentPerDay:0.00} is due every morning from tomorrow.":$"\nRent due tomorrow morning ${game.Balance.rentPerDay:0.00}";
+        totals+=$"\nMoney now ${game.State.money:0.00}";
         string dishes=string.Join("\n\n",summary.dishes.Select(d=>
             $"{game.Queries.GetCustomer(d.customerId)?.displayName} · {d.recipeId}\n"+
             $"{(d.result.recipeBuilt?"Recipe built":"Recipe mismatch")} · Health {d.result.healthDelta:+0;-0;0} · Delight {d.result.delightDelta:+0;-0;0} · Earned ${d.result.moneyEarned:0.00}"));

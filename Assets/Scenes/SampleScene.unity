@@ -256,19 +256,34 @@ MonoBehaviour:
   recipes: {fileID: 11400000, guid: 6c252e6c6c36bd74aa3f4115d57f0352, type: 2}
   customers: {fileID: 11400000, guid: 724dac76081634142aa5070c1c9475b8, type: 2}
   dialogues: {fileID: 11400000, guid: 5c52f47494095434fb62dfe1555259ac, type: 2}
+  endings: {fileID: 11400000, guid: b60279ad29e3d0f4cb10e437213f3cd7, type: 2}
+  events: {fileID: 11400000, guid: c83ba393f9da2204090b42da11f43bde, type: 2}
   balance: {fileID: 11400000, guid: 13db58f120d839e42a6b8e84616be0df, type: 2}
   uiTheme: {fileID: 0}
   tutorials: {fileID: 11400000, guid: c4d8cacb54f1bd842867c32e8ea5da74, type: 2}
   state:
+    eventPlanDay: 0
+    events: []
+    endingId: 
     currentDay: 1
     gameCompleted: 0
     tutorials: []
     completedDaySummary:
       moneySpent: 0
       moneyEarned: 0
+      walkInIncome: 0
+      rentPaid: 0
       dishes: []
       skippedCustomerIds: []
     money: 30
+    communityStateVersion: 0
+    popularity: 300
+    communityWellbeing: 50
+    attendancePlanDay: 0
+    morningPopularity: 0
+    dailyCustomerCapacity: 0
+    dailyCustomerIds: []
+    unlockedCustomerIds: []
     inventory: []
     currentCustomerId: 
     selectedRecipeId: 

@@ -42,6 +42,7 @@ MonoBehaviour:
     textTemplate: I am getting better at planning my break before the afternoon rush.
     claim: {fileID: 0}
     portrait: {fileID: 0}
+    backgroundImage: {fileID: 0}
     emotion: Cautious
     voiceOver: {fileID: 0}
   - lineOrder: 1
@@ -50,6 +51,7 @@ MonoBehaviour:
       Can we get this one right?
     claim: {fileID: 0}
     portrait: {fileID: 0}
+    backgroundImage: {fileID: 0}
     emotion: Cautious
     voiceOver: {fileID: 0}
   approvalStatus: 0

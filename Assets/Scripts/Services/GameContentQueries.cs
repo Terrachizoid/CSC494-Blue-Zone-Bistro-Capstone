@@ -11,11 +11,19 @@ public class GameContentQueries
     private readonly RecipeDatabase recipes;
     private readonly CustomerDatabase customers;
     private readonly RecipeCheck recipeCheck;
+    private readonly EndingDatabase endings;
+    private readonly EventDatabase events;
+    public MarketEffects Market {get;}
+    public EventDefinition GetEvent(string id)=>events?.events.Find(e=>e.id==id);
+    public List<EventRecord> GetEventHistory()=>state.events??new List<EventRecord>();
+    public PriceQuote GetPrice(StoreListingData listing)=>Market.Quote(listing);
+    public EndingDefinition GetEnding(string id)=>endings?.endings?.Find(e=>e!=null&&e.id==id);
     public FoodDatabase Foods { get; }
     public GameContentQueries(GameSessionState state, FoodDatabase foods,
-        StoreListingDatabase listings, RecipeDatabase recipes, CustomerDatabase customers)
+        StoreListingDatabase listings, RecipeDatabase recipes, CustomerDatabase customers, EndingDatabase endings=null, EventDatabase events=null)
     {
         this.state = state ?? throw new System.ArgumentNullException(nameof(state));
+        this.endings=endings;this.events=events;Market=new MarketEffects(state);
         Foods = foods ?? throw new System.ArgumentNullException(nameof(foods));
         this.listings = listings ?? throw new System.ArgumentNullException(nameof(listings));
         this.recipes = recipes ?? throw new System.ArgumentNullException(nameof(recipes));

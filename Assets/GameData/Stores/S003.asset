@@ -28,8 +28,12 @@ MonoBehaviour:
   - id: BULK_SACKS
     displayName: Bulk sacks
     artwork: {fileID: 0}
+  - id: BULK_PRODUCE
+    displayName: Bulk produce
+    artwork: {fileID: 0}
   approvalStatus: 0
-  reviewNotes: Greybox membership disabled until purchase UI exists. Cost 10 is provisional
-    dormant tuning; unlock day 4 retained.
+  reviewNotes: 'Restocked 2026-10-22: junk and bulk animal products on pallets, cheapest
+    dry staples in back sacks, giant produce packs that spoil. Memberships cut (user
+    decision); opens day 4.'
   exteriorIcon: {fileID: 0}
   shopBackground: {fileID: 0}

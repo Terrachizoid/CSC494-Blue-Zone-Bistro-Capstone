@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0de03d0ceb2d4e4fbb2cfac2d36a767, type: 3}
+  m_Name: P041
+  m_EditorClassIdentifier: Assembly-CSharp::FoodData
+  id: P041
+  displayName: Wild salmon
+  recipeCategory: 6
+  dailyDozenCategories: 00000000
+  trafficLight: 2
+  ingredientAppeal: 7
+  marketingLabel: Rich in omega-3
+  ingredientList: Wild salmon
+  sortingExplanation: 
+  ingredientCount: 1
+  storageType: 1
+  claimId: 
+  approvalStatus: 0
+  reviewNotes: "Added 2026-10-22 from the capstone plan's store/luxury examples (S2,
+    S6, \xA73.6). Classification follows the plan text; pending supervisor review.
+    Not a real product label. Ingredient appeal is provisional gameplay tuning."
+  icon: {fileID: 0}

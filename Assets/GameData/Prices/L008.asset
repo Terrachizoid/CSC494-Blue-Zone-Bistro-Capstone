@@ -20,9 +20,9 @@ MonoBehaviour:
   requiredFlag: 
   observedPriceCad: 0
   servingsPerPackage: 4
-  gamePrice: 4
+  gamePrice: 3.2
   priceSource: Synthetic greybox game tuning; retail price not surveyed
   priceDisplayStyle: 2
   approvalStatus: 0
-  reviewNotes: Prototype game price and package servings; no retail observation.
-    Serving units are gameplay quantities.
+  reviewNotes: Restocked 2026-10-22 to fit the store description; synthetic game
+    price, no retail observation. Serving units are gameplay quantities.

@@ -28,7 +28,7 @@ public class ShoppingTutorialBehaviour : ITutorialBehaviour
     public bool Feasible(IntroMealPlan plan,string step)=>plan.ShoppingFeasible();
     public bool IsText(string step)=>false;
     public string Check(string step,TutorialAction action,IntroMealPlan plan,List<CartEntry> cart,string recipeId,ServeResult preview)
-        =>action==TutorialAction.Checkout&&!plan.CartReady(cart)?"Your first meal needs "+plan.Requirements+". Add enough ingredients before checkout.":null;
+        =>action==TutorialAction.Checkout&&!plan.CartReady(cart)?"Your cart and pantry do not yet cover any recipe on today's menu (for example, "+(plan.Recipe?.displayName??"a recipe")+" needs "+plan.Requirements+"). Add enough ingredients before checkout.":null;
     public string Next(string step,TutorialAction action)=>action==TutorialAction.Checkout?null:step;
     public string Continue(string step)=>step;
 }
@@ -42,9 +42,10 @@ public class FirstMealTutorialBehaviour : ITutorialBehaviour
     {
         if(IsText(step))return "Read the meal explanation and choose Continue first.";
         if(action==TutorialAction.SkipCustomer||action==TutorialAction.ContinueDish||action==TutorialAction.FinishDay)return "Complete your first meal before moving on.";
-        if(action==TutorialAction.SelectRecipe && recipeId!=IntroMealPlan.RecipeId)return "Choose "+plan.Recipe.displayName+" for this first lesson.";
-        if(action==TutorialAction.Serve && step=="choose")return "Choose the introductory recipe before serving.";
-        if(action==TutorialAction.Serve && (recipeId!=IntroMealPlan.RecipeId||preview==null||!preview.success||!preview.recipeBuilt))return "For this lesson, build the introductory recipe successfully before serving. Review its slot warnings.";
+        // Any recipe on today's menu is accepted; the lesson only requires a successful build.
+        if(action==TutorialAction.SelectRecipe && !plan.IsCandidate(recipeId))return "Choose a recipe from today's menu for this first lesson.";
+        if(action==TutorialAction.Serve && step=="choose")return "Choose a recipe before serving.";
+        if(action==TutorialAction.Serve && (!plan.IsCandidate(recipeId)||preview==null||!preview.success||!preview.recipeBuilt))return "For this first lesson, build the recipe successfully before serving. Review its slot warnings.";
         return null;
     }
     public string Next(string step,TutorialAction action)=>action==TutorialAction.SelectRecipe?"build":action==TutorialAction.Serve?"feedback":step;

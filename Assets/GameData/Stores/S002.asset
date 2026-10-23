@@ -35,7 +35,8 @@ MonoBehaviour:
     displayName: Back freezer
     artwork: {fileID: 0}
   approvalStatus: 0
-  reviewNotes: 'Greybox: freezer listings available without discovery until discovery
-    interaction exists.'
+  reviewNotes: 'Restocked 2026-10-22: junk at eye level and in bargain bins, plain
+    staples on the bottom shelf and in the back freezer. Back-freezer discovery is
+    planned for the advanced store UI.'
   exteriorIcon: {fileID: 0}
   shopBackground: {fileID: 0}

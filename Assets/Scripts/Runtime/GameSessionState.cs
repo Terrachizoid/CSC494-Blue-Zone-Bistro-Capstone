@@ -8,6 +8,9 @@ using System.Collections.Generic;
 [Serializable]
 public class GameSessionState
 {
+    public int eventPlanDay;
+    public List<EventRecord> events=new List<EventRecord>();
+    public string endingId;
     public int currentDay = 1;
     public bool gameCompleted;
     public List<TutorialRecord> tutorials = new List<TutorialRecord>();
