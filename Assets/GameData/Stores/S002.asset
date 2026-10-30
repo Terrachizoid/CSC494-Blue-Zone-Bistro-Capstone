@@ -18,25 +18,27 @@ MonoBehaviour:
   description: Discount store with prominent processed foods and affordable staples
     in less visible areas.
   unlockDay: 1
-  requiresMembership: 0
-  membershipCost: 0
   defaultPriceDisplayStyle: 2
   shelves:
   - id: EYE_LEVEL
     displayName: Eye-level shelves
     artwork: {fileID: 0}
+    colour: '#7D8580'
   - id: BARGAIN_BIN
     displayName: Bargain bin
     artwork: {fileID: 0}
+    colour: '#898071'
   - id: BOTTOM_SHELF
     displayName: Bottom shelf
     artwork: {fileID: 0}
+    colour: '#827D70'
   - id: BACK_FREEZER
     displayName: Back freezer
     artwork: {fileID: 0}
+    colour: '#74858B'
   approvalStatus: 0
   reviewNotes: 'Restocked 2026-10-22: junk at eye level and in bargain bins, plain
     staples on the bottom shelf and in the back freezer. Back-freezer discovery is
     planned for the advanced store UI.'
-  exteriorIcon: {fileID: 0}
-  shopBackground: {fileID: 0}
+  logo: {fileID: 21300000, guid: 1eb4b8038d5a2864281e83f856fdc37f, type: 3}
+  shopBackground: {fileID: 21300000, guid: dc5a5e358b965864eb858bcb02341253, type: 3}

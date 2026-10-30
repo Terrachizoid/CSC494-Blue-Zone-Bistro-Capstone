@@ -16,7 +16,7 @@ Events begin on day 2. Each morning has a 25% chance of zero new events, 50% of 
 
 Food targets match every listing referring to that food. Existing inventory, recipe appeal and health classification do not change. A new combination needs only rows; a new kind of effect needs a typed evaluator and validation. Unknown enum values, invalid references and non-finite values reject the entire event import before replacing the database. Import claims before events using **Import All CSV Content**.
 
-Four starter examples: CheapCart sale, fictional oat-demand price rise, Verdant maintenance closure, and bistro publicity paired with a Verdant promotion. Their codex entries explain game rules, not medical claims. Optional source buttons accept HTTP(S) links only. Artwork reuses the geometric ending placeholders; replace paths/asset references later.
+Five examples: CheapCart sale, fictional oat-demand price rise, Verdant maintenance closure, CheapCart restocking closure (added 2026-10-24), and bistro publicity (+200 attendance popularity since 2026-10-24, was +500) paired with a Verdant promotion. Their codex entries explain game rules, not medical claims. Optional source buttons accept HTTP(S) links only. Artwork reuses the geometric ending placeholders; replace paths/asset references later.
 
 ## Runtime ownership
 
@@ -40,3 +40,5 @@ News remains available in the header. Its archive includes active and expired ev
 `Tools/EventChecks.cs` runs with `Tools/Test-GameOperations.ps1` and the CSV regression suite. `Assets/Editor/EventImportChecks.cs` is an isolated-project import/save test that intentionally submits invalid data. `Tools/EventUISmoke.cs` is copied into an isolated project's Editor directory for actual Play Mode UI checks and screenshots; neither test writes the player's checkpoint.
 
 Balance values are prototypes. No nutrition changes, secret-store unlock rules, food bans or real medical news are implemented.
+
+Tower news update: the city NEWS hotspot opens the archive; notifications use a tower-anchored speech bubble with existing click-to-detail and six-second timing. Missing images remain optional placeholders. Event scheduling/effects are unchanged. Isolated injected UI checks passed; manual Play Mode/browser checking remains open.

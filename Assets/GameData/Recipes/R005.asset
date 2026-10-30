@@ -39,4 +39,5 @@ MonoBehaviour:
   reviewNotes: Prototype category-slot meal; food choices determine effects. Mixed
     colours allowed by solo GDD. Sale price and delight are game tuning; pending
     review.
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 71af0ff9a05651740af0a2440106c64a, type: 3}
+  cardBack: {fileID: 21300000, guid: 0b43125ce08f145498cbdcd07848c214, type: 3}

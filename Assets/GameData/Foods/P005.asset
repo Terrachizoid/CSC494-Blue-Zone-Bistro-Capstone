@@ -20,7 +20,9 @@ MonoBehaviour:
   ingredientAppeal: 3
   marketingLabel: Plain staple
   ingredientList: Brown rice
-  sortingExplanation: 
+  sortingExplanation: 'Brown rice is Green in this game: a whole plant food, with
+    nothing harmful added and nothing good taken away. It counts toward the Daily
+    Dozen group: Whole grains.'
   ingredientCount: 1
   storageType: 4
   claimId: 
@@ -29,4 +31,8 @@ MonoBehaviour:
     pending supervisor review. Not a real product label. Ingredient appeal is provisional
     0-10 gameplay tuning for a serving-weighted mean; independent of price and Traffic
     Light. Runtime import/calculation pending.
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: c462574fd7668fa40a5576b5ba7a5d39, type: 3}
+  cardBack: {fileID: 21300000, guid: 3eed63a1f7b30904890acfd5284feae8, type: 3}
+  lightLogo: 0
+  darkPlaque: 1
+  cardSprig: 0

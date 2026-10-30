@@ -13,6 +13,8 @@ using UnityEngine.SceneManagement;
 public class GameBootstrapSetup : IProcessSceneWithReport, IPreprocessBuildWithReport
 {
     private const string BalancePath = "Assets/GameData/BalanceConfig.asset";
+    private const string ThemePath = "Assets/GameData/BistroUITheme.asset";
+    private const string ThemeArtFolder = "Assets/Art/UI";
     private static bool queued;
     public int callbackOrder => 0;
 
@@ -52,6 +54,7 @@ public class GameBootstrapSetup : IProcessSceneWithReport, IPreprocessBuildWithR
     {
         if (EditorApplication.isPlaying) return;
         EnsureBalance();
+        EnsureTheme();
         DialogueCsvImporter.EnsureCurrent();
         if(AssetDatabase.LoadAssetAtPath<EndingDatabase>(EndingCsvImporter.AssetPath)==null)EndingCsvImporter.Import();
         if(AssetDatabase.LoadAssetAtPath<EventDatabase>(EventCsvImporter.AssetPath)==null)EventCsvImporter.Import();
@@ -78,6 +81,40 @@ public class GameBootstrapSetup : IProcessSceneWithReport, IPreprocessBuildWithR
         AssetDatabase.SaveAssets();
     }
 
+    // The theme holds screen-wide art slots. Empty Sprite slots are filled from
+    // Assets/Art/UI/<field name>.png; anything dragged in by hand is never replaced.
+    private static void EnsureTheme()
+    {
+        var theme = AssetDatabase.LoadAssetAtPath<BistroUITheme>(ThemePath);
+        if (theme == null)
+        {
+            if (AssetDatabase.LoadMainAssetAtPath(ThemePath) != null)
+            {
+                Debug.LogError("Cannot create default UI theme: another asset occupies " + ThemePath);
+                return;
+            }
+            theme = ScriptableObject.CreateInstance<BistroUITheme>();
+            AssetDatabase.CreateAsset(theme, ThemePath);
+        }
+        var serialized = new SerializedObject(theme);
+        bool changed = false;
+        var property = serialized.GetIterator();
+        for (bool enter = true; property.NextVisible(enter); enter = false)
+        {
+            if (property.propertyType != SerializedPropertyType.ObjectReference ||
+                property.type != "PPtr<$Sprite>" || property.objectReferenceValue != null) continue;
+            var sprite = AssetDatabase.LoadAssetAtPath<Sprite>(ThemeArtFolder + "/" + property.name + ".png");
+            if (sprite == null) continue;
+            property.objectReferenceValue = sprite;
+            changed = true;
+        }
+        if (changed)
+        {
+            serialized.ApplyModifiedPropertiesWithoutUndo();
+            AssetDatabase.SaveAssets();
+        }
+    }
+
     private static void SetupScene(Scene scene, bool building)
     {
         foreach (var root in scene.GetRootGameObjects())
@@ -94,6 +131,7 @@ public class GameBootstrapSetup : IProcessSceneWithReport, IPreprocessBuildWithR
             changed |= Fill<EventDatabase>(serialized, "events", EventCsvImporter.AssetPath);
             changed |= Fill<BalanceConfig>(serialized, "balance", BalancePath);
             changed |= Fill<TutorialDatabase>(serialized, "tutorials", TutorialCsvImporter.AssetPath);
+            changed |= Fill<BistroUITheme>(serialized, "uiTheme", ThemePath);
             if (changed)
             {
                 serialized.ApplyModifiedPropertiesWithoutUndo();
@@ -126,6 +164,7 @@ public class GameBootstrapSetup : IProcessSceneWithReport, IPreprocessBuildWithR
     public void OnPreprocessBuild(BuildReport report)
     {
         EnsureBalance();
+        EnsureTheme();
         if (!DialogueCsvImporter.EnsureCurrent()) throw new BuildFailedException("Dialogue CSVs are not imported successfully. Fix dialogue import errors before building.");
         if (!TutorialCsvImporter.EnsureCurrent()) throw new BuildFailedException("Tutorial CSV import failed.");
         if (!BistroContentValidator.Validate()) throw new BuildFailedException("Imported Bistro content has structural errors. See the Console and run Tools > Blue Zone Bistro > Validate Imported Content.");

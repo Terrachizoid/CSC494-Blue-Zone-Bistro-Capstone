@@ -20,7 +20,9 @@ MonoBehaviour:
   ingredientAppeal: 7
   marketingLabel: Plain staple
   ingredientList: Apple
-  sortingExplanation: 
+  sortingExplanation: 'Apple is Green in this game: a whole plant food, with nothing
+    harmful added and nothing good taken away. It counts toward the Daily Dozen group:
+    Other fruits.'
   ingredientCount: 1
   storageType: 1
   claimId: 
@@ -29,4 +31,8 @@ MonoBehaviour:
     pending supervisor review. Not a real product label. Ingredient appeal is provisional
     0-10 gameplay tuning for a serving-weighted mean; independent of price and Traffic
     Light. Runtime import/calculation pending.
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 7c34862f98a5ae24b8c0c0f2281c2eeb, type: 3}
+  cardBack: {fileID: 21300000, guid: 8e0982c91e36a404090a226d479e2fe9, type: 3}
+  lightLogo: 0
+  darkPlaque: 1
+  cardSprig: 0

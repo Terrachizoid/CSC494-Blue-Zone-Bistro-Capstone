@@ -15,6 +15,8 @@ public class GameLoop
     private readonly EventService events;
     private readonly EncounterScheduler encounters;
     private readonly FoodSortingService sorting;
+    private readonly PantryService pantry;
+    private readonly FoodAidService foodAid;
     public SortingResult SortingResult { get; private set; }
     public List<SortingQuestion> SortingQuestions => sorting?.GetQuestions() ?? new List<SortingQuestion>();
     public DialoguePlaybackController Dialogue { get; }
@@ -37,15 +39,17 @@ public class GameLoop
         return new OperationResult{success=true};
     }
     public bool ContinueTutorial() { bool done=Tutorials?.ContinueText()==true; RefreshTutorials(); return done; }
+    public void MarkTutorialSeen() => Tutorials?.MarkInstructionSeen();
+    public void InspectToolbar(string item) { Tutorials?.NoteToolbarClick(item); RefreshTutorials(); }
 
     public GameLoop(IPurchaseService purchases, IMealService meals, IDayService days,
-        ICustomerVisitService visits, EncounterScheduler encounters = null, FoodSortingService sorting = null, bool completed = false, EndingService endings = null, EventService events = null)
+        ICustomerVisitService visits, EncounterScheduler encounters = null, FoodSortingService sorting = null, bool completed = false, EndingService endings = null, EventService events = null, PantryService pantry = null, FoodAidService foodAid = null)
     {
         this.purchases = purchases ?? throw new ArgumentNullException(nameof(purchases));
         this.meals = meals ?? throw new ArgumentNullException(nameof(meals));
         this.days = days ?? throw new ArgumentNullException(nameof(days));
         this.visits = visits ?? throw new ArgumentNullException(nameof(visits));
-        this.endings=endings;this.events=events;
+        this.endings=endings;this.events=events;this.pantry=pantry;this.foodAid=foodAid;
         if(!completed)events?.PrepareMorning();
         if(completed)endings?.Complete();
         this.encounters = encounters;
@@ -61,6 +65,18 @@ public class GameLoop
         if (Phase != GamePhase.Market) return new PurchaseResult { error = "Buying requires Market phase." };
         var result = purchases.Buy(listingId);
         if (result.success) Summary.moneySpent += result.moneySpent;
+        return result;
+    }
+
+    // Pantry sales happen at the market, before checkout, so a broke player can raise cash to shop.
+    public bool CanSellPantry => pantry != null && Phase == GamePhase.Market;
+    public float PantryValuePerServing(string inventoryEntryId) => pantry == null ? -1 : pantry.ValuePerServing(inventoryEntryId);
+    public PantrySaleResult QuotePantrySale(List<PantrySaleItem> items) => pantry == null ? new PantrySaleResult { error = "Selling is unavailable." } : pantry.Quote(items);
+    public PantrySaleResult SellPantry(List<PantrySaleItem> items)
+    {
+        if (!CanSellPantry) return new PantrySaleResult { error = "Pantry food can be sold at the market, before checkout." };
+        var result = pantry.Sell(items);
+        if (result.success) { Summary.pantrySales += result.amount; RefreshTutorials(); }
         return result;
     }
 
@@ -205,10 +221,17 @@ public class GameLoop
         var selectedTrigger = encounters.CustomerTrigger(trigger, Service.CurrentCustomerId, Service.lastDishResult);
         return Dialogue.Start(encounters.Dialogue.FindNext(selectedTrigger, context), context);
     }
+    // Every path into meal selection goes through here so the farmer can step in when nothing can be cooked.
+    private void EnterMealSelection()
+    {
+        Service.step = ServiceStep.MealSelection;
+        var aid = foodAid?.TryGive();
+        if (aid != null && aid.given) { Service.foodAidMessage = aid.message; Summary.foodAidMessage = aid.message; RefreshTutorials(); }
+    }
     private void StartBeforeDialogue()
     {
         Service.step = ServiceStep.BeforeDialogue;
-        if (!StartCustomerDialogue(DialogueTrigger.BeforeService)) Service.step = ServiceStep.MealSelection;
+        if (!StartCustomerDialogue(DialogueTrigger.BeforeService)) EnterMealSelection();
     }
     public bool AdvanceDialogue()
     {
@@ -221,7 +244,7 @@ public class GameLoop
         {
             case ServiceStep.StoryDialogue: AdvanceEncounter(); break;
             case ServiceStep.ArrivalDialogue: StartBeforeDialogue(); break;
-            case ServiceStep.BeforeDialogue: Service.step = ServiceStep.MealSelection; break;
+            case ServiceStep.BeforeDialogue: EnterMealSelection(); break;
             case ServiceStep.AfterDialogue: AdvanceEncounter(); break;
         }
         RefreshTutorials();

@@ -46,6 +46,28 @@ public class BistroDropSlot : MonoBehaviour, IDropHandler, IPointerClickHandler,
         BistroWidgets.Label(rect,"Drop here · click to inspect",theme,new Vector2(.03f,0),new Vector2(.97f,.12f),13);
         return slot;
     }
+    // foodArt: card-front sprites of the seated foods, in seat order (null entries keep the text card).
+    public void ApplyIllustratedContents(Sprite[] foodArt,Sprite categoryIcon=null)
+    {
+        var image=GetComponent<Image>();image.sprite=BistroShelfStyle.Rounded;image.type=Image.Type.Sliced;image.color=new Color(.84f,.87f,.79f);
+        var shadow=gameObject.AddComponent<Shadow>();shadow.effectColor=new Color(0,0,0,.13f);shadow.effectDistance=new Vector2(2,-3);
+        foreach(var text in GetComponentsInChildren<Text>()){text.color=BistroShelfStyle.Ink;if(BistroShelfStyle.BodyFont!=null)text.font=BistroShelfStyle.BodyFont;}
+        if(categoryIcon!=null){
+            var icon=BistroWidgets.Box(transform,"Requirement icon",Color.white,new Vector2(.04f,.76f),new Vector2(.19f,.96f));icon.GetComponent<Image>().sprite=categoryIcon;icon.GetComponent<Image>().preserveAspect=true;icon.GetComponent<Image>().raycastTarget=false;
+            var title=GetComponentInChildren<Text>();title.rectTransform.anchorMin=new Vector2(.21f,.74f);title.alignment=TextAnchor.MiddleLeft;
+        }
+        int i=0;
+        foreach(Transform child in transform){
+            if(child.name!="Seated card")continue;
+            var art=foodArt!=null&&i<foodArt.Length?foodArt[i]:null;i++;if(art==null)continue;
+            var face=child.GetComponent<Image>();face.sprite=art;face.color=Color.white;
+            var caption=child.GetComponentInChildren<Text>();if(caption!=null){
+                caption.rectTransform.anchorMin=new Vector2(.02f,.02f);caption.rectTransform.anchorMax=new Vector2(.98f,.30f);
+                caption.color=BistroShelfStyle.Ink;caption.fontSize=12;caption.resizeTextMinSize=8;caption.resizeTextMaxSize=12;
+                var plaque=BistroWidgets.Box(child,"Mini title",BistroShelfStyle.Cream,new Vector2(0,0),new Vector2(1,.32f));plaque.GetComponent<Image>().raycastTarget=false;plaque.SetAsFirstSibling();
+            }
+        }
+    }
     public void OnDrop(PointerEventData e){hoverScale=1;hoveringCard=null;var card=e.pointerDrag?.GetComponent<BistroFoodCard>();if(drop!=null && card!=null && card.TryClaimDrop(e.pointerId))drop(card.Key,card.Kind);}
     public void OnPointerClick(PointerEventData e){if(e.button==PointerEventData.InputButton.Left&&!e.dragging)open?.Invoke();}
     public void OnPointerEnter(PointerEventData e){hoveringCard=e.pointerDrag?.GetComponent<BistroFoodCard>();if(!reducedMotion && hoveringCard!=null && hoveringCard.IsDragging)hoverScale=1.025f;}

@@ -121,6 +121,24 @@ MonoBehaviour:
     price: 0.5
   - foodId: P054
     price: 0.5
+  - foodId: P055
+    price: 2
+  - foodId: P056
+    price: 2.4
+  - foodId: P057
+    price: 2.2
+  - foodId: P058
+    price: 2.2
+  - foodId: P059
+    price: 1.8
+  - foodId: P060
+    price: 2.5
+  - foodId: P061
+    price: 1.8000001
+  - foodId: P062
+    price: 2.6
+  - foodId: P063
+    price: 1.6
   foods:
   - {fileID: 11400000, guid: ab23a5dfed8eaae48a37658da988dfab, type: 2}
   - {fileID: 11400000, guid: 806f08dcfb2f6d94792ec6b0827c0c7a, type: 2}
@@ -176,3 +194,37 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 7fa29d52a44117a4a982dc2c1860b040, type: 2}
   - {fileID: 11400000, guid: b1bd7c872cbd4174ea2965af3b332631, type: 2}
   - {fileID: 11400000, guid: 65f2dc394718e1048afb725e7a78ca23, type: 2}
+  - {fileID: 11400000, guid: 940da7a7b2ff9164eadf28e19a5b3f75, type: 2}
+  - {fileID: 11400000, guid: d46e563d4d7f4d746a1139bfbd5dcfd1, type: 2}
+  - {fileID: 11400000, guid: 9c47115defbdc6e4ca7cde04d8425660, type: 2}
+  - {fileID: 11400000, guid: bcdbae499cca62a46afac86d7a905a7b, type: 2}
+  - {fileID: 11400000, guid: c85c1adc80e0ee34d8f058e95afdb67e, type: 2}
+  - {fileID: 11400000, guid: 15056c24f3116f34d9f426c613898e28, type: 2}
+  - {fileID: 11400000, guid: 9d352d8cb6ee1ef47aeab307f8fea785, type: 2}
+  - {fileID: 11400000, guid: 951ab27ac0ec7494b8c0365786b20180, type: 2}
+  - {fileID: 11400000, guid: c8e34c5eff42f4d4c802d81f87d01eff, type: 2}
+  categoryArt:
+  - category: 1
+    icon: {fileID: 21300000, guid: 4dcb31d4692387c46a28a0e018f1a1f4, type: 3}
+  - category: 2
+    icon: {fileID: 21300000, guid: 526637cab5d85464cac14eed36f84fe4, type: 3}
+  - category: 3
+    icon: {fileID: 21300000, guid: 9a9d02966971a214990b201b0bcf8a6c, type: 3}
+  - category: 4
+    icon: {fileID: 21300000, guid: 73da56b8beca76e448a3efd87388973f, type: 3}
+  - category: 5
+    icon: {fileID: 21300000, guid: 9f64af42264405949b0d636af552f4c3, type: 3}
+  - category: 6
+    icon: {fileID: 21300000, guid: dfa4c5fb0d1087f4a9270f9cc4dcb486, type: 3}
+  - category: 7
+    icon: {fileID: 21300000, guid: f4546adbc8ef1274fb53d019543f500b, type: 3}
+  - category: 8
+    icon: {fileID: 21300000, guid: 2921d8d9b78162542b8244e61b639a34, type: 3}
+  - category: 9
+    icon: {fileID: 21300000, guid: 0ab244646019e7d4f92697ea9dfdab50, type: 3}
+  - category: 10
+    icon: {fileID: 21300000, guid: 90348547968563d4fb66dd633f682fed, type: 3}
+  - category: 11
+    icon: {fileID: 21300000, guid: e1883f07ad09df644a5e6252bcca7ee5, type: 3}
+  - category: 12
+    icon: {fileID: 21300000, guid: 0c2a2607fe6524d4aa03423ed0022789, type: 3}

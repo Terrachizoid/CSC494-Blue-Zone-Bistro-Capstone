@@ -11,7 +11,7 @@ public static class CommunityProgress
         foreach(float v in new[]{b.maximumPopularity,b.startingPopularity,b.popularityPerDelight,
             b.failedRecipePopularityPenalty,b.maximumPopularityGainPerDish,b.maximumCommunityWellbeing,
             b.startingCommunityWellbeing,b.wellbeingPerHealthPoint,b.ingredientAppealMultiplier,
-            b.recipeDelightMultiplier,b.delightPerResolvedCraving,b.popularityPerMissedCraving,b.rentPerDay,b.walkInIncomePerPopularity,b.walkInPopularityThreshold})if(!Finite(v)||v<0)return false;
+            b.recipeDelightMultiplier,b.delightPerResolvedCraving,b.popularityPerMissedCraving,b.rentPerDay,b.walkInIncomePerPopularity,b.walkInPopularityThreshold,b.comfortMinimumAppeal,b.recipeFatigueMultiplier,b.popularityPerAppealPoint,b.popularityAppealPivot})if(!Finite(v)||v<0)return false;
         if(b.maximumPopularity<=0||b.maximumCommunityWellbeing<=0||b.startingPopularity>b.maximumPopularity||
             b.startingCommunityWellbeing>b.maximumCommunityWellbeing||b.cravingsStartDay<1||
             b.minimumDailyCravings<1||b.maximumDailyCravings<b.minimumDailyCravings||b.maximumDailyCravings>6||
@@ -39,7 +39,9 @@ public static class CommunityProgress
         {
             double fraction=s.currentDay<b.cravingsStartDay?1:
                 r.activeCravings.Length==0?0:(double)r.cravingsResolved.Length/r.activeCravings.Length;
-            gain=Math.Min(b.maximumPopularityGainPerDish,Math.Max(0,r.dishDelight)*b.popularityPerDelight*fraction);
+            // Indulgent (high-appeal) plates draw a crowd on top of the guest's own delight.
+            double crowd=Math.Max(0,r.ingredientAppeal-b.popularityAppealPivot)*b.popularityPerAppealPoint;
+            gain=Math.Min(b.maximumPopularityGainPerDish,(Math.Max(0,r.dishDelight)*b.popularityPerDelight+crowd)*fraction);
             // Ignoring a customer's request costs reputation. This depends on cravings only, never on health.
             if(s.currentDay>=b.cravingsStartDay)gain-=b.popularityPerMissedCraving*(r.activeCravings.Length-r.cravingsResolved.Length);
         }

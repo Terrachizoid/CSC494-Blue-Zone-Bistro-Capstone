@@ -20,7 +20,10 @@ MonoBehaviour:
   ingredientAppeal: 9
   marketingLabel: Family size!
   ingredientList: Refined wheat flour, Cheese, Tomato paste, Pepperoni, Palm oil
-  sortingExplanation: 
+  sortingExplanation: 'Frozen pizza is Red in this game: it is an ultra-processed
+    food. Look at the ingredient list: Refined wheat flour, Cheese, Tomato paste,
+    Pepperoni, Palm oil. The label "Family size!" is marketing; the Traffic Light
+    depends on how the food is made, not on what the package says.'
   ingredientCount: 5
   storageType: 2
   claimId: 
@@ -28,4 +31,8 @@ MonoBehaviour:
   reviewNotes: "Added 2026-10-22 from the capstone plan's store/luxury examples (S2,
     S6, \xA73.6). Classification follows the plan text; pending supervisor review.
     Not a real product label. Ingredient appeal is provisional gameplay tuning."
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: e26d86aaac33a7a4685be4bd23b8eb60, type: 3}
+  cardBack: {fileID: 21300000, guid: f5a43265addc92647854c7b9a7c75466, type: 3}
+  lightLogo: 0
+  darkPlaque: 0
+  cardSprig: 0

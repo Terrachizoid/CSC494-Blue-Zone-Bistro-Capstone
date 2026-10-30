@@ -1,12 +1,1 @@
-// File responsibility: Legacy standalone dialogue-demo state used by DialogueRuntimeExample.
-// The playable bistro uses GameSessionState; do not instantiate this as a second live progression source.
-
-using System;
-
-[Serializable]
-public class GameProgressState
-{
-    public int currentDay = 1;
-    public GameFlagState flags = new GameFlagState();
-    public DialogueHistoryState dialogueHistory = new DialogueHistoryState();
-}
+// Removed in the week 7 audit (unused; not in any scene). Safe to delete this file and its .meta in Unity.

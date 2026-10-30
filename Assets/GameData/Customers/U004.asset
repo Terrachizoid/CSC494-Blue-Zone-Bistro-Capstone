@@ -24,7 +24,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 9de0de0c13d52fa45883ca220c94e37a, type: 2}
   - {fileID: 11400000, guid: d1bd3d2f6c0f9114dac793c92d259b92, type: 2}
   - {fileID: 11400000, guid: 9ec5c3cec5734484cbb661ccef13e9d0, type: 2}
-  cravingTags: 020000000300000004000000
+  cravingTags: 02000000030000000400000007000000
   dialogueClaims: []
   approvalStatus: 0
   reviewNotes: 'Draft character content; delight-based attendance is sampled once

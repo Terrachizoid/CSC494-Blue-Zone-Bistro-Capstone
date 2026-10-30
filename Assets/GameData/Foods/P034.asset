@@ -20,7 +20,8 @@ MonoBehaviour:
   ingredientAppeal: 5
   marketingLabel: Everyday convenience
   ingredientList: Tomato juice, Salt
-  sortingExplanation: 
+  sortingExplanation: 'Salted tomato juice is Yellow in this game: it is a processed
+    plant food, because salt is added and much of the fibre is removed.'
   ingredientCount: 2
   storageType: 5
   claimId: 
@@ -29,4 +30,8 @@ MonoBehaviour:
     pending supervisor review. Not a real product label. Ingredient appeal is provisional
     0-10 gameplay tuning for a serving-weighted mean; independent of price and Traffic
     Light. Runtime import/calculation pending.
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 2aa6b929df35f594e88acf98414a526e, type: 3}
+  cardBack: {fileID: 21300000, guid: fd8f5b66d1bbb1241b85e929954f884b, type: 3}
+  lightLogo: 0
+  darkPlaque: 0
+  cardSprig: 0

@@ -75,6 +75,8 @@ public class ServeResult : OperationResult
     public int redServings;
     public float moneyEarned;
     public DailyDozenCategory[] dailyDozenCovered = Array.Empty<DailyDozenCategory>();
+    public int recipeRecentServes;   // servings of this recipe in the fatigue window, before this one
+    public bool recipeFatigued;      // positive popularity was multiplied by recipeFatigueMultiplier
     public ConsumedIngredient[] consumedIngredients = Array.Empty<ConsumedIngredient>();
     // Only today's active requests can resolve, and only for a successful recipe.
     public CravingTag[] cravingsResolved = Array.Empty<CravingTag>();

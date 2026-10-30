@@ -50,6 +50,10 @@ public class RecipeData : ScriptableObject
     [TextArea]
     public string reviewNotes;
 
+    // Art comes from Recipes.csv (icon_path, back_path); a blank path keeps an Inspector-assigned sprite.
     [Header("Presentation")]
+    [Tooltip("Dish picture on the card front. Recipes.csv: icon_path.")]
     public Sprite icon;
+    [Tooltip("Background behind the requirement tiles on the card back. Recipes.csv: back_path.")]
+    public Sprite cardBack;
 }

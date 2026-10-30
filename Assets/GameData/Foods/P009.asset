@@ -20,7 +20,9 @@ MonoBehaviour:
   ingredientAppeal: 7
   marketingLabel: Plain staple
   ingredientList: Sweet potato
-  sortingExplanation: 
+  sortingExplanation: 'Sweet potato is Green in this game: a whole plant food, with
+    nothing harmful added and nothing good taken away. It counts toward the Daily
+    Dozen group: Other vegetables.'
   ingredientCount: 1
   storageType: 1
   claimId: 
@@ -29,4 +31,8 @@ MonoBehaviour:
     pending supervisor review. Not a real product label. Ingredient appeal is provisional
     0-10 gameplay tuning for a serving-weighted mean; independent of price and Traffic
     Light. Runtime import/calculation pending.
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: e6ac145a640067441999ab68b7ec472d, type: 3}
+  cardBack: {fileID: 21300000, guid: 675863c3c8d92f646ad8f774725c88bf, type: 3}
+  lightLogo: 0
+  darkPlaque: 0
+  cardSprig: 0

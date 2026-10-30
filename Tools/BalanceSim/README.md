@@ -13,18 +13,31 @@ No packages are needed. One full run takes a few milliseconds.
 
 ## Bots (play styles)
 
+Since 2026-10-24 bots decide only from what a player can see before serving, because Review dish no
+longer forecasts outcomes: food appeal, Traffic Light belief (green good, red bad), which requests a
+recipe answers, base price and ingredient cost, plus whether the plate matches the recipe. The real
+outcome is still computed by the `MealService` port after serving.
+
 | Bot | Plays like |
 | --- | --- |
-| `health` | Green only, maximizes health, mostly ignores taste and cravings |
-| `balanced` | Informed player: green, tasty, chases cravings |
-| `popular` | Naive player: picks by appeal and cravings, any Traffic Light |
+| `health` | Green only, prefers green count over taste and requests |
+| `balanced` | Informed player: green, tasty, chases requests |
+| `frugal` | Informed player who watches cost closely |
+| `popular` | Taste chaser: appeal and requests, any Traffic Light |
 | `thrift` | Green only, cheapest builds |
-| `frugal` | Informed player who also watches money (stands in for a smart human) |
+| `luxury` | Extreme: highest appeal, ignores cost (green/yellow) |
+| `junk` | Extreme: high appeal, prefers yellow/red |
+| `noshop` | Extreme: buys for day 1 only, then lives on pantry, selling and the farmer |
 
-All bots know today's guests and cravings (the Market shows them), buy whole packages from the
-cheapest open listing, reuse pantry stock, downgrade a dish to a cheaper build when the cart is
-unaffordable, and turn a guest away only as a last resort. Day 1's first dish is the tutorial
-recipe (R001). Sorting accuracy defaults to 100% (`summarize(..., acc=0.6)` for weaker players).
+All bots know today's guests and cravings, buy whole packages from the cheapest open listing, reuse
+pantry stock, downgrade a dish to a cheaper build when the cart is unaffordable, sell pantry servings
+the day's plan does not use when short of money (soonest-to-spoil first), get the farmer's food aid once
+a day when a guest is left unserved and nothing can be cooked, and turn a guest away only as a last
+resort. `Run(..., mistake=0.2)` serves 20% of dishes with a missing serving (human error);
+`summarize(..., acc=0.6)` sets sorting accuracy.
+
+`extremes.py <project_root> [runs] [first_case]` runs the normal bots plus extreme cases (luxury, junk,
+never shops, careless player, broke start), each also without selling/farmer for comparison.
 
 ## What it models / does not model
 
@@ -33,7 +46,7 @@ wellbeing caps, attendance capacity and delight-weighted selection, popularity u
 feasibility, sorting refund, shelf life and expiry, delayed finance, endings.
 
 Not modelled: morning events (random noise; off), rush/crash dialogue (no stat effect), menu/UI
-friction, players who misread recipes. Results describe what a competent player of each style
+friction. Misread recipes are approximated by `mistake`. Results describe what a competent player of each style
 *can* reach, not how a first-time human feels.
 
 ## Keeping it honest
@@ -119,3 +132,59 @@ Findings:
 Rent 11 or more is a cliff: even the frugal informed player gets squeezed into cheap food, loses
 popularity and drops to Niche (Blue 13–20%), while health players start going bankrupt (up to 15%).
 Niche players are relatively poorer, not broke, at rent 9–10.
+
+## Round-5 matrix (2026-10-24, 100 runs per case, current content, visible-info bots)
+
+| Case | Endings | Final money | Popularity | Wellbeing | Farmer days | Sold $ |
+| --- | --- | --- | --- | --- | --- | --- |
+| health | Niche 95, Blue 5 | 34 | 613 | 78 | 0 | 0 |
+| balanced | Blue 99 | 58 | 817 | 77 | 0 | 0 |
+| frugal | Niche 97, Blue 3 | 40 | 629 | 78 | 0 | 0 |
+| popular (taste) | Struggling 100 | 22 | 587 | 60 | 0.4 | 6.8 |
+| thrift | Struggling 100 | 32 | 488 | 65 | 0 | 0 |
+| luxury buyer | Struggling 100 | 26 | 590 | 65 | 0.2 | 9.3 |
+| junk chaser | Struggling 100 | 27 | 605 | 47 | 0 | 10.7 |
+| never shops after day 1 | Struggling 100 | 19 | 413 | 61 | 4.0 | 0 |
+| careless (20% mistakes, 60% sorting) | Struggling 69, Niche 28, Blue 3; 11% end negative, 0 bankrupt | 15 | 483 | 68 | 1.1 | 1.5 |
+| careless, no sell/farmer | Struggling 44, Niche 29, **Bankrupt 24**; 42% end negative | 7.5 | 462 | 66 | – | – |
+| broke start $8 | Struggling 73, Niche 16, Blue 11 | 25 | 609 | 68 | 0.8 | 6.3 |
+| broke start $8, no sell/farmer | Struggling 74, Niche 19, Blue 7 | 24 | 576 | 69 | – | – |
+
+Reading: only the informed `balanced` style reaches Blue; green-but-request-ignoring styles land Niche;
+taste, luxury and junk chasers all struggle (junk also wrecks wellbeing). Selling + farmer removed
+bankruptcy for careless players (24% → 0%) without making "never shop" viable (Struggling, $19).
+Bot quirk: the broke-start bot sometimes sells food a later day needed, so it skips more guests than
+without selling; a human would not sell planned stock.
+
+## Rent × walk-in grid (2026-10-24, `grid_rent_walkin.py`)
+
+Used to pick rent $11 / walk-in 0.035 before AI round 6. Balanced-bot final money by (rent, walk-in): 9/0.05 $58,
+9/0.025 $40, 11/0.035 $36, 11/0.025 $30, 12/0.035 $33, 14/0.035 $22. Careless bots start going bankrupt at rent 12
+(8%) and rent 14 (52%). Plate-mistake popularity penalty 40 → 20 changed bots little but removed careless bankruptcy.
+
+## Comfort + recipe fatigue + new recipes (2026-10-25, 60 runs)
+
+| Case | Endings | Money | Wellbeing | Non-green servings/dish |
+| --- | --- | --- | --- | --- |
+| balanced | Blue 46, Niche 14 | 34.5 | 75 | 0.0 |
+| health | Niche 60 | 21.3 | 76 | 0.0 |
+| frugal | Niche 59, Blue 1 | 25.8 | 77 | 0.0 |
+| popular (taste) | Struggling 60 | 6.6 | 58 | 0.42 |
+| junk | Struggling 60 | 5.5 | 47 | 1.65 |
+| luxury | Struggling 58, Niche 2 | 9.3 | 62 | 0.0 |
+| careless | Niche 40, Struggling 18, Blue 1, Bankrupt 1 | 6.4 | 66 | 0.0 |
+
+Bots meet Comfort with green high-appeal foods (sweet potato, berries, dates) when they care about health; junk and
+taste chasers use chips/cereal/soda and fall behind on wellbeing. Fatigue is visible to bots (they avoid a fatigued
+recipe in planning).
+
+## Crowd popularity + snack platter + Daily Dozen novelty (2026-10-25, 40 runs)
+
+| Setting (pivot, per point) | Junk | Balanced | Health | Taste | Luxury |
+| --- | --- | --- | --- | --- | --- |
+| no snack platter, 7 / 15 | Struggling mostly, $22 | Blue, $37 | Niche, $22 | mixed, $33 | Niche/Struggling, $25 |
+| snack platter, 7 / 15 (chosen) | **Popular 36/40, $47**, wellbeing 14 | Blue, $37 | Niche, $22 | mixed, $33 | mostly Niche, $25 |
+| snack platter, 7 / 20 | Popular, $66 | Blue, $38 | Niche, $22 | Popular, $47 | mixed, $39 |
+| snack platter, 6.5 / 15 | Popular, $68 | Blue, $42 | Niche, $22 | Popular, $45 | mixed, $37 |
+
+The junk bot now buys cheaply (cost weight 1.0); the old version overspent on bacon/cheese/heirloom tomatoes.

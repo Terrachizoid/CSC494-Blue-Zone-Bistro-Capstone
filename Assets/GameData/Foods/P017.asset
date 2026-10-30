@@ -20,7 +20,9 @@ MonoBehaviour:
   ingredientAppeal: 4
   marketingLabel: Plain staple
   ingredientList: Black beans
-  sortingExplanation: 
+  sortingExplanation: 'Dry beans is Green in this game: a whole plant food, with
+    nothing harmful added and nothing good taken away. It counts toward the Daily
+    Dozen group: Beans.'
   ingredientCount: 1
   storageType: 4
   claimId: 
@@ -29,4 +31,8 @@ MonoBehaviour:
     pending supervisor review. Not a real product label. Ingredient appeal is provisional
     0-10 gameplay tuning for a serving-weighted mean; independent of price and Traffic
     Light. Runtime import/calculation pending.
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 32a47e5c1750f8c4cbd3c48599f6cd27, type: 3}
+  cardBack: {fileID: 21300000, guid: 546b8917c012735488aed0a126133f5f, type: 3}
+  lightLogo: 0
+  darkPlaque: 0
+  cardSprig: 0

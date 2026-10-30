@@ -17,14 +17,14 @@ MonoBehaviour:
   noEventChance: 0.25
   twoEventChance: 0.25
   startingMoney: 20
-  maximumSortingDiscount: 0.3
+  maximumSortingDiscount: 0.5
   freshDays: 2
   frozenDays: 5
   cannedDays: -1
   dryDays: -1
   shelfStableDays: -1
   healthPerGreenServing: 1
-  healthPerGreenDailyDozenCategory: 1
+  healthPerGreenDailyDozenCategory: 2
   healthPenaltyPerYellowServing: 1
   healthPenaltyPerRedServing: 3
   failedRecipeDelightPenalty: 30
@@ -40,7 +40,7 @@ MonoBehaviour:
   maximumPopularity: 1000
   startingPopularity: 300
   popularityPerDelight: 3
-  failedRecipePopularityPenalty: 40
+  failedRecipePopularityPenalty: 20
   maximumPopularityGainPerDish: 100
   attendanceThresholds:
   - 0
@@ -51,9 +51,20 @@ MonoBehaviour:
   startingCommunityWellbeing: 50
   wellbeingPerHealthPoint: 0.25
   rentStartDay: 3
-  rentPerDay: 9
-  walkInIncomePerPopularity: 0.08
+  rentPerDay: 11
+  walkInIncomePerPopularity: 0.035
   walkInPopularityThreshold: 450
+  pantrySellRate: 0.75
+  popularityPerAppealPoint: 15
+  popularityAppealPivot: 7
+  dailyDozenNewGroupsOnly: 1
+  comfortMinimumAppeal: 7
+  recipeFatigueWindowDays: 2
+  recipeFatigueThreshold: 4
+  recipeFatigueMultiplier: 0.5
+  foodAidEnabled: 1
+  foodAidMaxAppeal: 4
+  foodAidShelfLifeDays: 1
   popularityPerMissedCraving: 15
   maxDelight: 100
   startingDelight: 50

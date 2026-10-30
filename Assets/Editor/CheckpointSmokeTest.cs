@@ -17,7 +17,7 @@ public static class CheckpointSmokeTest
             CommunityProgress.Initialize(state,balance);
             state.popularity=0;state.communityWellbeing=62.5f;
             state.attendancePlanDay=2;state.dailyCustomerCapacity=1;state.dailyCustomerIds.Add("U");state.unlockedCustomerIds.Add("U");
-            state.flags.SetFlag("test.flag");state.correctlySortedFoodIds.Add("F");state.storeMembershipIds.Add("S");
+            state.flags.SetFlag("test.flag");state.correctlySortedFoodIds.Add("F");
             state.tutorials.Add(new TutorialRecord{tutorialId="T_SHOPPING",status="completed",stepId="shop"});
             state.tutorials.Add(new TutorialRecord{tutorialId="T_COOKING",status="skipped",skipReason="Unavailable ingredients"});
             state.inventory.Add(new InventoryEntry{foodId="F",listingId="L",servings=3,daysRemaining=1,purchaseCostPerServing=.75f});
@@ -41,7 +41,7 @@ public static class CheckpointSmokeTest
             Check(loaded.money==19.5f&&loaded.currentDay==2&&loaded.flags.HasFlag("test.flag")&&loaded.inventory.Count==1&&
                 loaded.inventory[0].purchaseCostPerServing==.75f&&loaded.customers[0].healthHistory[0].healthDelta==5&&
                 loaded.customers[0].crashDialoguePending&&loaded.customers[0].visualScore==-15&&loaded.correctlySortedFoodIds.Count==1&&
-                loaded.storeMembershipIds.Count==1&&!loaded.dialogueHistory.CanPlay(sequence,2)&&loaded.tutorials.Count==2&&
+                !loaded.dialogueHistory.CanPlay(sequence,2)&&loaded.tutorials.Count==2&&
                 loaded.tutorials[0].status=="completed"&&loaded.tutorials[1].skipReason=="Unavailable ingredients","Session round trip lost data");
             loaded.currentDay=3;Check(store.Save(store.Capture(loaded),out error),error);
             PlayerPrefs.SetString(key,"damaged");PlayerPrefs.Save();

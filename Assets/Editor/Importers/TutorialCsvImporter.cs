@@ -29,7 +29,7 @@ public static class TutorialCsvImporter
             string id=Get("tutorial_id"),behaviour=Get("behaviour_id"),phase=Get("activation_phase"),step=Get("step_id");
             if(string.IsNullOrEmpty(id)&&row.All(string.IsNullOrWhiteSpace))continue;
             if(string.IsNullOrEmpty(id)||string.IsNullOrEmpty(Get("trigger_flag"))||string.IsNullOrEmpty(step)||string.IsNullOrWhiteSpace(Get("text"))||
-                !new[]{"Shopping","FirstMeal","TextOnly"}.Contains(behaviour)||!Enum.TryParse<GamePhase>(phase,out var parsed)||!Enum.IsDefined(typeof(GamePhase),parsed)||parsed.ToString()!=phase||
+                !new[]{"Shopping","FirstMeal","TextOnly"}.Contains(behaviour)||(phase!="Any"&&(!Enum.TryParse<GamePhase>(phase,out var parsed)||!Enum.IsDefined(typeof(GamePhase),parsed)||parsed.ToString()!=phase))||
                 !int.TryParse(Get("priority"),out var priority))
             {Debug.LogError("Invalid tutorial row: "+id);return false;}
             var definition=definitions.Find(d=>d.id==id);

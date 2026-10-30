@@ -24,7 +24,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 25c84bad0bbb85b4bab26b05c543b443, type: 2}
   - {fileID: 11400000, guid: f507fad0959231b4e8cd10282e30275a, type: 2}
   - {fileID: 11400000, guid: f273679da48ac2f45a0e2fe99caeca7b, type: 2}
-  cravingTags: 010000000600000003000000
+  cravingTags: 01000000060000000300000007000000
   dialogueClaims: []
   approvalStatus: 0
   reviewNotes: 'Character theme from Capstone Plan S7 (stretch cast), reused as modest

@@ -18,22 +18,23 @@ MonoBehaviour:
   description: Premium store where healthy staples compete with expensive marketing
     traps.
   unlockDay: 1
-  requiresMembership: 0
-  membershipCost: 0
   defaultPriceDisplayStyle: 1
   shelves:
   - id: PRODUCE
     displayName: Produce
     artwork: {fileID: 0}
+    colour: '#6D806F'
   - id: WELLNESS
     displayName: Wellness aisle
     artwork: {fileID: 0}
+    colour: '#77847D'
   - id: LUXURY
     displayName: Luxury shelf
     artwork: {fileID: 0}
+    colour: '#7C8071'
   approvalStatus: 0
   reviewNotes: 'Restocked 2026-10-22: genuinely green but 2-3x priced produce and
     superfoods; Wellness aisle sells yellow/red items as premium health food; Luxury
     shelf (day 4) mixes green luxuries with traps.'
-  exteriorIcon: {fileID: 0}
-  shopBackground: {fileID: 0}
+  logo: {fileID: 21300000, guid: b00728523e832234aa89077bd8e2966b, type: 3}
+  shopBackground: {fileID: 21300000, guid: 0c90dabbd48c4134b8fdf4b01b9af7fe, type: 3}

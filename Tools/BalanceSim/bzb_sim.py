@@ -70,7 +70,7 @@ class Content:
 
 # ------------------------------------------------------------------ dish evaluation (MealService port)
 
-def evaluate(C, recipe, foods_by_slot, cust, day, cravings, popularity, wellbeing):
+def evaluate(C, recipe, foods_by_slot, cust, day, cravings, popularity, wellbeing, fatigued=False):
     """foods_by_slot: list aligned with recipe slots; each entry a list of food ids (len == n) or [] for empty optional."""
     b = C.b
     built = True
@@ -89,11 +89,13 @@ def evaluate(C, recipe, foods_by_slot, cust, day, cravings, popularity, wellbein
             elif f["tl"] == "Yellow": yellow += 1
             else: red += 1
             if recipe["green_only"] and f["tl"] != "Green": built = False
-    hchange = green * b["healthPerGreenServing"] + len(gcov) * b["healthPerGreenDailyDozenCategory"] \
+    newcov = gcov - set(cust.get("dd", ())) if b.get("dailyDozenNewGroupsOnly") else gcov
+    hchange = green * b["healthPerGreenServing"] + len(newcov) * b["healthPerGreenDailyDozenCategory"] \
         - yellow * b["healthPenaltyPerYellowServing"] - red * b["healthPenaltyPerRedServing"]
     hchange = min(b["maxHealthPerDish"], hchange)
-    mean_appeal = appeal / total
-    resolved = [t for t in cravings if t in recipe["tags"]] if built else []
+    mean_appeal = appeal / total if total else 0.0
+    # Comfort is answered by plate appeal (Unity MealService), any recipe.
+    resolved = [t for t in cravings if t in recipe["tags"] or (t == "Comfort" and mean_appeal >= b.get("comfortMinimumAppeal", 7))] if built else []
     if built:
         dchange = min(b["maxDelightPerDish"], math.floor(mean_appeal * b["ingredientAppealMultiplier"] +
                       recipe["delight"] * b["recipeDelightMultiplier"] + len(resolved) * b["delightPerResolvedCraving"]))
@@ -106,29 +108,47 @@ def evaluate(C, recipe, foods_by_slot, cust, day, cravings, popularity, wellbein
     if built:
         frac = 1 if day < b["cravingsStartDay"] else (0 if not cravings else len(resolved) / len(cravings))
         # Experiment: dishes below a delight threshold lose popularity; ignored cravings cost popularity.
-        raw = (dchange - b.get("popularityDelightThreshold", 0)) * b["popularityPerDelight"]
+        raw = (dchange - b.get("popularityDelightThreshold", 0)) * b["popularityPerDelight"] \
+            + max(0.0, mean_appeal - b.get("popularityAppealPivot", 5)) * b.get("popularityPerAppealPoint", 0)
         pgain = min(b["maximumPopularityGainPerDish"], raw * frac) if raw > 0 else raw
         if day >= b["cravingsStartDay"] and cravings:
             pgain -= b.get("popularityPerMissedCraving", 0) * (len(cravings) - len(resolved))
     else:
         pgain = -b["failedRecipePopularityPenalty"]
     pdelta = max(0, min(b["maximumPopularity"], popularity + pgain)) - popularity
+    if fatigued and pdelta > 0: pdelta *= b.get("recipeFatigueMultiplier", 0.5)  # global recipe fatigue
     wdelta = max(0, min(b["maximumCommunityWellbeing"], wellbeing + hchange * b["wellbeingPerHealthPoint"])) - wellbeing
     return dict(built=built, health=hchange, delight=dchange, pay=pay, tip=tip, pop=pdelta, well=wdelta,
-                red=red, yellow=yellow, green=green, cov=len(gcov), resolved=len(resolved), servings=total)
+                red=red, yellow=yellow, green=green, cov=len(gcov), resolved=len(resolved), servings=total, appeal=mean_appeal, gcov=sorted(gcov))
 
 # ------------------------------------------------------------------ bots
 
 STRATEGIES = {
-    # weights on (health, delight, popularity, wellbeing, money earned, ingredient cost); allowed lights
-    "health":   dict(w=dict(health=3, delight=0.3, pop=0.02, well=0, money=0.05, cost=0.3), lights={"Green"}),
-    "balanced": dict(w=dict(health=1.5, delight=1, pop=0.05, well=0, money=0.1, cost=0.3), lights={"Green", "Yellow", "Red"}),
-    "frugal":   dict(w=dict(health=1.5, delight=1, pop=0.05, well=0, money=0.1, cost=1.5), lights={"Green", "Yellow", "Red"}),
-    "popular":  dict(w=dict(health=0, delight=1, pop=0.1, well=0, money=0.1, cost=0.2), lights={"Green", "Yellow", "Red"}),
-    "thrift":   dict(w=dict(health=0.5, delight=0.1, pop=0, well=0, money=0.2, cost=3), lights={"Green"}),
+    # Bots see what a player sees before serving (2026-10-24: Review dish no longer forecasts outcomes):
+    # food appeal, Traffic Light belief (green good, red bad), requests the recipe answers, base price, cost.
+    # weights: light = (green - yellow - 2*red) servings, appeal = mean appeal, crave = requests answered,
+    #          price = recipe base price, cost = ingredient cost; lights = colours the bot is willing to cook
+    "health":   dict(w=dict(light=3, appeal=0.3, crave=1, price=0.1, cost=0.3), lights={"Green"}),
+    "balanced": dict(w=dict(light=1, appeal=1, crave=1.5, price=0.3, cost=0.5), lights={"Green", "Yellow", "Red"}),
+    "frugal":   dict(w=dict(light=1, appeal=0.5, crave=1, price=0.3, cost=2), lights={"Green", "Yellow", "Red"}),
+    "popular":  dict(w=dict(light=0, appeal=2, crave=1.5, price=0.2, cost=0.2), lights={"Green", "Yellow", "Red"}),
+    "thrift":   dict(w=dict(light=0.5, appeal=0.1, crave=0.5, price=0.3, cost=3), lights={"Green"}),
+    # extreme cases
+    "luxury":   dict(w=dict(light=1, appeal=3, crave=1, price=0.1, cost=0), lights={"Green", "Yellow"}),
+    "junk":     dict(w=dict(light=-1, appeal=2, crave=1.5, price=0.3, cost=1.0), lights={"Green", "Yellow", "Red"}),
+    "noshop":   dict(w=dict(light=0.5, appeal=0.1, crave=0.5, price=0.3, cost=3), lights={"Green"}),
 }
 
-def best_build(C, recipe, avail, cust, day, cravings, pop, well, strat, cost_of):
+def visible_score(C, recipe, sel, cravings, w, cost):
+    picks = [f for p in sel for f in p]
+    if not picks: return -1e9
+    g = sum(C.foods[f]["tl"] == "Green" for f in picks); y = sum(C.foods[f]["tl"] == "Yellow" for f in picks)
+    r = len(picks) - g - y
+    appeal = sum(C.foods[f]["appeal"] for f in picks) / len(picks)
+    crave = sum(1 for t in cravings if t in recipe["tags"] or (t == "Comfort" and appeal >= C.b.get("comfortMinimumAppeal", 7)))
+    return (w["light"] * (g - y - 2 * r) + w["appeal"] * appeal + w["crave"] * crave + w["price"] * recipe["pay"] - w["cost"] * cost)
+
+def best_build(C, recipe, avail, cust, day, cravings, pop, well, strat, cost_of, fatigued=False):
     w = STRATEGIES[strat]["w"]; lights = STRATEGIES[strat]["lights"]
     bycat = defaultdict(list)
     for fid in avail:
@@ -143,11 +163,9 @@ def best_build(C, recipe, avail, cust, day, cravings, pop, well, strat, cost_of)
         options.append(opts)
     def score(sel):
         e = evaluate(C, recipe, sel, cust, day, cravings, pop, well)
-        if not e["built"]: return -1e9, e
+        if not e["built"]: return -1e9, e  # plate validity is visible (Review dish)
         cost = sum(cost_of(f) for picks in sel for f in picks)
-        v = (w["health"] * e["health"] + w["delight"] * e["delight"] + w["pop"] * e["pop"] + w["well"] * e["well"]
-             + w["money"] * (e["pay"] + e["tip"]) - w["cost"] * cost)
-        return v, e
+        return visible_score(C, recipe, sel, cravings, w, cost) - (2.0 * w["crave"] if fatigued else 0), e  # recipe table shows fatigue
     # coordinate ascent from the first option set
     sel = [o[-1] if o != [[]] else [] for o in options]
     best, _ = score(sel)
@@ -163,8 +181,9 @@ def best_build(C, recipe, avail, cust, day, cravings, pop, well, strat, cost_of)
     return (v, sel, e) if v > -1e9 else None
 
 class Run:
-    def __init__(self, C, strat, seed, sort_accuracy=1.0, tutorial=True, log=False):
+    def __init__(self, C, strat, seed, sort_accuracy=1.0, tutorial=True, log=False, mistake=0.0):
         self.C, self.strat, self.rng, self.acc, self.tutorial, self.log = C, strat, random.Random(seed), sort_accuracy, tutorial, log
+        self.mistake = mistake  # chance a planned dish is served with a slot wrong (human error)
         b = C.b
         self.day, self.money = 1, b["startingMoney"]
         self.pop, self.well = b["startingPopularity"], b["startingCommunityWellbeing"]
@@ -210,7 +229,7 @@ class Run:
         wanted = b["minimumDailyCravings"] + int(self.rng.random() * (b["maximumDailyCravings"] - b["minimumDailyCravings"] + 1))
         chosen = []
         while len(chosen) < wanted:
-            opts = [t for t in pool if any(all(x in r["tags"] for x in chosen + [t]) for r in recipes_avail)]
+            opts = [t for t in pool if any(all(x == "Comfort" or x in r["tags"] for x in chosen + [t]) for r in recipes_avail)]
             if not opts: break
             t = opts[int(self.rng.random() * len(opts))]; chosen.append(t); pool.remove(t)
         return chosen
@@ -235,7 +254,10 @@ class Run:
         cravings = {g: self.choose_cravings(g, recipes_avail) for g in guests}
         cost_of = lambda f: 0.0 if pantry[f] > 0 else buy_price.get(f, (99,))[0]
         # plan dishes
-        plan = []
+        plan = []; planned = Counter()
+        serves = getattr(self, "serves", []); win = max(1, int(b.get("recipeFatigueWindowDays", 2))); thr = int(b.get("recipeFatigueThreshold", 0))
+        recent = lambda rid: sum(1 for d, x in serves if x == rid and d > self.day - win)
+        fat = lambda rid: thr > 0 and recent(rid) + planned[rid] >= thr
         for i, g in enumerate(guests):
             cs = self.cust[g]
             cands = recipes
@@ -244,9 +266,9 @@ class Run:
             for r in cands:
                 strat = self.strat
                 if self.tutorial and not self.first_dish_done and i == 0 and strat in ("health", "thrift"): strat = "health"
-                res = best_build(C, r, avail, cs, self.day, cravings[g], self.pop, self.well, strat, cost_of)
+                res = best_build(C, r, avail, cs, self.day, cravings[g], self.pop, self.well, strat, cost_of, fat(r["id"]))
                 if res and (best is None or res[0] > best[0]): best = (res[0], r, res[1], res[2])
-            if best: plan.append((g, best))
+            if best: plan.append((g, best)); planned[best[1]["id"]] += 1
         # shopping: buy what pantry lacks; downgrade or drop dishes if unaffordable
         thrifted = set()
         while True:
@@ -261,9 +283,21 @@ class Run:
                 if f not in buy_price: cart = None; break
                 best_l = min((l for l in listings if l["food"] == f), key=lambda l: math.ceil(missing / l["servings"]) * l["price"])
                 k = math.ceil(missing / best_l["servings"]); cart.append((best_l, k)); total += k * best_l["price"]
+            if self.strat == "noshop" and self.first_dish_done: plan = [p for p in plan if all(pantry[f] >= n for f, n in Counter(f for pk in p[1][2] for f in pk).items())]; cart, total = [], 0.0
             if cart is not None and total <= max(0.0, self.money) + 1e-9: break
             if not plan: cart, total = [], 0.0; break
             self.stats["money_short"].append(self.day)
+            # Sell pantry servings the plan does not use, soonest-to-spoil first (Unity PantryService rule).
+            if b.get("pantrySellRate", 0) > 0 and not getattr(self, "_sold_today", False):
+                self._sold_today = True; keep = Counter(need); gained = 0.0
+                for x in sorted(self.inv, key=lambda x: (x["days"] == -1, x["days"])):
+                    spare = x["servings"] - keep[x["food"]]
+                    keep[x["food"]] = max(0, keep[x["food"]] - x["servings"])
+                    if spare <= 0: continue
+                    gained += spare * b["pantrySellRate"] * min(C.minprice[x["food"]], x["cost"]); x["servings"] -= spare
+                self.inv = [x for x in self.inv if x["servings"] > 0]; pantry = Counter()
+                for e2 in self.inv: pantry[e2["food"]] += e2["servings"]
+                if gained > 0: self.money += round(gained, 2); self.stats["sold"].append(round(gained, 2)); continue
             # A real player first swaps the priciest dish for a thrift build, then drops a guest.
             def dish_cost(p): return sum(buy_price.get(f, (0,))[0] for picks in p[1][2] for f in picks)
             swapped = False
@@ -278,37 +312,61 @@ class Run:
             if swapped: continue
             plan.sort(key=lambda p: p[1][0]); dropped = plan.pop(0)
             self.stats["dropped_for_money"].append(self.day)
+        self._sold_today = False
         # checkout + sorting refund
         self.money -= total
-        new_foods = {l["food"] for l, k in cart} - self.mastered
-        refund = 0.0
-        if new_foods:
-            correct = [f for f in new_foods if self.rng.random() < self.acc]
-            refund = round(total * b["maximumSortingDiscount"] * len(correct) / len(new_foods), 2)
-            self.mastered.update(correct)
+        # Unity FoodSortingService: maximumSortingDiscount of what was paid for each correctly sorted new food.
+        new_foods = sorted({l["food"] for l, k in cart} - self.mastered)
+        correct = {f for f in new_foods if self.rng.random() < self.acc}
+        rate = b["maximumSortingDiscount"]
+        refund = round(sum(round(sum(l["price"] * k for l, k in cart if l["food"] == f) * rate, 2) for f in correct), 2)
+        self.mastered.update(correct)
         self.money += refund
-        paid_ratio = 1 if total == 0 else (total - refund) / total
         for l, k in cart:
             for _ in range(k):
                 self.inv.append(dict(food=l["food"], servings=l["servings"], days=C.shelf_life(C.foods[l["food"]]["storage"]),
-                                     cost=l["price"] / l["servings"] * paid_ratio))
+                                     cost=l["price"] / l["servings"] * ((1 - rate) if l["food"] in correct else 1)))
         spent = total - refund
         # service
         earned = 0.0; day_meals = []
         for g, (v, r, sel, e) in plan:
-            cs = self.cust[g]
-            e = evaluate(C, r, sel, cs, self.day, cravings[g], self.pop, self.well)
+            cs = self.cust[g]; fz = thr > 0 and recent(r["id"]) >= thr
+            e = evaluate(C, r, sel, cs, self.day, cravings[g], self.pop, self.well, fz)
+            if self.mistake and self.rng.random() < self.mistake:
+                e = evaluate(C, r, [p[:-1] if p and not s["opt"] else p for p, s in zip(sel, r["slots"])], cs, self.day, cravings[g], self.pop, self.well, fz)
+                self.stats["mistakes"].append(self.day)
             for picks in sel:
                 for f in picks:
                     batches = sorted([x for x in self.inv if x["food"] == f and x["servings"] > 0], key=lambda x: (x["days"] == -1, x["days"]))
                     batches[0]["servings"] -= 1
             self.inv = [x for x in self.inv if x["servings"] > 0]
             cs["health"] = max(0, min(100, cs["health"] + e["health"]))
+            cs.setdefault("dd", set()).update(e["gcov"])
             cs["delight"] = max(0, min(b["maxDelight"], cs["delight"] + e["delight"]))
             self.pop += e["pop"]; self.well += e["well"]
             earned += e["pay"] + e["tip"]; self.money += e["pay"] + e["tip"]
             self.meals[g] += 1; self.first_dish_done = True
+            serves.append((self.day, r["id"])); self.serves = serves
             day_meals.append((g, r["id"], e, sel))
+        # Farmer's food aid (Unity FoodAidService): once a day, for a guest left unserved because nothing can be made.
+        served_ids = {m[0] for m in day_meals}
+        for g in guests:
+            if g in served_ids or not b.get("foodAidEnabled") or getattr(self, "aid_day", 0) == self.day: continue
+            have = Counter()
+            for x in self.inv: have[x["food"]] += x["servings"]
+            if any(best_build(C, r, set(have), self.cust[g], self.day, cravings[g], self.pop, self.well, "thrift", lambda f: 0) for r in recipes): continue
+            cand = lambda cat: sorted(f for f, d in C.foods.items() if d["cat"] == cat and d["tl"] == "Green" and d["appeal"] <= b.get("foodAidMaxAppeal", 4) and f in C.minprice)
+            opts = sorted([r for r in recipes if all(cand(s["cat"]) for s in r["slots"] if not s["opt"])], key=lambda r: r["id"])
+            if not opts: break
+            rng = random.Random(self.day * 7919 + len(opts)); r = opts[rng.randrange(len(opts))]; sel = []
+            for s in r["slots"]:
+                if s["opt"]: sel.append([]); continue
+                pool = cand(s["cat"]); f = pool[rng.randrange(len(pool))]; sel.append([f] * s["n"])
+            self.aid_day = self.day; self.stats["aid"].append(self.day)
+            cs = self.cust[g]; e = evaluate(C, r, sel, cs, self.day, cravings[g], self.pop, self.well)
+            cs["health"] = max(0, min(100, cs["health"] + e["health"])); cs["delight"] = max(0, min(b["maxDelight"], cs["delight"] + e["delight"])); cs.setdefault("dd", set()).update(e["gcov"])
+            self.pop += e["pop"]; self.well += e["well"]; earned += e["pay"] + e["tip"]; self.money += e["pay"] + e["tip"]
+            self.meals[g] += 1; day_meals.append((g, r["id"], e, sel)); break
         # Experiment: walk-in / takeaway income proportional to popularity (foot traffic).
         walkin = max(0.0, self.pop - b.get("walkInPopularityThreshold", 0.0)) * b.get("walkInIncomePerPopularity", 0.0)
         self.money += walkin; earned += walkin
@@ -355,8 +413,8 @@ class Run:
         while self.play_day(): pass
         return self
 
-def summarize(C, strat, n=300, acc=1.0, seed0=1, tutorial=True):
-    runs = [Run(C, strat, seed0 + i, acc, tutorial=tutorial).play() for i in range(n)]
+def summarize(C, strat, n=300, acc=1.0, seed0=1, tutorial=True, mistake=0.0):
+    runs = [Run(C, strat, seed0 + i, acc, tutorial=tutorial, mistake=mistake).play() for i in range(n)]
     endings = Counter(r.ending() for r in runs)
     fin_money = [r.money for r in runs]
     healths = [cs["health"] for r in runs for cs in r.cust.values()]
@@ -377,7 +435,9 @@ def summarize(C, strat, n=300, acc=1.0, seed0=1, tutorial=True):
                 runs_money_bound=f"{drop:.0%}", guests_unfed_for_money=round(dropped, 2), meals_served=round(st.mean(served), 1), customers_skipped=round(st.mean(skipped), 1),
                 meals_per_customer=round(st.mean(meals), 2), health_per_dish=round(st.mean(hdeltas), 1),
                 final_health_mean=round(st.mean(healths), 1), final_health_max=max(healths), june_final_health=round(st.mean(june), 1),
-                share_high_band=f"{sum(1 for h in healths if h >= 70) / len(healths):.0%}", nongreen_servings_per_dish=round(nongreen, 2))
+                share_high_band=f"{sum(1 for h in healths if h >= 70) / len(healths):.0%}", nongreen_servings_per_dish=round(nongreen, 2),
+                farmer_days=round(st.mean(len(r.stats["aid"]) for r in runs), 2), sold_per_run=round(st.mean(sum(r.stats["sold"]) for r in runs), 2),
+                mistakes=round(st.mean(len(r.stats["mistakes"]) for r in runs), 2))
 
 if __name__ == "__main__":
     root = sys.argv[1]

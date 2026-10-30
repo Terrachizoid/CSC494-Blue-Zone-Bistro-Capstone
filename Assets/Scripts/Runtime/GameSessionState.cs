@@ -31,8 +31,11 @@ public class GameSessionState
     public List<CustomerState> customers = new List<CustomerState>();
     public GameFlagState flags = new GameFlagState();
     public DialogueHistoryState dialogueHistory = new DialogueHistoryState();
-    public List<string> storeMembershipIds = new List<string>();
     // Correct answers only. Wrong foods can return after a later day's purchase.
     public List<string> correctlySortedFoodIds = new List<string>();
     public ShoppingReceipt shoppingReceipt;
+    // Last day the farmer gave free food (0 = never). At most once per day.
+    public int lastFoodAidDay;
+    // Every served dish (built or not), for recipe fatigue and the end-of-game recap.
+    public List<RecipeServeRecord> recipeServes = new List<RecipeServeRecord>();
 }

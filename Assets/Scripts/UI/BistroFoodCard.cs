@@ -15,6 +15,14 @@ public class BistroFoodCard : MonoBehaviour, IPointerClickHandler, IInitializePo
     private Color dragColor, inkColor;
     private string front, back;
     private Text heading, detail;
+    private bool illustrated;
+    private GameObject titlePlate;
+    private GameObject shelfFooter;
+    private GameObject shelfForeground;
+    private GameObject shelfBack;
+    private Color shelfTitleColor;
+    private Sprite shelfArtwork;
+    private BistroUITheme presentationTheme;
     private GameObject icon;
     private bool flipped, dragging, canDrag;
     private RectTransform ghost;
@@ -41,6 +49,7 @@ public class BistroFoodCard : MonoBehaviour, IPointerClickHandler, IInitializePo
         var rect=BistroWidgets.Box(parent,"Food card",theme.card,Vector2.zero,Vector2.one);
         if(theme.cardFrame!=null) { var img=rect.GetComponent<Image>(); img.sprite=theme.cardFrame; img.type=Image.Type.Sliced; }
         var card=rect.gameObject.AddComponent<BistroFoodCard>(); card.Key=key; card.Kind=kind; card.canDrag=draggable;
+        card.presentationTheme=theme;
         card.faceGroup=rect.gameObject.AddComponent<CanvasGroup>();
         card.reducedMotion=theme.reducedMotion;card.flipSeconds=Mathf.Max(.01f,theme.cardFlipSeconds);
         card.dragColor=theme.card;card.dragColor.a=.90f;card.inkColor=theme.ink;
@@ -50,11 +59,67 @@ public class BistroFoodCard : MonoBehaviour, IPointerClickHandler, IInitializePo
         var image=BistroWidgets.Box(rect,"Image placeholder",Color.Lerp(theme.card,theme.accent,.5f),new Vector2(.12f,.34f),new Vector2(.88f,.76f));
         if(food?.icon!=null) {image.GetComponent<Image>().sprite=food.icon; image.GetComponent<Image>().preserveAspect=true; image.GetComponent<Image>().color=Color.white;}
         image.GetComponent<Image>().raycastTarget=false; card.icon=image.gameObject;
+        // Appeal badge on the front (child of the image, so it hides when the card flips).
+        // Stands in for a delight icon until art exists; it is not a Traffic Light answer.
+        if(theme.showCardAppeal && food!=null)
+        {
+            // Soft strip along the bottom of the image, in the card's own palette.
+            var badge=BistroWidgets.Box(image,"Appeal badge",Color.Lerp(theme.card,theme.accent,.25f),new Vector2(0f,0f),new Vector2(1f,.24f));
+            badge.GetComponent<Image>().raycastTarget=false;
+            var appeal=BistroWidgets.Label(badge,$"Appeal {food.ingredientAppeal:0.#}/10",theme,Vector2.zero,Vector2.one,14,theme.ink);
+            // Never wrap or shrink: wrapping pushed the number out of the box.
+            appeal.resizeTextForBestFit=false;appeal.horizontalOverflow=HorizontalWrapMode.Overflow;appeal.verticalOverflow=VerticalWrapMode.Overflow;
+        }
         card.front=(food?.marketingLabel??"")+"\n"+stats+"\nClick to flip";
-        card.back=food==null?"Food unavailable": "Ingredients\n"+food.ingredientList+"\n\nDaily Dozen\n"+string.Join(", ",food.dailyDozenCategories)+"\n\nStorage: "+food.storageType+"\nCodex research pending";
+        card.back=food==null?"Food unavailable": "Category: "+IntroMealPlan.CategoryName(food.recipeCategory)+"\n\nIngredients\n"+food.ingredientList+"\n\nDaily Dozen\n"+IntroMealPlan.ReadableList(food.dailyDozenCategories)+"\n\nStorage: "+IntroMealPlan.Readable(food.storageType);
         if(theme.debugCardDetails && Debug.isDebugBuild && food!=null) card.back+="\nDEBUG: "+food.trafficLight;
         card.detail=BistroWidgets.Label(rect,card.front,theme,new Vector2(.06f,.03f),new Vector2(.94f,.33f),17,theme.ink);
         return card;
+    }
+    // Optional presentation skin; retains the same identity, flip state and drag intent.
+    // All art comes from the food's data asset (Foods.csv) and the UI theme; no art lookups by ID here.
+    // logo: the selling store's logo (null on pantry/service cards).
+    public void ApplyShelfArtwork(FoodData food,string price=null,int servings=0,Sprite logo=null)
+    {
+        var artwork=food==null?null:food.icon;
+        if(artwork==null)return;
+        illustrated=true;
+        shelfArtwork=artwork;
+        var theme=presentationTheme;
+        var cardShadow=GetComponent<Shadow>()??gameObject.AddComponent<Shadow>();
+        cardShadow.effectColor=new Color(.09f,.14f,.10f,.28f);cardShadow.effectDistance=new Vector2(3,-3);cardShadow.useGraphicAlpha=true;
+        var rootImage=GetComponent<Image>();rootImage.sprite=BistroShelfStyle.Rounded;rootImage.type=Image.Type.Sliced;
+        if(GetComponent<Mask>()==null)gameObject.AddComponent<Mask>().showMaskGraphic=true;
+        var rt=(RectTransform)icon.transform;
+        rt.anchorMin=Vector2.zero;rt.anchorMax=Vector2.one;rt.offsetMin=rt.offsetMax=Vector2.zero;
+        var img=icon.GetComponent<Image>();img.sprite=artwork;img.color=Color.white;img.preserveAspect=false;
+        icon.transform.SetAsFirstSibling();
+        var reverse=BistroWidgets.Box(transform,"Illustrated card back",Color.white,Vector2.zero,Vector2.one);
+        reverse.GetComponent<Image>().sprite=food.cardBack!=null?food.cardBack:artwork;reverse.GetComponent<Image>().raycastTarget=false;
+        var veil=BistroWidgets.Box(reverse,"Reading contrast",new Color(.06f,.10f,.09f,.58f),Vector2.zero,Vector2.one);
+        veil.GetComponent<Image>().raycastTarget=false;shelfBack=reverse.gameObject;
+        // Move existing appeal badge out of the illustration's focal area.
+        if(icon.transform.childCount>0){var badge=icon.transform.GetChild(0);back+="\n"+badge.GetComponentInChildren<Text>().text;badge.gameObject.SetActive(false);}
+        if(logo!=null)BistroShelfIcon.Add(icon.transform,logo,"leaf",new Vector2(.07f,.84f),new Vector2(.19f,.95f),food.lightLogo?new Color(.93f,.95f,.78f):BistroShelfStyle.Green);
+        back+="\n\n"+front.Replace("Click to flip","");
+        var plate=BistroShelfStyle.Panel(transform,"Name plaque",new Color(.96f,.93f,.84f),new Vector2(.04f,.16f),new Vector2(.96f,.33f));
+        plate.GetComponent<Image>().raycastTarget=false;titlePlate=plate.gameObject;
+        var plaqueSprite=theme==null?null:food.darkPlaque?theme.plaqueDark:theme.plaqueLight;
+        if(plaqueSprite!=null){plate.GetComponent<Image>().sprite=plaqueSprite;plate.GetComponent<Image>().type=Image.Type.Simple;plate.GetComponent<Image>().color=Color.white;}
+        // Neighbouring cards tilt opposite ways so a shelf row looks hand-placed.
+        plate.localRotation=Quaternion.Euler(0,0,transform.GetSiblingIndex()%2==0?1.2f:-1.1f);
+        shelfTitleColor=food.darkPlaque?BistroShelfStyle.Cream:BistroShelfStyle.Ink;
+        if(food.cardSprig&&theme!=null&&theme.cardSprig!=null)
+        {
+            var leaves=BistroShelfStyle.Artwork(transform,"Card sprig",theme.cardSprig,new Vector2(-.035f,.265f),new Vector2(.24f,.435f),Color.white,true);
+            shelfForeground=leaves.gameObject;
+        }
+        heading.transform.SetAsLastSibling();detail.transform.SetAsLastSibling();
+        if(BistroShelfStyle.TitleFont!=null)heading.font=BistroShelfStyle.TitleFont;heading.fontStyle=FontStyle.Normal;heading.resizeTextMaxSize=27;
+        var footer=BistroWidgets.Box(transform,"Price and servings",Color.clear,Vector2.zero,new Vector2(1,.16f));footer.GetComponent<Image>().raycastTarget=false;shelfFooter=footer.gameObject;
+        BistroShelfStyle.Text(footer,servings+" servings",theme,new Vector2(.07f,.08f),new Vector2(.56f,.95f),17,Color.white);
+        BistroShelfStyle.Text(footer,price??"",theme,new Vector2(.55f,.08f),new Vector2(.94f,.95f),24,Color.white,false,TextAnchor.MiddleRight).fontStyle=FontStyle.Bold;
+        SetFace();
     }
     public void OnPointerClick(PointerEventData e)
     {
@@ -72,6 +137,19 @@ public class BistroFoodCard : MonoBehaviour, IPointerClickHandler, IInitializePo
     {
         icon.SetActive(!flipped); detail.text=flipped?back:front;
         detail.rectTransform.anchorMax=new Vector2(.94f,flipped?.77f:.33f);
+        if(illustrated)
+        {
+            titlePlate.SetActive(!flipped);
+            if(shelfBack!=null)shelfBack.SetActive(flipped);
+            if(shelfForeground!=null)shelfForeground.SetActive(!flipped);
+            heading.color=flipped?BistroShelfStyle.Cream:shelfTitleColor;
+            if(shelfFooter!=null)shelfFooter.SetActive(!flipped);
+            detail.gameObject.SetActive(flipped);
+            heading.rectTransform.anchorMin=new Vector2(.06f,flipped?.78f:.16f);
+            heading.rectTransform.anchorMax=new Vector2(.94f,flipped?.97f:.33f);
+            detail.rectTransform.anchorMax=new Vector2(.94f,flipped?.77f:.22f);
+            detail.color=new Color(.98f,.97f,.92f);
+        }
     }
     private IEnumerator Flip()
     {
@@ -96,6 +174,7 @@ public class BistroFoodCard : MonoBehaviour, IPointerClickHandler, IInitializePo
         if(flipAnimation!=null){StopCoroutine(flipAnimation);flipAnimation=null;transform.localScale=Vector3.one;}
         ghost=BistroWidgets.Box(canvas.transform,"Dragging card",dragColor,Vector2.zero,Vector2.zero);
         ghost.sizeDelta=new Vector2(145,195); ghost.GetComponent<Image>().raycastTarget=false;
+        if(shelfArtwork!=null){ghost.GetComponent<Image>().sprite=shelfArtwork;ghost.GetComponent<Image>().color=Color.white;}
         var t=new GameObject("Name",typeof(RectTransform),typeof(Text)); t.transform.SetParent(ghost,false);
         var rt=(RectTransform)t.transform; rt.anchorMin=Vector2.zero;rt.anchorMax=Vector2.one;rt.offsetMin=Vector2.zero;rt.offsetMax=Vector2.zero;
         var label=t.GetComponent<Text>();label.font=heading.font;label.text=heading.text;label.color=inkColor;label.alignment=TextAnchor.MiddleCenter;label.raycastTarget=false;

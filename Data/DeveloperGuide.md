@@ -79,9 +79,9 @@ The UI calls GameLoop commands. GameLoop calls services. Services change the sha
 
 Use stable, unique IDs. CSV column names and enum values are part of the authoring contract; renaming them needs a migration. Reimport updates assets with the same IDs and preserves blank optional media references. Removing a row removes database membership but can leave the old asset on disk; do not infer active content from folder contents.
 
-**Food:** add a Foods row (category, Daily Dozen tags, Traffic Light, label, ingredient list, storage, appeal 0–10) and at least one Prices row (store, shelf ID that exists in the store's `shelf_definitions`, unlock day, servings, game price). Classification must come from the approved table.
+**Food:** add a Foods row (category, Daily Dozen tags, Traffic Light, label, ingredient list, storage, appeal 0–10, plus art: `icon_path`, `back_path`, `card_style`) and at least one Prices row (store, shelf ID that exists in the store's `shelf_definitions`, unlock day, servings, game price). Classification must come from the approved table.
 
-**Store / shelf:** add a Stores row with `shelf_definitions` (`ID:Display name|…`). Leave `requires_membership=false` (memberships are cut). Shelf IDs are what 2D hotspots or 3D colliders should reference.
+**Store / shelf:** add a Stores row with `shelf_definitions` (`ID:Display name|…`). Art and colours also live in the row: `logo_path`, `shop_background_path`, `shelf_colours` (`ID:#hex|…`). Shelf IDs are what 2D hotspots or 3D colliders should reference.
 
 **Customer:** add a Customers row with unlock day, starting health, theme, preferred recipes and craving pool. Starting delight and finance come from BalanceConfig; `starting_prosperity` is legacy metadata. An optional `unlock_popularity` column sets the popularity needed before the customer first appears (0 = none; U005 = 500, U006 = 750). Add an introduction, the nine health × delight greetings (bands 0–34, 35–69, 70–100), after-meal reactions, and one `RushAfterService` and one `CrashArrival` sequence. Preferred recipes are descriptive; cravings drive rewards from day 4.
 

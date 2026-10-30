@@ -47,13 +47,7 @@ public class GameContentQueries
                 result.Add(listing);
         return result;
     }
-    public List<RecipeData> GetMakeableRecipes()
-    {
-        var result = new List<RecipeData>();
-        foreach (var recipe in recipes.Recipes)
-            if (recipeCheck.CanMake(recipe, state)) result.Add(recipe);
-        return result;
-    }
+    // True when today's usable pantry covers every required slot (a hint; MealService decides when serving).
     public bool CanMake(RecipeData recipe) => recipeCheck.CanMake(recipe, state);
     public List<RecipeData> GetUnlockedRecipes()
     {

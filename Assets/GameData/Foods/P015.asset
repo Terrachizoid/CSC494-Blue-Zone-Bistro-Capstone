@@ -20,7 +20,8 @@ MonoBehaviour:
   ingredientAppeal: 6
   marketingLabel: Everyday convenience
   ingredientList: Egg
-  sortingExplanation: 
+  sortingExplanation: 'Eggs is Yellow in this game: the game classifies unprocessed
+    animal foods as Yellow.'
   ingredientCount: 1
   storageType: 1
   claimId: 
@@ -29,4 +30,8 @@ MonoBehaviour:
     pending supervisor review. Not a real product label. Ingredient appeal is provisional
     0-10 gameplay tuning for a serving-weighted mean; independent of price and Traffic
     Light. Runtime import/calculation pending.
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: ec6cc7861a021dd4abe088273475024b, type: 3}
+  cardBack: {fileID: 21300000, guid: 53a7658cb8a867b47a0cdfe6e52e8d63, type: 3}
+  lightLogo: 0
+  darkPlaque: 0
+  cardSprig: 0

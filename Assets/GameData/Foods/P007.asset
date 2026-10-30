@@ -20,7 +20,8 @@ MonoBehaviour:
   ingredientAppeal: 6
   marketingLabel: Everyday convenience
   ingredientList: Refined wheat flour, Water, Yeast, Salt
-  sortingExplanation: 
+  sortingExplanation: 'Refined-flour bread is Yellow in this game: it is a processed
+    plant food, because refined flour has had the bran and germ removed.'
   ingredientCount: 4
   storageType: 1
   claimId: 
@@ -29,4 +30,8 @@ MonoBehaviour:
     pending supervisor review. Not a real product label. Ingredient appeal is provisional
     0-10 gameplay tuning for a serving-weighted mean; independent of price and Traffic
     Light. Runtime import/calculation pending.
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 81a016162fa468d49a07479d7fd7deec, type: 3}
+  cardBack: {fileID: 21300000, guid: 7ce82aa49550b7249ba82b2019b1c381, type: 3}
+  lightLogo: 0
+  darkPlaque: 0
+  cardSprig: 0

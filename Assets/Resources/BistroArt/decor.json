@@ -1,0 +1,78 @@
+{
+  "entries": [
+    {
+      "x": 0.029296875,
+      "height": 0.37109375,
+      "id": "leaf",
+      "width": 0.283203125,
+      "y": 0.1025390625
+    },
+    {
+      "x": 0.3567708333333333,
+      "height": 0.3759765625,
+      "id": "cart",
+      "width": 0.2864583333333333,
+      "y": 0.09765625
+    },
+    {
+      "x": 0.6770833333333334,
+      "height": 0.15625,
+      "id": "plaqueLight",
+      "width": 0.3138020833333333,
+      "y": 0.203125
+    },
+    {
+      "x": 0.013020833333333334,
+      "height": 0.14453125,
+      "id": "plaqueDark",
+      "width": 0.3072916666666667,
+      "y": 0.6640625
+    },
+    {
+      "x": 0.341796875,
+      "height": 0.078125,
+      "id": "wood",
+      "width": 0.3157552083333333,
+      "y": 0.701171875
+    },
+    {
+      "x": 0.6770833333333334,
+      "height": 0.361328125,
+      "id": "foreground",
+      "width": 0.3125,
+      "y": 0.5517578125
+    },
+    {
+      "id": "cheapcart",
+      "height": 0.76,
+      "width": 0.42,
+      "texture": "BistroArt/StoreLogos",
+      "y": 0.13,
+      "x": 0.04
+    },
+    {
+      "id": "megabulk",
+      "height": 0.72,
+      "width": 0.42,
+      "texture": "BistroArt/StoreLogos",
+      "y": 0.17,
+      "x": 0.54
+    },
+    {
+      "id": "service-room",
+      "texture": "BistroArt/ServiceRoom",
+      "x": 0,
+      "y": 0,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "service-counter",
+      "texture": "BistroArt/ServiceRoom",
+      "x": 0,
+      "y": 0.7,
+      "width": 1,
+      "height": 0.3
+    }
+  ]
+}

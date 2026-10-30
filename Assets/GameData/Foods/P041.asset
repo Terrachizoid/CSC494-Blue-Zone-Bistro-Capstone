@@ -20,7 +20,9 @@ MonoBehaviour:
   ingredientAppeal: 7
   marketingLabel: Rich in omega-3
   ingredientList: Wild salmon
-  sortingExplanation: 
+  sortingExplanation: 'Wild salmon is Yellow in this game: the game classifies unprocessed
+    animal foods as Yellow. The label "Rich in omega-3" is marketing; the Traffic
+    Light depends on how the food is made, not on what the package says.'
   ingredientCount: 1
   storageType: 1
   claimId: 
@@ -28,4 +30,8 @@ MonoBehaviour:
   reviewNotes: "Added 2026-10-22 from the capstone plan's store/luxury examples (S2,
     S6, \xA73.6). Classification follows the plan text; pending supervisor review.
     Not a real product label. Ingredient appeal is provisional gameplay tuning."
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 959667fce23bd764e86f0cfde6de7e78, type: 3}
+  cardBack: {fileID: 21300000, guid: 940327f07f807d14799aa23a2bd36c1c, type: 3}
+  lightLogo: 0
+  darkPlaque: 0
+  cardSprig: 0

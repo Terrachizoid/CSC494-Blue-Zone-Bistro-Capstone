@@ -30,7 +30,7 @@ public class CheckpointStore
             var candidate=JsonUtility.FromJson<GameSessionState>(envelope.payload);
             if(candidate==null || candidate.currentDay<1 || float.IsNaN(candidate.money) || float.IsInfinity(candidate.money) ||
                 candidate.inventory==null || candidate.customers==null || candidate.flags==null || candidate.dialogueHistory==null ||
-                candidate.storeMembershipIds==null || candidate.correctlySortedFoodIds==null)throw new Exception("Checkpoint has invalid session data.");
+                candidate.correctlySortedFoodIds==null)throw new Exception("Checkpoint has invalid session data.");
             foreach(var batch in candidate.inventory)
                 if(batch==null || string.IsNullOrEmpty(batch.inventoryEntryId) || string.IsNullOrEmpty(batch.foodId) || batch.servings<=0 || batch.daysRemaining < -1)
                     throw new Exception("Checkpoint contains invalid inventory.");

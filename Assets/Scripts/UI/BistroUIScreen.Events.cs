@@ -13,7 +13,6 @@ public partial class BistroUIScreen
     private AudioSource eventAudio;
     private ClaimData eventCodex;
     private bool choosingEventCodex;
-    private string PublicityLabel(){float p=game.Queries.Market.Publicity;return p==0?"":$"{p:+0;-0;0} publicity";}
     private void PlayEventAudio(AudioClip clip)
     {if(eventAudio==null)eventAudio=gameObject.AddComponent<AudioSource>();eventAudio.playOnAwake=false;eventAudio.Stop();if(clip!=null){eventAudio.clip=clip;eventAudio.Play();}}
     private void OpenEvent(EventRecord record)
@@ -38,20 +37,47 @@ public partial class BistroUIScreen
             if(toastRecord==null)return;
             announcedEvents.Add(toastRecord.eventId+":"+toastRecord.startDay);toastElapsed=0;
             var definition=game.Queries.GetEvent(toastRecord.eventId);
-            eventToast=BistroWidgets.Box(canvas.transform,"Event notification",theme.panel,new Vector2(.64f,.64f),new Vector2(.98f,.80f));
+            eventToast=BistroShelfStyle.Panel(canvas.transform,"Event notification",BistroShelfStyle.Cream,new Vector2(.5f,.5f),new Vector2(.5f,.5f)); eventToast.pivot=new Vector2(.5f,0);eventToast.sizeDelta=new Vector2(350,130);
+            var tail=BistroWidgets.Box(eventToast,"Speech bubble tail",BistroShelfStyle.Cream,new Vector2(.48f,0),new Vector2(.52f,0));tail.sizeDelta=new Vector2(14,14);tail.localRotation=Quaternion.Euler(0,0,45);tail.GetComponent<Image>().raycastTarget=false;
             var image=BistroWidgets.Box(eventToast,"News image",theme.accent,new Vector2(.02f,.08f),new Vector2(.26f,.92f));
             if(definition?.image!=null){image.GetComponent<Image>().sprite=definition.image;image.GetComponent<Image>().color=Color.white;image.GetComponent<Image>().preserveAspect=true;}
-            BistroWidgets.Label(eventToast,(definition?.headline??toastRecord.eventId)+"\n"+(definition?.summary??"")+"\nClick to read",theme,new Vector2(.28f,.04f),new Vector2(.97f,.96f),19);
+            BistroWidgets.Label(eventToast,(definition?.headline??toastRecord.eventId)+"\n"+(definition?.summary??"")+"\nClick to read",theme,new Vector2(.28f,.04f),new Vector2(.97f,.96f),19,BistroShelfStyle.Ink);
             var button=eventToast.gameObject.AddComponent<Button>();var record=toastRecord;button.onClick.AddListener(()=>OpenEvent(record));
             image.GetComponent<Image>().raycastTarget=false;PlayEventAudio(definition?.notificationAudio);
         }
         toastElapsed+=Time.unscaledDeltaTime;
-        if(eventToast!=null){eventToast.SetAsLastSibling();float x=theme.reducedMotion?0:(1-Mathf.SmoothStep(0,1,toastElapsed/.3f))*520;eventToast.anchoredPosition=new Vector2(x,0);}
+        if(eventToast!=null){eventToast.SetAsLastSibling();PositionTowerToast();}
         if(toastElapsed>=6){Destroy(eventToast.gameObject);eventToast=null;toastRecord=null;}
     }
-    private void EventPanel()
+    private void PositionTowerToast()
     {
-        var shade=BistroWidgets.Box(screen,"Modal blocker",new Color(0,0,0,.8f),Vector2.zero,Vector2.one);
+        var world=screen.GetComponentsInChildren<BistroWorldLayout>().FirstOrDefault();
+        var area=(RectTransform)canvas.transform;
+        Vector2 point=new Vector2(0,area.rect.height*.20f);
+        if(world!=null){var rect=(RectTransform)world.transform;var region=BistroWorldArt.Get("city")?.regions?.FirstOrDefault(r=>r.id=="NEWS");
+            if(region!=null){var local=new Vector3((region.marker.x-.5f)*rect.rect.width,(.5f-region.marker.y)*rect.rect.height+28,0);point=area.InverseTransformPoint(rect.TransformPoint(local));}}
+        point.x=Mathf.Clamp(point.x,area.rect.xMin+180,area.rect.xMax-180);
+        point.y=Mathf.Clamp(point.y,area.rect.yMin+20,area.rect.yMax-area.rect.height*.09f-145);
+        eventToast.anchoredPosition=point;
+        eventToast.localScale=Vector3.one*(theme.reducedMotion?1:Mathf.Lerp(.9f,1,Mathf.Clamp01(toastElapsed/.25f)));
+    }    private void EventPanel()
+    {
+        if(modal=="event-detail"&&!choosingEventCodex){
+            if(eventCodex!=null){
+                var entry=eventCodex;
+                bool linked=Uri.TryCreate(entry.sourceUrl,UriKind.Absolute,out var source)&&(source.Scheme=="https"||source.Scheme=="http");
+                DialoguePanel(entry.shortText??"Codex",(entry.codexText??"Evidence content has not been supplied yet.")+"\n\n"+entry.sourceTitle+"\n"+entry.sourceCitation+(!entry.sourceChecked?"\nPrototype / source not verified.":""),"Back to event",()=>eventCodex=null,
+                    decorate:frame=>{if(linked)BistroActionButton.Create(frame,"Open source",theme,new Vector2(.57f,.045f),new Vector2(.75f,.19f),BistroActionRole.Secondary,()=>Application.OpenURL(source.AbsoluteUri));});
+            }else{
+                var news=game.Queries.GetEvent(detailRecord?.eventId);
+                string description=$"Days {detailRecord?.startDay}–{detailRecord?.expiresOnDay-1} · "+(detailRecord?.Active(game.State.currentDay)==true?"Active":"Expired")+"\n\n"+(news?.details??"Details are unavailable.")+"\n\n"+(detailRecord==null?"":string.Join("\n",detailRecord.effects.Select(EffectText)));
+                var entries=(news?.codex??Array.Empty<ClaimData>()).Where(c=>c!=null).ToArray();
+                DialoguePanel(news?.headline??"Neighbourhood news",description,"All news",()=>{modal="news";if(eventAudio!=null)eventAudio.Stop();},()=>{modal=null;if(eventAudio!=null)eventAudio.Stop();},
+                    decorate:frame=>{if(entries.Length>0)BistroActionButton.Create(frame,"Codex",theme,new Vector2(.42f,.045f),new Vector2(.56f,.19f),BistroActionRole.Secondary,()=>Change(()=>{if(entries.Length==1)eventCodex=entries[0];else choosingEventCodex=true;}));});
+            }
+            return;
+        }
+        var shade=BistroWidgets.Box(screen,"Modal blocker",new Color(0,0,0,.8f),Vector2.zero,new Vector2(1,.91f));
         var panel=BistroWidgets.Box(shade,"News",theme.background,new Vector2(.06f,.06f),new Vector2(.94f,.91f));
         BistroWidgets.Button(panel,"Close",theme,new Vector2(.82f,.90f),new Vector2(.97f,.98f),()=>Change(()=>{modal=null;eventCodex=null;if(eventAudio!=null)eventAudio.Stop();}));
         if(modal=="news")

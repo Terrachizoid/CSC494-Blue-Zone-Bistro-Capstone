@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0de03d0ceb2d4e4fbb2cfac2d36a767, type: 3}
+  m_Name: P061
+  m_EditorClassIdentifier: Assembly-CSharp::FoodData
+  id: P061
+  displayName: Black forbidden rice
+  recipeCategory: 4
+  dailyDozenCategories: 0a000000
+  trafficLight: 1
+  ingredientAppeal: 7
+  marketingLabel: Ancient grain
+  ingredientList: Black rice
+  sortingExplanation: 'Black forbidden rice is Green in this game: a whole plant
+    food, with nothing harmful added and nothing good taken away. It counts toward
+    the Daily Dozen group: Whole grains. The label "Ancient grain" and the price
+    are marketing; the Traffic Light depends on how the food is made, not on what
+    the package says.'
+  ingredientCount: 1
+  storageType: 4
+  claimId: 
+  approvalStatus: 0
+  reviewNotes: Added 2026-10-24 as a Verdant luxury-shelf item (expensive, high appeal,
+    green/yellow only). Classification follows the plan's Traffic Light definitions;
+    pending supervisor review. Not a real product label. Ingredient appeal is provisional
+    gameplay tuning.
+  icon: {fileID: 21300000, guid: 541112946c81d114a85f7db5916da29a, type: 3}
+  cardBack: {fileID: 21300000, guid: 40973910471b3cb4baa52ec049be8cd9, type: 3}
+  lightLogo: 0
+  darkPlaque: 0
+  cardSprig: 0

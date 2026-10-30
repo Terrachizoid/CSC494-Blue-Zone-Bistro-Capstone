@@ -73,7 +73,6 @@ public class CustomerVisitService : ICustomerVisitService
         {var food=foods.GetById(entry.foodId);if(food!=null){categories.Add(food.recipeCategory);if(food.trafficLight==TrafficLight.Green)greenCategories.Add(food.recipeCategory);}}
         if(listings!=null)foreach(var l in listings.Listings)
             if(l!=null&&l.food!=null&&l.store!=null&&new MarketEffects(state).ClosureReason(l.store.id)==null&&l.unlockDay<=state.currentDay&&l.store.unlockDay<=state.currentDay&&
-                (!l.store.requiresMembership||state.storeMembershipIds.Contains(l.store.id))&&
                 (string.IsNullOrEmpty(l.requiredFlag)||state.flags.HasFlag(l.requiredFlag))&&CommunityProgress.Finite(l.gamePrice)&&l.gamePrice>0&&l.servingsPerPackage>0)
                 {categories.Add(l.food.recipeCategory);if(l.food.trafficLight==TrafficLight.Green)greenCategories.Add(l.food.recipeCategory);}
         return recipes.Recipes.Where(r=>r!=null&&r.unlockDay<=state.currentDay&&RecipeRequirements.TryGetBounds(r,out _,out _) &&
@@ -86,7 +85,8 @@ public class CustomerVisitService : ICustomerVisitService
         int wanted=balance.minimumDailyCravings+(int)(Roll()*(balance.maximumDailyCravings-balance.minimumDailyCravings+1));
         while(chosen.Count<wanted)
         {
-            var options=pool.Where(t=>available==null||available.Any(r=>chosen.Concat(new[]{t}).All(tag=>(r.cravingTags??Array.Empty<CravingTag>()).Contains(tag)))).ToList();
+            // Comfort is met by plate appeal, so any recipe can answer it alongside its own tags.
+            var options=pool.Where(t=>available==null||available.Any(r=>chosen.Concat(new[]{t}).All(tag=>tag==CravingTag.Comfort||(r.cravingTags??Array.Empty<CravingTag>()).Contains(tag)))).ToList();
             if(options.Count==0)break;
             var tag=options[(int)(Roll()*options.Count)];chosen.Add(tag);pool.Remove(tag);
         }

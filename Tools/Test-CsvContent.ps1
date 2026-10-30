@@ -21,7 +21,6 @@ $storesById = @{}
 foreach ($row in (Read-ContentCsv 'Stores')) {
     $store = New-Object StoreData
     $store.id = $row.store_id; $store.unlockDay = [int]$row.unlock_day
-    $store.requiresMembership = [bool]::Parse($row.requires_membership)
     $storesById[$store.id] = $store
 }
 $listingItems = New-Object 'System.Collections.Generic.List[StoreListingData]'
@@ -77,7 +76,7 @@ foreach ($recipe in $recipeItems) {
         $offer=$listingItems | Where-Object {
             $_.food.recipeCategory -eq $slot.category -and $_.food.trafficLight -eq [TrafficLight]::Green -and
             $_.unlockDay -le $recipe.unlockDay -and $_.store.unlockDay -le $recipe.unlockDay -and
-            !$_.store.requiresMembership -and !$_.requiredFlag
+            !$_.requiredFlag
         } | Sort-Object { $_.gamePrice / $_.servingsPerPackage } | Select-Object -First 1
         if (!$offer) { throw "Recipe $($recipe.id) has no accessible green ingredient for $($slot.category)" }
         $remaining=$slot.servings

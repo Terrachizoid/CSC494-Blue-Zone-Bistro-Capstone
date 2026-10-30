@@ -25,5 +25,4 @@ MonoBehaviour:
   priceDisplayStyle: 0
   approvalStatus: 0
   reviewNotes: Prototype game price and package servings; no retail observation.
-    Serving units are gameplay quantities. Discovery/membership flag deferred for
-    playable greybox.
+    Serving units are gameplay quantities. Discovery flag deferred for playable greybox.

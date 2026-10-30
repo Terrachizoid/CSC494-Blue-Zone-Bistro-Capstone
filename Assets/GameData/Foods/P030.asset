@@ -20,7 +20,9 @@ MonoBehaviour:
   ingredientAppeal: 7
   marketingLabel: Plain staple
   ingredientList: Pumpkin seeds
-  sortingExplanation: 
+  sortingExplanation: 'Unsalted pumpkin seeds is Green in this game: a whole plant
+    food, with nothing harmful added and nothing good taken away. It counts toward
+    the Daily Dozen group: Nuts and seeds.'
   ingredientCount: 1
   storageType: 4
   claimId: 
@@ -29,4 +31,8 @@ MonoBehaviour:
     pending supervisor review. Not a real product label. Ingredient appeal is provisional
     0-10 gameplay tuning for a serving-weighted mean; independent of price and Traffic
     Light. Runtime import/calculation pending.
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 34715dfa60b9d394098c77c2cc29a27a, type: 3}
+  cardBack: {fileID: 21300000, guid: 9de054a50e8ca0b47abd2ab39a0afd76, type: 3}
+  lightLogo: 0
+  darkPlaque: 0
+  cardSprig: 0

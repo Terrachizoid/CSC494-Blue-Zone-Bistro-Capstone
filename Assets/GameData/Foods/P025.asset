@@ -20,7 +20,9 @@ MonoBehaviour:
   ingredientAppeal: 4
   marketingLabel: Plain staple
   ingredientList: Lentils
-  sortingExplanation: 
+  sortingExplanation: 'Dry lentils is Green in this game: a whole plant food, with
+    nothing harmful added and nothing good taken away. It counts toward the Daily
+    Dozen group: Beans.'
   ingredientCount: 1
   storageType: 4
   claimId: 
@@ -29,4 +31,8 @@ MonoBehaviour:
     pending supervisor review. Not a real product label. Ingredient appeal is provisional
     0-10 gameplay tuning for a serving-weighted mean; independent of price and Traffic
     Light. Runtime import/calculation pending.
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 2e069d4dff4758b4197cef3c66d99478, type: 3}
+  cardBack: {fileID: 21300000, guid: ab6579f53922cd54c9b0e5d1d2524cc2, type: 3}
+  lightLogo: 0
+  darkPlaque: 0
+  cardSprig: 0

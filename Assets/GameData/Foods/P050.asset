@@ -20,7 +20,10 @@ MonoBehaviour:
   ingredientAppeal: 8
   marketingLabel: Keto! Zero sugar!
   ingredientList: Almond flour, Allulose, Palm oil, Erythritol, Flavouring
-  sortingExplanation: 
+  sortingExplanation: 'Keto allulose dessert is Red in this game: it is an ultra-processed
+    food. Look at the ingredient list: Almond flour, Allulose, Palm oil, Erythritol,
+    Flavouring. The label "Keto! Zero sugar!" is marketing; the Traffic Light depends
+    on how the food is made, not on what the package says.'
   ingredientCount: 5
   storageType: 5
   claimId: 
@@ -28,4 +31,8 @@ MonoBehaviour:
   reviewNotes: "Added 2026-10-22 from the capstone plan's store/luxury examples (S2,
     S6, \xA73.6). Classification follows the plan text; pending supervisor review.
     Not a real product label. Ingredient appeal is provisional gameplay tuning."
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 5ef4afae27d7b7043b4f2289bebb7e40, type: 3}
+  cardBack: {fileID: 21300000, guid: 1925ba79d2e2ece40841e1bb9adbd08e, type: 3}
+  lightLogo: 0
+  darkPlaque: 0
+  cardSprig: 0

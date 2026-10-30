@@ -1,5 +1,6 @@
 // Ending presentation only. Reads the persisted ID; lines advance without rerunning selection or gameplay effects.
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
@@ -19,11 +20,28 @@ public partial class BistroUIScreen
         else BistroWidgets.Label(background,"YOUR BISTRO'S STORY",theme,new Vector2(.1f,.3f),new Vector2(.9f,.7f),32);
         BistroWidgets.Label(screen,ending?.title??"Run completed",theme,new Vector2(.05f,.91f),new Vector2(.95f,.99f),32);
         string text=lines.Length==0?"Your run is complete. Ending content is unavailable, but you can return to the main menu.":lines[endingLine].textTemplate;
-        BistroWidgets.ReadingPanel(screen,text,theme,new Vector2(.06f,.15f),new Vector2(.94f,.38f));
-        if(endingFinished)BistroWidgets.Label(screen,"Story complete",theme,new Vector2(.62f,.04f),new Vector2(.94f,.12f),22);
-        if(lines.Length>0&&!endingFinished)
-            BistroWidgets.Button(screen,endingLine+1<lines.Length?"Continue":"Finish story",theme,new Vector2(.62f,.04f),new Vector2(.94f,.12f),()=>Change(()=>{if(endingLine+1<lines.Length)endingLine++;else endingFinished=true;}));
-        BistroWidgets.Button(screen,"Main menu",theme,new Vector2(.06f,.04f),new Vector2(.30f,.12f),()=>Change(()=>game.ReturnToMenu()));
+        if(endingFinished||lines.Length==0)text=RunRecap();
+        DialoguePanel(ending?.title??"Your bistro",text,endingFinished||lines.Length==0?"Main menu":endingLine+1<lines.Length?"Continue":"Finish story",()=>{
+            if(endingFinished||lines.Length==0)game.ReturnToMenu();else if(endingLine+1<lines.Length)endingLine++;else endingFinished=true;
+        },()=>game.ReturnToMenu());
         if(game.SaveFailed)BistroWidgets.Button(screen,"Retry save",theme,new Vector2(.34f,.04f),new Vector2(.58f,.12f),()=>Change(()=>game.RetrySave()));
+    }
+    // End-of-game recap from the persisted serve history and customer records (no new calculations of outcomes).
+    private string RunRecap()
+    {
+        var serves=game.State.recipeServes??new List<RecipeServeRecord>();
+        int green=serves.Sum(x=>x.green),yellow=serves.Sum(x=>x.yellow),red=serves.Sum(x=>x.red);
+        var tried=serves.Select(x=>x.recipeId).Distinct(StringComparer.OrdinalIgnoreCase).ToList();
+        int unlocked=game.Queries.GetUnlockedRecipes().Count;
+        var covered=new HashSet<DailyDozenCategory>(game.State.customers.Where(c=>c.dailyDozenEaten!=null).SelectMany(c=>c.dailyDozenEaten));
+        var missing=Enum.GetValues(typeof(DailyDozenCategory)).Cast<DailyDozenCategory>().Where(g=>g!=DailyDozenCategory.None&&!covered.Contains(g)).ToList();
+        string guests=string.Join("\n",game.State.customers.Select(c=>{var d=game.Queries.GetCustomer(c.customerId);
+            return d==null?null:$"  {d.displayName}: health {d.startingHealth} → {c.health}";}).Where(x=>x!=null));
+        return $"Dishes served {serves.Count} ({serves.Count(x=>x.built)} matched their recipe)\n"+
+            $"Servings cooked: {green} green · {yellow} yellow · {red} red\n"+
+            $"Recipes tried: {tried.Count} of {unlocked}\n"+
+            $"Daily Dozen groups served: {covered.Count} of {covered.Count+missing.Count}"+(missing.Count==0?" (all of them!)":" · never served: "+IntroMealPlan.ReadableList(missing))+"\n"+
+            $"Money ${game.State.money:0.00} · Popularity {game.State.popularity:0} · Community wellbeing {game.State.communityWellbeing:0}\n"+
+            (guests.Length==0?"":"Guests:\n"+guests);
     }
 }

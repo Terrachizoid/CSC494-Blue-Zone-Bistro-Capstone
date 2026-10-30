@@ -19,6 +19,7 @@ namespace UnityEngine {
  public class TextAreaAttribute : Attribute { public TextAreaAttribute() {} public TextAreaAttribute(int a, int b) {} }
  public class MinAttribute : Attribute { public MinAttribute(float n) {} }
  public class RangeAttribute : Attribute { public RangeAttribute(float a, float b) {} }
+ public class TooltipAttribute : Attribute { public TooltipAttribute(string s) {} }
  public static class Debug { public static void LogError(object s, Object o = null) {} public static void LogWarning(object s) {} }
 }
 '@
@@ -53,6 +54,8 @@ $files += Join-Path $PSScriptRoot 'ProgressChecks.cs'
 $files += Join-Path $PSScriptRoot 'TutorialChecks.cs'
 $files += Join-Path $PSScriptRoot 'CommunityChecks.cs'
 $files += Join-Path $PSScriptRoot 'EventChecks.cs'
+$files += Join-Path $PSScriptRoot 'PantryChecks.cs'
+$files += Join-Path $PSScriptRoot 'ComfortFatigueChecks.cs'
 Add-Type -Path $files -CompilerOptions '/nowarn:0649'
 [GameOperationsChecks]::Run()
 [DialogueChecks]::Run()
@@ -67,4 +70,6 @@ Add-Type -Path $files -CompilerOptions '/nowarn:0649'
 [TutorialChecks]::Run()
 [CommunityChecks]::Run()
 [EventChecks]::Run()
+[PantryChecks]::Run()
+[ComfortFatigueChecks]::Run()
 

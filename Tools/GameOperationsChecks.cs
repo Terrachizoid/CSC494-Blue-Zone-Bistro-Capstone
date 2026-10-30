@@ -35,9 +35,6 @@ public static class GameOperationsChecks
         listing.unlockDay = 2;
         Check(!loop.Buy("L1").success && state.money == 30, "Locked listing mutated state");
         listing.unlockDay = 1;
-        store.requiresMembership = true;
-        Check(!loop.Buy("L1").success, "Membership bypass");
-        store.requiresMembership = false;
         listing.gamePrice = 31;
         Check(!loop.Buy("L1").success && state.inventory.Count == 0, "Unaffordable purchase mutated state");
         listing.gamePrice = 5;

@@ -37,7 +37,7 @@ public class EventService
         var existing=state.events.Where(r=>r.Active(state.currentDay)).Concat(additions).SelectMany(r=>r.effects).ToList();
         var all=existing.Concat(candidate.effects).ToList();
         var available=listings.Listings.Where(l=>l!=null&&l.store!=null&&l.food!=null&&l.unlockDay<=state.currentDay&&l.store.unlockDay<=state.currentDay&&
-            (!l.store.requiresMembership||state.storeMembershipIds.Contains(l.store.id))&&(string.IsNullOrEmpty(l.requiredFlag)||state.flags.HasFlag(l.requiredFlag))).ToList();
+            (string.IsNullOrEmpty(l.requiredFlag)||state.flags.HasFlag(l.requiredFlag))).ToList();
         foreach(var e in candidate.effects)
         {
             if(e.target==EventTarget.Store&&!available.Any(l=>l.store.id==e.targetId))return false;

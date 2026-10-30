@@ -17,8 +17,12 @@ MonoBehaviour:
     title: A flourishing Blue Zone Bistro
     minPopularity: 750
     maxPopularity: -1
-    minWellbeing: 70
+    minWellbeing: 65
     maxWellbeing: -1
+    hasMinMoney: 0
+    hasMaxMoney: 0
+    minMoney: 0
+    maxMoney: 0
     priority: 100
     fallback: 0
     dialogue: {fileID: 11400000, guid: d26b562aea5e0a34b9622f7ada301ed0, type: 2}
@@ -27,8 +31,12 @@ MonoBehaviour:
     title: A neighbourhood favourite
     minPopularity: -1
     maxPopularity: 750
-    minWellbeing: 70
+    minWellbeing: 60
     maxWellbeing: -1
+    hasMinMoney: 0
+    hasMaxMoney: 0
+    minMoney: 0
+    maxMoney: 0
     priority: 90
     fallback: 0
     dialogue: {fileID: 11400000, guid: 5772da432518bb84bbc1c160aafb21d0, type: 2}
@@ -38,7 +46,11 @@ MonoBehaviour:
     minPopularity: 750
     maxPopularity: -1
     minWellbeing: -1
-    maxWellbeing: 70
+    maxWellbeing: 65
+    hasMinMoney: 0
+    hasMaxMoney: 0
+    minMoney: 0
+    maxMoney: 0
     priority: 80
     fallback: 0
     dialogue: {fileID: 11400000, guid: 1ae2684f140e29d4eb2fef21f6b149fc, type: 2}
@@ -49,6 +61,10 @@ MonoBehaviour:
     maxPopularity: -1
     minWellbeing: -1
     maxWellbeing: -1
+    hasMinMoney: 0
+    hasMaxMoney: 0
+    minMoney: 0
+    maxMoney: 0
     priority: -100
     fallback: 1
     dialogue: {fileID: 11400000, guid: abcffda5db0695146beb0a82c8d583b6, type: 2}
@@ -59,6 +75,10 @@ MonoBehaviour:
     maxPopularity: -1
     minWellbeing: -1
     maxWellbeing: -1
+    hasMinMoney: 0
+    hasMaxMoney: 1
+    minMoney: 0
+    maxMoney: -10
     priority: 200
     fallback: 0
     dialogue: {fileID: 11400000, guid: 208c98f9a4d8c2c42bbcabc4a8cf827b, type: 2}

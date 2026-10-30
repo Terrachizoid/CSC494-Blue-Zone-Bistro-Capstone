@@ -1,0 +1,13 @@
+category_id,icon_path
+Beans,Assets/Art/Categories/Beans.png
+Fruit,Assets/Art/Categories/Fruit.png
+Vegetable,Assets/Art/Categories/Vegetable.png
+Grain,Assets/Art/Categories/Grain.png
+StarchyVegetable,Assets/Art/Categories/StarchyVegetable.png
+Meat,Assets/Art/Categories/Meat.png
+MeatSubstitute,Assets/Art/Categories/MeatSubstitute.png
+Dairy,Assets/Art/Categories/Dairy.png
+Egg,Assets/Art/Categories/Egg.png
+Fat,Assets/Art/Categories/Fat.png
+Beverage,Assets/Art/Categories/Beverage.png
+Other,Assets/Art/Categories/Other.png

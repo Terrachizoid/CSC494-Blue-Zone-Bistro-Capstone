@@ -20,7 +20,8 @@ MonoBehaviour:
   ingredientAppeal: 9
   marketingLabel: Convenient snack or ready-to-cook product
   ingredientList: Pork, Salt, Sugar, Sodium nitrite
-  sortingExplanation: 
+  sortingExplanation: 'Bacon is Red in this game: the game classifies processed animal
+    foods as Red. Look at the ingredient list: Pork, Salt, Sugar, Sodium nitrite.'
   ingredientCount: 4
   storageType: 1
   claimId: 
@@ -29,4 +30,8 @@ MonoBehaviour:
     pending supervisor review. Not a real product label. Ingredient appeal is provisional
     0-10 gameplay tuning for a serving-weighted mean; independent of price and Traffic
     Light. Runtime import/calculation pending.
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 18d82306bebf28e4b93b888cdf7c086e, type: 3}
+  cardBack: {fileID: 21300000, guid: 26116379b93f0e743a278cf831d61b3f, type: 3}
+  lightLogo: 1
+  darkPlaque: 1
+  cardSprig: 0

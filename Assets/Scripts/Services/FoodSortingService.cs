@@ -1,5 +1,6 @@
 // Evaluates choices against the checkout snapshot, applies one refund, and records
-// correct food IDs only. UI never supplies scores or money. Wrong answers can return
+// correct food IDs only. The refund is maximumSortingDiscount of what was paid for each
+// correctly sorted new food; known foods and wrong answers earn nothing. UI never supplies scores or money. Wrong answers can return
 // after a later purchase, but the same checkout cannot be submitted twice.
 using System;
 using System.Collections.Generic;
@@ -19,7 +20,7 @@ public class FoodSortingService
     // Return copies so presentation cannot change the transaction's answer key.
     public List<SortingQuestion> GetQuestions() => !HasCheckout ? new List<SortingQuestion>() :
         state.shoppingReceipt.questions.Select(q => new SortingQuestion {
-            listingId = q.listingId, foodId = q.foodId, correctAnswer = q.correctAnswer }).ToList();
+            listingId = q.listingId, foodId = q.foodId, correctAnswer = q.correctAnswer, cost = q.cost }).ToList();
 
     public string GetExplanation(string foodId)
     {
@@ -44,18 +45,26 @@ public class FoodSortingService
             answers.Add(choice.foodId, choice.answer);
         }
         var result = new SortingResult { questionCount = receipt.questions.Count };
+        var refundedFoods = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        double refund = 0;
         foreach (var question in receipt.questions)
         {
             if (!answers.TryGetValue(question.foodId, out var answer)) return Fail("An expected food answer is missing.");
             bool correct = answer == question.correctAnswer;
             if (correct) result.correctCount++;
+            float share = 0;
+            if (correct && question.cost > 0 && !float.IsNaN(question.cost) && !float.IsInfinity(question.cost))
+            {
+                share = (float)Math.Round(question.cost * (double)receipt.maximumDiscount, 2, MidpointRounding.AwayFromZero);
+                refund += share; refundedFoods.Add(question.foodId);
+            }
             result.feedback.Add(new SortingFeedback { foodId = question.foodId, chosen = answer,
-                correct = question.correctAnswer, isCorrect = correct, explanation = GetExplanation(question.foodId) });
+                correct = question.correctAnswer, isCorrect = correct, explanation = GetExplanation(question.foodId), refund = share });
         }
         result.accuracy = result.questionCount == 0 ? 0 : result.correctCount / (float)result.questionCount;
-        result.discountRate = receipt.maximumDiscount * result.accuracy;
-        result.refundAmount = (float)Math.Round(receipt.total * (double)result.discountRate, 2, MidpointRounding.AwayFromZero);
-        result.refundAmount = Math.Min(receipt.total, result.refundAmount);
+        result.refundAmount = Math.Min(receipt.total, (float)refund);
+        // Share of the whole checkout that came back (display only).
+        result.discountRate = receipt.total > 0 ? result.refundAmount / receipt.total : 0;
         if (float.IsNaN(state.money) || float.IsInfinity(state.money + result.refundAmount)) return Fail("Invalid funds.");
         var batches = new List<InventoryEntry>();
         foreach (var id in receipt.batchIds)
@@ -64,8 +73,10 @@ public class FoodSortingService
             if (matches.Count != 1) return Fail("A purchased batch is missing or duplicated.");
             batches.Add(matches[0]);
         }
-        float paidRatio = receipt.total == 0 ? 1 : (receipt.total - result.refundAmount) / receipt.total;
-        foreach (var batch in batches) batch.purchaseCostPerServing *= paidRatio;
+        // Only the correctly sorted foods became cheaper; their batches record the discounted cost.
+        float paidRatio = 1 - receipt.maximumDiscount;
+        foreach (var batch in batches)
+            if (refundedFoods.Contains(batch.foodId)) batch.purchaseCostPerServing *= paidRatio;
         if (state.correctlySortedFoodIds == null) state.correctlySortedFoodIds = new List<string>();
         foreach (var feedback in result.feedback.Where(f => f.isCorrect))
             if (!state.correctlySortedFoodIds.Exists(id => string.Equals(id, feedback.foodId, StringComparison.OrdinalIgnoreCase)))

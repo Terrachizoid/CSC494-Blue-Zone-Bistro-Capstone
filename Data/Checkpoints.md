@@ -17,7 +17,7 @@ not whatever unfinished state the player has reached since then. Saves with miss
 food/customer definitions are rejected on resume rather than silently losing data.
 
 Saved: inventory identity/source/cost/expiry, customer health/delight/finance/history,
-flags, dialogue history, memberships, learned foods, rush day, visual score and pending
+flags, dialogue history, learned foods, rush day, visual score and pending
 crash dialogue. Cart/selection/active-dialogue cursors and receipts are not restored.
 
 ## Presentation-only rush/crash
@@ -68,3 +68,5 @@ project, including private flags/history serialization, snapshot isolation, prev
 recovery after corruption, checksum rejection and completed-run summary restoration.
 The browser close/reopen and main-menu interactions still require Play Mode/Web testing.
 
+
+2026-10-27 presentation update: main menu now uses city art and a cream welcome panel. Removed the always-visible technical storage explanation. Return confirmation retains the consequence in plain language: restarting today. New-game replacement confirmation, resume and save-error handling are unchanged.

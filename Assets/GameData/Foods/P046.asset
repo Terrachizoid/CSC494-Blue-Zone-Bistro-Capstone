@@ -20,7 +20,9 @@ MonoBehaviour:
   ingredientAppeal: 9
   marketingLabel: Premium
   ingredientList: Medjool dates
-  sortingExplanation: 
+  sortingExplanation: 'Medjool dates is Green in this game: a whole plant food, with
+    nothing harmful added and nothing good taken away. It counts toward the Daily
+    Dozen group: Other fruits.'
   ingredientCount: 1
   storageType: 4
   claimId: 
@@ -28,4 +30,8 @@ MonoBehaviour:
   reviewNotes: "Added 2026-10-22 from the capstone plan's store/luxury examples (S2,
     S6, \xA73.6). Classification follows the plan text; pending supervisor review.
     Not a real product label. Ingredient appeal is provisional gameplay tuning."
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 4e200b13d8443424fb1c99fd6e51813d, type: 3}
+  cardBack: {fileID: 21300000, guid: 6a6131e6c81013b43ab2c53456fc6e67, type: 3}
+  lightLogo: 1
+  darkPlaque: 1
+  cardSprig: 0

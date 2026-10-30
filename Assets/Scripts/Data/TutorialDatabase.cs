@@ -20,4 +20,7 @@ public class TutorialDatabase : ScriptableObject
 [Serializable] public class TutorialRecord
 {
     public string tutorialId, stepId, status, skipReason;
+    // Action step whose instruction the player has already seen. Kept with the lesson (not in the UI) so a
+    // lesson paused for another one, or reopened after a reload, does not pop its instruction again.
+    public string seenStepId;
 }

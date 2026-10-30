@@ -24,6 +24,7 @@ public static class RecipeCsvImporter
         "claim_ids",
         "allow_non_green_choices",
         "icon_path",
+        "back_path",
         "approval_status",
         "review_notes"
     };
@@ -156,6 +157,11 @@ public static class RecipeCsvImporter
                 recipe.icon,
                 id,
                 "icon_path");
+            recipe.cardBack = CsvImportUtility.LoadOptionalAsset(
+                CsvImportUtility.Get(row, columns, "back_path"),
+                recipe.cardBack,
+                id,
+                "back_path");
 
             EditorUtility.SetDirty(recipe);
             imported.Add(recipe);

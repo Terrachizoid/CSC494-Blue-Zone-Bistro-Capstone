@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public partial class BistroUIScreen
 {
     private Vector2 cityPosition=new Vector2(.5f,.5f);
-    private void CityMap()
+    private void FallbackCityMap()
     {
         var viewport=BistroWidgets.Box(screen,"City viewport",theme.panel,new Vector2(.03f,.19f),new Vector2(.97f,.89f));
         viewport.gameObject.AddComponent<RectMask2D>();
@@ -43,6 +43,6 @@ public partial class BistroUIScreen
         Canvas.ForceUpdateCanvases();scroll.normalizedPosition=cityPosition;
         scroll.onValueChanged.AddListener(value=>cityPosition=value);
         BistroWidgets.Label(screen,"THE NEIGHBOURHOOD  ·  Drag to explore",theme,new Vector2(.05f,.82f),new Vector2(.77f,.88f),24);
-        BistroWidgets.Button(screen,"Recenter",theme,new Vector2(.80f,.82f),new Vector2(.95f,.88f),()=>{scroll.StopMovement();scroll.normalizedPosition=new Vector2(.5f,.5f);});
     }
 }
+

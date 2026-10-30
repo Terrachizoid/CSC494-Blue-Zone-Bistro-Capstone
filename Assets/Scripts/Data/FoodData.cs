@@ -42,8 +42,19 @@ public class FoodData : ScriptableObject
     [TextArea]
     public string reviewNotes;
 
+    // Art comes from Foods.csv (icon_path, back_path). A blank path keeps whatever sprite
+    // was dropped into these slots in the Inspector, so either workflow works.
     [Header("Presentation")]
+    [Tooltip("Card front art (food and its background). Foods.csv: icon_path.")]
     public Sprite icon;
+    [Tooltip("Card back art. Foods.csv: back_path. Blank uses the front art.")]
+    public Sprite cardBack;
+    [Tooltip("Foods.csv card_style: light_logo. Use a pale store logo on dark art.")]
+    public bool lightLogo;
+    [Tooltip("Foods.csv card_style: dark_plaque. Use the dark name plaque on light art.")]
+    public bool darkPlaque;
+    [Tooltip("Foods.csv card_style: sprig. Adds the leaf sprig beside the name plaque.")]
+    public bool cardSprig;
 
     public bool HasShortListStamp =>
         approvalStatus == ApprovalStatus.Approved &&

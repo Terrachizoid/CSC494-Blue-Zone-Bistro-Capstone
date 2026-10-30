@@ -20,7 +20,10 @@ MonoBehaviour:
   ingredientAppeal: 4
   marketingLabel: Heart healthy!
   ingredientList: Olive oil
-  sortingExplanation: 
+  sortingExplanation: 'Olive oil is Yellow in this game: it is a processed plant
+    food, because the oil is pressed out of the olive and the fibre is left behind.
+    The label "Heart healthy!" is marketing; the Traffic Light depends on how the
+    food is made, not on what the package says.'
   ingredientCount: 1
   storageType: 5
   claimId: 
@@ -29,4 +32,8 @@ MonoBehaviour:
     pending supervisor review. Not a real product label. Ingredient appeal is provisional
     0-10 gameplay tuning for a serving-weighted mean; independent of price and Traffic
     Light. Runtime import/calculation pending.
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 160e243b6e898ea44a0589b64370a5eb, type: 3}
+  cardBack: {fileID: 21300000, guid: 66880a8532ef87546b42279a52b41c76, type: 3}
+  lightLogo: 0
+  darkPlaque: 1
+  cardSprig: 0

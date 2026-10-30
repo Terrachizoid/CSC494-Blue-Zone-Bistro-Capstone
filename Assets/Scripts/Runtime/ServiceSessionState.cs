@@ -14,6 +14,7 @@ public class ServiceSessionState
     public bool awaitingDishAcknowledgement => step == ServiceStep.DishResult;
     public ServeResult lastDishResult;
     public string lastRecipeId;
+    public string foodAidMessage; // Set when the farmer gives food during this service; shown on the meal screen.
     public EncounterEntry CurrentEncounter => encounters != null && encounterIndex >= 0 &&
         encounterIndex < encounters.Count ? encounters[encounterIndex] : null;
     public string CurrentCustomerId => CurrentEncounter?.customerId;
@@ -36,6 +37,8 @@ public class DaySummary
     public float moneyEarned; // Includes walkInIncome.
     public float walkInIncome;
     public float rentPaid; // Charged this morning, before the market opened.
+    public float pantrySales; // Cash from selling pantry batches today (not included in moneyEarned).
+    public string foodAidMessage; // The farmer's gift today, for the results screen.
     public List<DishRecord> dishes = new List<DishRecord>();
     public List<string> skippedCustomerIds = new List<string>();
 }

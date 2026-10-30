@@ -20,7 +20,9 @@ MonoBehaviour:
   ingredientAppeal: 3
   marketingLabel: Plain staple
   ingredientList: Spinach
-  sortingExplanation: 
+  sortingExplanation: 'Spinach is Green in this game: a whole plant food, with nothing
+    harmful added and nothing good taken away. It counts toward the Daily Dozen group:
+    Greens.'
   ingredientCount: 1
   storageType: 1
   claimId: 
@@ -29,4 +31,8 @@ MonoBehaviour:
     pending supervisor review. Not a real product label. Ingredient appeal is provisional
     0-10 gameplay tuning for a serving-weighted mean; independent of price and Traffic
     Light. Runtime import/calculation pending.
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 540a436fd3148c546bedceeb7a6ffc57, type: 3}
+  cardBack: {fileID: 21300000, guid: c94d2ca2f523b2e46ad740980899df59, type: 3}
+  lightLogo: 0
+  darkPlaque: 0
+  cardSprig: 0

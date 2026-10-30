@@ -27,6 +27,8 @@ public static class FoodCsvImporter
         "storage_type",
         "claim_id",
         "icon_path",
+        "back_path",
+        "card_style",
         "approval_status",
         "review_notes",
         "ingredient_appeal"
@@ -201,6 +203,13 @@ public static class FoodCsvImporter
                 }
             }
 
+            food.cardBack = CsvImportUtility.LoadOptionalAsset(
+                Get(row, columns, "back_path"),
+                food.cardBack,
+                id,
+                "back_path");
+            ApplyCardStyle(food, Get(row, columns, "card_style"));
+
             EditorUtility.SetDirty(food);
             importedFoods.Add(food);
 
@@ -243,6 +252,25 @@ public static class FoodCsvImporter
         Debug.Log(
             $"Food import finished. Created: {created}, " +
             $"updated: {updated}, rejected: {rejected}.");
+    }
+
+    // card_style: optional pipe list of light_logo, dark_plaque, sprig. Blank means none.
+    private static void ApplyCardStyle(FoodData food, string text)
+    {
+        food.lightLogo = false;
+        food.darkPlaque = false;
+        food.cardSprig = false;
+
+        foreach (string part in (text ?? string.Empty).Split('|'))
+        {
+            string token = part.Trim().ToLowerInvariant();
+
+            if (token.Length == 0) continue;
+            else if (token == "light_logo") food.lightLogo = true;
+            else if (token == "dark_plaque") food.darkPlaque = true;
+            else if (token == "sprig") food.cardSprig = true;
+            else Debug.LogWarning($"Food {food.id}: unknown card_style '{part.Trim()}'. Use light_logo, dark_plaque or sprig.");
+        }
     }
 
     private static Dictionary<string, int> BuildColumnMap(

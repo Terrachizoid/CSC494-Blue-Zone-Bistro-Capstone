@@ -22,6 +22,8 @@ public class CustomerState
     public int cravingDay;
     public CravingTag[] activeCravings = Array.Empty<CravingTag>();
     public List<HealthSnapshot> healthHistory = new List<HealthSnapshot>();
+    // Daily Dozen groups this guest has eaten from green foods (shown to the player before cooking).
+    public List<DailyDozenCategory> dailyDozenEaten = new List<DailyDozenCategory>();
 
     public static CustomerState Create(CustomerData data, BalanceConfig balance)
     {

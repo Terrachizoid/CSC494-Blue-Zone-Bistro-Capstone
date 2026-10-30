@@ -16,6 +16,7 @@ namespace UnityEngine {
  public class TextAreaAttribute : Attribute { public TextAreaAttribute() {} public TextAreaAttribute(int a,int b) {} }
  public class MinAttribute : Attribute { public MinAttribute(float n) {} }
  public class RangeAttribute : Attribute { public RangeAttribute(float a,float b) {} }
+ public class TooltipAttribute : Attribute { public TooltipAttribute(string s) {} }
  public static class Debug {
   public static List<string> Errors = new List<string>();
   public static void Log(object s) { }
@@ -71,6 +72,10 @@ try {
     }
     [IO.File]::WriteAllText($foodPath,$foodCsv)
     Write-Output 'PASS: ingredient appeal import and atomic rejection of non-finite/out-of-range values.'
+    $tomato=[UnityEditor.AssetDatabase]::Assets['Assets/GameData/Foods/P019.asset']
+    $oats=[UnityEditor.AssetDatabase]::Assets['Assets/GameData/Foods/P001.asset']
+    if (!$tomato.lightLogo -or !$tomato.cardSprig -or $tomato.darkPlaque -or $oats.lightLogo -or $oats.cardSprig) { throw 'card_style import failed' }
+    Write-Output 'PASS: card_style flags imported from Foods.csv (art paths resolve only inside Unity).'
     foreach ($row in Import-Csv (Join-Path $projectRoot 'Assets/GameData/CSV/Blue_Zone_Bistro_Customers.csv')) {
         $customer=New-Object CustomerData; $customer.id=$row.customer_id
         [UnityEditor.AssetDatabase]::CreateAsset($customer,"Assets/GameData/Customers/$($customer.id).asset")
@@ -125,7 +130,7 @@ try {
     Copy-Item -LiteralPath (Join-Path $projectRoot 'Assets/GameData/CSV/Blue_Zone_Bistro_Tutorials.csv') -Destination $csvDirectory
     if (![TutorialCsvImporter]::EnsureCurrent()) { throw 'Tutorial import failed' }
     $tutorialDb=[UnityEditor.AssetDatabase]::Assets['Assets/GameData/TutorialDatabase.asset']
-    if ($tutorialDb.tutorials.Count -ne 5 -or ($tutorialDb.tutorials.steps | Measure-Object).Count -ne 7) { throw 'Tutorial definition/step count incorrect' }
+    if ($tutorialDb.tutorials.Count -ne 11 -or ($tutorialDb.tutorials.steps | Measure-Object).Count -ne 13) { throw 'Tutorial definition/step count incorrect' }
     $tutorialPath=Join-Path $csvDirectory 'Blue_Zone_Bistro_Tutorials.csv'
     $tutorialCsv=[IO.File]::ReadAllText($tutorialPath)
     $tutorialFingerprint=$tutorialDb.fingerprint
@@ -135,7 +140,7 @@ try {
     }
     [IO.File]::WriteAllText($tutorialPath,$tutorialCsv)
     if (![TutorialCsvImporter]::EnsureCurrent()) { throw 'Tutorial freshness check failed' }
-    Write-Output 'PASS: four tutorial definitions, six steps, and atomic rejection of unknown behaviours, duplicate steps and invalid phases.'
+    Write-Output 'PASS: eleven tutorial definitions (incl. three Any-phase top-bar lessons), thirteen steps, and atomic rejection of unknown behaviours, duplicate steps and invalid phases.'
     Write-Output "PASS: $originalCount dialogues imported by actual importer code; missing references and undefined enums preserve existing data; non-finite prices and duplicate headers rejected."
 } finally {
     [Environment]::CurrentDirectory=$originalDirectory

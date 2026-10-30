@@ -20,7 +20,10 @@ MonoBehaviour:
   ingredientAppeal: 9
   marketingLabel: Dairy-free indulgence
   ingredientList: Coconut milk, Sugar, Guar gum
-  sortingExplanation: 
+  sortingExplanation: 'Coconut-milk gelato is Yellow in this game: it is a processed
+    plant food, because it is made from coconut milk with added sugar. The label
+    "Dairy-free indulgence" is marketing; the Traffic Light depends on how the food
+    is made, not on what the package says.'
   ingredientCount: 3
   storageType: 2
   claimId: 
@@ -28,4 +31,8 @@ MonoBehaviour:
   reviewNotes: "Added 2026-10-22 from the capstone plan's store/luxury examples (S2,
     S6, \xA73.6). Classification follows the plan text; pending supervisor review.
     Not a real product label. Ingredient appeal is provisional gameplay tuning."
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: bbea694cb807b2e40b84395fe0cd8eac, type: 3}
+  cardBack: {fileID: 21300000, guid: c217db9f541268f41b13ced0078a70ee, type: 3}
+  lightLogo: 1
+  darkPlaque: 1
+  cardSprig: 0

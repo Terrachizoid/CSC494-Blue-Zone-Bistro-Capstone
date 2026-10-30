@@ -17,6 +17,7 @@ public interface ICartPurchaseService
     public string listingId; // Representative offer; different offers of the same food form one question.
     public string foodId;
     public TrafficLight correctAnswer;
+    public float cost; // What this checkout paid for this food across all its offers; the refund base.
 }
 [Serializable] public class SortingFeedback
 {
@@ -25,6 +26,7 @@ public interface ICartPurchaseService
     public TrafficLight correct;
     public bool isCorrect;
     public string explanation;
+    public float refund; // Share of the refund earned by this food (0 when sorted wrong).
 }
 [Serializable] public class SortingResult : OperationResult
 {

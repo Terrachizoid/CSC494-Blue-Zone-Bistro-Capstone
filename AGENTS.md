@@ -16,6 +16,7 @@ Read this file before changing the project. It is a shared handover for humans a
    - `Data/Events.md`: temporary modifiers, news and event authoring.
    - `Data/Endings.md`: ending selection, presentation and debug preview.
    - `Data/Economy.md`: rent, walk-in income, craving pressure, negative money and the bankrupt ending.
+   - `Data/PlaytestReport_AI.md` and `Tools/Playtest/`: AI persona playtests, harness and findings.
    - `Data/ArtDirection.md`: selected visual references and prototype status.
 
 The guides were brought up to date with the code on 2026-10-22. If a guide and the code disagree, trust the code and fix the guide.
@@ -33,8 +34,10 @@ The nutrition framework in Plan §2 is a fixed client requirement: no player-fac
 - **Store memberships are cut.** MegaBulk Club simply opens on day 4 (Chapter 2). There is no membership fee, Café Fund or purchase UI. Reason: added complexity without fun or educational value. The dormant `requiresMembership` / `membershipCost` / `storeMembershipIds` fields still exist in code and CSV; do not build UI for them. Removal is tracked in `KnownIssues.md`.
 - **Mixed meals.** Recipes are category-slot templates; yellow and red foods can be served and their effects come from the foods chosen (`allowNonGreenChoices=true` on all current recipes).
 - **Delight never adds health; finance follows health change with a 2-day lag** and currently only drives tips.
+- **Verdant's luxury shelf is stocked** (overrides the GDD non-goal): expensive, high-appeal green/yellow foods only, no red. It is shelf content, not a new mechanic.
 - **One checkout per day** across any number of open stores (the plan's two-store limit is not used).
 - **Six days, two chapters.** Days 1–3 Gray City; day 4 opens MegaBulk, Okinawa-inspired recipes and cravings.
+- **Art lives in the CSVs (2026-10-28).** Every food, recipe, category and store gets its art from a path column in its CSV, imported into a Sprite slot on the asset. Never add a JSON catalogue, sprite-sheet coordinates or ID-keyed art lookups in C#. See "Where art lives" below.
 - **Visual target:** 2D placeholders that read as low-poly 3D now; eventual low-poly 3D scenes with 2D characters. Keep shelf/store IDs independent of 2D hotspots so they can become 3D colliders.
 
 ## Working boundaries
@@ -48,17 +51,32 @@ The nutrition framework in Plan §2 is a fixed client requirement: no player-fac
 - Keep optional image/audio references safe when missing. Keep player-facing text free of debugging jargon. Do not expose Traffic Light answers in normal card inspection (only `BistroUITheme.debugCardDetails` in debug builds); preserve intentional sorting feedback.
 - Preserve Unity `.meta` files and stable content IDs. Do not casually regenerate asset GUIDs.
 
-## Current visual handover (2026-10-22)
+## Current visual handover (2026-10-28)
 
-The active work is art direction and a simpler, more interactive UI, not an automatic replacement of the live UI.
+The illustrated UI is now integrated, not only concept work. Preserve the newer implementation rather than restoring the old solid-block screens.
 
-- Approved city: `Assets/Art/Concepts/City_Approved_Direction.png`.
-- Selected bistro: `Assets/Art/Concepts/Bistro_Approved_Direction.png` (the earlier muted sage version; later white/misty variants are not selected).
-- Store prototypes: `Store_S001_Verdant_Prototype.png`, `Store_S002_CheapCart_Prototype.png`, `Store_S003_MegaBulk_Prototype.png` in the same folder. User-approved initial directions as of 2026-10-22; later revisions remain possible. Not final production backgrounds.
-- Store view: elevated roofless cutaway with matching camera across stores; clickable areas correspond to CSV shelf IDs.
-- Service view: fixed view from behind the counter toward the glass entrance. Customer upper-body layer sits behind the foreground counter. Meal-building overlay dims the scene, then clears for results/dialogue.
-- Images are flattened concepts, not layered assets or live integrations. Final labels should be separate UI. Product dressing is illustrative.
-- Before integrating art into stores, note the shelf-data issues in `KnownIssues.md` (empty `EYE_LEVEL` and `LUXURY` shelves; most CheapCart stock on `BOTTOM_SHELF`).
+### Where art lives (binding, 2026-10-28)
+
+One image file per item under `Assets/Art/`, referenced from data. Unity imports these folders as sprites automatically (`Assets/Editor/BistroArtImport.cs`).
+
+| Art | File | Set in |
+|---|---|---|
+| Food card front / back | `Art/Foods/P001_front.png`, `P001_back.png` | `Foods.csv` `icon_path`, `back_path` (+ optional `card_style`: `light_logo`, `dark_plaque`, `sprig`) |
+| Recipe dish / card back | `Art/Recipes/R001_dish.png`, `R001_back.png` | `Recipes.csv` `icon_path`, `back_path` |
+| Category icon (recipe tiles, meal slots) | `Art/Categories/Grain.png` | `Categories.csv` `icon_path` |
+| Store logo, interior, shelf colours | `Art/Stores/S001_logo.png`, `S001_background.png` | `Stores.csv` `logo_path`, `shop_background_path`, `shelf_colours` |
+| Screen-wide art (city, bistro room, counter, plaques, shelf rail, sprig, cart icon) | `Art/UI/<slot>.png` | `Assets/GameData/BistroUITheme.asset` slots; empty slots auto-fill from `Art/UI/<slot name>.png` |
+
+- To add or replace art: put the PNG in the folder, set the CSV path, run Tools > Blue Zone Bistro > Import All CSV Content. Or drag a sprite onto the asset's slot in the Inspector; a blank CSV path keeps the dragged sprite.
+- Missing art is allowed (plain card fallback); the content validator lists what is missing.
+- `Resources/BistroArt/world.json` holds only click regions (polygons and label markers per view), which are layout, not art.
+- Food art style: simple forms, few colours, muted backgrounds and gradients; expressive highlights allowed. Keep artwork and title/price text separate. Recipe illustrations are fixed per recipe. Recipe backs are background only, never the dish again (muted gradients with ingredient motifs).
+- Active city is based on `City_Waterfront_Selected_20261025.png`; the bistro on `Bistro_Midtone_Selected_20261025.png` (fixed behind-counter view; layers: room, customer portrait or silhouette, counter, dialogue or cooking UI). Gameplay store/shelf IDs stay independent of image coordinates for future 3D colliders.
+- **Latest user decision:** remove the misty cream dialogue veil and full-page tutorial takeover. Use one compact bottom dialogue presentation, with dark bottom-to-transparent fade, speaker name and readable light text. Tutorials use “Blue Zone Guide.” Reviews/results and text explanations should reuse this panel; browsing still uses cards. Long text is paged, and only the last page performs the final action.
+- Cooking uses the shared illustrated style for buttons, slots and miniature ingredient cards. Slots stay above pantry cards. The Comfort threshold belongs in the request tutorial, not permanently in the cooking header; read the value from balance configuration.
+- Recenter and the city Tutorial button were removed. Toolbar Help shows only the lesson in progress (or "All guides are complete for now…"). Reviewing text must never replay tutorial actions or mutate completion.
+- Customer artwork/animation is deferred: simple original 2D characters with expressions, upper-body framing behind the counter. Attached character images were style references, not owned production art.
+- The goal remains eventual low-poly 3D scenery with 2D characters and independent Canvas overlays. Do not add camera head turning.
 
 ## Verification and handoff
 
@@ -75,3 +93,16 @@ For balance, price, recipe or customer changes also run `python Tools/BalanceSim
 These use isolated fixtures/stubs and do not establish Play Mode or browser behaviour. For UI changes, check real interaction and layout in Unity. State clearly what was run and what remains unverified. Documentation-only changes do not require gameplay tests.
 
 After work, update the relevant guide with actual changes, limitations and next steps, and update `KnownIssues.md` when you fix or add an issue. Keep approved versus experimental art distinct. Record prompts/references when continuing concept work. Use one writer per file when several tools work concurrently; review each diff before combining. Never put credentials in handover files.
+
+
+### Concurrent-agent handoff reminder (2026-10-28)
+Before continuing UI work, reread the current code: the CSV/per-item-art migration, one-dialogue-at-a-time rendering, revised top bar and sorting UI supersede earlier JSON/atlas work. Preserve those changes. Use a separate disposable Unity project for captures; never copy stale scripts or generated test assets back into the live project. The capture harness must use a clone of the authored BistroUITheme so it exercises the real room/counter and decoration references.
+
+### Recipe/menu polish (2026-10-28)
+Recipe backs R001-R015 are individual background-only motif PNGs at their existing CSV back_path locations; preserve their GUIDs. They contain no plated dish or white reading block. BistroRecipeCard preserves single dish rendering and the unavailable cream wash; flipping now uses unscaled animation with the theme's cardFlipSeconds/reducedMotion. City zoom is theme.cityMapZoom (1.4 default), not a change to hotspot coordinates or store views. The start menu is a sage side panel with authored botanical accent and a menu-only city blur shader. Keep gameplay/data ownership unchanged.
+
+### UI surface polish (2026-10-29)
+Toolbar/map markers/sorting bins use BistroSurface shading and authored sprig decoration. BistroShelfIcon preserves its symbols but caches supersampled antialiased alpha textures; sprite overrides still win. Keep decoration non-interactive and CSV art ownership unchanged. Disposable reviews now use Tools/UI/ReviewProject (locally ignored), since Unity can clear the project Temp folder.
+
+### Contextual actions (2026-10-29)
+Use BistroActionButton with an explicit Primary/Secondary/Caution role for transient actions. Palette is configurable in BistroUITheme (sage/cream/clay defaults); Next is primary, Previous/Back secondary, Skip customer caution. Keep toolbar/main-menu controls and world indicators separate.

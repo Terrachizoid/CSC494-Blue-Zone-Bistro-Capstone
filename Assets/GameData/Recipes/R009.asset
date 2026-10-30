@@ -40,4 +40,5 @@ MonoBehaviour:
     Tags are resolution candidates only for a successfully built dish. All-green
     builds possible. Sale price and recipe delight bonus are provisional game tuning;
     runtime craving selection/resolution pending.
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 878caa87053577241987ca101e41f45f, type: 3}
+  cardBack: {fileID: 21300000, guid: 09e425145891e784ea14d79406c1a2b0, type: 3}

@@ -16,11 +16,10 @@ public static class StoreCsvImporter
         "role_description",
         "description",
         "unlock_day",
-        "requires_membership",
-        "membership_cost",
         "default_price_display_style",
         "shelf_definitions",
-        "exterior_icon_path",
+        "shelf_colours",
+        "logo_path",
         "shop_background_path",
         "approval_status",
         "review_notes"
@@ -90,12 +89,6 @@ public static class StoreCsvImporter
             store.unlockDay = CsvImportUtility.ParseInt(
                 CsvImportUtility.Get(row, columns, "unlock_day"),
                 1, 1, int.MaxValue, id, "unlock_day");
-            store.requiresMembership = CsvImportUtility.ParseBool(
-                CsvImportUtility.Get(row, columns, "requires_membership"),
-                false, id, "requires_membership");
-            store.membershipCost = CsvImportUtility.ParseFloat(
-                CsvImportUtility.Get(row, columns, "membership_cost"),
-                0f, 0f, id, "membership_cost");
             store.defaultPriceDisplayStyle = CsvImportUtility.ParseEnum(
                 CsvImportUtility.Get(
                     row, columns, "default_price_display_style"),
@@ -113,11 +106,15 @@ public static class StoreCsvImporter
                 "approval_status");
             store.reviewNotes = CsvImportUtility.Get(
                 row, columns, "review_notes");
-            store.exteriorIcon = CsvImportUtility.LoadOptionalAsset(
-                CsvImportUtility.Get(row, columns, "exterior_icon_path"),
-                store.exteriorIcon,
+            ApplyShelfColours(
+                store.shelves,
+                CsvImportUtility.Get(row, columns, "shelf_colours"),
+                id);
+            store.logo = CsvImportUtility.LoadOptionalAsset(
+                CsvImportUtility.Get(row, columns, "logo_path"),
+                store.logo,
                 id,
-                "exterior_icon_path");
+                "logo_path");
             store.shopBackground = CsvImportUtility.LoadOptionalAsset(
                 CsvImportUtility.Get(row, columns, "shop_background_path"),
                 store.shopBackground,
@@ -169,6 +166,42 @@ public static class StoreCsvImporter
         }
 
         return true;
+    }
+
+    // shelf_colours: SHELF_ID:#RRGGBB pairs separated by '|'. Shelves not listed get no colour.
+    private static void ApplyShelfColours(
+        StoreShelfDefinition[] shelves,
+        string text,
+        string storeId)
+    {
+        foreach (StoreShelfDefinition shelf in shelves)
+        {
+            shelf.colour = string.Empty;
+        }
+
+        foreach (string pair in (text ?? string.Empty).Split('|'))
+        {
+            if (string.IsNullOrWhiteSpace(pair)) continue;
+
+            string[] parts = pair.Split(new[] { ':' }, 2);
+            string shelfId = parts[0].Trim();
+            string colour = parts.Length > 1 ? parts[1].Trim() : string.Empty;
+            StoreShelfDefinition shelf = shelves.FirstOrDefault(s =>
+                string.Equals(s.id, shelfId, StringComparison.OrdinalIgnoreCase));
+
+            if (shelf == null)
+            {
+                Debug.LogWarning($"Store {storeId}: shelf_colours names unknown shelf '{shelfId}'.");
+            }
+            else if (!ColorUtility.TryParseHtmlString(colour, out _))
+            {
+                Debug.LogWarning($"Store {storeId}: '{colour}' is not a colour for shelf '{shelfId}'. Use #RRGGBB.");
+            }
+            else
+            {
+                shelf.colour = colour;
+            }
+        }
     }
 
     private static StoreShelfDefinition[] ParseShelves(

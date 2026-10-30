@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 002a8a9976b64187947ec515cd4fa6b8, type: 3}
+  m_Name: BistroUITheme
+  m_EditorClassIdentifier: Assembly-CSharp::BistroUITheme
+  background: {r: 0.17, g: 0.21, b: 0.21, a: 1}
+  panel: {r: 0.25, g: 0.3, b: 0.29, a: 1}
+  card: {r: 0.88, g: 0.86, b: 0.79, a: 1}
+  ink: {r: 0.16, g: 0.2, b: 0.19, a: 1}
+  accent: {r: 0.6, g: 0.7, b: 0.61, a: 1}
+  warning: {r: 0.78, g: 0.43, b: 0.38, a: 1}
+  cityBackground: {fileID: 21300000, guid: a30d806d7f11b034397d2f91dda12bea, type: 3}
+  cityMapZoom: 1.4
+  serviceBackground: {fileID: 21300000, guid: c401d3e8385fa16498706e26883b74ca, type: 3}
+  serviceCounter: {fileID: 21300000, guid: 4c7722fe44aebe644a1e99d79e5d0ac4, type: 3}
+  plaqueLight: {fileID: 21300000, guid: 65d60d70bba367b48b3b47c55246e6ae, type: 3}
+  plaqueDark: {fileID: 21300000, guid: 422cbe8f6923eea4a879c17fdd922f60, type: 3}
+  shelfRail: {fileID: 21300000, guid: 7f8e0690550702545ae37aa3aca22819, type: 3}
+  cardSprig: {fileID: 21300000, guid: 2dc868972aa1cea47b88ed11d1f79b7d, type: 3}
+  cartIcon: {fileID: 21300000, guid: 9fcc2292b950a15469f46e1492cd8ce1, type: 3}
+  cardFrame: {fileID: 0}
+  slotFrame: {fileID: 0}
+  font: {fileID: 0}
+  reducedMotion: 0
+  cardFlipSeconds: 0.26
+  panelRevealSeconds: 0.18
+  showCardAppeal: 1
+  debugCardDetails: 0
+  recipeFrontVeilOpacity: 0.5
+  recipeBackVeilOpacity: 0.56

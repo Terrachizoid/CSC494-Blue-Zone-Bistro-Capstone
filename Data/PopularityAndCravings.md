@@ -34,3 +34,38 @@ After editing CSVs, use **Tools → Blue Zone Bistro → Import All CSV Content*
 Old checkpoints initialize the new scores from config once, then save a morning plan. A legitimate saved popularity of zero remains zero. Existing day-start-only save semantics are unchanged.
 
 Tests: `Tools/Test-CsvContent.ps1`, `Tools/Test-ContentImport.ps1`, and the real Unity `CheckpointSmokeTest` cover calculations, queue caching, migration, serialization and content import.
+
+## Comfort request and recipe fatigue (2026-10-25)
+
+- **Comfort** (`CravingTag.Comfort`, appended last) is answered by any built plate whose mean ingredient appeal
+  reaches `BalanceConfig.comfortMinimumAppeal` (7), not by recipe tags. It makes high-appeal foods (junk, luxury,
+  sweet potato, berries, dates) worth considering. Customers.csv gives it to Dev, Sam and Marco. Craving selection
+  treats Comfort as answerable by any recipe (`CustomerVisitService.ChooseCravings`).
+- **Recipe fatigue** (`Services/RecipeFatigue.cs`): if a recipe has already been served `recipeFatigueThreshold` (4)
+  times to anyone within `recipeFatigueWindowDays` (2, counting today), its positive popularity is multiplied by
+  `recipeFatigueMultiplier` (0.5). Negative popularity is unchanged. `ServeResult.recipeFatigued/recipeRecentServes`
+  report it; recipe buttons show "Served N× in 2 days". Threshold 0 turns it off (C# default).
+- `GameSessionState.recipeServes` records every served dish (day, recipe, guest, built, green/yellow/red servings);
+  `CustomerState.dailyDozenEaten` records the Daily Dozen groups each guest has eaten from green foods. Both feed the
+  guest info line and the end-of-game recap.
+- Bots: Comfort, fatigue and the new recipes leave junk and taste-chasing at Struggling (junk wellbeing 47); informed
+  play still reaches Blue (46/60 runs, $34). See `Tools/BalanceSim/README.md`.
+
+## Junk as the crowd route, Daily Dozen novelty (2026-10-25, second pass)
+
+Owen's intent: a junk-food bistro should reach "A full house, an unfinished promise" (Popular) and make the most money,
+while wellbeing collapses. Bots showed it could not: every recipe forced greens (diluting plate appeal), junk-fed guests'
+finance fell to 0 (no tips), and appeal moved popularity only a little.
+
+- `popularityPerAppealPoint` (15) × max(0, plate appeal − `popularityAppealPivot` (7)) is added to a built dish's
+  popularity before the requests-answered fraction (`CommunityProgress.Evaluate`). Only indulgent plates draw a crowd;
+  plain staples get nothing, tasty greens (7) get none to a little.
+- New recipe R015 Snack platter (Starchy vegetable + Beverage, optional Other, day 1): chips + soda + candy, or sweet
+  potato + water.
+- `dailyDozenNewGroupsOnly` (on) with `healthPerGreenDailyDozenCategory` 2 (was 1): a dish's Daily Dozen health bonus
+  counts only groups that guest has not eaten before in the run (`CustomerState.dailyDozenEaten`). Repeating the same
+  plants for the same guest no longer stacks health; variety does.
+
+Bots (40 runs): junk → Popular 36/40, $47 (most money), wellbeing 14; balanced → Blue, $37; health-only → Niche, $22;
+taste chaser → mixed, $33; luxury → mostly Niche, $25; careless → low, $8. Stronger crowd values (20, or pivot 6.5)
+made junk $66–68, too dominant.

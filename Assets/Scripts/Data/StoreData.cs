@@ -1,5 +1,4 @@
-// File responsibility: Authored store identity and access rules; purchases enforce day, flag, and membership conditions.
-// Actual purchased memberships live in the session, not this shared asset.
+// File responsibility: Authored store identity and access rules; purchases enforce day and flag conditions.
 
 using System;
 using UnityEngine;
@@ -10,6 +9,8 @@ public class StoreShelfDefinition
     public string id;
     public string displayName;
     public Sprite artwork;
+    // Shelf background colour as HTML hex (Stores.csv: shelf_colours). Blank uses the default sage.
+    public string colour;
 }
 
 [CreateAssetMenu(
@@ -30,10 +31,6 @@ public class StoreData : ScriptableObject
     [Header("Availability and Economy")]
     [Min(1)]
     public int unlockDay = 1;
-    public bool requiresMembership;
-
-    [Min(0f)]
-    public float membershipCost;
 
     public PriceDisplayStyle defaultPriceDisplayStyle =
         PriceDisplayStyle.Standard;
@@ -48,8 +45,11 @@ public class StoreData : ScriptableObject
     [TextArea]
     public string reviewNotes;
 
+    // Art comes from Stores.csv (logo_path, shop_background_path); a blank path keeps an Inspector-assigned sprite.
     [Header("Presentation")]
-    public Sprite exteriorIcon;
+    [Tooltip("White silhouette logo, tinted by the UI. Stores.csv: logo_path.")]
+    public Sprite logo;
+    [Tooltip("Store interior shown when entering the store. Stores.csv: shop_background_path.")]
     public Sprite shopBackground;
 
     public bool HasShelf(string shelfId)

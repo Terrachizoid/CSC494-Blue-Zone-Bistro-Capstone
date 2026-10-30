@@ -20,7 +20,9 @@ MonoBehaviour:
   ingredientAppeal: 4
   marketingLabel: Plain staple
   ingredientList: Broccoli
-  sortingExplanation: 
+  sortingExplanation: 'Broccoli is Green in this game: a whole plant food, with nothing
+    harmful added and nothing good taken away. It counts toward the Daily Dozen group:
+    Cruciferous vegetables.'
   ingredientCount: 1
   storageType: 2
   claimId: 
@@ -29,4 +31,8 @@ MonoBehaviour:
     pending supervisor review. Not a real product label. Ingredient appeal is provisional
     0-10 gameplay tuning for a serving-weighted mean; independent of price and Traffic
     Light. Runtime import/calculation pending.
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 3aa213b14ea96f441b1bba70cb38ac5d, type: 3}
+  cardBack: {fileID: 21300000, guid: faa8e07d1e75fe048aeffefb644018e0, type: 3}
+  lightLogo: 0
+  darkPlaque: 0
+  cardSprig: 0

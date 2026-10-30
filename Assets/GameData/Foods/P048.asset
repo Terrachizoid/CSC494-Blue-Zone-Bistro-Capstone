@@ -20,7 +20,10 @@ MonoBehaviour:
   ingredientAppeal: 7
   marketingLabel: Ceremonial grade
   ingredientList: Stone-ground green tea leaves
-  sortingExplanation: 
+  sortingExplanation: 'Ceremonial matcha is Green in this game: a whole plant food,
+    with nothing harmful added and nothing good taken away. It counts toward the
+    Daily Dozen group: Beverages. The label "Ceremonial grade" is marketing; the
+    Traffic Light depends on how the food is made, not on what the package says.'
   ingredientCount: 1
   storageType: 4
   claimId: 
@@ -28,4 +31,8 @@ MonoBehaviour:
   reviewNotes: "Added 2026-10-22 from the capstone plan's store/luxury examples (S2,
     S6, \xA73.6). Classification follows the plan text; pending supervisor review.
     Not a real product label. Ingredient appeal is provisional gameplay tuning."
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: c39b2166ac374e9498e66d4bb4e60419, type: 3}
+  cardBack: {fileID: 21300000, guid: d8925bdaf841cf6458f87d412f20a193, type: 3}
+  lightLogo: 0
+  darkPlaque: 0
+  cardSprig: 0

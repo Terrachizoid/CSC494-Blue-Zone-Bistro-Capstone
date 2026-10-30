@@ -6,8 +6,7 @@ public enum PriceDisplayStyle
     Standard,
     Premium,
     Sale,
-    Bulk,
-    Membership
+    Bulk
 }
 
 public enum RecipeTier
@@ -26,7 +25,10 @@ public enum CravingTag
     Crunchy,
     Creamy,
     Fizzy,
-    Hearty
+    Hearty,
+    // Satisfied by any built plate whose mean ingredient appeal reaches BalanceConfig.comfortMinimumAppeal,
+    // not by recipe tags. Appended last so existing serialized values keep their numbers.
+    Comfort
 }
 
 public enum ClaimUsageTag

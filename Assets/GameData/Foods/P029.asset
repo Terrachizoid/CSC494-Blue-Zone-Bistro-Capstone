@@ -20,7 +20,9 @@ MonoBehaviour:
   ingredientAppeal: 7
   marketingLabel: Plain staple
   ingredientList: Walnuts
-  sortingExplanation: 
+  sortingExplanation: 'Unsalted walnuts is Green in this game: a whole plant food,
+    with nothing harmful added and nothing good taken away. It counts toward the
+    Daily Dozen group: Nuts and seeds.'
   ingredientCount: 1
   storageType: 4
   claimId: 
@@ -29,4 +31,8 @@ MonoBehaviour:
     pending supervisor review. Not a real product label. Ingredient appeal is provisional
     0-10 gameplay tuning for a serving-weighted mean; independent of price and Traffic
     Light. Runtime import/calculation pending.
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: cd5add32f8dda3a45b80c94ce87403f0, type: 3}
+  cardBack: {fileID: 21300000, guid: e8a45b7933e3f344aac6b342db39c893, type: 3}
+  lightLogo: 0
+  darkPlaque: 1
+  cardSprig: 0

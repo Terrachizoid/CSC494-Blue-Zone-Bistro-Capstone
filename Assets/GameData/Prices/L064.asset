@@ -15,7 +15,7 @@ MonoBehaviour:
   id: L064
   food: {fileID: 11400000, guid: 3f59c20eac0c09b4ab3370d4995ed414, type: 2}
   store: {fileID: 11400000, guid: 5b1adbc2ebffd0f4b91dd60f90bed07d, type: 2}
-  shelfId: LUXURY
+  shelfId: WELLNESS
   unlockDay: 4
   requiredFlag: 
   observedPriceCad: 0

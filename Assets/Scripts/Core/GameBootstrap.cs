@@ -102,7 +102,8 @@ public class GameBootstrap : MonoBehaviour
         Loop = new GameLoop(new PurchaseService(state, listings, balance),
             new MealService(state, foods, recipes, customers, balance), new DayService(state, balance, customers),
             new CustomerVisitService(state, customers, balance, recipes:recipes, foods:foods, listings:listings), scheduler,
-            new FoodSortingService(state, foods), state.gameCompleted,new EndingService(state,endings),new EventService(state,events,balance,listings));
+            new FoodSortingService(state, foods), state.gameCompleted,new EndingService(state,endings),new EventService(state,events,balance,listings),
+            new PantryService(state, foods, balance), new FoodAidService(state, foods, recipes, balance));
         Loop.DayFinished += CaptureCheckpoint;
         tutorialController=new TutorialController(state,tutorials,new IntroMealPlan(state,foods,recipes,listings,balance));
         Loop.AttachTutorials(tutorialController);

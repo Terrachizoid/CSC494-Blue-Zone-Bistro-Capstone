@@ -1,0 +1,721 @@
+{
+  "entries": [
+    {
+      "row": 0,
+      "foodId": "P004",
+      "column": 0,
+      "lightLogo": true,
+      "darkPlaque": false,
+      "plaqueTilt": 1.2,
+      "foreground": ""
+    },
+    {
+      "row": 0,
+      "foodId": "P006",
+      "column": 1,
+      "lightLogo": false,
+      "darkPlaque": true,
+      "plaqueTilt": -1.1,
+      "foreground": ""
+    },
+    {
+      "row": 0,
+      "foodId": "P018",
+      "column": 2,
+      "lightLogo": false,
+      "darkPlaque": false,
+      "plaqueTilt": 1.2,
+      "foreground": ""
+    },
+    {
+      "row": 0,
+      "foodId": "P019",
+      "column": 3,
+      "lightLogo": true,
+      "darkPlaque": false,
+      "plaqueTilt": -1.1,
+      "foreground": "foreground"
+    },
+    {
+      "row": 0,
+      "foodId": "P020",
+      "column": 4,
+      "lightLogo": false,
+      "darkPlaque": true,
+      "plaqueTilt": 1.2,
+      "foreground": ""
+    },
+    {
+      "row": 1,
+      "foodId": "P044",
+      "column": 0,
+      "lightLogo": true,
+      "darkPlaque": false,
+      "plaqueTilt": 1.2,
+      "foreground": ""
+    },
+    {
+      "row": 1,
+      "foodId": "P045",
+      "column": 1,
+      "lightLogo": false,
+      "darkPlaque": true,
+      "plaqueTilt": -1.1,
+      "foreground": ""
+    },
+    {
+      "row": 1,
+      "foodId": "P009",
+      "column": 2,
+      "lightLogo": false,
+      "darkPlaque": false,
+      "plaqueTilt": 1.2,
+      "foreground": ""
+    },
+    {
+      "row": 1,
+      "foodId": "P039",
+      "column": 3,
+      "lightLogo": true,
+      "darkPlaque": false,
+      "plaqueTilt": -1.1,
+      "foreground": ""
+    },
+    {
+      "row": 1,
+      "foodId": "P023",
+      "column": 4,
+      "lightLogo": false,
+      "darkPlaque": false,
+      "plaqueTilt": 1.2,
+      "foreground": ""
+    }
+  ],
+  "storeId": "S001",
+  "rows": 2,
+  "columns": 5,
+  "shelfId": "PRODUCE",
+  "texture": "BistroArt/VerdantProduce",
+  "rowEdges": [
+    0,
+    0.48712667353244077,
+    1
+  ],
+  "atlases": [
+    {
+      "texture": "BistroArt/Staples",
+      "entries": [
+        {
+          "plaqueTilt": 1,
+          "column": 0,
+          "foodId": "P001",
+          "darkPlaque": false,
+          "lightLogo": false,
+          "row": 0
+        },
+        {
+          "plaqueTilt": -1,
+          "column": 1,
+          "foodId": "P002",
+          "darkPlaque": true,
+          "lightLogo": false,
+          "row": 0
+        },
+        {
+          "plaqueTilt": 1,
+          "column": 2,
+          "foodId": "P003",
+          "darkPlaque": false,
+          "lightLogo": false,
+          "row": 0
+        },
+        {
+          "plaqueTilt": -1,
+          "column": 3,
+          "foodId": "P017",
+          "darkPlaque": false,
+          "lightLogo": false,
+          "row": 0
+        },
+        {
+          "plaqueTilt": 1,
+          "column": 4,
+          "foodId": "P005",
+          "darkPlaque": true,
+          "lightLogo": false,
+          "row": 0
+        },
+        {
+          "plaqueTilt": -1,
+          "column": 0,
+          "foodId": "P008",
+          "darkPlaque": false,
+          "lightLogo": false,
+          "row": 1
+        },
+        {
+          "plaqueTilt": 1,
+          "column": 1,
+          "foodId": "P010",
+          "darkPlaque": false,
+          "lightLogo": false,
+          "row": 1
+        },
+        {
+          "plaqueTilt": -1,
+          "column": 2,
+          "foodId": "P021",
+          "darkPlaque": true,
+          "lightLogo": false,
+          "row": 1
+        },
+        {
+          "plaqueTilt": 1,
+          "column": 3,
+          "foodId": "P022",
+          "darkPlaque": false,
+          "lightLogo": false,
+          "row": 1
+        },
+        {
+          "plaqueTilt": -1,
+          "column": 4,
+          "foodId": "P024",
+          "darkPlaque": false,
+          "lightLogo": false,
+          "row": 1
+        }
+      ],
+      "rows": 2,
+      "columns": 5,
+      "backTexture": "BistroArt/StapleBacks"
+    },
+    {
+      "texture": "BistroArt/DryGoods",
+      "entries": [
+        {
+          "plaqueTilt": 1,
+          "column": 0,
+          "foodId": "P025",
+          "darkPlaque": false,
+          "lightLogo": false,
+          "row": 0
+        },
+        {
+          "plaqueTilt": -1,
+          "column": 1,
+          "foodId": "P026",
+          "darkPlaque": true,
+          "lightLogo": false,
+          "row": 0
+        },
+        {
+          "plaqueTilt": 1,
+          "column": 2,
+          "foodId": "P027",
+          "darkPlaque": false,
+          "lightLogo": false,
+          "row": 0
+        },
+        {
+          "plaqueTilt": -1,
+          "column": 3,
+          "foodId": "P028",
+          "darkPlaque": false,
+          "lightLogo": false,
+          "row": 0
+        },
+        {
+          "plaqueTilt": 1,
+          "column": 0,
+          "foodId": "P029",
+          "darkPlaque": true,
+          "lightLogo": false,
+          "row": 1
+        },
+        {
+          "plaqueTilt": -1,
+          "column": 1,
+          "foodId": "P030",
+          "darkPlaque": false,
+          "lightLogo": false,
+          "row": 1
+        },
+        {
+          "plaqueTilt": 1,
+          "column": 2,
+          "foodId": "P031",
+          "darkPlaque": false,
+          "lightLogo": false,
+          "row": 1
+        },
+        {
+          "plaqueTilt": -1,
+          "column": 3,
+          "foodId": "P032",
+          "darkPlaque": true,
+          "lightLogo": false,
+          "row": 1
+        }
+      ],
+      "rows": 2,
+      "columns": 4,
+      "backTexture": "BistroArt/DryGoodsBacks"
+    },
+    {
+      "texture": "BistroArt/EdamameBarley",
+      "entries": [
+        {
+          "plaqueTilt": 1,
+          "column": 0,
+          "foodId": "P038",
+          "darkPlaque": false,
+          "lightLogo": false,
+          "row": 0
+        },
+        {
+          "plaqueTilt": -1,
+          "column": 1,
+          "foodId": "P040",
+          "darkPlaque": true,
+          "lightLogo": false,
+          "row": 0
+        }
+      ],
+      "rows": 1,
+      "columns": 2,
+      "backTexture": "BistroArt/EdamameBarleyBacks"
+    },
+    {
+      "entries": [
+        {
+          "lightLogo": false,
+          "column": 0,
+          "darkPlaque": false,
+          "row": 0,
+          "plaqueTilt": 1,
+          "foodId": "P011"
+        },
+        {
+          "lightLogo": false,
+          "column": 1,
+          "darkPlaque": true,
+          "row": 0,
+          "plaqueTilt": -1,
+          "foodId": "P012"
+        },
+        {
+          "lightLogo": false,
+          "column": 2,
+          "darkPlaque": false,
+          "row": 0,
+          "plaqueTilt": 1,
+          "foodId": "P015"
+        },
+        {
+          "lightLogo": false,
+          "column": 3,
+          "darkPlaque": false,
+          "row": 0,
+          "plaqueTilt": -1,
+          "foodId": "P041"
+        },
+        {
+          "lightLogo": false,
+          "column": 0,
+          "darkPlaque": true,
+          "row": 1,
+          "plaqueTilt": 1,
+          "foodId": "P042"
+        },
+        {
+          "lightLogo": false,
+          "column": 1,
+          "darkPlaque": false,
+          "row": 1,
+          "plaqueTilt": -1,
+          "foodId": "P043"
+        },
+        {
+          "lightLogo": false,
+          "column": 2,
+          "darkPlaque": false,
+          "row": 1,
+          "plaqueTilt": 1,
+          "foodId": "P050"
+        },
+        {
+          "lightLogo": false,
+          "column": 3,
+          "darkPlaque": true,
+          "row": 1,
+          "plaqueTilt": -1,
+          "foodId": "P016"
+        }
+      ],
+      "texture": "BistroArt/Wellness",
+      "backTexture": "BistroArt/WellnessBacks",
+      "columns": 4,
+      "rows": 2
+    },
+    {
+      "entries": [
+        {
+          "foreground": "",
+          "darkPlaque": false,
+          "foodId": "P007",
+          "lightLogo": false,
+          "row": 0,
+          "plaqueTilt": -1,
+          "column": 0
+        },
+        {
+          "foreground": "",
+          "darkPlaque": true,
+          "foodId": "P033",
+          "lightLogo": true,
+          "row": 0,
+          "plaqueTilt": 1,
+          "column": 1
+        },
+        {
+          "foreground": "",
+          "darkPlaque": false,
+          "foodId": "P034",
+          "lightLogo": false,
+          "row": 0,
+          "plaqueTilt": -1,
+          "column": 2
+        },
+        {
+          "foreground": "",
+          "darkPlaque": false,
+          "foodId": "P051",
+          "lightLogo": false,
+          "row": 0,
+          "plaqueTilt": 1,
+          "column": 3
+        },
+        {
+          "foreground": "",
+          "darkPlaque": true,
+          "foodId": "P052",
+          "lightLogo": true,
+          "row": 1,
+          "plaqueTilt": -1,
+          "column": 0
+        },
+        {
+          "foreground": "",
+          "darkPlaque": false,
+          "foodId": "P013",
+          "lightLogo": false,
+          "row": 1,
+          "plaqueTilt": 1,
+          "column": 1
+        },
+        {
+          "foreground": "",
+          "darkPlaque": false,
+          "foodId": "P014",
+          "lightLogo": false,
+          "row": 1,
+          "plaqueTilt": -1,
+          "column": 2
+        },
+        {
+          "foreground": "",
+          "darkPlaque": true,
+          "foodId": "P035",
+          "lightLogo": true,
+          "row": 1,
+          "plaqueTilt": 1,
+          "column": 3
+        }
+      ],
+      "texture": "BistroArt/Everyday",
+      "rowEdges": [
+        0,
+        0.498046875,
+        1
+      ],
+      "backRowEdges": [
+        0,
+        0.498046875,
+        1
+      ],
+      "columns": 4,
+      "rows": 2,
+      "backTexture": "BistroArt/EverydayBacks"
+    },
+    {
+      "entries": [
+        {
+          "foreground": "",
+          "darkPlaque": false,
+          "foodId": "P036",
+          "lightLogo": false,
+          "row": 0,
+          "plaqueTilt": -1,
+          "column": 0
+        },
+        {
+          "foreground": "",
+          "darkPlaque": true,
+          "foodId": "P037",
+          "lightLogo": true,
+          "row": 0,
+          "plaqueTilt": 1,
+          "column": 1
+        },
+        {
+          "foreground": "",
+          "darkPlaque": false,
+          "foodId": "P053",
+          "lightLogo": false,
+          "row": 0,
+          "plaqueTilt": -1,
+          "column": 2
+        },
+        {
+          "foreground": "",
+          "darkPlaque": false,
+          "foodId": "P054",
+          "lightLogo": false,
+          "row": 0,
+          "plaqueTilt": 1,
+          "column": 3
+        },
+        {
+          "foreground": "",
+          "darkPlaque": true,
+          "foodId": "P046",
+          "lightLogo": true,
+          "row": 1,
+          "plaqueTilt": -1,
+          "column": 0
+        },
+        {
+          "foreground": "",
+          "darkPlaque": false,
+          "foodId": "P047",
+          "lightLogo": false,
+          "row": 1,
+          "plaqueTilt": 1,
+          "column": 1
+        },
+        {
+          "foreground": "",
+          "darkPlaque": false,
+          "foodId": "P048",
+          "lightLogo": false,
+          "row": 1,
+          "plaqueTilt": -1,
+          "column": 2
+        },
+        {
+          "foreground": "",
+          "darkPlaque": true,
+          "foodId": "P049",
+          "lightLogo": true,
+          "row": 1,
+          "plaqueTilt": 1,
+          "column": 3
+        }
+      ],
+      "texture": "BistroArt/Treats",
+      "rowEdges": [
+        0,
+        0.4755859375,
+        1
+      ],
+      "backRowEdges": [
+        0,
+        0.4755859375,
+        1
+      ],
+      "columns": 4,
+      "rows": 2,
+      "backTexture": "BistroArt/TreatsBacks"
+    },
+    {
+      "entries": [
+        {
+          "foreground": "",
+          "darkPlaque": false,
+          "foodId": "P055",
+          "lightLogo": false,
+          "row": 0,
+          "plaqueTilt": -1,
+          "column": 0
+        },
+        {
+          "foreground": "",
+          "darkPlaque": true,
+          "foodId": "P056",
+          "lightLogo": true,
+          "row": 0,
+          "plaqueTilt": 1,
+          "column": 1
+        },
+        {
+          "foreground": "",
+          "darkPlaque": false,
+          "foodId": "P057",
+          "lightLogo": false,
+          "row": 0,
+          "plaqueTilt": -1,
+          "column": 2
+        },
+        {
+          "foreground": "",
+          "darkPlaque": false,
+          "foodId": "P058",
+          "lightLogo": false,
+          "row": 1,
+          "plaqueTilt": 1,
+          "column": 0
+        },
+        {
+          "foreground": "",
+          "darkPlaque": true,
+          "foodId": "P059",
+          "lightLogo": true,
+          "row": 1,
+          "plaqueTilt": -1,
+          "column": 1
+        },
+        {
+          "foreground": "",
+          "darkPlaque": false,
+          "foodId": "P060",
+          "lightLogo": false,
+          "row": 1,
+          "plaqueTilt": 1,
+          "column": 2
+        },
+        {
+          "foreground": "",
+          "darkPlaque": false,
+          "foodId": "P061",
+          "lightLogo": false,
+          "row": 2,
+          "plaqueTilt": -1,
+          "column": 0
+        },
+        {
+          "foreground": "",
+          "darkPlaque": true,
+          "foodId": "P062",
+          "lightLogo": true,
+          "row": 2,
+          "plaqueTilt": 1,
+          "column": 1
+        },
+        {
+          "foreground": "",
+          "darkPlaque": false,
+          "foodId": "P063",
+          "lightLogo": false,
+          "row": 2,
+          "plaqueTilt": -1,
+          "column": 2
+        }
+      ],
+      "texture": "BistroArt/Luxury",
+      "rowEdges": [
+        0,
+        0.3326822916666667,
+        0.6634114583333334,
+        1
+      ],
+      "backRowEdges": [
+        0,
+        0.3326822916666667,
+        0.6634114583333334,
+        1
+      ],
+      "columns": 3,
+      "rows": 3,
+      "backTexture": "BistroArt/LuxuryBacks"
+    }
+  ],
+  "themes": [
+    {
+      "logo": "leaf",
+      "rail": "wood",
+      "colour": "#6D806F",
+      "shelfId": "PRODUCE",
+      "storeId": "S001"
+    },
+    {
+      "logo": "cheapcart",
+      "rail": "wood",
+      "colour": "#827D70",
+      "shelfId": "BOTTOM_SHELF",
+      "storeId": "S002"
+    },
+    {
+      "logo": "cheapcart",
+      "rail": "wood",
+      "colour": "#74858B",
+      "shelfId": "BACK_FREEZER",
+      "storeId": "S002"
+    },
+    {
+      "logo": "megabulk",
+      "rail": "wood",
+      "colour": "#72695C",
+      "shelfId": "BULK_SACKS",
+      "storeId": "S003"
+    },
+    {
+      "logo": "megabulk",
+      "rail": "wood",
+      "colour": "#707965",
+      "shelfId": "BULK_PRODUCE",
+      "storeId": "S003"
+    },
+    {
+      "storeId": "S001",
+      "rail": "wood",
+      "logo": "leaf",
+      "shelfId": "WELLNESS",
+      "colour": "#77847D"
+    },
+    {
+      "logo": "leaf",
+      "colour": "#7C8071",
+      "storeId": "S001",
+      "shelfId": "LUXURY",
+      "rail": "wood"
+    },
+    {
+      "logo": "cheapcart",
+      "colour": "#7D8580",
+      "storeId": "S002",
+      "shelfId": "EYE_LEVEL",
+      "rail": "wood"
+    },
+    {
+      "logo": "cheapcart",
+      "colour": "#898071",
+      "storeId": "S002",
+      "shelfId": "BARGAIN_BIN",
+      "rail": "wood"
+    },
+    {
+      "logo": "megabulk",
+      "colour": "#71695F",
+      "storeId": "S003",
+      "shelfId": "PALLETS",
+      "rail": "wood"
+    }
+  ],
+  "backTexture": "BistroArt/ProduceBacks",
+  "backRowEdges": [
+    0,
+    0.4850669412976313,
+    1
+  ]
+}

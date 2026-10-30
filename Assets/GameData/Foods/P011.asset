@@ -20,7 +20,9 @@ MonoBehaviour:
   ingredientAppeal: 6
   marketingLabel: Lean protein
   ingredientList: Chicken breast
-  sortingExplanation: 
+  sortingExplanation: 'Chicken breast is Yellow in this game: the game classifies
+    unprocessed animal foods as Yellow. The label "Lean protein" is marketing; the
+    Traffic Light depends on how the food is made, not on what the package says.'
   ingredientCount: 1
   storageType: 1
   claimId: 
@@ -29,4 +31,8 @@ MonoBehaviour:
     pending supervisor review. Not a real product label. Ingredient appeal is provisional
     0-10 gameplay tuning for a serving-weighted mean; independent of price and Traffic
     Light. Runtime import/calculation pending.
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: bad5853f129c5dc48a4451d16d76ab01, type: 3}
+  cardBack: {fileID: 21300000, guid: 619d7c9d046938046b69590ea202b7a6, type: 3}
+  lightLogo: 0
+  darkPlaque: 0
+  cardSprig: 0

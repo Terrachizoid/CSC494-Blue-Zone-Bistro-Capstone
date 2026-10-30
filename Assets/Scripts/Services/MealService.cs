@@ -163,14 +163,18 @@ public class MealService : IMealService
         if (oldHealth < 0 || oldHealth > 100)
             return Fail("Invalid customer state.");
         long healthChange = green * balance.healthPerGreenServing +
-            (long)greenCoverage.Count * balance.healthPerGreenDailyDozenCategory -
+            (long)(balance.dailyDozenNewGroupsOnly && customerState?.dailyDozenEaten != null
+                ? greenCoverage.Count(g => !customerState.dailyDozenEaten.Contains(g)) : greenCoverage.Count) * balance.healthPerGreenDailyDozenCategory -
             yellow * balance.healthPenaltyPerYellowServing - red * balance.healthPenaltyPerRedServing;
         healthChange = Math.Min(balance.maxHealthPerDish, healthChange); // Only positive gain is capped.
         int nextHealth = (int)Math.Max(0L, Math.Min(100L, oldHealth + healthChange));
         result.ingredientAppeal=(float)(appealSum/totalServings);
         result.activeCravings = state.currentDay>=balance.cravingsStartDay && customerState?.cravingDay==state.currentDay
             ? (customerState.activeCravings??Array.Empty<CravingTag>()).Where(t=>t!=CravingTag.None).Distinct().ToArray() : Array.Empty<CravingTag>();
-        result.cravingsResolved = result.recipeBuilt ? result.activeCravings.Intersect(recipe.cravingTags??Array.Empty<CravingTag>()).ToArray() : Array.Empty<CravingTag>();
+        // Recipe tags answer most requests; Comfort is answered by a tasty enough plate, whatever the recipe.
+        result.cravingsResolved = result.recipeBuilt ? result.activeCravings.Where(t =>
+            (recipe.cravingTags ?? Array.Empty<CravingTag>()).Contains(t) ||
+            (t == CravingTag.Comfort && result.ingredientAppeal >= balance.comfortMinimumAppeal)).ToArray() : Array.Empty<CravingTag>();
         int delightChange = result.recipeBuilt
             ? (int)Math.Min(balance.maxDelightPerDish, Math.Floor(
                 result.ingredientAppeal * (double)balance.ingredientAppealMultiplier + recipe.delightValue * (double)balance.recipeDelightMultiplier +
@@ -180,6 +184,10 @@ public class MealService : IMealService
         result.dishDelight=delightChange;
         result.dishHealthEffect=healthChange;
         CommunityProgress.Evaluate(state,balance,result);
+        // Global recipe fatigue: guests tire of a dish the bistro serves to everyone.
+        result.recipeRecentServes = RecipeFatigue.RecentServes(state, balance, recipe.id);
+        result.recipeFatigued = RecipeFatigue.IsFatigued(state, balance, recipe.id);
+        if (result.recipeFatigued && result.popularityDelta > 0) result.popularityDelta *= balance.recipeFatigueMultiplier;
 
         // Commit only after all validation succeeds. Failed requests never spend or consume anything.
         if (commit)
@@ -197,6 +205,11 @@ public class MealService : IMealService
             state.popularity=CommunityProgress.Clamp(state.popularity+result.popularityDelta,balance.maximumPopularity);
             state.communityWellbeing=CommunityProgress.Clamp(state.communityWellbeing+result.communityWellbeingDelta,balance.maximumCommunityWellbeing);
             RushCrashProgress.Served(customerState, state.currentDay, red > 0);
+            if (customerState.dailyDozenEaten == null) customerState.dailyDozenEaten = new List<DailyDozenCategory>();
+            foreach (var group in greenCoverage) if (!customerState.dailyDozenEaten.Contains(group)) customerState.dailyDozenEaten.Add(group);
+            if (state.recipeServes == null) state.recipeServes = new List<RecipeServeRecord>();
+            state.recipeServes.Add(new RecipeServeRecord { day = state.currentDay, recipeId = recipe.id, customerId = customer.id,
+                built = result.recipeBuilt, green = (int)green, yellow = (int)yellow, red = (int)red });
             state.flags.SetFlag(TutorialFlags.Served);
             if (result.recipeBuilt) state.flags.SetFlag(TutorialFlags.BuiltRecipe);
             state.money += result.moneyEarned;

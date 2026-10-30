@@ -72,6 +72,8 @@ public static class BistroContentValidator
                 !RangeValid(dialogue.minServedMealDelight, dialogue.maxServedMealDelight))
                 errors.Add($"Dialogue {dialogue.id}: inverted condition range.");
         }
+        CheckFrameworkWording(dialogues);
+        ReportMissingArt(foods, recipes);
         return Report(errors);
     }
 
@@ -96,6 +98,52 @@ public static class BistroContentValidator
         }
         if (!any) errors.Add($"The {label} database is empty.");
     }
+    // Nutrition framework (instructor plan §2): player text must not present oils or animal foods as healthy,
+    // or any food as "fine in moderation". Food marketing labels are deliberate traps and are not checked here;
+    // a phrase directly inside quotation marks is treated as quoting a label, not endorsing it.
+    // Warning only (Owen, 2026-10-28): the supervisor reviews wording by playing; this just points at candidates.
+    private static readonly string[] ForbiddenWording =
+        { "moderation", "heart-healthy", "heart healthy", "lean protein", "healthy fat", "good fat" };
+    private static void CheckFrameworkWording(DialogueDatabase dialogues)
+    {
+        void Scan(string where, string text)
+        {
+            if (string.IsNullOrEmpty(text)) return;
+            foreach (string phrase in ForbiddenWording)
+                for (int at = text.IndexOf(phrase, StringComparison.OrdinalIgnoreCase); at >= 0;
+                     at = text.IndexOf(phrase, at + 1, StringComparison.OrdinalIgnoreCase))
+                {
+                    bool quoted = at > 0 && "\"'\u201C\u2018".IndexOf(text[at - 1]) >= 0;
+                    if (!quoted) { Debug.LogWarning($"{where}: uses \"{phrase}\", which the nutrition framework avoids. Consider rephrasing, or quote it as a marketing label."); break; }
+                }
+        }
+        foreach (var sequence in dialogues.Dialogues.Where(d => d != null))
+            foreach (var line in sequence.lines ?? Array.Empty<DialogueLineData>())
+                if (line != null) Scan("Dialogue " + sequence.id, line.textTemplate);
+        var tutorials = AssetDatabase.LoadAssetAtPath<TutorialDatabase>(TutorialCsvImporter.AssetPath);
+        if (tutorials != null)
+            foreach (var tutorial in tutorials.tutorials.Where(t => t != null))
+                foreach (var step in tutorial.steps.Where(s => s != null)) Scan($"Tutorial {tutorial.id}/{step.stepId}", step.text);
+        var events = AssetDatabase.LoadAssetAtPath<EventDatabase>(EventCsvImporter.AssetPath);
+        if (events != null)
+            foreach (var e in events.events.Where(x => x != null))
+            { Scan("Event " + e.id, e.headline); Scan("Event " + e.id, e.summary); Scan("Event " + e.id, e.details); }
+    }
+
+    // Missing art is allowed (cards fall back to plain text), but list it so gaps are easy to find.
+    private static void ReportMissingArt(FoodDatabase foods, RecipeDatabase recipes)
+    {
+        var missing = new List<string>();
+        missing.AddRange(foods.Foods.Where(f => f != null && f.icon == null).Select(f => "food " + f.id + " (icon_path)"));
+        missing.AddRange(recipes.Recipes.Where(r => r != null && r.icon == null).Select(r => "recipe " + r.id + " (icon_path)"));
+        missing.AddRange(recipes.Recipes.Where(r => r != null && r.slots != null).SelectMany(r => r.slots)
+            .Where(s => s != null).Select(s => s.category).Distinct()
+            .Where(c => foods.CategoryIcon(c) == null).Select(c => "category " + c + " (Categories.csv)"));
+        if (missing.Count > 0)
+            Debug.LogWarning("Art not assigned, plain cards will be shown for: " + string.Join(", ", missing) +
+                ". Fill the path in the CSV or drop a sprite on the asset, then Import All CSV Content.");
+    }
+
     private static bool Report(List<string> errors)
     {
         foreach (string error in errors) Debug.LogError("Bistro content: " + error);

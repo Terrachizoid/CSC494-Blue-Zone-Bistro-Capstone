@@ -44,14 +44,16 @@ public static class ShoppingChecks
         Check(!loop.SubmitSorting(new List<SortingChoice> { answers[0],answers[0] }).success, "Duplicate answers accepted");
         Check(state.money == 80 && state.correctlySortedFoodIds.Count == 0, "Invalid answers mutated state");
         var result = loop.SubmitSorting(answers);
-        Check(result.success && result.accuracy == .5f && result.refundAmount == 3 && state.money == 83 &&
-            loop.Summary.moneySpent == 17 && state.correctlySortedFoodIds.Count == 1 && state.correctlySortedFoodIds[0] == "G", "Accuracy/refund/mastery incorrect");
-        Check(Math.Abs(state.inventory[1].purchaseCostPerServing - .85f) < .0001 && old.purchaseCostPerServing == 9, "Refund cost allocation incorrect");
-        Check(!loop.SubmitSorting(answers).success && state.money == 83 && loop.Summary.moneySpent == 17, "Double refund");
+        // Refund = 30% (test rate) of the $15 paid for the correctly sorted green food only; the wrong red food earns nothing.
+        Check(result.success && result.accuracy == .5f && result.refundAmount == 4.5f && state.money == 84.5f &&
+            loop.Summary.moneySpent == 15.5f && state.correctlySortedFoodIds.Count == 1 && state.correctlySortedFoodIds[0] == "G", "Accuracy/refund/mastery incorrect");
+        Check(Math.Abs(state.inventory[1].purchaseCostPerServing - .7f) < .0001 && Math.Abs(state.inventory[4].purchaseCostPerServing - 1f) < .0001 &&
+            old.purchaseCostPerServing == 9, "Refund cost allocation incorrect");
+        Check(!loop.SubmitSorting(answers).success && state.money == 84.5f && loop.Summary.moneySpent == 15.5f, "Double refund");
         Check(loop.BeginService() && loop.Phase == GamePhase.Results && loop.FinishDay().success, "Post-sorting flow failed");
         Check(loop.Checkout(cart).success && loop.SortingQuestions.Count == 1 && loop.SortingQuestions[0].foodId == "R", "Wrong food failed to return or mastered food repeated");
-        Check(loop.SubmitSorting(new List<SortingChoice> { new SortingChoice { foodId="R", answer=TrafficLight.Red } }).refundAmount == 6,
-            "Retry on later purchase did not reward full-cart accuracy");
+        Check(loop.SubmitSorting(new List<SortingChoice> { new SortingChoice { foodId="R", answer=TrafficLight.Red } }).refundAmount == 1.5f,
+            "Retry on later purchase must refund only the new food's own price");
         loop.BeginService(); loop.FinishDay();
         float before = state.money;
         Check(loop.Checkout(cart).success && loop.Phase == GamePhase.Results && state.money == before-20 && sorting.GetQuestions().Count == 0,

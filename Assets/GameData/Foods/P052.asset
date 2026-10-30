@@ -20,7 +20,10 @@ MonoBehaviour:
   ingredientAppeal: 8
   marketingLabel: Fortified with vitamins!
   ingredientList: Refined corn, Sugar, Glucose syrup, Salt, Colour
-  sortingExplanation: 
+  sortingExplanation: 'Frosted cereal is Red in this game: it is an ultra-processed
+    food. Look at the ingredient list: Refined corn, Sugar, Glucose syrup, Salt,
+    Colour. The label "Fortified with vitamins!" is marketing; the Traffic Light
+    depends on how the food is made, not on what the package says.'
   ingredientCount: 5
   storageType: 5
   claimId: 
@@ -28,4 +31,8 @@ MonoBehaviour:
   reviewNotes: "Added 2026-10-22 from the capstone plan's store/luxury examples (S2,
     S6, \xA73.6). Classification follows the plan text; pending supervisor review.
     Not a real product label. Ingredient appeal is provisional gameplay tuning."
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: f8b3cda7b3a3df94aaf495049822925c, type: 3}
+  cardBack: {fileID: 21300000, guid: 447e64be5a2a8b34d968c2a9d692ef34, type: 3}
+  lightLogo: 1
+  darkPlaque: 1
+  cardSprig: 0

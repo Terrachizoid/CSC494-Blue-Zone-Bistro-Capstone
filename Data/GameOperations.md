@@ -14,9 +14,11 @@ but GameLoop rejects it when sorting is enabled.
 Checkout snapshots distinct food questions and the configured maximum discount in the
 session's `ShoppingReceipt`. `correctlySortedFoodIds` excludes previously correct foods.
 Wrong answers remain eligible on later purchases. UI submits only `SortingChoice` records;
-FoodSortingService returns feedback and applies `cart total * maximumSortingDiscount * accuracy`,
-rounded to cents, exactly once. Default maximum discount is 0.30. Empty question sets grant
-no refund. Purchased batches' historical unit costs and daily spending reflect the refund;
+FoodSortingService returns feedback and applies, exactly once, `maximumSortingDiscount` × what
+this checkout paid for each correctly sorted new food (`SortingQuestion.cost`, all offers of that food;
+each share rounded to cents). Known foods and wrong answers refund nothing (2026-10-28, Owen; was
+30% of the whole cart × accuracy). Default discount is 0.50. Empty question sets grant no refund.
+Only the refunded foods' batches record the lower unit cost; daily spending reflects the refund;
 minimum catalogue prices used for meal scoring are unchanged. Sorting feedback remains visible
 until Continue. No reattempt of that checkout is possible.
 
@@ -43,7 +45,7 @@ No per-frame Update loop is needed for these button-driven commands.
 
 Press Play with the configured GameBootstrap scene object active. Bootstrap adds
 `BistroUIScreen`, which builds the Canvas UI at runtime (see [UI framework](UIFramework.md)).
-The old IMGUI `GreyboxUIController` was removed from startup on 2026-10-22.
+The old IMGUI `GreyboxUIController` was removed from startup on 2026-10-22 and its file emptied on 2026-10-28.
 
 Market: pan the city map, enter stores and shelves, drag packages into the cart,
 inspect the pantry, review the cart, and confirm checkout before sorting/service.
@@ -106,7 +108,7 @@ Run **Tools > Blue Zone Bistro > Import All CSV Content** after changing the CSV
 or **Import Dialogue CSV** for dialogue-only changes. GameBootstrapSetup automatically
 assigns DialogueDatabase alongside the other databases. Bootstrap constructs the
 existing DialogueService with the session's flags/history through EncounterScheduler.
-Do not attach DialogueRuntimeExample for gameplay; it remains a standalone example.
+`DialogueRuntimeExample` and `GameProgressState` were unused and were emptied on 2026-10-28.
 DialogueDatabase also records an import fingerprint. Editor setup detects changed CSVs
 or legacy assets with no fingerprint and reimports dialogue automatically before play
 and builds. A rejected automatic import blocks entering play/building with stale dialogue;
@@ -185,10 +187,8 @@ customers; each is served at most once per day. Ending service with no meals is 
 
 Purchasing buys one package, reading price and servings from StoreListingData and
 storage type from its FoodData reference. Each purchase gets a unique batch ID.
-Listing unlock flags use `state.flags`. Store memberships are intentionally cut
-(user decision, 2026-10-22): MegaBulk opens by `unlock_day` 4 with `requires_membership=false`.
-The dormant membership check (`StoreData.requiresMembership`, `state.storeMembershipIds`)
-remains in code until cleanup; do not build UI for it.
+Listing unlock flags use `state.flags`. Store memberships were cut (user decision, 2026-10-22)
+and their code and CSV columns removed on 2026-10-28: MegaBulk simply opens by `unlock_day` 4.
 
 Serving accepts batch IDs and quantities, not mutable InventoryEntry references.
 Repeated selections of the same batch are combined before stock validation.

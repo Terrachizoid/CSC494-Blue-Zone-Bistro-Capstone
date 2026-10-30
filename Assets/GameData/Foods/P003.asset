@@ -20,7 +20,9 @@ MonoBehaviour:
   ingredientAppeal: 4
   marketingLabel: Plain staple
   ingredientList: Carrots, Green beans, Peas
-  sortingExplanation: 
+  sortingExplanation: 'Frozen vegetables is Green in this game: a whole plant food,
+    with nothing harmful added and nothing good taken away. It counts toward the
+    Daily Dozen group: Other vegetables.'
   ingredientCount: 3
   storageType: 2
   claimId: 
@@ -29,4 +31,8 @@ MonoBehaviour:
     pending supervisor review. Not a real product label. Ingredient appeal is provisional
     0-10 gameplay tuning for a serving-weighted mean; independent of price and Traffic
     Light. Runtime import/calculation pending.
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 0a5eefe979d702649ac38454bbd58abb, type: 3}
+  cardBack: {fileID: 21300000, guid: 9736fcace35f19f4cbfeb7241eef1eba, type: 3}
+  lightLogo: 0
+  darkPlaque: 0
+  cardSprig: 0

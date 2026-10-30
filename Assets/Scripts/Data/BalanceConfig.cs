@@ -12,7 +12,8 @@ public class BalanceConfig : ScriptableObject
     [Range(0,1)] public float twoEventChance=.25f;
     [Min(0)] public float startingMoney = 30f;
     [Header("First successful food sorting reward")]
-    [Range(0, 1)] public float maximumSortingDiscount = 0.30f;
+    // Refund on each correctly sorted new food's price (known foods and wrong answers earn nothing).
+    [Range(0, 1)] public float maximumSortingDiscount = 0.50f;
     [Header("Prototype tuning; game values, not real-world shelf life")]
     [Min(1)] public int totalDays = 6;
     [Min(1)] public int freshDays = 2;
@@ -54,6 +55,17 @@ public class BalanceConfig : ScriptableObject
     [Tooltip("Charged each morning from rentStartDay. Money may go negative.")] [Min(0)] public float rentPerDay = 0f;
     [Tooltip("Walk-in takeaway income per popularity point above the threshold, paid when service closes.")] [Min(0)] public float walkInIncomePerPopularity = 0f;
     [Min(0)] public float walkInPopularityThreshold = 450f;
+    [Tooltip("Indulgent plates draw crowds: extra popularity per point of plate appeal above popularityAppealPivot (scaled by requests answered). 0 turns it off.")] [Min(0)] public float popularityPerAppealPoint = 0f;
+    [Range(0, 10)] public float popularityAppealPivot = 7f;
+    [Tooltip("If on, a dish's Daily Dozen health bonus counts only groups this guest has not eaten before in the run.")] public bool dailyDozenNewGroupsOnly = false;
+    [Tooltip("A Comfort request is met by any built plate whose average ingredient appeal is at least this.")] [Range(0, 10)] public float comfortMinimumAppeal = 7f;
+    [Tooltip("Recipe fatigue: servings of one recipe (all guests) within this many days, counting today.")] [Min(1)] public int recipeFatigueWindowDays = 2;
+    [Tooltip("Recipe fatigue starts when a recipe has already been served this many times in the window. 0 turns it off.")] [Min(0)] public int recipeFatigueThreshold = 0;
+    [Tooltip("Positive popularity from a fatigued recipe is multiplied by this.")] [Range(0, 1)] public float recipeFatigueMultiplier = 0.5f;
+    [Tooltip("At most once a day, a farmer gives free low-appeal food for one recipe when nothing on the menu can be completed.")] public bool foodAidEnabled = false;
+    [Tooltip("Farmer gifts are green foods with ingredient appeal at or below this.")] [Range(0, 10)] public float foodAidMaxAppeal = 4f;
+    [Tooltip("Days before gifted food spoils.")] [Min(1)] public int foodAidShelfLifeDays = 1;
+    [Tooltip("Pantry batches sell back for this share of the lower of the cheapest shelf price and the price paid, per serving.")] [Range(0, 1)] public float pantrySellRate = 0f;
     [Tooltip("Popularity lost per active craving a built dish leaves unresolved (day cravingsStartDay onward).")] [Min(0)] public float popularityPerMissedCraving = 0f;
     [Header("Customer visits and finance")]
     [Min(1)] public int maxDelight = 100;

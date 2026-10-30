@@ -18,22 +18,23 @@ MonoBehaviour:
   description: Bulk store opens on day four; larger packages cost more upfront but
     less per serving.
   unlockDay: 4
-  requiresMembership: 0
-  membershipCost: 10
   defaultPriceDisplayStyle: 3
   shelves:
   - id: PALLETS
     displayName: Pallet displays
     artwork: {fileID: 0}
+    colour: '#71695F'
   - id: BULK_SACKS
     displayName: Bulk sacks
     artwork: {fileID: 0}
+    colour: '#72695C'
   - id: BULK_PRODUCE
     displayName: Bulk produce
     artwork: {fileID: 0}
+    colour: '#707965'
   approvalStatus: 0
   reviewNotes: 'Restocked 2026-10-22: junk and bulk animal products on pallets, cheapest
     dry staples in back sacks, giant produce packs that spoil. Memberships cut (user
     decision); opens day 4.'
-  exteriorIcon: {fileID: 0}
-  shopBackground: {fileID: 0}
+  logo: {fileID: 21300000, guid: 8ffec30b3842de74d8cb28aa3bf395c2, type: 3}
+  shopBackground: {fileID: 21300000, guid: 50d5308918fb5c844b5fd5d904348000, type: 3}

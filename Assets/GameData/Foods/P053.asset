@@ -20,7 +20,10 @@ MonoBehaviour:
   ingredientAppeal: 8
   marketingLabel: 2 for 1!
   ingredientList: Pork, Water, Salt, Corn syrup, Sodium nitrite
-  sortingExplanation: 
+  sortingExplanation: 'Hot dogs is Red in this game: the game classifies processed
+    animal foods as Red. Look at the ingredient list: Pork, Water, Salt, Corn syrup,
+    Sodium nitrite. The label "2 for 1!" is marketing; the Traffic Light depends
+    on how the food is made, not on what the package says.'
   ingredientCount: 5
   storageType: 1
   claimId: 
@@ -28,4 +31,8 @@ MonoBehaviour:
   reviewNotes: "Added 2026-10-22 from the capstone plan's store/luxury examples (S2,
     S6, \xA73.6). Classification follows the plan text; pending supervisor review.
     Not a real product label. Ingredient appeal is provisional gameplay tuning."
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 0f52504154dd89f46bfad4d59c3d71e0, type: 3}
+  cardBack: {fileID: 21300000, guid: 7ecca527f5f061b42b8081fe14b0d626, type: 3}
+  lightLogo: 0
+  darkPlaque: 0
+  cardSprig: 0

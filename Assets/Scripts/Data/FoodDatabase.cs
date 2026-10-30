@@ -50,7 +50,33 @@ public class FoodDatabase : ScriptableObject
     [SerializeField]
     private List<FoodData> foods = new List<FoodData>();
 
+    // One icon per recipe category (Categories.csv). Used on recipe cards and meal slots.
+    [Serializable]
+    public class CategoryArt
+    {
+        public FoodCategory category;
+        public Sprite icon;
+    }
+
+    [SerializeField] private List<CategoryArt> categoryArt = new List<CategoryArt>();
+    public IReadOnlyList<CategoryArt> CategoryArtwork => categoryArt;
+    public void SetCategoryArt(List<CategoryArt> items) { categoryArt = items ?? new List<CategoryArt>(); }
+    public Sprite CategoryIcon(FoodCategory category)
+    {
+        foreach (var entry in categoryArt)
+            if (entry != null && entry.category == category) return entry.icon;
+        return null;
+    }
+
     private Dictionary<string, FoodData> byId;
+    private Dictionary<FoodCategory, List<FoodData>> byCategory;
+
+    // Foods of one recipe category, built with the ID index (used by the farmer's food aid).
+    public IReadOnlyList<FoodData> InCategory(FoodCategory category)
+    {
+        EnsureIndex();
+        return byCategory.TryGetValue(category, out var list) ? list : (IReadOnlyList<FoodData>)Array.Empty<FoodData>();
+    }
 
     public IReadOnlyList<FoodData> Foods => foods;
 
@@ -88,6 +114,7 @@ public class FoodDatabase : ScriptableObject
     {
         byId = new Dictionary<string, FoodData>(
             StringComparer.OrdinalIgnoreCase);
+        byCategory = new Dictionary<FoodCategory, List<FoodData>>();
 
         foreach (FoodData food in foods)
         {
@@ -96,12 +123,15 @@ public class FoodDatabase : ScriptableObject
                 continue;
             }
 
+            if (!byCategory.TryGetValue(food.recipeCategory, out var group))
+                byCategory[food.recipeCategory] = group = new List<FoodData>();
             if (!byId.TryAdd(food.id, food))
             {
                 Debug.LogError(
                     $"Duplicate FoodData ID '{food.id}'.",
                     this);
             }
+            else group.Add(food);
         }
     }
 }

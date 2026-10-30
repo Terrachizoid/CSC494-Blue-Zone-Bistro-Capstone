@@ -20,7 +20,8 @@ MonoBehaviour:
   ingredientAppeal: 8
   marketingLabel: Convenient snack or ready-to-cook product
   ingredientList: Carbonated water, Sugar, Flavouring, Caramel colour
-  sortingExplanation: 
+  sortingExplanation: 'Soda is Red in this game: it is an ultra-processed food. Look
+    at the ingredient list: Carbonated water, Sugar, Flavouring, Caramel colour.'
   ingredientCount: 4
   storageType: 5
   claimId: 
@@ -29,4 +30,8 @@ MonoBehaviour:
     pending supervisor review. Not a real product label. Ingredient appeal is provisional
     0-10 gameplay tuning for a serving-weighted mean; independent of price and Traffic
     Light. Runtime import/calculation pending.
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 9d3cf5bc2931eea47a61a78b852e5efc, type: 3}
+  cardBack: {fileID: 21300000, guid: 0adf1397cada40e4fa3bedf9ccc03edb, type: 3}
+  lightLogo: 0
+  darkPlaque: 0
+  cardSprig: 0

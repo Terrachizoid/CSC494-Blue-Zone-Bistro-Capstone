@@ -36,4 +36,5 @@ MonoBehaviour:
   reviewNotes: Generic category template inspired by the plan plant-food meals and
     dessert variety. Name is a suggestion, not an exact-ingredient constraint. Traffic
     Light effects come from chosen foods; fictional balance values.
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: d8d4e159a5685784fa83d8fb0a8e3dbc, type: 3}
+  cardBack: {fileID: 21300000, guid: b28d5b9a9fe415342bfe5cb46870e7c9, type: 3}

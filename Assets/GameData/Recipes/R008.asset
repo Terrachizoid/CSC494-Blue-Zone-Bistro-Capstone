@@ -38,4 +38,5 @@ MonoBehaviour:
     Light effects come from chosen foods; fictional balance values. Creamy tag assumes
     a mashed or blended fruit base with a crunchy seed topping; preparation is abstracted
     by the recipe.
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: f3efb1b76039ae44ebd543c595551892, type: 3}
+  cardBack: {fileID: 21300000, guid: 48a204d835df9f04093eafb9de13d478, type: 3}

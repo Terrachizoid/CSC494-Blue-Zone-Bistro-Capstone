@@ -27,7 +27,8 @@ public partial class BistroUIScreen
         renderedContext=ScrollContext();
         // Layout must settle before ScrollRect can calculate a meaningful normalized position.
         Canvas.ForceUpdateCanvases();
-        foreach(var grid in screen.GetComponentsInChildren<BistroResponsiveGrid>())grid.Apply();
+        foreach(var grid in screen.GetComponentsInChildren<BistroResponsiveGrid>())if(grid.enabled)grid.Apply();
+        foreach(var shelfLayout in screen.GetComponentsInChildren<BistroShelfLayout>())shelfLayout.Apply();
         Canvas.ForceUpdateCanvases();
         foreach(var scroll in screen.GetComponentsInChildren<ScrollRect>().Where(s=>!s.horizontal))
         {

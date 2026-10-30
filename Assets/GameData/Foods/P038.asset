@@ -20,7 +20,9 @@ MonoBehaviour:
   ingredientAppeal: 6
   marketingLabel: Plain staple
   ingredientList: Edamame
-  sortingExplanation: 
+  sortingExplanation: 'Edamame is Green in this game: a whole plant food, with nothing
+    harmful added and nothing good taken away. It counts toward the Daily Dozen group:
+    Beans.'
   ingredientCount: 1
   storageType: 2
   claimId: 
@@ -29,4 +31,8 @@ MonoBehaviour:
     pending supervisor review. Not a real product label. Ingredient appeal is provisional
     0-10 gameplay tuning for a serving-weighted mean; independent of price and Traffic
     Light. Runtime import/calculation pending.
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 203be7549a877c744a30d469a3710f9d, type: 3}
+  cardBack: {fileID: 21300000, guid: ebb551082d326bd4da95d1ceec5772bc, type: 3}
+  lightLogo: 0
+  darkPlaque: 0
+  cardSprig: 0

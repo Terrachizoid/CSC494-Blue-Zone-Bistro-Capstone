@@ -13,7 +13,10 @@ public static class AllContentCsvImporter
 
         // Dependency order matters. Dialogue can reference Claims, Recipes,
         // and Customers, so it is imported last.
+        // Images under Assets/Art must be sprites before CSV paths can resolve to them.
+        BistroArtImport.EnsureSprites();
         FoodCsvImporter.ImportFoods();
+        CategoryCsvImporter.ImportCategories();
         StoreCsvImporter.ImportStores();
         ClaimCsvImporter.ImportClaims();
         StoreListingCsvImporter.ImportPrices();

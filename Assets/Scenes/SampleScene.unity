@@ -259,7 +259,7 @@ MonoBehaviour:
   endings: {fileID: 11400000, guid: b60279ad29e3d0f4cb10e437213f3cd7, type: 2}
   events: {fileID: 11400000, guid: c83ba393f9da2204090b42da11f43bde, type: 2}
   balance: {fileID: 11400000, guid: 13db58f120d839e42a6b8e84616be0df, type: 2}
-  uiTheme: {fileID: 0}
+  uiTheme: {fileID: 11400000, guid: 2740a8fc5554fe14f8c1bd2279ab41cf, type: 2}
   tutorials: {fileID: 11400000, guid: c4d8cacb54f1bd842867c32e8ea5da74, type: 2}
   state:
     eventPlanDay: 0
@@ -273,6 +273,8 @@ MonoBehaviour:
       moneyEarned: 0
       walkInIncome: 0
       rentPaid: 0
+      pantrySales: 0
+      foodAidMessage: 
       dishes: []
       skippedCustomerIds: []
     money: 30
@@ -293,7 +295,6 @@ MonoBehaviour:
     dialogueHistory:
       completedOnceIds: []
       lastPlayed: []
-    storeMembershipIds: []
     correctlySortedFoodIds: []
     shoppingReceipt:
       day: 0
@@ -311,6 +312,8 @@ MonoBehaviour:
         discountRate: 0
         refundAmount: 0
         feedback: []
+    lastFoodAidDay: 0
+    recipeServes: []
 --- !u!4 &317186751
 Transform:
   m_ObjectHideFlags: 0

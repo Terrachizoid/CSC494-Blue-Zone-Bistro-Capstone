@@ -44,9 +44,6 @@ public class PurchaseService : IPurchaseService, ICartPurchaseService
             return "This listing or store is locked.";
         if (!string.IsNullOrWhiteSpace(listing.requiredFlag) && !state.flags.HasFlag(listing.requiredFlag))
             return "The required unlock flag is missing.";
-        if (listing.store.requiresMembership && !state.storeMembershipIds.Exists(
-                id => string.Equals(id, listing.store.id, StringComparison.OrdinalIgnoreCase)))
-            return "This store requires membership.";
         string closed=effects.ClosureReason(listing.store.id);
         if(closed!=null)return closed;
         var price=effects.Quote(listing);if(!price.valid)return price.error;
@@ -105,7 +102,7 @@ public class PurchaseService : IPurchaseService, ICartPurchaseService
             maximumDiscount = balance.maximumSortingDiscount };
         var batches = new List<InventoryEntry>();
         var mastered = new HashSet<string>(state.correctlySortedFoodIds ?? new List<string>(), StringComparer.OrdinalIgnoreCase);
-        var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        var questionByFood = new Dictionary<string, SortingQuestion>(StringComparer.OrdinalIgnoreCase);
         foreach (var item in cart)
         {
             var listing = listings.GetById(item.listingId);
@@ -115,9 +112,15 @@ public class PurchaseService : IPurchaseService, ICartPurchaseService
                 batches.Add(batch);
                 receipt.batchIds.Add(batch.inventoryEntryId);
             }
-            if (seen.Add(listing.food.id) && !mastered.Contains(listing.food.id))
-                receipt.questions.Add(new SortingQuestion { foodId = listing.food.id,
-                    listingId = listing.id, correctAnswer = listing.food.trafficLight });
+            if (mastered.Contains(listing.food.id)) continue;
+            if (!questionByFood.TryGetValue(listing.food.id, out var question))
+            {
+                question = new SortingQuestion { foodId = listing.food.id,
+                    listingId = listing.id, correctAnswer = listing.food.trafficLight };
+                questionByFood.Add(listing.food.id, question);
+                receipt.questions.Add(question);
+            }
+            question.cost += effects.Quote(listing).effectivePrice * item.packageQuantity;
         }
         // All validation and batch preparation precede the single transaction commit.
         receipt.sortingSubmitted = receipt.questions.Count == 0;

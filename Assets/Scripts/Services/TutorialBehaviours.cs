@@ -28,7 +28,7 @@ public class ShoppingTutorialBehaviour : ITutorialBehaviour
     public bool Feasible(IntroMealPlan plan,string step)=>plan.ShoppingFeasible();
     public bool IsText(string step)=>false;
     public string Check(string step,TutorialAction action,IntroMealPlan plan,List<CartEntry> cart,string recipeId,ServeResult preview)
-        =>action==TutorialAction.Checkout&&!plan.CartReady(cart)?"Your cart and pantry do not yet cover any recipe on today's menu (for example, "+(plan.Recipe?.displayName??"a recipe")+" needs "+plan.Requirements+"). Add enough ingredients before checkout.":null;
+        =>action==TutorialAction.Checkout&&!plan.CartReady(cart)?"Your cart and pantry do not yet cover any recipe on today's menu. On today's menu, "+plan.Examples+". Each food's category must match the slot exactly. Add enough ingredients before checkout.":null;
     public string Next(string step,TutorialAction action)=>action==TutorialAction.Checkout?null:step;
     public string Continue(string step)=>step;
 }
