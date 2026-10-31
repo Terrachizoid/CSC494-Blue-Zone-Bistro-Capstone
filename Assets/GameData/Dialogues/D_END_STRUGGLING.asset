@@ -43,16 +43,16 @@ MonoBehaviour:
       to grow.
     claim: {fileID: 0}
     portrait: {fileID: 0}
-    backgroundImage: {fileID: 21300000, guid: 927909a3902d09741b64d2196988524c, type: 3}
+    backgroundImage: {fileID: 21300000, guid: 2c70d4ab8a50434384126e63a67aca41, type: 3}
     emotion: 
     voiceOver: {fileID: 0}
   - lineOrder: 1
     speakerId: Narrator
-    textTemplate: Some choices did not work out. Every shopping trip and every meal
-      offered something to learn.
+    textTemplate: Your opening days are over, and there's still room for your bistro
+      and its community to grow.
     claim: {fileID: 0}
     portrait: {fileID: 0}
-    backgroundImage: {fileID: 21300000, guid: f6b91f3cb252c1641bad7b98b8de6d01, type: 3}
+    backgroundImage: {fileID: 21300000, guid: 2c70d4ab8a50434384126e63a67aca41, type: 3}
     emotion: 
     voiceOver: {fileID: 0}
   - lineOrder: 2
@@ -61,7 +61,7 @@ MonoBehaviour:
       and make each plate count.'
     claim: {fileID: 0}
     portrait: {fileID: 0}
-    backgroundImage: {fileID: 21300000, guid: f3f993fdf2cbfa7419a83d8c86aba33d, type: 3}
+    backgroundImage: {fileID: 21300000, guid: 2c70d4ab8a50434384126e63a67aca41, type: 3}
     emotion: 
     voiceOver: {fileID: 0}
   approvalStatus: 0

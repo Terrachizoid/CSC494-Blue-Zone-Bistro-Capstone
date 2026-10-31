@@ -20,6 +20,9 @@ public enum EventOperation { Add, Multiply, Close }
     public int minDay=2, maxDay=-1, durationDays=1;
     public float weight=1;
     public Sprite image;
+    // Optional compact art; defaults to the same simple emblem. CSV-owned presentation only.
+    public Sprite thumbnail;
+    public string paperColor = "#E9E2D0", accentColor = "#A6B7A0";
     public AudioClip notificationAudio, detailAudio;
     public ClaimData[] codex=Array.Empty<ClaimData>();
     public List<EventEffect> effects=new List<EventEffect>();

@@ -39,7 +39,7 @@ MonoBehaviour:
   lines:
   - lineOrder: 0
     speakerId: U004
-    textTemplate: I am getting better at planning my break before the afternoon rush.
+    textTemplate: I'm getting better at planning my break before the afternoon rush.
     claim: {fileID: 0}
     portrait: {fileID: 0}
     backgroundImage: {fileID: 0}

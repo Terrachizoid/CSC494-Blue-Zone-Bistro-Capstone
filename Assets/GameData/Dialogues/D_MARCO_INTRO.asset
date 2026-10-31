@@ -41,7 +41,7 @@ MonoBehaviour:
   lines:
   - lineOrder: 0
     speakerId: U005
-    textTemplate: I am Marco. I work on the boats, so fish has always been the centre
+    textTemplate: I'm Marco. I work on the boats, so fish has always been the centre
       of my meals.
     claim: {fileID: 0}
     portrait: {fileID: 0}
@@ -50,7 +50,7 @@ MonoBehaviour:
     voiceOver: {fileID: 0}
   - lineOrder: 1
     speakerId: U005
-    textTemplate: I am curious about your bean dishes. Something hearty and familiar
+    textTemplate: I'm curious about your bean dishes. Something hearty and familiar
       would be a good place to start.
     claim: {fileID: 0}
     portrait: {fileID: 0}

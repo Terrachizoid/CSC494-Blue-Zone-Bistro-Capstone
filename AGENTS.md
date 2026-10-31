@@ -106,3 +106,11 @@ Toolbar/map markers/sorting bins use BistroSurface shading and authored sprig de
 
 ### Contextual actions (2026-10-29)
 Use BistroActionButton with an explicit Primary/Secondary/Caution role for transient actions. Palette is configurable in BistroUITheme (sage/cream/clay defaults); Next is primary, Previous/Back secondary, Skip customer caution. Keep toolbar/main-menu controls and world indicators separate.
+
+### Ending artwork (2026-10-30)
+Five individual Ending_<ID>.png illustrations under Assets/Art/Endings are referenced in the endings CSV and all corresponding dialogue background paths. The full-scene ending uses the shared bottom dialogue and a compact title plaque. Preserve outcome rules and persisted selection. These character-free illustrations are review placeholders, not final 3D art.
+
+Ending cleanup: seven unused legacy ending PNGs/metas removed after path/GUID reference checks. Keep blue_2, niche_0, popular_1, struggling_0 and struggling_2: news events still reference them. Ending panels/buttons already use the current decorated title, shared dialogue and action roles.
+
+### Event newspapers (2026-10-30)
+Events.csv owns image_path, optional thumbnail_path, paper_color and accent_color. Individual transparent icons live in Art/Events; current thumbnails reuse their simple full illustration. Expanded events and Codex use newspaper overlays, not the shared dialogue panel. Tower cards show headline/icon only. Keep live text separate, preserve optional art fallbacks and HTTP(S) source gating. All old geometric ending art is now removed: the five event consumers were migrated. Event services and slot semantics were not changed. See Data/Events.md for verification limits.

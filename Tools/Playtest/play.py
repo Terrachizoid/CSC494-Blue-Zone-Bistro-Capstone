@@ -270,7 +270,7 @@ class Game:
             for lid, q in self.cart.items():
                 l = next(x for x in self.D.C.listings if x["id"] == lid); counts[l["food"]] += l["servings"] * q
             if not any(self.can_make(r, counts) for r in self.recipes_today()):
-                return "[TUTORIAL] Your cart and pantry do not yet cover any recipe on today's menu. Add enough ingredients before checkout."
+                return "[TUTORIAL] Your cart and pantry can't make any recipe on today's menu yet. Open Recipes to see what each dish needs."
         self.money -= total; self.summary["spent"] += total
         for x in self.inv: x["fresh"] = False  # only this checkout's batches share its sorting refund
         new = []
@@ -430,7 +430,7 @@ class Game:
                       (f" · not answered: {', '.join(t for t in crav if t not in ans)}" if len(ans) < len(crav) else "")) if crav else "\nThis guest has no request today.") +
                     "\nHow the guest reacts, and what they pay, is revealed after serving.")
         if self.first_meal is None and not e["built"]:
-            return "[TUTORIAL] For this first lesson, build the recipe successfully before serving. Review its slot warnings."
+            return "[TUTORIAL] For your first dish, fill every slot exactly. Slots with a red outline still need something."
         for f in [f for s in sel for f in s] + extras:
             b = sorted([x for x in self.usable() if x["food"] == f], key=lambda x: (x["days"] == -1, x["days"], x["id"]))[0]; b["servings"] -= 1
         self.inv = [x for x in self.inv if x["servings"] > 0]

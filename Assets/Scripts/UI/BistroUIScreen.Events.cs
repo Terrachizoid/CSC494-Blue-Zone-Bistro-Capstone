@@ -23,7 +23,7 @@ public partial class BistroUIScreen
             e.target==EventTarget.Store?game.Queries.GetStores().Find(s=>s.id==e.targetId)?.displayName:"Bistro";
         target=target??e.targetId;
         if(e.type==EventEffectType.Availability)return target+": temporarily closed";
-        if(e.type==EventEffectType.AttendancePopularity)return $"Attendance publicity: {e.value:+0;-0;0} (earned popularity unchanged)";
+        if(e.type==EventEffectType.AttendancePopularity)return "More people are curious about the bistro: extra guests may visit";
         return target+(e.operation==EventOperation.Add?$": package price {e.value:+$0.00;-$0.00;$0.00}":$": package prices {(e.value-1)*100:+0.#;-0.#;0}%");
     }
     private void TickEventToast()
@@ -39,9 +39,12 @@ public partial class BistroUIScreen
             var definition=game.Queries.GetEvent(toastRecord.eventId);
             eventToast=BistroShelfStyle.Panel(canvas.transform,"Event notification",BistroShelfStyle.Cream,new Vector2(.5f,.5f),new Vector2(.5f,.5f)); eventToast.pivot=new Vector2(.5f,0);eventToast.sizeDelta=new Vector2(350,130);
             var tail=BistroWidgets.Box(eventToast,"Speech bubble tail",BistroShelfStyle.Cream,new Vector2(.48f,0),new Vector2(.52f,0));tail.sizeDelta=new Vector2(14,14);tail.localRotation=Quaternion.Euler(0,0,45);tail.GetComponent<Image>().raycastTarget=false;
-            var image=BistroWidgets.Box(eventToast,"News image",theme.accent,new Vector2(.02f,.08f),new Vector2(.26f,.92f));
-            if(definition?.image!=null){image.GetComponent<Image>().sprite=definition.image;image.GetComponent<Image>().color=Color.white;image.GetComponent<Image>().preserveAspect=true;}
-            BistroWidgets.Label(eventToast,(definition?.headline??toastRecord.eventId)+"\n"+(definition?.summary??"")+"\nClick to read",theme,new Vector2(.28f,.04f),new Vector2(.97f,.96f),19,BistroShelfStyle.Ink);
+            eventToast.GetComponent<Image>().color=NewsColor(definition?.paperColor,BistroShelfStyle.Cream);
+            tail.GetComponent<Image>().color=eventToast.GetComponent<Image>().color;
+            var image=NewsArt(eventToast,definition?.thumbnail??definition?.image,new Vector2(.02f,.08f),new Vector2(.29f,.92f));
+            BistroShelfStyle.Text(eventToast,definition?.headline??toastRecord.eventId,theme,new Vector2(.32f,.17f),new Vector2(.95f,.85f),21,BistroShelfStyle.Ink,true);
+            NewsRule(eventToast,new Vector2(.32f,.10f),new Vector2(.95f,.12f),NewsColor(definition?.accentColor,BistroShelfStyle.Green));
+            NewsPaperFinish(eventToast);
             var button=eventToast.gameObject.AddComponent<Button>();var record=toastRecord;button.onClick.AddListener(()=>OpenEvent(record));
             image.GetComponent<Image>().raycastTarget=false;PlayEventAudio(definition?.notificationAudio);
         }
@@ -60,61 +63,92 @@ public partial class BistroUIScreen
         point.y=Mathf.Clamp(point.y,area.rect.yMin+20,area.rect.yMax-area.rect.height*.09f-145);
         eventToast.anchoredPosition=point;
         eventToast.localScale=Vector3.one*(theme.reducedMotion?1:Mathf.Lerp(.9f,1,Mathf.Clamp01(toastElapsed/.25f)));
-    }    private void EventPanel()
+    }
+    private static Texture2D newsPaperGrain;
+    private void NewsPaperFinish(RectTransform parent)
     {
-        if(modal=="event-detail"&&!choosingEventCodex){
-            if(eventCodex!=null){
-                var entry=eventCodex;
-                bool linked=Uri.TryCreate(entry.sourceUrl,UriKind.Absolute,out var source)&&(source.Scheme=="https"||source.Scheme=="http");
-                DialoguePanel(entry.shortText??"Codex",(entry.codexText??"Evidence content has not been supplied yet.")+"\n\n"+entry.sourceTitle+"\n"+entry.sourceCitation+(!entry.sourceChecked?"\nPrototype / source not verified.":""),"Back to event",()=>eventCodex=null,
-                    decorate:frame=>{if(linked)BistroActionButton.Create(frame,"Open source",theme,new Vector2(.57f,.045f),new Vector2(.75f,.19f),BistroActionRole.Secondary,()=>Application.OpenURL(source.AbsoluteUri));});
-            }else{
-                var news=game.Queries.GetEvent(detailRecord?.eventId);
-                string description=$"Days {detailRecord?.startDay}–{detailRecord?.expiresOnDay-1} · "+(detailRecord?.Active(game.State.currentDay)==true?"Active":"Expired")+"\n\n"+(news?.details??"Details are unavailable.")+"\n\n"+(detailRecord==null?"":string.Join("\n",detailRecord.effects.Select(EffectText)));
-                var entries=(news?.codex??Array.Empty<ClaimData>()).Where(c=>c!=null).ToArray();
-                DialoguePanel(news?.headline??"Neighbourhood news",description,"All news",()=>{modal="news";if(eventAudio!=null)eventAudio.Stop();},()=>{modal=null;if(eventAudio!=null)eventAudio.Stop();},
-                    decorate:frame=>{if(entries.Length>0)BistroActionButton.Create(frame,"Codex",theme,new Vector2(.42f,.045f),new Vector2(.56f,.19f),BistroActionRole.Secondary,()=>Change(()=>{if(entries.Length==1)eventCodex=entries[0];else choosingEventCodex=true;}));});
-            }
-            return;
+        if(newsPaperGrain==null){
+            newsPaperGrain=new Texture2D(128,128,TextureFormat.RGBA32,false){name="News paper grain",wrapMode=TextureWrapMode.Repeat,filterMode=FilterMode.Bilinear,hideFlags=HideFlags.HideAndDontSave};
+            var random=new System.Random(716);var pixels=new Color[128*128];
+            for(int i=0;i<pixels.Length;i++)pixels[i]=new Color(.20f,.16f,.10f,(float)random.NextDouble()*.055f);
+            newsPaperGrain.SetPixels(pixels);newsPaperGrain.Apply(false,true);
         }
-        var shade=BistroWidgets.Box(screen,"Modal blocker",new Color(0,0,0,.8f),Vector2.zero,new Vector2(1,.91f));
-        var panel=BistroWidgets.Box(shade,"News",theme.background,new Vector2(.06f,.06f),new Vector2(.94f,.91f));
-        BistroWidgets.Button(panel,"Close",theme,new Vector2(.82f,.90f),new Vector2(.97f,.98f),()=>Change(()=>{modal=null;eventCodex=null;if(eventAudio!=null)eventAudio.Stop();}));
+        var layer=new GameObject("Paper print finish",typeof(RectTransform),typeof(RawImage));layer.transform.SetParent(parent,false);
+        var rect=(RectTransform)layer.transform;rect.anchorMin=Vector2.zero;rect.anchorMax=Vector2.one;rect.offsetMin=rect.offsetMax=Vector2.zero;
+        var image=layer.GetComponent<RawImage>();image.texture=newsPaperGrain;image.uvRect=new Rect(0,0,6,4);image.raycastTarget=false;
+    }
+    private static Color NewsColor(string hex,Color fallback) => ColorUtility.TryParseHtmlString(hex??"",out var color)?color:fallback;
+    private RectTransform NewsArt(Transform parent,Sprite sprite,Vector2 min,Vector2 max)
+    {
+        var art=BistroWidgets.Box(parent,"Event illustration",Color.clear,min,max);
+        var image=art.GetComponent<Image>();image.raycastTarget=false;
+        if(sprite!=null){image.sprite=sprite;image.color=Color.white;image.preserveAspect=true;}
+        return art;
+    }
+    private void NewsRule(Transform parent,Vector2 min,Vector2 max,Color color)
+    {BistroWidgets.Box(parent,"Printed rule",color,min,max).GetComponent<Image>().raycastTarget=false;}
+    private void NewsReading(RectTransform parent,string text,Vector2 min,Vector2 max)
+    {
+        BistroWidgets.ReadingPanel(parent,text,theme,min,max);
+        var reading=parent.GetChild(parent.childCount-1);
+        reading.GetComponent<Image>().color=Color.clear;
+        var body=reading.GetComponentInChildren<Text>();body.color=BistroShelfStyle.Ink;body.fontSize=20;
+        Canvas.ForceUpdateCanvases();
+        var scroll=reading.GetComponent<ScrollRect>();scroll.verticalNormalizedPosition=1;
+        scroll.content.anchoredPosition=Vector2.zero;
+    }
+    private void CloseNews(){modal=null;eventCodex=null;choosingEventCodex=false;if(eventAudio!=null)eventAudio.Stop();}
+    private void EventPanel()
+    {
+        var definition=game.Queries.GetEvent(detailRecord?.eventId);
+        var shade=BistroWidgets.Box(screen,"News dimmer",new Color(0,0,0,.65f),Vector2.zero,Vector2.one);
+        var paper=NewsColor(definition?.paperColor,BistroShelfStyle.Cream);
+        var accent=NewsColor(definition?.accentColor,BistroShelfStyle.Green);
+        var panel=BistroShelfStyle.Panel(shade,"Newspaper",paper,new Vector2(.13f,.055f),new Vector2(.87f,.965f));
+        BistroShelfStyle.Text(panel,"THE BLUE ZONE POST",theme,new Vector2(.04f,.91f),new Vector2(.70f,.975f),26,BistroShelfStyle.Ink,true);
+        NewsRule(panel,new Vector2(.04f,.90f),new Vector2(.96f,.903f),BistroShelfStyle.Ink);
+        BistroActionButton.Create(panel,"Close",theme,new Vector2(.82f,.925f),new Vector2(.96f,.98f),BistroActionRole.Secondary,()=>Change(CloseNews));
         if(modal=="news")
         {
-            BistroWidgets.Label(panel,"NEIGHBOURHOOD NEWS",theme,new Vector2(.04f,.90f),new Vector2(.78f,.98f),28);
-            var list=BistroWidgets.Grid(panel,theme,new Vector2(.04f,.04f),new Vector2(.96f,.87f));
-            foreach(var r in game.Queries.GetEventHistory().AsEnumerable().Reverse())
+            var list=BistroWidgets.Grid(panel,theme,new Vector2(.04f,.06f),new Vector2(.96f,.87f));
+            foreach(var record in game.Queries.GetEventHistory().AsEnumerable().Reverse())
             {
-                var row=BistroWidgets.Box(list,"News entry",theme.panel,Vector2.zero,Vector2.one);var def=game.Queries.GetEvent(r.eventId);
-                BistroWidgets.Button(row,$"{def?.headline??r.eventId}\nDays {r.startDay}–{r.expiresOnDay-1} · {(r.Active(game.State.currentDay)?"Active":"Expired")}",theme,Vector2.zero,Vector2.one,()=>OpenEvent(r));
+                var news=game.Queries.GetEvent(record.eventId);
+                var row=BistroShelfStyle.Panel(list,"News entry",NewsColor(news?.paperColor,BistroShelfStyle.Cream),Vector2.zero,Vector2.one);
+                NewsArt(row,news?.thumbnail??news?.image,new Vector2(.02f,.15f),new Vector2(.25f,.85f));
+                BistroShelfStyle.Text(row,news?.headline??record.eventId,theme,new Vector2(.29f,.40f),new Vector2(.95f,.90f),22,BistroShelfStyle.Ink,true);
+                BistroWidgets.Label(row,$"Days {record.startDay}–{record.expiresOnDay-1} · {(record.Active(game.State.currentDay)?"Active":"Expired")}",theme,new Vector2(.29f,.08f),new Vector2(.95f,.35f),16,BistroShelfStyle.Ink);
+                row.gameObject.AddComponent<Button>().onClick.AddListener(()=>OpenEvent(record));
             }
-            if(game.Queries.GetEventHistory().Count==0)BistroWidgets.Label(panel,"No news yet. Random events begin on day 2.",theme,new Vector2(.1f,.3f),new Vector2(.9f,.7f));
+            if(game.Queries.GetEventHistory().Count==0)BistroWidgets.Label(panel,"No news yet.",theme,new Vector2(.1f,.3f),new Vector2(.9f,.7f));
             return;
         }
-        var definition=game.Queries.GetEvent(detailRecord?.eventId);
-        BistroWidgets.Button(panel,"← All news",theme,new Vector2(.03f,.90f),new Vector2(.25f,.98f),()=>Change(()=>{modal="news";eventCodex=null;if(eventAudio!=null)eventAudio.Stop();}));
+        BistroActionButton.Create(panel,"All news",theme,new Vector2(.04f,.025f),new Vector2(.23f,.085f),BistroActionRole.Secondary,()=>Change(()=>{modal="news";eventCodex=null;choosingEventCodex=false;}));
         if(eventCodex!=null)
         {
-            BistroWidgets.ReadingPanel(panel,(eventCodex.shortText??"Codex")+"\n\n"+(string.IsNullOrWhiteSpace(eventCodex.codexText)?"Evidence content has not been supplied yet.":eventCodex.codexText)+"\n\n"+eventCodex.sourceTitle+"\n"+eventCodex.sourceCitation+(!eventCodex.sourceChecked?"\nPrototype / source not verified.":""),theme,new Vector2(.04f,.16f),new Vector2(.96f,.87f));
-            if(Uri.TryCreate(eventCodex.sourceUrl,UriKind.Absolute,out var url)&&(url.Scheme=="https"||url.Scheme=="http"))BistroWidgets.Button(panel,"Open source",theme,new Vector2(.55f,.03f),new Vector2(.94f,.12f),()=>Application.OpenURL(url.AbsoluteUri));
-            BistroWidgets.Button(panel,"Back to event",theme,new Vector2(.04f,.03f),new Vector2(.43f,.12f),()=>Change(()=>eventCodex=null));return;
+            var entry=eventCodex;
+            NewsReading(panel,(entry.shortText??"Codex")+"\n\n"+(entry.codexText??"Evidence content has not been supplied yet.")+"\n\n"+entry.sourceTitle+"\n"+entry.sourceCitation+(!entry.sourceChecked?"\nPrototype / source not verified.":""),new Vector2(.06f,.14f),new Vector2(.94f,.86f));
+            BistroActionButton.Create(panel,"Back to article",theme,new Vector2(.28f,.025f),new Vector2(.55f,.085f),BistroActionRole.Secondary,()=>Change(()=>eventCodex=null));
+            if(Uri.TryCreate(entry.sourceUrl,UriKind.Absolute,out var url)&&(url.Scheme=="https"||url.Scheme=="http"))BistroActionButton.Create(panel,"Open source",theme,new Vector2(.65f,.025f),new Vector2(.96f,.085f),BistroActionRole.Primary,()=>Application.OpenURL(url.AbsoluteUri));
+            return;
         }
-        var art=BistroWidgets.Box(panel,"Event artwork",theme.panel,new Vector2(.04f,.49f),new Vector2(.40f,.86f));
-        if(definition?.image!=null){art.GetComponent<Image>().sprite=definition.image;art.GetComponent<Image>().preserveAspect=true;art.GetComponent<Image>().color=Color.white;}
-        else BistroWidgets.Label(art,"NEWS",theme,Vector2.zero,Vector2.one,32);
-        BistroWidgets.Label(panel,definition?.headline??detailRecord?.eventId??"Event unavailable",theme,new Vector2(.44f,.69f),new Vector2(.96f,.87f),28);
-        BistroWidgets.Label(panel,$"Days {detailRecord?.startDay}–{detailRecord?.expiresOnDay-1}\n"+(detailRecord?.Active(game.State.currentDay)==true?"Active":"Expired"),theme,new Vector2(.44f,.49f),new Vector2(.96f,.67f));
-        string effects=detailRecord==null?"":string.Join("\n",detailRecord.effects.Select(EffectText));
-        BistroWidgets.ReadingPanel(panel,(definition?.details??"Authored details are unavailable.")+"\n\nEffects:\n"+effects,theme,new Vector2(.04f,.15f),new Vector2(.96f,.46f));
-        var claims=definition?.codex??Array.Empty<ClaimData>();
-        if(claims.Any(c=>c!=null))BistroWidgets.Button(panel,"Codex: read more",theme,new Vector2(.04f,.025f),new Vector2(.45f,.12f),()=>Change(()=>{if(claims.Count(c=>c!=null)==1)eventCodex=claims.First(c=>c!=null);else choosingEventCodex=true;}));
         if(choosingEventCodex)
         {
-            var picker=BistroWidgets.Box(panel,"Codex entries",theme.background,new Vector2(.02f,.015f),new Vector2(.98f,.88f));
-            var grid=BistroWidgets.Grid(picker,theme,new Vector2(.02f,.13f),new Vector2(.98f,.98f));
-            foreach(var claim in claims.Where(c=>c!=null)){var row=BistroWidgets.Box(grid,"Codex entry",theme.panel,Vector2.zero,Vector2.one);BistroWidgets.Button(row,claim.shortText??claim.id,theme,Vector2.zero,Vector2.one,()=>Change(()=>{eventCodex=claim;choosingEventCodex=false;}));}
-            BistroWidgets.Button(picker,"Back to event",theme,new Vector2(.04f,.02f),new Vector2(.45f,.11f),()=>Change(()=>choosingEventCodex=false));
+            var list=BistroWidgets.Grid(panel,theme,new Vector2(.05f,.17f),new Vector2(.95f,.85f));
+            foreach(var claim in (definition?.codex??Array.Empty<ClaimData>()).Where(c=>c!=null))BistroActionButton.Create(list,claim.shortText,theme,Vector2.zero,Vector2.one,BistroActionRole.Secondary,()=>Change(()=>{eventCodex=claim;choosingEventCodex=false;}));
+            BistroActionButton.Create(panel,"Back to article",theme,new Vector2(.28f,.025f),new Vector2(.55f,.085f),BistroActionRole.Secondary,()=>Change(()=>choosingEventCodex=false));return;
         }
+        BistroShelfStyle.Text(panel,definition?.headline??"Neighbourhood news",theme,new Vector2(.045f,.73f),new Vector2(.955f,.88f),40,BistroShelfStyle.Ink,true);
+        var field=BistroWidgets.Box(panel,"Printed colour field",accent,new Vector2(.04f,.14f),new Vector2(.48f,.70f));field.GetComponent<Image>().raycastTarget=false;
+        NewsArt(panel,definition?.image,new Vector2(.055f,.17f),new Vector2(.465f,.68f));
+        BistroShelfStyle.Text(panel,definition?.summary??"",theme,new Vector2(.53f,.57f),new Vector2(.95f,.70f),24,BistroShelfStyle.Ink,true);
+        string duration=$"Days {detailRecord?.startDay}–{detailRecord?.expiresOnDay-1} · "+(detailRecord?.Active(game.State.currentDay)==true?"Active":"Expired");
+        string effects=detailRecord==null?"":string.Join("\n",detailRecord.effects.Select(EffectText));
+        NewsReading(panel,(definition?.details??"Details are unavailable.")+"\n\n"+duration+"\n\n"+effects,new Vector2(.53f,.14f),new Vector2(.95f,.55f));
+        foreach(var reading in panel.GetComponentsInChildren<Image>())if(reading.name=="Reading panel")reading.color=Color.clear;
+        NewsPaperFinish(panel);
+        NewsRule(panel,new Vector2(.04f,.11f),new Vector2(.96f,.112f),BistroShelfStyle.Ink);
+        var entries=(definition?.codex??Array.Empty<ClaimData>()).Where(c=>c!=null).ToArray();
+        if(entries.Length>0)BistroActionButton.Create(panel,"Codex · Read more",theme,new Vector2(.65f,.025f),new Vector2(.96f,.085f),BistroActionRole.Secondary,()=>Change(()=>{if(entries.Length==1)eventCodex=entries[0];else choosingEventCodex=true;}));
     }
 }

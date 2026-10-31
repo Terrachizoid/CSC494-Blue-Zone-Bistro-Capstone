@@ -24,6 +24,9 @@ public static class EventCsvImporter
                 if(string.IsNullOrWhiteSpace(e.id)||data.Any(d=>string.Equals(d.id,e.id,StringComparison.OrdinalIgnoreCase))||string.IsNullOrWhiteSpace(e.headline)||e.minDay<2||(e.maxDay!=-1&&e.maxDay<e.minDay)||e.durationDays<1||e.durationDays>365||e.weight<=0)throw new Exception("Invalid event fields: "+e.id);
                 var previous=old?.events.Find(d=>d.id==e.id);
                 e.image=CsvImportUtility.LoadOptionalAsset(g("image_path"),previous?.image,e.id,"image_path");
+                e.thumbnail=CsvImportUtility.LoadOptionalAsset(g("thumbnail_path"),previous?.thumbnail,e.id,"thumbnail_path");
+                e.paperColor=string.IsNullOrWhiteSpace(g("paper_color"))?previous?.paperColor??"#E9E2D0":g("paper_color");
+                e.accentColor=string.IsNullOrWhiteSpace(g("accent_color"))?previous?.accentColor??"#A6B7A0":g("accent_color");
                 e.notificationAudio=CsvImportUtility.LoadOptionalAsset(g("notification_audio_path"),previous?.notificationAudio,e.id,"notification_audio_path");
                 e.detailAudio=CsvImportUtility.LoadOptionalAsset(g("detail_audio_path"),previous?.detailAudio,e.id,"detail_audio_path");
                 e.codex=g("codex_ids").Split('|').Where(id=>!string.IsNullOrWhiteSpace(id)).Select(id=>AssetDatabase.LoadAssetAtPath<ClaimData>("Assets/GameData/Claims/"+id.Trim()+".asset")??throw new Exception("Missing event codex: "+id)).ToArray();

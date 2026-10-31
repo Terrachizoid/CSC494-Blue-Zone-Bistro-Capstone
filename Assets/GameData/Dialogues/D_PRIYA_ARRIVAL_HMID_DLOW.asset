@@ -39,8 +39,7 @@ MonoBehaviour:
   lines:
   - lineOrder: 0
     speakerId: U006
-    textTemplate: I have a break between errands. This seems like a good time for
-      lunch.
+    textTemplate: I've a break between errands. This seems like a good time for lunch.
     claim: {fileID: 0}
     portrait: {fileID: 0}
     backgroundImage: {fileID: 0}

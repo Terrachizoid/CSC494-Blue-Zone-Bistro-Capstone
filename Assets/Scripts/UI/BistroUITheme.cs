@@ -39,6 +39,8 @@ public class BistroUITheme : ScriptableObject
     public bool reducedMotion;
     [Range(.1f,.5f)] public float cardFlipSeconds=.26f;
     [Range(.08f,.4f)] public float panelRevealSeconds=.18f;
+    // Cross-fade between the old and new screen when the place or an overlay changes (opening and closing panels).
+    [Range(.05f,.4f)] public float screenFadeSeconds=.16f;
     [Tooltip("Show each food's ingredient appeal (0-10) as a badge on the card front. Placeholder for delight icons.")]
     public bool showCardAppeal = true;
     [Tooltip("Extra classification labels only appear in editor/development builds.")]

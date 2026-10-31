@@ -368,3 +368,36 @@ BistroActionButton.Create accepts an explicit BistroActionRole (Primary, Seconda
 All roles share rounded geometry, subtle gradient, thin rim, upper highlight and light shadow. Hover/pressed/disabled use Selectable colors; selection adds a focus rim; press reduces the shadow. Reduced motion disables color-fade timing. Existing main-menu controls, toolbar items and world indicators retain their separate designs. No gameplay, CSV content or art ownership changed.
 
 Validation: graphics-enabled Unity ShelfCapture passed its existing dialogue paging/final-action, service, recipe, shelf and world routing checks. Reviewed service-review.png with all three roles and dialogue navigation; copied to Data/Previews/2026-10-29-Actions. Keyboard focus/disabled visuals were implemented but not manually exercised in a full playthrough; WebGL unverified.
+
+### UI motion pass 1 — 2026-10-30 (Claude)
+- **Screen cross-fade:** `Refresh` no longer destroys the old screen at once. When the place or an overlay changes (the same contexts `AnimateNavigation` already tracks), the old screen stays underneath, not clickable, while the new one fades in over `BistroUITheme.screenFadeSeconds` (0.16 s), then is removed. Opening and closing panels therefore animate both ways. Rebuilds without a context change (adding to the cart, moving a card) still swap instantly. A new click during a fade finishes it at once. `reducedMotion` turns it off (the capture harness already sets it).
+- **One button motion family:** `BistroShelfStyle.Button` and `BistroActionButton` now get `BistroMotion` (hover lift, press squash, release settle), like `BistroWidgets.Button` already did.
+- **Fix (same day, Owen's playtest): too much was animating.** The motion context used to include the chosen recipe, customer, dish acknowledgement and dialogue sequence, so each of those replayed the reveal on the whole room background (zoom + flash) and cross-faded the entire screen, top bar included. Now only a change of *place* (phase, store, shelf, menu) cross-fades the screen. Inside a place, the rebuild compares top-level pieces by name: new ones (a panel, the dialogue box) fade and pop in, removed ones fade out as a short-lived copy, and everything else (top bar, room, customer) swaps in the same frame with no visible change. Backgrounds never scale.
+- Next slices: per-element keys below the top level (cards, slots, the cooking workspace) so those can animate individually, then true update-in-place for the busiest screens.
+
+### Cart panel is the cart review — 2026-10-30 (Claude, Owen's request)
+- On a shelf, the right-hand cart panel replaces the separate review: its rows scroll (vertical swipe) and can be dragged back onto the shelf to remove one package (`BistroDragChip`, kind `remove-cart`; the shelf viewport has a `BistroShelfCartTarget`). "Review cart" was removed. **Checkout** opens one confirmation ("Buy N packages for $X? You will have $Y left.") in the shared dialogue box, then buys. An over-budget cart shows a note instead of a confirmation that would fail.
+- Drop targets accept any `IBistroDragSource` (food cards and cart rows), declared in `BistroShelfCartTarget.cs`.
+- The top-bar Cart button still opens `IllustratedCartReview`, which is useful from the city or a store overview.
+
+### Slots hold draggable rows — 2026-10-30 (Claude, Owen's request)
+- Cooking slots, sorting bins and the pantry SELL slot no longer show seated mini cards or open a panel on click. `BistroDropSlot.ShowRows` lists their contents as small scrollable rows (thumbnail + name ×count). Drag a row onto another slot to move it there (sorting: kind `sort`; cooking: kind `meal-move`, key `slotIndex|foodId`, moves one serving), or release it anywhere that is not a drop area to take it out (`BistroDragChip.DroppedOutside`: un-sort, put one serving back, keep one serving). Releasing it on its own slot does nothing. Cart rows on the shelf follow the same rule.
+- Removed: `IllustratedSortBin`, `MealModal`, the `pantry-sell` panel, `MealSlotTitle`. The generic `Modal()` panel now only serves Pantry. Lesson text in T_SHOPPING and T_COOKING updated to the drag-out wording.
+- (same day, Owen) Drag vs scroll split by input: any click-drag on a row picks it up (no more "mostly vertical = scroll" guess, which swallowed quick drags); slot lists scroll with the mouse wheel only (`BistroWheelScroll`, a ScrollRect that ignores click-drags). The city map and card shelves keep normal drag-to-scroll.
+
+Event UI exception (2026-10-30): event details/Codex use a layered newspaper and full-scene dimmer, not dialogue. CSV colours and art determine the page; toolbar/slot code is unchanged. A cached subtle RawImage paper finish ignores raycasts. NewsReading explicitly sets dark ink and initial scroll position.
+
+### Text motion — 2026-10-30 (Claude)
+- `BistroTextMotion` (legacy `Text`): **typewriter** (letters appear one by one; hidden letters are drawn transparent via a colour tag so wrapping never jumps) and **pop** (quick scale-settle). Start times are kept by the screen, so a rebuild mid-animation continues instead of restarting.
+- Dialogue box: each page types at 55 characters/s with short pauses after punctuation. Clicking the box or the main button while typing shows the whole page; the next click advances.
+- Top bar: a label animates only when its text changes. The place name types in (90 characters/s); Day, Popularity, Wallet and Cart do a small pop. Unchanged labels never animate on rebuilds.
+- `reducedMotion` shows everything instantly. If the UI moves to TextMeshPro later, per-letter effects (hop, wave, colour) can replace this with the same start-time approach.
+
+### Text and layout pass — 2026-10-30 (Claude, Owen's request)
+- Dialogue pages break only between sentences and are balanced (`BistroDialoguePages`: fewest pages that fit ~4 lines of ~95 characters, then the most even split; word breaks only for an overlong sentence).
+- Cooking header: left-aligned two bands, guest (name in the title font, request, muted stats line) then dish (name, "Base price · Plate appeal"), with a thin rule between; buttons aligned to the dish band.
+- Shelf and pantry cards show a small "Appeal N" tag top-right on the front (logo stays top-left); the back still lists it.
+- Shorter player-facing messages: no "events begin on day 2", no internal notes on publicity, no per-serving notice, "Hoping for" / "No special request today" for requests, farmer aid says "Use it today".
+
+### City map: wheel zoom and elastic edges — 2026-10-30 (Claude, Owen's request)
+- Click-drag pans; the edges are elastic (`ScrollRect.MovementType.Elastic`, elasticity 0.12): dragging past an edge gets harder the further you pull and the map springs back on release. The mouse wheel zooms toward the cursor between 1× and 2.6× with easing (`BistroMapZoom`), and no longer scrolls. Zoom level and position are kept across rebuilds and reset on a new game. Touch pinch-zoom is not added yet (needed for the phone build).

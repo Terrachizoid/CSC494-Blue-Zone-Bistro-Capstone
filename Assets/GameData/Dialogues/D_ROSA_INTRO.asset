@@ -41,8 +41,8 @@ MonoBehaviour:
   lines:
   - lineOrder: 0
     speakerId: U003
-    textTemplate: At home I reach for olive oil before I have even decided what to
-      cook. It is an old habit.
+    textTemplate: At home I reach for olive oil before I've even decided what to
+      cook. It's an old habit.
     claim: {fileID: 0}
     portrait: {fileID: 0}
     backgroundImage: {fileID: 0}
@@ -50,7 +50,7 @@ MonoBehaviour:
     voiceOver: {fileID: 0}
   - lineOrder: 1
     speakerId: U003
-    textTemplate: I am curious about your oil-free meals. I want ideas I can actually
+    textTemplate: I'm curious about your oil-free meals. I want ideas I can actually
       use in my own kitchen.
     claim: {fileID: 0}
     portrait: {fileID: 0}

@@ -6,9 +6,11 @@ using UnityEngine;
 
 public sealed class BistroArtImport : AssetPostprocessor
 {
-    // Art referenced from the CSVs and the UI theme. Concepts/ and Endings/ are left alone.
+    // Art referenced from the CSVs and the UI theme. Concepts/ is left alone.
     private static readonly string[] Folders =
     {
+        "Assets/Art/Endings",
+        "Assets/Art/Events",
         "Assets/Art/Foods",
         "Assets/Art/Recipes",
         "Assets/Art/Categories",

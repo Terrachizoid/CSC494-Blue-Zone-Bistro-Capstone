@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public partial class BistroUIScreen
 {
     private Vector2 cityPosition=new Vector2(.5f,.5f);
+    private float cityZoomLevel=1f; // wheel zoom on the city map, kept across rebuilds
     private void FallbackCityMap()
     {
         var viewport=BistroWidgets.Box(screen,"City viewport",theme.panel,new Vector2(.03f,.19f),new Vector2(.97f,.89f));
@@ -39,7 +40,7 @@ public partial class BistroUIScreen
         }
         var scroll=viewport.gameObject.AddComponent<ScrollRect>();
         scroll.viewport=viewport;scroll.content=world;scroll.horizontal=true;scroll.vertical=true;
-        scroll.movementType=ScrollRect.MovementType.Clamped;scroll.inertia=true;scroll.decelerationRate=.08f;scroll.scrollSensitivity=35;
+        scroll.movementType=ScrollRect.MovementType.Elastic;scroll.elasticity=.12f;scroll.inertia=true;scroll.decelerationRate=.08f;scroll.scrollSensitivity=35;
         Canvas.ForceUpdateCanvases();scroll.normalizedPosition=cityPosition;
         scroll.onValueChanged.AddListener(value=>cityPosition=value);
         BistroWidgets.Label(screen,"THE NEIGHBOURHOOD  ·  Drag to explore",theme,new Vector2(.05f,.82f),new Vector2(.77f,.88f),24);

@@ -93,7 +93,9 @@ public class GameLoop
         Tutorials?.Succeeded(TutorialAction.Checkout);
         Summary.moneySpent += result.total;
         SortingResult = null;
-        if (sorting.IsComplete) BeginService();
+        // The purchase is committed, so the day must move on: a lesson that switches on now (e.g. money low)
+        // shows on the next screen instead of blocking the transition and leaving the market stuck.
+        if (sorting.IsComplete) StartService();
         else SetPhase(GamePhase.FoodSorting);
         return result;
     }
@@ -140,6 +142,11 @@ public class GameLoop
     public bool BeginService()
     {
         if(!TutorialAllows(TutorialAction.BeginService))return false;
+        return StartService();
+    }
+    // Starts service without asking the tutorial (used right after a committed checkout).
+    private bool StartService()
+    {
         if (Phase != GamePhase.Market && Phase != GamePhase.FoodSorting) return false;
         if (sorting != null && !sorting.IsComplete) return false;
         var customers = visits.GetTodaysCustomers();

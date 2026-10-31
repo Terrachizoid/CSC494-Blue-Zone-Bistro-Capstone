@@ -39,8 +39,7 @@ MonoBehaviour:
   lines:
   - lineOrder: 0
     speakerId: U006
-    textTemplate: I have a break between errands. This seems like a good time for
-      lunch.
+    textTemplate: I've a break between errands. This seems like a good time for lunch.
     claim: {fileID: 0}
     portrait: {fileID: 0}
     backgroundImage: {fileID: 0}
@@ -48,8 +47,8 @@ MonoBehaviour:
     voiceOver: {fileID: 0}
   - lineOrder: 1
     speakerId: U006
-    textTemplate: I am glad to be back. I have started looking forward to trying
-      your combinations.
+    textTemplate: I'm glad to be back. I've started looking forward to trying your
+      combinations.
     claim: {fileID: 0}
     portrait: {fileID: 0}
     backgroundImage: {fileID: 0}

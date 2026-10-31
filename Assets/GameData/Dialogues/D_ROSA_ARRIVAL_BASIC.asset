@@ -39,7 +39,7 @@ MonoBehaviour:
   lines:
   - lineOrder: 0
     speakerId: U003
-    textTemplate: I have been thinking about the ingredients in your bowls.
+    textTemplate: I've been thinking about the ingredients in your bowls.
     claim: {fileID: 0}
     portrait: {fileID: 0}
     backgroundImage: {fileID: 0}

@@ -39,7 +39,7 @@ MonoBehaviour:
   lines:
   - lineOrder: 0
     speakerId: U001
-    textTemplate: I am taking things slowly today. I am glad there is somewhere familiar
+    textTemplate: I'm taking things slowly today. I'm glad there is somewhere familiar
       to sit.
     claim: {fileID: 0}
     portrait: {fileID: 0}
@@ -48,7 +48,7 @@ MonoBehaviour:
     voiceOver: {fileID: 0}
   - lineOrder: 1
     speakerId: U001
-    textTemplate: I am still finding my routine here. A straightforward meal would
+    textTemplate: I'm still finding my routine here. A straightforward meal would
       help.
     claim: {fileID: 0}
     portrait: {fileID: 0}

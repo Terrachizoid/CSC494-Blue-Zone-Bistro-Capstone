@@ -40,7 +40,9 @@ public class TutorialController : IDisposable
         // State-derived flags let CSV lessons react to the economy without new behaviours.
         if(plan.RentPerDay>0&&state.currentDay==plan.RentStartDay-1)state.flags.SetFlag(TutorialFlags.RentUpcoming);
         if(state.money<0)state.flags.SetFlag(TutorialFlags.MoneyNegative);
-        if(plan.RentPerDay>0&&state.currentDay>=plan.RentStartDay&&state.money<plan.RentPerDay)state.flags.SetFlag(TutorialFlags.MoneyLow);
+        // Money-low advice (sell pantry food) only makes sense at the market before today's checkout.
+        bool checkedOutToday=state.shoppingReceipt!=null&&state.shoppingReceipt.day==state.currentDay;
+        if(plan.RentPerDay>0&&state.currentDay>=plan.RentStartDay&&state.money<plan.RentPerDay&&loop.Phase==GamePhase.Market&&!checkedOutToday)state.flags.SetFlag(TutorialFlags.MoneyLow);
         if(loop.Phase==GamePhase.Service&&loop.Service.step==ServiceStep.MealSelection&&!state.flags.HasFlag(TutorialFlags.Served))state.flags.SetFlag(TutorialFlags.CookingAvailable);
         ObserveFlags();
         if(Active!=null)

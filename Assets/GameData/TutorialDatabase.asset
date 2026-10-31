@@ -22,12 +22,9 @@ MonoBehaviour:
     - tutorial.shopping_lesson_complete
     steps:
     - stepId: shop
-      text: 'Welcome to your bistro! Pick any recipe on today''s menu and buy what
-        it needs: {examples}. Each food''s category must match the slot exactly;
-        flip a card to see its category. Explore the stores and shelves, then drag
-        packages into your cart. You may buy extras, but checkout must be affordable
-        and leave you enough ingredients for at least one recipe. Open the cart to
-        remove packages. Pantry and Recipes remain available at any time.'
+      text: Welcome to your bistro! First, shop for today's cooking. Open Recipes
+        in the top bar to see what each dish needs, then drag food from the shelves
+        into your cart. Buy enough for at least one recipe, then check out.
   - id: T_SORTING
     triggerFlag: tutorial.sorting_available
     behaviourId: TextOnly
@@ -37,14 +34,11 @@ MonoBehaviour:
     - tutorial.sorting_lesson_complete
     steps:
     - stepId: explain
-      text: 'Before cooking, sort the new foods into Green, Yellow or Red. These
-        are the game''s Traffic Light groups: Green foods are the everyday foundation
-        and the only foods that build health. Yellow foods are ones customers are
-        moving away from. Red foods are the ones to avoid. Flip cards to inspect
-        ingredients. Each new food you sort correctly gives back {maxDiscount} of
-        what you paid for it today. Foods you already know and wrong answers give
-        nothing back. You can rearrange cards before submitting. There is no retry
-        after submission; a wrong food can return on a later purchase.'
+      text: Sort each new food into Green, Yellow or Red. Green foods are the everyday
+        foundation and the only foods that build health. Yellow foods are ones customers
+        are moving away from. Red foods are the ones to avoid. Flip a card to read
+        its ingredients. Each new food you sort correctly gives back {maxDiscount}
+        of what you paid for it. Answers are final once you submit.
   - id: T_COOKING
     triggerFlag: tutorial.cooking_available
     behaviourId: FirstMeal
@@ -54,23 +48,19 @@ MonoBehaviour:
     - tutorial.cooking_lesson_complete
     steps:
     - stepId: choose
-      text: Let's cook the ingredients you prepared. Choose any recipe you have ingredients
-        for. You can still inspect your pantry or return to the main menu.
+      text: Time to cook! Pick a recipe you have ingredients for. Faded recipes are
+        missing something.
     - stepId: build
-      text: Drag one serving at a time into the recipe slots. Required slots need
-        the exact category and count. Optional slots may stay empty, or be filled
-        exactly. A red rim means something needs attention. Open a slot to drag a
-        serving back out. Review the dish whenever you like; this first lesson requires
-        a successful recipe before you can confirm serving.
+      text: Drag one serving at a time from your pantry into the recipe's slots.
+        A red outline means a slot still needs something. Drag a row out of a slot
+        to put it back. For your first dish, fill every slot exactly, then press
+        Review dish.
     - stepId: feedback
-      text: 'Your first recipe is built! You used {ingredients}. This dish changed
-        health by {healthDelta} and covered these Daily Dozen groups: {dailyDozen}.
-        In this game, Green servings and the Daily Dozen groups they cover contribute
-        to health. Each Daily Dozen group a guest has not eaten before adds extra
-        health for them; groups they have already had add nothing extra, so vary
-        the plants you serve each guest. Positive health gains per dish are capped.
-        Aim for variety within the recipe''s slots, rather than piling on extra servings.
-        From now on, you may also serve imperfect recipes and face their consequences.'
+      text: 'Your first dish is done! You used {ingredients}. Health changed by {healthDelta},
+        and it covered these Daily Dozen groups: {dailyDozen}. Only Green foods build
+        health. Each Daily Dozen group a guest hasn''t had before adds a little extra,
+        so vary the plants you serve. From now on, you can also serve dishes that
+        don''t match the recipe, but guests will notice.'
   - id: T_CRASH
     triggerFlag: tutorial.first_crash_dialogue_completed
     behaviourId: TextOnly
@@ -80,12 +70,9 @@ MonoBehaviour:
     - tutorial.rush_crash_lesson_complete
     steps:
     - stepId: explain
-      text: 'You have now heard both sides of a rush and crash. A brief lift can
-        feel encouraging, yet it may not last. Watch the customer''s experience over
-        time. Here, rush/crash is visual and dialogue feedback: it adds no extra
-        health penalty beyond the dish''s normal calculation. Think about the ingredients
-        and the overall meal, rather than treating a burst of energy as proof of
-        a good result.'
+      text: That guest felt a quick burst of energy, then a slump. A rush can feel
+        good in the moment, but it doesn't mean the meal was good for them. Judge
+        a meal by what's in it, not by how lively a guest seems afterwards.
   - id: T_RENT
     triggerFlag: tutorial.rent_upcoming
     behaviourId: TextOnly
@@ -95,13 +82,10 @@ MonoBehaviour:
     - tutorial.rent_lesson_complete
     steps:
     - stepId: explain
-      text: 'A letter from the landlord: the opening grace period ends tomorrow.
-        From tomorrow morning, rent of ${rent} is charged every day before the market
-        opens, even on a quiet day. Your money can dip below zero, but you can only
-        shop while your balance is positive, so keep a cushion. A popular bistro
-        also earns walk-in takeaway each evening, so delighting guests is what keeps
-        the lights on. Guests will soon bring requests too: answering them builds
-        popularity, and ignoring them costs some.'
+      text: 'A letter from the landlord: from tomorrow, rent of ${rent} is due every
+        morning. You can only shop while you have money, so keep a little cushion.
+        Busy evenings bring in takeaway income, and guests will soon start arriving
+        with requests.'
   - id: T_SELL
     triggerFlag: tutorial.money_low
     behaviourId: TextOnly
@@ -111,12 +95,9 @@ MonoBehaviour:
     - tutorial.sell_lesson_complete
     steps:
     - stepId: explain
-      text: 'Money is running low: tomorrow''s rent of ${rent} could push you below
-        zero, and below zero the shops won''t take your order. You can raise cash
-        by selling food you won''t use: open Pantry and drag servings onto SELL,
-        then press Sell. Each serving sells for {sellRate} of its lowest shelf price
-        (or of what you paid, if that was less). Food that would spoil before you
-        can cook it is the best thing to sell.'
+      text: Money is running low, and tomorrow's rent could leave you unable to shop.
+        Open Pantry, drag food you won't use onto SELL, then press Sell. Food that
+        would spoil before you cook it is the best thing to sell.
   - id: T_REQUESTS
     triggerFlag: okinawa_chef_arrived
     behaviourId: TextOnly
@@ -126,12 +107,11 @@ MonoBehaviour:
     - tutorial.requests_lesson_complete
     steps:
     - stepId: explain
-      text: From today, guests may arrive with a request such as Savory, Creamy or
-        Crunchy. Each recipe on the menu lists what it is good for. Serving a recipe
-        that answers a guest's request delights them and grows your popularity much
-        faster; leaving a request unanswered costs some popularity. Health still
-        comes only from the foods you choose. Comfort is answered by any complete
-        recipe with an average ingredient appeal of at least {comfort}.
+      text: From today, guests may ask for something, like Savory, Creamy or Crunchy.
+        Each recipe shows what it answers. Answering a request delights a guest and
+        grows your popularity; ignoring it costs a little. Health still comes only
+        from the foods you choose. Comfort is answered by any dish with an appeal
+        of {comfort} or more.
   - id: T_FARMER
     triggerFlag: tutorial.food_aid_given
     behaviourId: TextOnly
@@ -141,12 +121,9 @@ MonoBehaviour:
     - tutorial.farmer_lesson_complete
     steps:
     - stepId: explain
-      text: 'Your pantry can''t complete any recipe on the menu, so a local farmer
-        has stepped in with a small crate of plain staples: enough for one simple
-        dish. The farmer helps at most once a day, and only when nothing on the menu
-        can be made. Gifted food spoils after a day and has low appeal, so guests
-        won''t be thrilled. Shop, or sell food you won''t use, to get back on your
-        feet.'
+      text: Your pantry couldn't make any recipe, so a local farmer brought a small
+        crate of plain staples, enough for one simple dish. The farmer can only help
+        once a day, so shop or sell spare food to get back on your feet.
   - id: T_DAY
     triggerFlag: tutorial.toolbar_day
     behaviourId: TextOnly
@@ -155,11 +132,10 @@ MonoBehaviour:
     completionFlags: []
     steps:
     - stepId: explain
-      text: Your bistro has {totalDays} days to make its name. Each day you shop
-        at the market, sort what you bought, then cook for your guests. Rent of ${rent}
-        is charged every morning from day {rentStart}, and guests start bringing
-        requests on day {cravingsStart}. After day {totalDays}, your popularity and
-        the community's wellbeing decide how the story ends.
+      text: 'You have {totalDays} days to make your bistro''s name. Each day: shop,
+        sort what''s new, then cook for your guests. Rent starts on day {rentStart},
+        and guests bring requests from day {cravingsStart}. At the end, your popularity
+        and the community''s wellbeing decide how the story ends.'
   - id: T_POPULARITY
     triggerFlag: tutorial.toolbar_popularity
     behaviourId: TextOnly
@@ -168,12 +144,10 @@ MonoBehaviour:
     completionFlags: []
     steps:
     - stepId: explain
-      text: 'Popularity is how well known your bistro is. It decides how many guests
-        come each day: more seats open at {guestThresholds} popularity, up to {maxGuests}
-        guests. Above {walkInThreshold}, walk-in customers also buy takeaway every
-        evening, about ${walkInPer100} for each 100 points above it. Delighted guests,
-        answered requests and tasty plates raise it; mismatched dishes and ignored
-        requests lower it.'
+      text: Popularity is how well known your bistro is. More guests come at {guestThresholds}
+        popularity (up to {maxGuests}), and above {walkInThreshold}, walk-in customers
+        buy takeaway every evening. Delighted guests, answered requests and tasty
+        plates raise it; mismatched dishes and ignored requests lower it.
   - id: T_WALLET
     triggerFlag: tutorial.toolbar_wallet
     behaviourId: TextOnly
@@ -182,10 +156,8 @@ MonoBehaviour:
     completionFlags: []
     steps:
     - stepId: explain
-      text: Your wallet pays for food at the market, and guests pay you, plus tips,
-        for every dish you serve. From day {rentStart}, rent of ${rent} is charged
-        every morning. Your money can dip below zero, but stores only take orders
-        while you have money, and ending the run deep in debt closes the bistro.
-        Short on cash? Sell food you won't use from the Pantry for {sellRate} of
-        its price.
-  fingerprint: O81ZkccRgve73aIq6SIeoHZD6LGkMm/AEhRFmd2UQfs=
+      text: Guests pay you, plus tips, for every dish, and the market takes your
+        money for food. From day {rentStart}, rent of ${rent} is due each morning.
+        You can only shop while you have money, and ending deep in debt closes the
+        bistro. Short on cash? Sell spare food from the Pantry.
+  fingerprint: X90rd7/R9tEcSkgq8zNBK/oGQdh2Mm1j+R6DgtlDZ1s=

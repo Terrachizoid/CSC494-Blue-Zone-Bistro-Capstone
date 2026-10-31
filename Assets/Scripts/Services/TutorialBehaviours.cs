@@ -17,7 +17,7 @@ public class TextTutorialBehaviour : ITutorialBehaviour
     public bool CanActivate(GameLoop loop)=>true;
     public bool Feasible(IntroMealPlan plan,string step)=>true;
     public bool IsText(string step)=>true;
-    public string Check(string step,TutorialAction action,IntroMealPlan plan,List<CartEntry> cart,string recipeId,ServeResult preview)=>"Read the tutorial and choose Continue first.";
+    public string Check(string step,TutorialAction action,IntroMealPlan plan,List<CartEntry> cart,string recipeId,ServeResult preview)=>"Finish reading the guide first.";
     public string Next(string step,TutorialAction action)=>step;
     public string Continue(string step)=>null;
 }
@@ -28,7 +28,7 @@ public class ShoppingTutorialBehaviour : ITutorialBehaviour
     public bool Feasible(IntroMealPlan plan,string step)=>plan.ShoppingFeasible();
     public bool IsText(string step)=>false;
     public string Check(string step,TutorialAction action,IntroMealPlan plan,List<CartEntry> cart,string recipeId,ServeResult preview)
-        =>action==TutorialAction.Checkout&&!plan.CartReady(cart)?"Your cart and pantry do not yet cover any recipe on today's menu. On today's menu, "+plan.Examples+". Each food's category must match the slot exactly. Add enough ingredients before checkout.":null;
+        =>action==TutorialAction.Checkout&&!plan.CartReady(cart)?"Your cart and pantry can't make any recipe on today's menu yet. Open Recipes to see what each dish needs.":null;
     public string Next(string step,TutorialAction action)=>action==TutorialAction.Checkout?null:step;
     public string Continue(string step)=>step;
 }
@@ -40,12 +40,12 @@ public class FirstMealTutorialBehaviour : ITutorialBehaviour
     public bool IsText(string step)=>step=="feedback";
     public string Check(string step,TutorialAction action,IntroMealPlan plan,List<CartEntry> cart,string recipeId,ServeResult preview)
     {
-        if(IsText(step))return "Read the meal explanation and choose Continue first.";
+        if(IsText(step))return "Finish reading the guide first.";
         if(action==TutorialAction.SkipCustomer||action==TutorialAction.ContinueDish||action==TutorialAction.FinishDay)return "Complete your first meal before moving on.";
         // Any recipe on today's menu is accepted; the lesson only requires a successful build.
         if(action==TutorialAction.SelectRecipe && !plan.IsCandidate(recipeId))return "Choose a recipe from today's menu for this first lesson.";
         if(action==TutorialAction.Serve && step=="choose")return "Choose a recipe before serving.";
-        if(action==TutorialAction.Serve && (!plan.IsCandidate(recipeId)||preview==null||!preview.success||!preview.recipeBuilt))return "For this first lesson, build the recipe successfully before serving. Review its slot warnings.";
+        if(action==TutorialAction.Serve && (!plan.IsCandidate(recipeId)||preview==null||!preview.success||!preview.recipeBuilt))return "For your first dish, fill every slot exactly. Slots with a red outline still need something.";
         return null;
     }
     public string Next(string step,TutorialAction action)=>action==TutorialAction.SelectRecipe?"build":action==TutorialAction.Serve?"feedback":step;

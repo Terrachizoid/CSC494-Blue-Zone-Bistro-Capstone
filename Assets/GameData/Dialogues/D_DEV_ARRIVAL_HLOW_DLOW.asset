@@ -39,7 +39,7 @@ MonoBehaviour:
   lines:
   - lineOrder: 0
     speakerId: U002
-    textTemplate: Training is not on the agenda today. I am taking a quieter lunch
+    textTemplate: Training isn't on the agenda today. I'm taking a quieter lunch
       break.
     claim: {fileID: 0}
     portrait: {fileID: 0}

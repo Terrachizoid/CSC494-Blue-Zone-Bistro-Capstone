@@ -39,7 +39,7 @@ MonoBehaviour:
   lines:
   - lineOrder: 0
     speakerId: U001
-    textTemplate: It is good to be back. I am getting used to making a plan before
+    textTemplate: It's good to be back. I'm getting used to making a plan before
       I order.
     claim: {fileID: 0}
     portrait: {fileID: 0}

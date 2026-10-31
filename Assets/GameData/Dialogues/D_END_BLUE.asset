@@ -43,7 +43,7 @@ MonoBehaviour:
       community.
     claim: {fileID: 0}
     portrait: {fileID: 0}
-    backgroundImage: {fileID: 21300000, guid: 803613dbc33995645949cd65bcbeeffe, type: 3}
+    backgroundImage: {fileID: 21300000, guid: fc548bc87d9e430db74c80fd1ebc1e6e, type: 3}
     emotion: 
     voiceOver: {fileID: 0}
   - lineOrder: 1
@@ -52,7 +52,7 @@ MonoBehaviour:
       and enjoyment can belong together.
     claim: {fileID: 0}
     portrait: {fileID: 0}
-    backgroundImage: {fileID: 21300000, guid: 78d0c535db8cce24392fcaf23741937f, type: 3}
+    backgroundImage: {fileID: 21300000, guid: fc548bc87d9e430db74c80fd1ebc1e6e, type: 3}
     emotion: 
     voiceOver: {fileID: 0}
   - lineOrder: 2
@@ -61,7 +61,7 @@ MonoBehaviour:
       Bistro.
     claim: {fileID: 0}
     portrait: {fileID: 0}
-    backgroundImage: {fileID: 21300000, guid: ddb2294adac35f942803fbc04b2334c3, type: 3}
+    backgroundImage: {fileID: 21300000, guid: fc548bc87d9e430db74c80fd1ebc1e6e, type: 3}
     emotion: 
     voiceOver: {fileID: 0}
   approvalStatus: 0

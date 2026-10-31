@@ -39,7 +39,7 @@ MonoBehaviour:
   lines:
   - lineOrder: 0
     speakerId: U006
-    textTemplate: I am feeling lively today. I am looking forward to a proper lunch
+    textTemplate: I'm feeling lively today. I'm looking forward to a proper lunch
       break.
     claim: {fileID: 0}
     portrait: {fileID: 0}

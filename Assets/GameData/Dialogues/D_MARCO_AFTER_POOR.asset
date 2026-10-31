@@ -39,8 +39,8 @@ MonoBehaviour:
   lines:
   - lineOrder: 0
     speakerId: U005
-    textTemplate: This is not the dish we agreed on. I would rather you tell me when
-      the ingredients run short.
+    textTemplate: This isn't the dish we agreed on. I'd rather you tell me when the
+      ingredients run short.
     claim: {fileID: 0}
     portrait: {fileID: 0}
     backgroundImage: {fileID: 0}

@@ -16,8 +16,12 @@ public partial class BistroUIScreen
         Canvas.ForceUpdateCanvases();layout.Apply();
         if(city)
         {
+            // Click-drag pans. Elastic edges: dragging past an edge gets harder the further you pull, and the map
+            // springs back when released. The mouse wheel zooms toward the cursor (it no longer scrolls).
             var scroll=viewport.gameObject.AddComponent<ScrollRect>();scroll.viewport=viewport;scroll.content=world;
-            scroll.horizontal=scroll.vertical=true;scroll.movementType=ScrollRect.MovementType.Clamped;scroll.inertia=true;scroll.decelerationRate=.08f;scroll.scrollSensitivity=35;
+            scroll.horizontal=scroll.vertical=true;scroll.movementType=ScrollRect.MovementType.Elastic;scroll.elasticity=.12f;
+            scroll.inertia=true;scroll.decelerationRate=.08f;scroll.scrollSensitivity=0;
+            BistroMapZoom.Attach(viewport,world,cityZoomLevel,!theme.reducedMotion).Changed=level=>cityZoomLevel=level;
             Canvas.ForceUpdateCanvases();scroll.normalizedPosition=cityPosition;scroll.onValueChanged.AddListener(v=>cityPosition=v);
         }
         return world;

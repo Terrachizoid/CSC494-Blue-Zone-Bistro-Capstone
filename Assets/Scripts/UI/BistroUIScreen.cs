@@ -45,7 +45,7 @@ public partial class BistroUIScreen : MonoBehaviour
         canvas.gameObject.SetActive(true);
         RememberScroll();
         RememberCardFaces();
-        if(screen!=null){screen.gameObject.SetActive(false);Destroy(screen.gameObject);}
+        RetireScreen();
         screen=BistroWidgets.Box(canvas.transform,"Current screen",theme.background,Vector2.zero,Vector2.one);
         dialogueRequests.Clear();
         if(game.IsMainMenu){MainMenu();StyleMenu(screen);FlushDialogue();AnimateNavigation();return;}
@@ -119,15 +119,17 @@ public partial class BistroUIScreen : MonoBehaviour
             var card=BistroFoodCard.Create(grid,food,q.foodId,"sort",$"{servings} purchased servings\n{Expiry(earliest)}",theme);
             card.ApplyShelfArtwork(food,"",servings);
         }
-        BistroWidgets.EmptyShelf(grid,"All foods placed.\nClick a bin to move a card, or submit your answers.",theme);
+        BistroWidgets.EmptyShelf(grid,"All foods placed.\nDrag a food between bins, or out of a bin to take it back.",theme);
         for(int i=0;i<SortBins.Length;i++)
         {
             var answer=SortBins[i];float top=.97f-i*.285f;
             var inBin=answers.Where(p=>p.Value==answer).Select(p=>p.Key).ToList();
             var bin=BistroDropSlot.Create(desk,answer.ToString().ToUpperInvariant(),inBin.Count==0?"Drop food here":"",theme,new Vector2(.665f,top-.265f),new Vector2(.975f,top),false,
-                (id,kind)=>{if(kind=="sort")Change(()=>answers[id]=answer);},()=>Change(()=>modal="sort:"+answer),
-                inBin.Select(id=>game.Queries.Foods.GetById(id)?.displayName??id).ToArray());
-            bin.ApplyIllustratedContents(inBin.Select(id=>game.Queries.Foods.GetById(id)?.icon).ToArray());
+                (id,kind)=>{if(kind=="sort")Change(()=>answers[id]=answer);},null);
+            bin.ApplyIllustratedContents(null);
+            // Rows keep kind "sort": dropping one on another bin moves it there; dropping it anywhere else takes it back.
+            bin.ShowRows(inBin.Select(id=>new BistroDropSlot.Row{key=id,label=game.Queries.Foods.GetById(id)?.displayName??id,art=game.Queries.Foods.GetById(id)?.icon}).ToList(),
+                "sort",id=>Change(()=>answers.Remove(id)),theme);
             bin.GetComponent<Image>().color=Color.Lerp(new Color(.94f,.92f,.86f),LightColour(answer),.22f);
             BistroSurface.Dress((RectTransform)bin.transform,LightColour(answer),theme.cardSprig);
             BistroShelfIcon.Add(bin.transform,LightSymbol(answer),new Vector2(.035f,.75f),new Vector2(.15f,.97f),LightColour(answer));
@@ -161,28 +163,6 @@ public partial class BistroUIScreen : MonoBehaviour
         BistroActionButton.Create(desk,"Continue to service",theme,new Vector2(.64f,.025f),new Vector2(.975f,.115f),BistroActionRole.Primary,()=>Change(()=>game.Loop.BeginService()),true);
     }
     // Opening a bin shows its cards in the same style as the cart review; drag one out to take it back.
-    private void IllustratedSortBin()
-    {
-        var answer=SortBins.FirstOrDefault(l=>"sort:"+l==modal);
-        var shade=BistroWidgets.Box(screen,"Modal blocker",new Color(0,0,0,.55f),Vector2.zero,new Vector2(1,.91f));
-        var panel=BistroShelfStyle.Panel(shade,"Sorting bin",BistroShelfStyle.Cream,new Vector2(.07f,.06f),new Vector2(.93f,.94f));
-        BistroShelfIcon.Add(panel,LightSymbol(answer),new Vector2(.03f,.885f),new Vector2(.08f,.975f),LightColour(answer));
-        BistroShelfStyle.Text(panel,answer.ToString().ToUpperInvariant()+" bin",theme,new Vector2(.09f,.88f),new Vector2(.70f,.98f),34,BistroShelfStyle.Ink,true);
-        BistroShelfStyle.Button(panel,"Close",theme,new Vector2(.83f,.90f),new Vector2(.96f,.97f),theme.accent,BistroShelfStyle.Ink,()=>Change(()=>modal=null));
-        var grid=BistroWidgets.Grid(panel,theme,new Vector2(.04f,.24f),new Vector2(.96f,.86f));
-        ((RectTransform)grid.parent).GetComponent<Image>().color=new Color(.43f,.51f,.44f);
-        grid.GetComponent<BistroResponsiveGrid>().SetPreferred(new Vector2(176,250));
-        foreach(var id in answers.Where(p=>p.Value==answer).Select(p=>p.Key).ToList())
-        {
-            var food=game.Queries.Foods.GetById(id);
-            int servings=game.State.inventory.Where(e=>game.State.shoppingReceipt.batchIds.Contains(e.inventoryEntryId)&&e.foodId==id).Sum(e=>e.servings);
-            BistroFoodCard.Create(grid,food,id,"remove-sort","Drag out to take it back",theme).ApplyShelfArtwork(food,"",servings);
-        }
-        BistroWidgets.EmptyShelf(grid,"This bin is empty.\nClose it and drag a food card in.",theme);
-        var back=BistroShelfStyle.Panel(panel,"Take back",new Color(.83f,.82f,.75f),new Vector2(.04f,.05f),new Vector2(.55f,.21f));
-        BistroShelfStyle.Text(back,"Drag a card here to take it back",theme,new Vector2(.05f,.1f),new Vector2(.95f,.9f),23,BistroShelfStyle.Ink,false,TextAnchor.MiddleCenter);
-        back.gameObject.AddComponent<BistroShelfCartTarget>().Drop=(id,kind)=>{if(kind=="remove-sort")Change(()=>answers.Remove(id));};
-    }
     private void Modal()
     {
         if(modal=="recipes"){RecipeBook();return;}
@@ -197,23 +177,17 @@ public partial class BistroUIScreen : MonoBehaviour
             DialoguePanel("Today's guests",text,"Back",()=>modal=null);return;
         }
         if(modal=="cart"){IllustratedCartReview();return;}
-        if(modal.StartsWith("sort:")){IllustratedSortBin();return;}
+        if(modal=="checkout-confirm"){CheckoutConfirmation();return;}
+        if(modal!="pantry"){modal=null;return;} // the only remaining generic panel
         var shade=BistroWidgets.Box(screen,"Modal blocker",new Color(0,0,0,.70f),Vector2.zero,new Vector2(1,.91f));
-        var panel=BistroWidgets.Box(shade,"Slot contents "+modal,theme.background,new Vector2(.05f,.05f),new Vector2(.95f,.95f));
-        BistroWidgets.Label(panel,modal=="pantry-sell"?"SELL SLOT":modal=="pantry"?"YOUR PANTRY":MealSlotTitle(),theme,new Vector2(.03f,.88f),new Vector2(.75f,.98f),26);
+        var panel=BistroWidgets.Box(shade,"Pantry panel",theme.background,new Vector2(.05f,.05f),new Vector2(.95f,.95f));
+        BistroWidgets.Label(panel,"YOUR PANTRY",theme,new Vector2(.03f,.88f),new Vector2(.75f,.98f),26);
         BistroWidgets.Button(panel,"Close",theme,new Vector2(.81f,.90f),new Vector2(.97f,.97f),()=>Change(()=>modal=null));
         BistroWidgets.Label(panel,notice,theme,new Vector2(.04f,.845f),new Vector2(.96f,.89f),16);
-        if(modal.StartsWith("meal")){MealModal(panel);return;}
         var grid=BistroWidgets.Grid(panel,theme,new Vector2(.03f,.23f),new Vector2(.97f,.84f));
-        if(modal=="pantry"||modal=="pantry-sell")PantryModal(panel,grid);
+        if(modal=="pantry")PantryModal(panel,grid);
     }
-    private string MealSlotTitle()
-    {
-        int index=modal.Length>5&&int.TryParse(modal.Substring(5),out int n)?n:-1;
-        var slots=mealRecipe?.slots;
-        return slots!=null&&index>=0&&index<slots.Length?IntroMealPlan.CategoryName(slots[index].category).ToUpperInvariant()+" SLOT":"SLOT";
-    }
-    // Pantry batches; at the market, drag one serving at a time into SELL, open SELL to drag servings back, then confirm.
+    // Pantry batches; at the market, drag one serving at a time into SELL, drag a row out of SELL to keep one, then confirm.
     private void PantryModal(RectTransform panel,RectTransform grid)
     {
         bool selling=game.Loop.CanSellPantry;
@@ -226,17 +200,6 @@ public partial class BistroUIScreen : MonoBehaviour
         }
         var items=sellSelections.Select(p=>new PantrySaleItem{inventoryEntryId=p.Key,servings=p.Value}).ToList();
         var quote=items.Count==0?null:game.Loop.QuotePantrySale(items);
-        string[] names=sellSelections.Select(p=>$"{FoodName(p.Key)} ×{p.Value}").ToArray();
-        if(modal=="pantry-sell")
-        {
-            foreach(var p in sellSelections)
-                BistroFoodCard.Create(grid,game.Queries.Foods.GetById(BatchFood(p.Key)),p.Key,"unsell",$"{p.Value} servings to sell\nDrag to return one",theme);
-            BistroWidgets.EmptyShelf(grid,"The SELL slot is empty.\nGo back to the pantry and drag servings in.",theme);
-            BistroDropSlot.Create(panel,"RETURN ONE SERVING","Drop a card here to keep one serving",theme,new Vector2(.03f,.025f),new Vector2(.55f,.21f),false,
-                (id,kind)=>{if(kind=="unsell")Change(()=>{if(sellSelections.TryGetValue(id,out int n)){if(n<=1)sellSelections.Remove(id);else sellSelections[id]=n-1;}});},null);
-            BistroWidgets.Button(panel,"← Back to pantry",theme,new Vector2(.59f,.035f),new Vector2(.97f,.12f),()=>Change(()=>modal="pantry"));
-            return;
-        }
         foreach(var e in game.State.inventory)
         {
             sellSelections.TryGetValue(e.inventoryEntryId,out int pending);
@@ -248,8 +211,11 @@ public partial class BistroUIScreen : MonoBehaviour
         }
         BistroWidgets.EmptyShelf(grid,"Your pantry is empty.\nPurchased food appears here as individual batches.",theme);
         if(!selling){BistroWidgets.Label(panel,"Pantry food can be sold at the market, before checkout.",theme,new Vector2(.03f,.05f),new Vector2(.97f,.18f),18);return;}
-        BistroDropSlot.Create(panel,"SELL",items.Count==0?"Drag one serving at a time here":$"{items.Sum(i=>i.servings)} servings · ${(quote!=null&&quote.success?quote.amount:0):0.00}",theme,
-            new Vector2(.03f,.025f),new Vector2(.55f,.21f),quote!=null&&!quote.success,(id,kind)=>{if(kind=="sell-batch")Change(()=>AddSellServing(id));},()=>Change(()=>modal="pantry-sell"),names);
+        var sellSlot=BistroDropSlot.Create(panel,"SELL",items.Count==0?"Drag one serving at a time here":$"{items.Sum(i=>i.servings)} servings · ${(quote!=null&&quote.success?quote.amount:0):0.00}",theme,
+            new Vector2(.03f,.025f),new Vector2(.55f,.21f),quote!=null&&!quote.success,(id,kind)=>{if(kind=="sell-batch")Change(()=>AddSellServing(id));},null);
+        // Each row is one batch waiting to be sold; drag it out of the slot to keep one serving.
+        sellSlot.ShowRows(sellSelections.Select(p=>new BistroDropSlot.Row{key=p.Key,label=$"{FoodName(p.Key)} ×{p.Value}",art=game.Queries.Foods.GetById(BatchFood(p.Key))?.icon}).ToList(),
+            "unsell",id=>Change(()=>{if(sellSelections.TryGetValue(id,out int n)){if(n<=1)sellSelections.Remove(id);else sellSelections[id]=n-1;}}),theme);
         BistroWidgets.Button(panel,quote!=null&&quote.success?$"Sell for ${quote.amount:0.00}":"Sell",theme,new Vector2(.59f,.035f),new Vector2(.97f,.12f),()=>Change(()=>{
             var sale=game.Loop.SellPantry(items);
             if(sale.success){sellSelections.Clear();notice=$"Sold {sale.servingsSold} servings for ${sale.amount:0.00}.";}else notice=sale.error;}));

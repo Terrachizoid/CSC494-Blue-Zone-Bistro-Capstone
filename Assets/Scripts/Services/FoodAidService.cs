@@ -65,7 +65,7 @@ public class FoodAidService
         state.lastFoodAidDay = state.currentDay;
         state.flags.SetFlag(TutorialFlags.FoodAidGiven);
         result.given = true; result.recipeId = recipe.id;
-        result.message = $"A local farmer dropped off {string.Join(", ", names)}: enough for {recipe.displayName}. It keeps for {Math.Max(1, balance.foodAidShelfLifeDays)} day(s).";
+        result.message = $"A local farmer dropped off {string.Join(", ", names)}: enough for {recipe.displayName}. Use it today; it won't keep.";
         return result;
     }
 }

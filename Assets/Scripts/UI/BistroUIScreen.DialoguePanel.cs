@@ -7,6 +7,11 @@ public partial class BistroUIScreen
 {
     private string dialoguePageKey;
     private int dialoguePage;
+    // Typewriter state lives here (not on the rebuilt text), so a rebuild mid-sentence keeps typing smoothly.
+    private const float DialogueCharsPerSecond=55f;
+    private string typingKey;
+    private float typingStart;
+    private bool typingSkipped;
     private static Sprite dialogueFade;
     private class DialogueRequest{public RectTransform slot;public string speaker,text,actionLabel;public Action action,cancel;public bool block;public Action<RectTransform> decorate;}
     private readonly List<DialogueRequest> dialogueRequests=new List<DialogueRequest>();
@@ -37,16 +42,8 @@ public partial class BistroUIScreen
     {
         string key=speaker+"/"+text;
         if(dialoguePageKey!=key){dialoguePageKey=key;dialoguePage=0;}
-        var pages=new List<string>();string page="";
-        foreach(var line in (text??"").Split('\n')){
-            foreach(var word in line.Split(' ')){
-                if(page.Length+word.Length>330){pages.Add(page.Trim());page="";}
-                page+=word+" ";
-            }
-            page+="\n";
-            if(page.Split('\n').Length>5){pages.Add(page.Trim());page="";}
-        }
-        if(!string.IsNullOrWhiteSpace(page)||pages.Count==0)pages.Add(page.Trim());
+        // Pages break between sentences and are balanced (BistroDialoguePages).
+        var pages=BistroDialoguePages.Split(text);
         dialoguePage=Mathf.Clamp(dialoguePage,0,pages.Count-1);
         root.GetComponent<Image>().raycastTarget=block;
         if(dialogueFade==null){
@@ -57,10 +54,24 @@ public partial class BistroUIScreen
         var frame=BistroWidgets.Box(root,"Bottom dialogue",Color.white,Vector2.zero,new Vector2(1,.35f));frame.GetComponent<Image>().sprite=dialogueFade;
         // Speaker and text stay below .64 of the frame, where the fade is fully dark.
         BistroShelfStyle.Text(frame,speaker,theme,new Vector2(.045f,.48f),new Vector2(.23f,.64f),23,new Color(.80f,.85f,.68f),true);
-        var body=BistroShelfStyle.Text(frame,pages[dialoguePage],theme,new Vector2(.25f,.21f),new Vector2(.94f,.64f),22,Color.white);
+        string shownPage=pages[dialoguePage];
+        var body=BistroShelfStyle.Text(frame,shownPage,theme,new Vector2(.25f,.21f),new Vector2(.94f,.64f),22,Color.white);
         body.alignment=TextAnchor.UpperLeft;
+        // Each page types out once. Clicking the box or the main button while it types shows the whole page.
+        string typeKey=key+"#"+dialoguePage;
+        if(typingKey!=typeKey){typingKey=typeKey;typingStart=Time.unscaledTime;typingSkipped=false;}
+        float typeSeconds=BistroTextMotion.Duration(shownPage,DialogueCharsPerSecond,true);
+        bool Typed()=>theme.reducedMotion||typingSkipped||Time.unscaledTime-typingStart>=typeSeconds;
+        if(!Typed())
+        {
+            BistroTextMotion.Typewriter(body,shownPage,typingStart,DialogueCharsPerSecond,true);
+            var skip=frame.gameObject.AddComponent<Button>();skip.transition=Selectable.Transition.None;
+            skip.onClick.AddListener(()=>{if(!Typed())Change(()=>typingSkipped=true);});
+        }
         bool last=dialoguePage==pages.Count-1;
-        BistroActionButton.Create(frame,last?actionLabel:"Next  ›",theme,new Vector2(.78f,.045f),new Vector2(.96f,.19f),BistroActionRole.Primary,()=>Change(()=>{if(!last)dialoguePage++;else{dialoguePageKey=null;action?.Invoke();}}));
+        BistroActionButton.Create(frame,last?actionLabel:"Next  ›",theme,new Vector2(.78f,.045f),new Vector2(.96f,.19f),BistroActionRole.Primary,()=>Change(()=>{
+            if(!Typed()){typingSkipped=true;return;}
+            if(!last)dialoguePage++;else{dialoguePageKey=null;action?.Invoke();}}));
         if(dialoguePage>0)BistroActionButton.Create(frame,"‹  Previous",theme,new Vector2(.25f,.045f),new Vector2(.40f,.19f),BistroActionRole.Secondary,()=>Change(()=>dialoguePage--));
         if(cancel!=null)BistroActionButton.Create(frame,"Back",theme,new Vector2(.59f,.045f),new Vector2(.74f,.19f),BistroActionRole.Secondary,()=>Change(()=>{dialoguePageKey=null;cancel();}));
         if(pages.Count>1)BistroShelfStyle.Text(frame,$"{dialoguePage+1} / {pages.Count}",theme,new Vector2(.045f,.08f),new Vector2(.20f,.20f),14,Color.white);

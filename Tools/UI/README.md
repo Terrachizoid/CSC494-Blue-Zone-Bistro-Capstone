@@ -25,3 +25,7 @@ The 2026-10-28 harness also captures service-dialogue, service-guide, service-re
 Copy RecipeFlipCheck.cs into the disposable project's Assets/Editor and run `-executeMethod RecipeFlipCheck.Run` with a graphics-capable Unity batch process. It enters Play Mode and checks animated narrowing, final face, unscaled-time progress while timeScale=0, repeated-click suppression, interruption cleanup and reduced-motion immediate flip. Do not install the harness into live Assets. ShelfCapture also asserts city map extents exceed the viewport on both axes and that the menu blur shader is assigned.
 
 Use Tools/UI/ReviewProject with a local `*` .gitignore for disposable Unity reviews instead of Temp/UIReview28: the live editor can clear Temp. Copy source into the review project only; never copy old review scripts back into live Assets. ShelfCapture now also renders sorting-polish.png and checks the HUD icon cache size.
+
+Ending checks (2026-10-30): ShelfCapture renders ending-E_*.png for all five imported definitions, checks every story background against its ending image and checks that recap rendering does not change money, popularity or the selected ending. Fixtures force Completed; this is presentation validation, not a six-day playthrough.
+
+EventPaperCapture.Run is a focused disposable-project capture for five newspaper articles, tower notice, Codex and close routing; it imports authored content and uses an in-memory session. Run this independently while concurrent shopping/slot changes invalidate ShelfCapture assumptions.

@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class BistroFoodCard : MonoBehaviour, IPointerClickHandler, IInitializePotentialDragHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
+public class BistroFoodCard : MonoBehaviour, IBistroDragSource, IPointerClickHandler, IInitializePotentialDragHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     public string Key { get; private set; }
     public string Kind { get; private set; }
@@ -100,6 +100,13 @@ public class BistroFoodCard : MonoBehaviour, IPointerClickHandler, IInitializePo
         veil.GetComponent<Image>().raycastTarget=false;shelfBack=reverse.gameObject;
         // Move existing appeal badge out of the illustration's focal area.
         if(icon.transform.childCount>0){var badge=icon.transform.GetChild(0);back+="\n"+badge.GetComponentInChildren<Text>().text;badge.gameObject.SetActive(false);}
+        // Small appeal tag in the top-right corner of the front (the store logo sits top-left), clear of the art's centre.
+        if(theme==null||theme.showCardAppeal)
+        {
+            var chip=BistroShelfStyle.Panel(icon.transform,"Appeal tag",new Color(.10f,.16f,.13f,.62f),new Vector2(.60f,.86f),new Vector2(.95f,.955f));
+            chip.GetComponent<Image>().raycastTarget=false;
+            BistroShelfStyle.Text(chip,$"Appeal {food.ingredientAppeal:0.#}",theme,Vector2.zero,Vector2.one,14,Color.white,false,TextAnchor.MiddleCenter).raycastTarget=false;
+        }
         if(logo!=null)BistroShelfIcon.Add(icon.transform,logo,"leaf",new Vector2(.07f,.84f),new Vector2(.19f,.95f),food.lightLogo?new Color(.93f,.95f,.78f):BistroShelfStyle.Green);
         back+="\n\n"+front.Replace("Click to flip","");
         var plate=BistroShelfStyle.Panel(transform,"Name plaque",new Color(.96f,.93f,.84f),new Vector2(.04f,.16f),new Vector2(.96f,.33f));

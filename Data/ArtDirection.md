@@ -221,3 +221,19 @@ BistroActionButton.Create accepts an explicit BistroActionRole (Primary, Seconda
 All roles share rounded geometry, subtle gradient, thin rim, upper highlight and light shadow. Hover/pressed/disabled use Selectable colors; selection adds a focus rim; press reduces the shadow. Reduced motion disables color-fade timing. Existing main-menu controls, toolbar items and world indicators retain their separate designs. No gameplay, CSV content or art ownership changed.
 
 Validation: graphics-enabled Unity ShelfCapture passed its existing dialogue paging/final-action, service, recipe, shelf and world routing checks. Reviewed service-review.png with all three roles and dialogue navigation; copied to Data/Previews/2026-10-29-Actions. Keyboard focus/disabled visuals were implemented but not manually exercised in a full playthrough; WebGL unverified.
+
+### Ending placeholder batch (2026-10-30)
+Reference: Art/UI/cityBackground.png, the selected waterfront city. Prompt direction: a recognizable cream waterfront corner bistro with teal frames, medium-wide elevated three-quarter view, simple low-poly-like forms, muted colour and quiet lower area for dialogue; no characters, logos or baked text. Five individual outputs: Blue (blue/green, planted and flourishing), Popular (coral sunset, expanded terraces), Niche (pale cool mist, sparse tables), Bankrupt (shutter, stacked chairs, small facade crack), Struggling (gray, sparse and weary but still open). Integrated as review placeholders; architecture varies slightly between generated variants and awaits user art review.
+
+### Event editorial icons (2026-10-30)
+Built-in image generation, one transparent PNG per event, saved in Assets/Art/Events/EV_<ID>_icon.png. User's retro poster reference guided the paper/editorial composition; imagery is original. Current compact and expanded views reuse the same simple illustration through separate CSV slots.
+
+Shared prompt: square transparent production game UI illustration; retro newspaper editorial cut-paper icon; bold simple silhouette; four or five flat muted colours; restrained printed grain within shapes; no gradients, realistic shading, 3D, tiny details, words, letters, numbers, border, background rectangle or humans; one balanced central emblem readable as a thumbnail.
+
+Subjects:
+- SALE: A simple ochre grocery bag with two chunky vegetables peeking out, one large downward price arrow and a blank hanging sale tag. Muted ochre, sage and charcoal.
+- OATS: A single recognizable oat stalk and small bowl of rolled oats, next to one bold rising price chart arrow. Muted wheat gold, dusty blue and charcoal.
+- CLOSED: A small sage grocery storefront with a large simple leaf emblem, shutter down and a crossed wrench symbol. Verdant maintenance closure. Sage, cream and charcoal.
+- PUBLICITY: A small teal bistro storefront, three large upward arrows, and a nearby sage leaf seal representing the partner grocery store. Local newspaper publicity. Dusty teal, sage and warm cream.
+- CHEAP_CLOSED: A small ochre convenience shop with closed shutter, two stacked cardboard boxes and a simple circular restocking arrow. Muted ochre, clay and charcoal.
+

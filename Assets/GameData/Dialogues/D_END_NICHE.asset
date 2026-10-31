@@ -42,7 +42,7 @@ MonoBehaviour:
     textTemplate: Your bistro stayed small, but the meals made a positive difference.
     claim: {fileID: 0}
     portrait: {fileID: 0}
-    backgroundImage: {fileID: 21300000, guid: ab6b2e72d1aab6f43874bbc2a94a19fe, type: 3}
+    backgroundImage: {fileID: 21300000, guid: a2127af3109c424fbc2e521462ca055a, type: 3}
     emotion: 
     voiceOver: {fileID: 0}
   - lineOrder: 1
@@ -51,7 +51,7 @@ MonoBehaviour:
       have yet to discover you.
     claim: {fileID: 0}
     portrait: {fileID: 0}
-    backgroundImage: {fileID: 21300000, guid: 102d341be4daca742899fcd00e56fe55, type: 3}
+    backgroundImage: {fileID: 21300000, guid: a2127af3109c424fbc2e521462ca055a, type: 3}
     emotion: 
     voiceOver: {fileID: 0}
   - lineOrder: 2
@@ -60,7 +60,7 @@ MonoBehaviour:
       their seat.
     claim: {fileID: 0}
     portrait: {fileID: 0}
-    backgroundImage: {fileID: 21300000, guid: 272bb0b55e2f33c4392112803709ee76, type: 3}
+    backgroundImage: {fileID: 21300000, guid: a2127af3109c424fbc2e521462ca055a, type: 3}
     emotion: 
     voiceOver: {fileID: 0}
   approvalStatus: 0

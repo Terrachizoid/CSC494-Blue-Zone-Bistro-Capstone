@@ -39,7 +39,7 @@ MonoBehaviour:
   lines:
   - lineOrder: 0
     speakerId: U002
-    textTemplate: Hold on, that is not the dish I picked.
+    textTemplate: Hold on, that's not the dish I picked.
     claim: {fileID: 0}
     portrait: {fileID: 0}
     backgroundImage: {fileID: 0}
@@ -47,7 +47,7 @@ MonoBehaviour:
     voiceOver: {fileID: 0}
   - lineOrder: 1
     speakerId: U002
-    textTemplate: A bigger pile does not fix the missing ingredients. Please check
+    textTemplate: A bigger pile doesn't fix the missing ingredients. Please check
       the recipe next time.
     claim: {fileID: 0}
     portrait: {fileID: 0}

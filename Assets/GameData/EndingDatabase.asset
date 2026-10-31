@@ -26,7 +26,7 @@ MonoBehaviour:
     priority: 100
     fallback: 0
     dialogue: {fileID: 11400000, guid: d26b562aea5e0a34b9622f7ada301ed0, type: 2}
-    image: {fileID: 21300000, guid: 803613dbc33995645949cd65bcbeeffe, type: 3}
+    image: {fileID: 21300000, guid: fc548bc87d9e430db74c80fd1ebc1e6e, type: 3}
   - id: E_NICHE
     title: A neighbourhood favourite
     minPopularity: -1
@@ -40,7 +40,7 @@ MonoBehaviour:
     priority: 90
     fallback: 0
     dialogue: {fileID: 11400000, guid: 5772da432518bb84bbc1c160aafb21d0, type: 2}
-    image: {fileID: 21300000, guid: ab6b2e72d1aab6f43874bbc2a94a19fe, type: 3}
+    image: {fileID: 21300000, guid: a2127af3109c424fbc2e521462ca055a, type: 3}
   - id: E_POPULAR
     title: A full house, an unfinished promise
     minPopularity: 750
@@ -54,7 +54,7 @@ MonoBehaviour:
     priority: 80
     fallback: 0
     dialogue: {fileID: 11400000, guid: 1ae2684f140e29d4eb2fef21f6b149fc, type: 2}
-    image: {fileID: 21300000, guid: 2cdc5c868f2fb794aa384717ce510621, type: 3}
+    image: {fileID: 21300000, guid: 9149da4517974a99885e45d054e79116, type: 3}
   - id: E_STRUGGLING
     title: A chance to begin again
     minPopularity: -1
@@ -68,7 +68,7 @@ MonoBehaviour:
     priority: -100
     fallback: 1
     dialogue: {fileID: 11400000, guid: abcffda5db0695146beb0a82c8d583b6, type: 2}
-    image: {fileID: 21300000, guid: 927909a3902d09741b64d2196988524c, type: 3}
+    image: {fileID: 21300000, guid: 2c70d4ab8a50434384126e63a67aca41, type: 3}
   - id: E_BANKRUPT
     title: Closed for now
     minPopularity: -1
@@ -82,4 +82,4 @@ MonoBehaviour:
     priority: 200
     fallback: 0
     dialogue: {fileID: 11400000, guid: 208c98f9a4d8c2c42bbcabc4a8cf827b, type: 2}
-    image: {fileID: 21300000, guid: f6b91f3cb252c1641bad7b98b8de6d01, type: 3}
+    image: {fileID: 21300000, guid: 11dd653e5d6a4d32afca75c6f4eff64e, type: 3}

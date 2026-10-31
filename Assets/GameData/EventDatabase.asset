@@ -23,7 +23,10 @@ MonoBehaviour:
     maxDay: -1
     durationDays: 2
     weight: 1
-    image: {fileID: 21300000, guid: ab6b2e72d1aab6f43874bbc2a94a19fe, type: 3}
+    image: {fileID: 21300000, guid: cf2f3e8d19a840ec95405a2975113a9d, type: 3}
+    thumbnail: {fileID: 21300000, guid: cf2f3e8d19a840ec95405a2975113a9d, type: 3}
+    paperColor: '#EAE0CB'
+    accentColor: '#D3AE73'
     notificationAudio: {fileID: 0}
     detailAudio: {fileID: 0}
     codex:
@@ -44,7 +47,10 @@ MonoBehaviour:
     maxDay: -1
     durationDays: 1
     weight: 1
-    image: {fileID: 21300000, guid: 58d09e4bf0f093b41a8338500a98219e, type: 3}
+    image: {fileID: 21300000, guid: bcc1f242ed4a412e83016f2743b95cae, type: 3}
+    thumbnail: {fileID: 21300000, guid: bcc1f242ed4a412e83016f2743b95cae, type: 3}
+    paperColor: '#E8E3D5'
+    accentColor: '#A6B7BC'
     notificationAudio: {fileID: 0}
     detailAudio: {fileID: 0}
     codex:
@@ -65,7 +71,10 @@ MonoBehaviour:
     maxDay: -1
     durationDays: 1
     weight: 1
-    image: {fileID: 21300000, guid: 927909a3902d09741b64d2196988524c, type: 3}
+    image: {fileID: 21300000, guid: 508a8e9b3588484aba7dfbcb11a395a7, type: 3}
+    thumbnail: {fileID: 21300000, guid: 508a8e9b3588484aba7dfbcb11a395a7, type: 3}
+    paperColor: '#E4E7DA'
+    accentColor: '#A6B59B'
     notificationAudio: {fileID: 0}
     detailAudio: {fileID: 0}
     codex:
@@ -87,7 +96,10 @@ MonoBehaviour:
     maxDay: -1
     durationDays: 2
     weight: 1
-    image: {fileID: 21300000, guid: ddb2294adac35f942803fbc04b2334c3, type: 3}
+    image: {fileID: 21300000, guid: b408e0ee1679469aa50205737cd99443, type: 3}
+    thumbnail: {fileID: 21300000, guid: b408e0ee1679469aa50205737cd99443, type: 3}
+    paperColor: '#E5E8DE'
+    accentColor: '#A2BCB4'
     notificationAudio: {fileID: 0}
     detailAudio: {fileID: 0}
     codex:
@@ -112,7 +124,10 @@ MonoBehaviour:
     maxDay: -1
     durationDays: 1
     weight: 1
-    image: {fileID: 21300000, guid: f3f993fdf2cbfa7419a83d8c86aba33d, type: 3}
+    image: {fileID: 21300000, guid: 022dbe41244043b59a05a172591dfe50, type: 3}
+    thumbnail: {fileID: 21300000, guid: 022dbe41244043b59a05a172591dfe50, type: 3}
+    paperColor: '#EAE0D1'
+    accentColor: '#C9A48B'
     notificationAudio: {fileID: 0}
     detailAudio: {fileID: 0}
     codex:

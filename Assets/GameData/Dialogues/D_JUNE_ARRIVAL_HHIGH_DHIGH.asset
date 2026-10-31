@@ -47,7 +47,7 @@ MonoBehaviour:
     voiceOver: {fileID: 0}
   - lineOrder: 1
     speakerId: U001
-    textTemplate: I have enjoyed coming here. I am looking forward to what you have
+    textTemplate: I've enjoyed coming here. I'm looking forward to what you have
       planned.
     claim: {fileID: 0}
     portrait: {fileID: 0}

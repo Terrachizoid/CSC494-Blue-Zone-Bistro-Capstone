@@ -18,6 +18,7 @@ public sealed class BistroActionButton : MonoBehaviour, ISelectHandler, IDeselec
         var rect=BistroShelfStyle.Panel(parent,label,fill,min,max);
         rect.gameObject.AddComponent<BistroSurface>();
         var button=rect.gameObject.AddComponent<UnityEngine.UI.Button>();button.targetGraphic=rect.GetComponent<UnityEngine.UI.Image>();
+        if(!theme.reducedMotion)rect.gameObject.AddComponent<BistroMotion>(); // shared hover/press motion family
         var colors=button.colors;colors.normalColor=Color.white;colors.highlightedColor=new Color(1.08f,1.08f,1.08f);colors.selectedColor=new Color(1.06f,1.06f,1.06f);colors.pressedColor=new Color(.84f,.87f,.82f);colors.disabledColor=new Color(.65f,.65f,.65f,.65f);colors.fadeDuration=theme.reducedMotion?0:.10f;button.colors=colors;
         var controller=rect.gameObject.AddComponent<BistroActionButton>();controller.Role=role;controller.button=button;
         controller.shadow=rect.gameObject.AddComponent<UnityEngine.UI.Shadow>();controller.shadow.effectColor=new Color(.08f,.14f,.11f,.18f);controller.shadow.effectDistance=new Vector2(0,-2);

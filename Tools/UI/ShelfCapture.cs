@@ -89,6 +89,18 @@ if(toast==null)throw new Exception("Missing tower bubble");
 camera.Render();tex.ReadPixels(new Rect(0,0,1672,940),0,0);tex.Apply();File.WriteAllBytes("tower-news.png",tex.EncodeToPNG());
 toast.GetComponent<Button>().onClick.Invoke();if((string)typeof(BistroUIScreen).GetField("modal",flags).GetValue(ui)!="event-detail")throw new Exception("Bubble detail route failed");
 Set(ui,"toastRecord",null);toast.gameObject.SetActive(false);
+foreach(var news in Asset<EventDatabase>().events){
+ if(news.image==null||news.thumbnail==null)throw new Exception("Missing event illustration "+news.id);
+ var record=new EventRecord{eventId=news.id,startDay=4,expiresOnDay=4+news.durationDays,effects=news.effects.Select(e=>e.Copy()).ToList()};
+ typeof(BistroUIScreen).GetMethod("OpenEvent",flags).Invoke(ui,new object[]{record});Call(ui,"Refresh");Canvas.ForceUpdateCanvases();
+ if(go.GetComponentsInChildren<RectTransform>().Any(t=>t.name=="Bottom dialogue"))throw new Exception("Event still renders as dialogue");
+ camera.Render();tex.ReadPixels(new Rect(0,0,1672,940),0,0);tex.Apply();File.WriteAllBytes("news-"+news.id+".png",tex.EncodeToPNG());
+ var codexButton=go.GetComponentsInChildren<Button>().FirstOrDefault(b=>b.GetComponentInChildren<Text>()?.text=="Codex · Read more");
+ if(codexButton!=null){codexButton.onClick.Invoke();Call(ui,"Refresh");if(typeof(BistroUIScreen).GetField("eventCodex",flags).GetValue(ui)==null)throw new Exception("Codex link failed");}
+}
+Set(ui,"eventCodex",null);Set(ui,"modal",null);
+Debug.Log("EVENT PAPER PASS: five artwork mappings, newspaper rendering without dialogue, and Codex navigation.");
+
 game.State.inventory.Add(new InventoryEntry{foodId="P004",servings=4,daysRemaining=3,purchaseCostPerServing=1});
 game.State.inventory.Add(new InventoryEntry{foodId="P001",servings=8,daysRemaining=-1,purchaseCostPerServing=.5f});
 Set(ui,"notice","");
@@ -138,6 +150,19 @@ for(int pageIndex=0;pageIndex<20;pageIndex++){
 var finishLesson=go.GetComponentsInChildren<Button>().First(b=>b.GetComponentInChildren<Text>()?.text=="Continue");finishLesson.onClick.Invoke();
 if(lesson.Active?.id=="T_REQUESTS")throw new Exception("Final tutorial action did not complete");
 Set(ui,"modal",null);typeof(GameLoop).GetProperty("Phase").SetValue(game.Loop,GamePhase.Results);Call(ui,"Refresh");Canvas.ForceUpdateCanvases();camera.Render();tex.ReadPixels(new Rect(0,0,1672,940),0,0);tex.Apply();File.WriteAllBytes("day-summary.png",tex.EncodeToPNG());
+// Exercise every authored ending with imported per-item artwork.
+typeof(GameLoop).GetProperty("Phase").SetValue(game.Loop,GamePhase.Completed);
+var endingMoney=game.State.money;var endingPopularity=game.State.popularity;
+foreach(var ending in Asset<EndingDatabase>().endings){
+ game.State.endingId=ending.id;Set(ui,"endingLine",0);Set(ui,"endingFinished",false);Set(ui,"modal",null);
+ if(ending.image==null||ending.dialogue.lines.Any(l=>l.backgroundImage!=ending.image))throw new Exception("Ending artwork mismatch "+ending.id);
+ Call(ui,"Refresh");Canvas.ForceUpdateCanvases();
+ if(go.GetComponentsInChildren<Image>().First(i=>i.name=="Ending artwork").sprite!=ending.image)throw new Exception("Ending scene missing "+ending.id);
+ camera.Render();tex.ReadPixels(new Rect(0,0,1672,940),0,0);tex.Apply();File.WriteAllBytes("ending-"+ending.id+".png",tex.EncodeToPNG());
+ Set(ui,"endingLine",ending.dialogue.lines.Length-1);Set(ui,"endingFinished",true);Call(ui,"Refresh");
+ if(game.State.money!=endingMoney||game.State.popularity!=endingPopularity||game.State.endingId!=ending.id)throw new Exception("Ending presentation mutated progress");
+}
+Debug.Log("ENDING PASS: five imported backgrounds, all dialogue references, full-screen rendering and non-mutating recap.");
 Debug.Log("DIALOGUE PASS: review, result and guide use bottom panel.");
 Debug.Log("SERVICE PASS: scene layers, dialogue advancement and illustrated recipe selection.");
 Debug.Log("RECIPE PASS: unlocked catalogue, all artwork mappings and flip backs.");typeof(GameBootstrap).GetProperty("IsMainMenu").SetValue(game,true);Call(ui,"Refresh");Canvas.ForceUpdateCanvases();camera.Render();tex.ReadPixels(new Rect(0,0,1672,940),0,0);tex.Apply();File.WriteAllBytes("menu-start.png",tex.EncodeToPNG());if(go.GetComponentInChildren<BistroMenuBlur>().GetComponent<Image>().material.shader.name!="Bistro/UI/MenuBlur")throw new Exception("Menu blur material missing");Debug.Log("NEWS PASS: tower opens archive; notification opens event detail.");Debug.Log("WORLD PASS: three city routes, ten shelf routes, drag suppression and day-one store lock.");

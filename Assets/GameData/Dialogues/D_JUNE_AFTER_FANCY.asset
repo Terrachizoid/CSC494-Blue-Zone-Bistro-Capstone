@@ -48,7 +48,7 @@ MonoBehaviour:
   - lineOrder: 1
     speakerId: U001
     textTemplate: I enjoyed the welcome, but please keep the affordable bowls too.
-      A higher price is not a promise about my health.
+      A higher price isn't a promise about my health.
     claim: {fileID: 0}
     portrait: {fileID: 0}
     backgroundImage: {fileID: 0}

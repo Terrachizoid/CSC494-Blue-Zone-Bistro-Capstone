@@ -50,7 +50,7 @@ MonoBehaviour:
     voiceOver: {fileID: 0}
   - lineOrder: 1
     speakerId: U001
-    textTemplate: Could we start with something simple? I would rather build a routine
+    textTemplate: Could we start with something simple? I'd rather build a routine
       than chase an expensive promise.
     claim: {fileID: 0}
     portrait: {fileID: 0}

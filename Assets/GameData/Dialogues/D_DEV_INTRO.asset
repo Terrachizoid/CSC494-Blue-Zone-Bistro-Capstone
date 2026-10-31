@@ -41,7 +41,7 @@ MonoBehaviour:
   lines:
   - lineOrder: 0
     speakerId: U002
-    textTemplate: I usually plan lunch around meat or eggs after the gym. That is
+    textTemplate: I usually plan lunch around meat or eggs after the gym. That's
       the habit I know.
     claim: {fileID: 0}
     portrait: {fileID: 0}
@@ -50,7 +50,7 @@ MonoBehaviour:
     voiceOver: {fileID: 0}
   - lineOrder: 1
     speakerId: U002
-    textTemplate: I am willing to try a bean or tofu bowl. Make it a meal I can picture
+    textTemplate: I'm willing to try a bean or tofu bowl. Make it a meal I can picture
       ordering again.
     claim: {fileID: 0}
     portrait: {fileID: 0}

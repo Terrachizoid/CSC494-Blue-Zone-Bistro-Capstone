@@ -39,7 +39,7 @@ MonoBehaviour:
   lines:
   - lineOrder: 0
     speakerId: U004
-    textTemplate: Thanks for the {servedRecipe}. It is good to have a straightforward
+    textTemplate: Thanks for the {servedRecipe}. It's good to have a straightforward
       lunch option.
     claim: {fileID: 0}
     portrait: {fileID: 0}

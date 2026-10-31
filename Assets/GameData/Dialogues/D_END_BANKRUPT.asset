@@ -43,7 +43,7 @@ MonoBehaviour:
       and too few tables filled to cover it.
     claim: {fileID: 0}
     portrait: {fileID: 0}
-    backgroundImage: {fileID: 21300000, guid: 927909a3902d09741b64d2196988524c, type: 3}
+    backgroundImage: {fileID: 21300000, guid: 11dd653e5d6a4d32afca75c6f4eff64e, type: 3}
     emotion: 
     voiceOver: {fileID: 0}
   - lineOrder: 1
@@ -52,16 +52,15 @@ MonoBehaviour:
       your costs among the lowest in town.'
     claim: {fileID: 0}
     portrait: {fileID: 0}
-    backgroundImage: {fileID: 21300000, guid: f6b91f3cb252c1641bad7b98b8de6d01, type: 3}
+    backgroundImage: {fileID: 21300000, guid: 11dd653e5d6a4d32afca75c6f4eff64e, type: 3}
     emotion: 
     voiceOver: {fileID: 0}
   - lineOrder: 2
     speakerId: Narrator
-    textTemplate: 'What the neighbourhood was missing was a reason to come in: dishes
-      they were craving, and meals that made them excited to return.'
+    textTemplate: Healthy food was never the problem.
     claim: {fileID: 0}
     portrait: {fileID: 0}
-    backgroundImage: {fileID: 21300000, guid: f3f993fdf2cbfa7419a83d8c86aba33d, type: 3}
+    backgroundImage: {fileID: 21300000, guid: 11dd653e5d6a4d32afca75c6f4eff64e, type: 3}
     emotion: 
     voiceOver: {fileID: 0}
   - lineOrder: 3
@@ -70,7 +69,7 @@ MonoBehaviour:
       choice the delicious one. The doors can open again.
     claim: {fileID: 0}
     portrait: {fileID: 0}
-    backgroundImage: {fileID: 21300000, guid: ab6b2e72d1aab6f43874bbc2a94a19fe, type: 3}
+    backgroundImage: {fileID: 21300000, guid: 11dd653e5d6a4d32afca75c6f4eff64e, type: 3}
     emotion: 
     voiceOver: {fileID: 0}
   approvalStatus: 0

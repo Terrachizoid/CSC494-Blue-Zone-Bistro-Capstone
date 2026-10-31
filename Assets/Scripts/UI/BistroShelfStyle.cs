@@ -78,6 +78,7 @@ public static class BistroShelfStyle
     public static Button Button(Transform parent,string label,BistroUITheme theme,Vector2 min,Vector2 max,Color fill,Color ink,Action action,bool title=false)
     {
         var r=Panel(parent,label,fill,min,max);var button=r.gameObject.AddComponent<Button>();button.targetGraphic=r.GetComponent<Image>();
+        if(!theme.reducedMotion)r.gameObject.AddComponent<BistroMotion>();
         Text(r,label,theme,new Vector2(.07f,.06f),new Vector2(.93f,.94f),22,ink,title,TextAnchor.MiddleCenter);
         button.onClick.AddListener(()=>action());return button;
     }

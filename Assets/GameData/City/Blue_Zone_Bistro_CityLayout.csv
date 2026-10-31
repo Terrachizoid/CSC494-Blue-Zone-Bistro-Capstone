@@ -1,0 +1,45 @@
+kind,id,x,z,w,d,style,store_id,notes
+setting,seed,20261030,,,,,,Same seed gives the same city
+setting,blocks_x,16,,,,,,City grid size in blocks (west to east)
+setting,blocks_z,12,,,,,,City grid size in blocks (south to north)
+setting,block_size,24,,,,,,Metres per block (buildings)
+setting,road_width,8,,,,,,Metres per street
+coast,c01,-0.6,12.6,,,,,Land outline in block units; listed clockwise from the north-west corner
+coast,c02,16.6,12.6,,,,,
+coast,c03,16.6,7.4,,,,,
+coast,c04,15.6,6.6,,,,,
+coast,c05,15.2,5.0,,,,,
+coast,c06,15.7,3.2,,,,,
+coast,c07,15.0,1.6,,,,,
+coast,c08,13.2,1.1,,,,,
+coast,c09,11.0,0.8,,,,,
+coast,c10,9.0,1.0,,,,,
+coast,c11,7.2,0.6,,,,,
+coast,c12,5.4,1.0,,,,,
+coast,c13,3.6,1.3,,,,,
+coast,c14,2.6,2.2,,,,,
+coast,c15,2.4,3.6,,,,,
+coast,c16,2.9,4.6,,,,,
+coast,c17,2.6,5.5,,,,,
+coast,c18,1.4,5.8,,,,,
+coast,c19,0.2,5.3,,,,,
+coast,c20,-0.6,5.6,,,,,
+island,i01,-0.6,4.2,,,,,West bank across the bay (reached by the bridge)
+island,i02,0.4,4.4,,,,,
+island,i03,1.3,3.6,,,,,
+island,i04,1.0,2.2,,,,,
+island,i05,-0.6,1.6,,,,,
+landmark,S001,2.0,9.0,2,2,dome,S001,Verdant & Co. (glass dome)
+landmark,S002,12.0,9.6,2.6,1.6,bigbox_orange,S002,CheapCart
+landmark,S003,11.6,3.6,2.6,1.8,bigbox_blue,S003,MegaBulk Club
+landmark,NEWS,7.2,6.2,0.6,0.6,tower,,News tower (opens the newspaper)
+landmark,BISTRO,4.4,1.5,1.4,1.0,bistro,,Your bistro on the waterfront
+park,P01,6.5,5.5,2,2,plaza,,Tower plaza
+park,P02,5.6,10.0,1.6,1.4,park,,North park
+pond,W01,6.4,10.7,1.2,0.8,,,North pond
+park,P03,9.0,6.6,1.6,1.4,park,,Garden
+pond,W02,9.6,7.2,1.0,0.7,,,Garden pond
+bridge,B01,1.7,4.3,1.6,0.25,,,Bridge over the bay (west-east)
+pier,R01,4.4,0.9,0.25,1.0,,,Bistro pier
+pier,R02,13.4,0.7,0.25,1.0,,,East marina pier
+pier,R03,9.6,0.5,0.25,0.9,,,South pier

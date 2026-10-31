@@ -39,7 +39,7 @@ MonoBehaviour:
   lines:
   - lineOrder: 0
     speakerId: U002
-    textTemplate: I have been looking at the bean and grain options instead of ordering
+    textTemplate: I've been looking at the bean and grain options instead of ordering
       on autopilot.
     claim: {fileID: 0}
     portrait: {fileID: 0}

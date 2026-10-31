@@ -39,8 +39,8 @@ MonoBehaviour:
   lines:
   - lineOrder: 0
     speakerId: U006
-    textTemplate: I really enjoyed that {servedRecipe}. It is a combination I would
-      choose again.
+    textTemplate: I really enjoyed that {servedRecipe}. It's a combination I'd choose
+      again.
     claim: {fileID: 0}
     portrait: {fileID: 0}
     backgroundImage: {fileID: 0}

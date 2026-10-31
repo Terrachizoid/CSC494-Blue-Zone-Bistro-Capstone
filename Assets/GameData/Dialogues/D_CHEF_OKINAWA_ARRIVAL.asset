@@ -41,7 +41,7 @@ MonoBehaviour:
   lines:
   - lineOrder: 0
     speakerId: Visiting Chef
-    textTemplate: Thank you for inviting me into your kitchen. I would like to share
+    textTemplate: Thank you for inviting me into your kitchen. I'd like to share
       a few plant-based meal ideas inspired by Okinawa.
     claim: {fileID: 0}
     portrait: {fileID: 0}
@@ -59,8 +59,8 @@ MonoBehaviour:
     voiceOver: {fileID: 0}
   - lineOrder: 2
     speakerId: Visiting Chef
-    textTemplate: Let us make room for those ingredients and try the new bowls. Your
-      regulars can explore them at their own pace.
+    textTemplate: We can begin with sweet potato, tofu and greens. Think of them
+      as starting points for your own menu.
     claim: {fileID: 0}
     portrait: {fileID: 0}
     backgroundImage: {fileID: 0}

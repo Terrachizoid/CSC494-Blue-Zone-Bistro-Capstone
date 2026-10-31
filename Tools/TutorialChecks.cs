@@ -68,6 +68,19 @@ public static class TutorialChecks
         poorLoop.AttachTutorials(skipped);
         Check(skipped.Active==null&&poor.tutorials.Any(r=>r.tutorialId=="shop"&&r.status=="skipped")&&!poor.flags.HasFlag("shop.done"),"Infeasible lesson did not skip safely");
         Check(poorLoop.Checkout(new List<CartEntry>()).success,"Skipped lesson retained lock");skipped.Dispose();
-        return "PASS: all four tutorial flows, progress guards, preview freedom, no partial mutations, actual dish feedback, crash timing, resume and infeasible skips.";
+        // Regression (2026-10-30): a checkout that leaves money below rent must still move the day on, and the
+        // money-low lesson (sell pantry food) must not start after checkout. It used to block the move to service
+        // after the purchase had already gone through, leaving the market stuck.
+        var rentBalance=new BalanceConfig{rentPerDay=10,rentStartDay=1};
+        var tight=new GameSessionState{money=11};tight.correctlySortedFoodIds.Add("G");
+        var sellLesson=new TutorialDatabase();sellLesson.tutorials.Add(Def("sell",TutorialFlags.MoneyLow,"TextOnly","Market","explain"));
+        var tightLessons=new TutorialController(tight,sellLesson,new IntroMealPlan(tight,foods,recipes,listings,rentBalance));
+        var tightLoop=new GameLoop(new PurchaseService(tight,listings,rentBalance),new MealService(tight,foods,recipes,customers,rentBalance),new DayService(tight,rentBalance),new CustomerVisitService(tight,emptyCustomers,rentBalance),null,new FoodSortingService(tight,foods));
+        tightLoop.AttachTutorials(tightLessons);
+        Check(tightLessons.Active==null&&tightLoop.Checkout(new List<CartEntry>{new CartEntry{listingId="LG"}}).success,"Known-food checkout failed");
+        Check(tight.money<10&&tightLoop.Phase!=GamePhase.Market,"Checkout left the day stuck at the market");
+        Check(tightLessons.Active==null&&!tight.flags.HasFlag(TutorialFlags.MoneyLow),"Money-low lesson started after checkout");
+        tightLessons.Dispose();
+        return "PASS: all four tutorial flows, progress guards, preview freedom, no partial mutations, actual dish feedback, crash timing, resume, infeasible skips and post-checkout transitions.";
     }
 }

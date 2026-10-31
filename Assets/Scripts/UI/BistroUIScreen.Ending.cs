@@ -15,16 +15,25 @@ public partial class BistroUIScreen
         endingLine=Mathf.Clamp(endingLine,0,Math.Max(0,lines.Length-1));
         Sprite art=ending?.image;
         foreach(var line in lines.Take(endingLine+1))if(line.backgroundImage!=null)art=line.backgroundImage;
-        var background=BistroWidgets.Box(screen,"Ending artwork",theme.panel,new Vector2(.04f,.40f),new Vector2(.96f,.91f));
-        if(art!=null){var image=background.GetComponent<Image>();image.sprite=art;image.color=Color.white;image.preserveAspect=true;}
-        else BistroWidgets.Label(background,"YOUR BISTRO'S STORY",theme,new Vector2(.1f,.3f),new Vector2(.9f,.7f),32);
-        BistroWidgets.Label(screen,ending?.title??"Run completed",theme,new Vector2(.05f,.91f),new Vector2(.95f,.99f),32);
+        var viewport=BistroWidgets.Box(screen,"Ending scene",theme.panel,Vector2.zero,Vector2.one);
+        viewport.gameObject.AddComponent<RectMask2D>();
+        var background=BistroWidgets.Box(viewport,"Ending artwork",theme.panel,new Vector2(.5f,.5f),new Vector2(.5f,.5f));
+        if(art!=null)
+        {
+            var image=background.GetComponent<Image>();image.sprite=art;image.color=Color.white;image.raycastTarget=false;
+            var layout=background.gameObject.AddComponent<BistroWorldLayout>();layout.Viewport=viewport;layout.Aspect=art.rect.width/art.rect.height;layout.Cover=true;
+            Canvas.ForceUpdateCanvases();layout.Apply();
+        }
+        var heading=BistroShelfStyle.Panel(screen,"Ending title",new Color(.94f,.92f,.86f,.90f),new Vector2(.035f,.81f),new Vector2(.64f,.965f));
+        heading.GetComponent<Image>().raycastTarget=false;BistroSurface.Dress(heading,BistroShelfStyle.Green,theme.cardSprig);
+        BistroShelfStyle.Text(heading,"BLUE ZONE BISTRO  /  EPILOGUE",theme,new Vector2(.035f,.67f),new Vector2(.96f,.92f),15,BistroShelfStyle.Green);
+        BistroShelfStyle.Text(heading,ending?.title??"The end",theme,new Vector2(.035f,.13f),new Vector2(.96f,.68f),30,BistroShelfStyle.Ink,true);
         string text=lines.Length==0?"Your run is complete. Ending content is unavailable, but you can return to the main menu.":lines[endingLine].textTemplate;
         if(endingFinished||lines.Length==0)text=RunRecap();
         DialoguePanel(ending?.title??"Your bistro",text,endingFinished||lines.Length==0?"Main menu":endingLine+1<lines.Length?"Continue":"Finish story",()=>{
             if(endingFinished||lines.Length==0)game.ReturnToMenu();else if(endingLine+1<lines.Length)endingLine++;else endingFinished=true;
         },()=>game.ReturnToMenu());
-        if(game.SaveFailed)BistroWidgets.Button(screen,"Retry save",theme,new Vector2(.34f,.04f),new Vector2(.58f,.12f),()=>Change(()=>game.RetrySave()));
+        if(game.SaveFailed)BistroActionButton.Create(screen,"Retry save",theme,new Vector2(.77f,.86f),new Vector2(.96f,.94f),BistroActionRole.Secondary,()=>Change(()=>game.RetrySave()));
     }
     // End-of-game recap from the persisted serve history and customer records (no new calculations of outcomes).
     private string RunRecap()
