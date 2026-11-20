@@ -22,6 +22,9 @@ public class GameBootstrap : MonoBehaviour
     public BalanceConfig Balance => balance;
     public GameLoop Loop { get; private set; }
     public GameContentQueries Queries { get; private set; }
+    public MealPlanService Planner { get; private set; } // Today's pinned recipes ("Today's plan" panel).
+    public IdleChatterService Idle { get; private set; }  // Guide chatter lines (Resources/Idle/IdleChatter.csv).
+    public GameDebugTools DebugTools { get; private set; } // Debug panel shortcuts (F2, development builds only).
     public bool IsMainMenu { get; private set; } = true;
     public string SaveMessage { get; private set; }
     public bool SaveFailed { get; private set; }
@@ -105,9 +108,12 @@ public class GameBootstrap : MonoBehaviour
             new FoodSortingService(state, foods), state.gameCompleted,new EndingService(state,endings),new EventService(state,events,balance,listings),
             new PantryService(state, foods, balance), new FoodAidService(state, foods, recipes, balance));
         Loop.DayFinished += CaptureCheckpoint;
-        tutorialController=new TutorialController(state,tutorials,new IntroMealPlan(state,foods,recipes,listings,balance));
+        Planner = new MealPlanService(state, foods, recipes, listings);
+        if (Idle == null) Idle = new IdleChatterService(IdleChatterService.Parse(Resources.Load<TextAsset>("Idle/IdleChatter")?.text));
+        tutorialController=new TutorialController(state,tutorials,new IntroMealPlan(state,foods,recipes,listings,balance)){Planner=Planner};
         Loop.AttachTutorials(tutorialController);
         Queries = new GameContentQueries(state, foods, listings, recipes, customers,endings,events);
+        DebugTools = new GameDebugTools(state, events, listings, balance);
     }
     private void PrepareMorning(GameSessionState session)
     {

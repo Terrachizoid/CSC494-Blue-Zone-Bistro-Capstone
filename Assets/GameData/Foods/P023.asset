@@ -15,6 +15,7 @@ MonoBehaviour:
   id: P023
   displayName: Kale
   recipeCategory: 3
+  alsoCategories: 
   dailyDozenCategories: 05000000
   trafficLight: 1
   ingredientAppeal: 3

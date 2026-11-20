@@ -29,3 +29,5 @@ Use Tools/UI/ReviewProject with a local `*` .gitignore for disposable Unity revi
 Ending checks (2026-10-30): ShelfCapture renders ending-E_*.png for all five imported definitions, checks every story background against its ending image and checks that recap rendering does not change money, popularity or the selected ending. Fixtures force Completed; this is presentation validation, not a six-day playthrough.
 
 EventPaperCapture.Run is a focused disposable-project capture for five newspaper articles, tower notice, Codex and close routing; it imports authored content and uses an in-memory session. Run this independently while concurrent shopping/slot changes invalidate ShelfCapture assumptions.
+
+PanelArtCapture.Run (2026-11-20) imports current CSVs, configures the six new UI sprite borders, clones the authored theme (2D mode only in the fixture), validates all event art references and renders actual plan/guide/suggestion/recipe UI plus a badge sample. Use only in the disposable review project; never copy its imported databases or scene changes back wholesale. Previews: Data/Previews/2026-11-20-Panels. Does not exercise physical input or player saves.

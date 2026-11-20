@@ -15,6 +15,7 @@ MonoBehaviour:
   id: P033
   displayName: Unsweetened almond drink
   recipeCategory: 11
+  alsoCategories: 
   dailyDozenCategories: 00000000
   trafficLight: 2
   ingredientAppeal: 5

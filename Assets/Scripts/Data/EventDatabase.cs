@@ -2,8 +2,10 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-public enum EventEffectType { Price, Availability, AttendancePopularity }
-public enum EventTarget { Store, Food, Bistro }
+// 2026-11-19: Craving (request weight), SortingRefund (refund multiplier), ShelfLife (days added to food bought that day);
+// targets Category (a food type, e.g. Fruit), Shelf ("storeId/shelfId") and Craving (a craving tag).
+public enum EventEffectType { Price, Availability, AttendancePopularity, Craving, SortingRefund, ShelfLife }
+public enum EventTarget { Store, Food, Bistro, Category, Shelf, Craving }
 public enum EventOperation { Add, Multiply, Close }
 [Serializable] public class EventEffect
 {
@@ -19,6 +21,8 @@ public enum EventOperation { Add, Multiply, Close }
     public string id, headline, summary, details;
     public int minDay=2, maxDay=-1, durationDays=1;
     public float weight=1;
+    // False = never chosen in easy mode (BalanceConfig.easyMode), e.g. closures and shortages.
+    public bool easyMode=true;
     public Sprite image;
     // Optional compact art; defaults to the same simple emblem. CSV-owned presentation only.
     public Sprite thumbnail;

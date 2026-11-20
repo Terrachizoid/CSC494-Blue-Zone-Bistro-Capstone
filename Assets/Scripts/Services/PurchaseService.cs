@@ -44,7 +44,7 @@ public class PurchaseService : IPurchaseService, ICartPurchaseService
             return "This listing or store is locked.";
         if (!string.IsNullOrWhiteSpace(listing.requiredFlag) && !state.flags.HasFlag(listing.requiredFlag))
             return "The required unlock flag is missing.";
-        string closed=effects.ClosureReason(listing.store.id);
+        string closed=effects.UnavailableReason(listing);
         if(closed!=null)return closed;
         var price=effects.Quote(listing);if(!price.valid)return price.error;
         int days = balance.GetShelfLife(listing.food.storageType);
@@ -63,7 +63,7 @@ public class PurchaseService : IPurchaseService, ICartPurchaseService
             foodId = listing.food.id,
             servings = listing.servingsPerPackage,
             purchaseCostPerServing = effects.Quote(listing).effectivePrice / listing.servingsPerPackage,
-            daysRemaining = balance.GetShelfLife(listing.food.storageType)
+            daysRemaining = ShelfLife(listing.food)
         };
 
     public CartResult Quote(List<CartEntry> cart)
@@ -89,8 +89,10 @@ public class PurchaseService : IPurchaseService, ICartPurchaseService
 
     public CartResult Checkout(List<CartEntry> cart)
     {
-        if (state.shoppingReceipt != null && state.shoppingReceipt.day == state.currentDay)
-            return new CartResult { error = "Today's checkout is already complete." };
+        // Several checkouts per day: each one gets its own receipt and sorting round (2026-11-13). The next checkout
+        // waits until the previous purchase has been sorted.
+        if (state.shoppingReceipt != null && state.shoppingReceipt.day == state.currentDay && !state.shoppingReceipt.sortingSubmitted)
+            return new CartResult { error = "Sort your last purchase first." };
         var quote = Quote(cart);
         if (!quote.success) return quote;
         // Money can be negative after rent; an empty cart is still allowed so the day can continue.
@@ -99,7 +101,7 @@ public class PurchaseService : IPurchaseService, ICartPurchaseService
             return new CartResult { error = "Maximum sorting discount must be between 0 and 1." };
 
         var receipt = new ShoppingReceipt { day = state.currentDay, total = quote.total,
-            maximumDiscount = balance.maximumSortingDiscount };
+            maximumDiscount = Math.Min(1f, balance.maximumSortingDiscount * effects.RefundMultiplier) };
         var batches = new List<InventoryEntry>();
         var mastered = new HashSet<string>(state.correctlySortedFoodIds ?? new List<string>(), StringComparer.OrdinalIgnoreCase);
         var questionByFood = new Dictionary<string, SortingQuestion>(StringComparer.OrdinalIgnoreCase);
@@ -125,6 +127,8 @@ public class PurchaseService : IPurchaseService, ICartPurchaseService
         // All validation and batch preparation precede the single transaction commit.
         receipt.sortingSubmitted = receipt.questions.Count == 0;
         state.inventory.AddRange(batches);
+        if (state.boughtFoodIds == null) state.boughtFoodIds = new List<string>();
+        foreach (var batch in batches) if (!state.boughtFoodIds.Contains(batch.foodId)) state.boughtFoodIds.Add(batch.foodId);
         state.money -= quote.total;
         state.shoppingReceipt = receipt;
         if (quote.packages > 0) state.flags.SetFlag(TutorialFlags.Purchased);
@@ -133,4 +137,10 @@ public class PurchaseService : IPurchaseService, ICartPurchaseService
 
     private static bool Finite(float value) => !float.IsNaN(value) && !float.IsInfinity(value);
     private static PurchaseResult Fail(string error) => new PurchaseResult { error = error };
+    // Shelf life for food bought today: the authored value, shifted by events (never below one day; -1 = keeps).
+    private int ShelfLife(FoodData food)
+    {
+        int days = balance.GetShelfLife(food.storageType);
+        return days <= 0 ? days : Math.Max(1, days + effects.ShelfLifeChange(food));
+    }
 }

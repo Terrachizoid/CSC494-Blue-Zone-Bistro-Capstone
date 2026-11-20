@@ -81,9 +81,43 @@ public static class GameOperationsChecks
         Check(loop.FinishDay().gameCompleted && loop.Phase == GamePhase.Completed &&
             !loop.FinishDay().success && state.currentDay == 3, "Completion guard failed");
         CheckFlowAndRecipes();
+        CheckCityDuringService();
         CheckFlexibleMeals();
         CheckAttendanceAndFinance();
-        return "PASS: operations, previews, minimum-price rebuilds, finance tips, two-day health lag, attendance without rerolls, dish caps, and delight bounds.";
+        return "PASS: operations, previews, minimum-price rebuilds, finance tips, two-day health lag, attendance without rerolls, dish caps, delight bounds, and leaving/returning to the bistro mid-service.";
+    }
+
+    // Easy mode (2026-11-13): leave the bistro mid-service, shop, come back. Unserved guests wait; served ones are done.
+    private static void CheckCityDuringService()
+    {
+        var state = new GameSessionState();
+        var balance = new BalanceConfig { totalDays = 3, startingFinance = 0 };
+        var food = new FoodData { id = "F1", storageType = StorageType.Fresh, recipeCategory = FoodCategory.Grain, trafficLight = TrafficLight.Green };
+        var store = new StoreData { id = "S1" };
+        var listing = new StoreListingData { id = "L1", food = food, store = store, servingsPerPackage = 4, gamePrice = 5 };
+        var recipe = new RecipeData { id = "R1", baseSalePrice = 8, slots = new[] { new RecipeSlot { category = FoodCategory.Grain, servings = 2 } } };
+        var customer = new CustomerData { id = "U1", startingHealth = 50 };
+        var foods = new FoodDatabase(); foods.SetItems(new List<FoodData> { food });
+        var listings = new StoreListingDatabase(); listings.SetItems(new List<StoreListingData> { listing });
+        foods.RebuildMinimumPrices(listings.Listings);
+        var recipes = new RecipeDatabase(); recipes.SetItems(new List<RecipeData> { recipe });
+        var customers = new CustomerDatabase(); customers.SetItems(new List<CustomerData> { customer });
+        var loop = new GameLoop(new PurchaseService(state, listings, balance), new MealService(state, foods, recipes, customers, balance),
+            new DayService(state, balance), new CustomerVisitService(state, customers, balance, () => 0));
+        Check(!loop.LeaveBistro() && loop.EnterBistro() && loop.Phase == GamePhase.Service && loop.BistroOpened &&
+            loop.Service.CurrentCustomerId == "U1" && loop.Service.step == ServiceStep.MealSelection, "Bistro did not open");
+        Check(loop.LeaveBistro() && loop.Phase == GamePhase.Market && loop.BistroOpened && !loop.CanLeaveBistro, "Could not leave the bistro");
+        var buy = loop.Buy("L1");
+        Check(buy.success && !loop.ShowResults(), "Market unusable during an open service");
+        Check(loop.EnterBistro() && loop.Phase == GamePhase.Service && loop.Service.CurrentCustomerId == "U1" &&
+            loop.Service.step == ServiceStep.MealSelection, "Unserved guest did not wait");
+        var input = new ServeInput { customerId = "U1", recipeId = "R1", ingredients = new List<IngredientSelection> {
+            new IngredientSelection { inventoryEntryId = buy.inventoryEntryId, servingsUsed = 2 } } };
+        Check(loop.Serve(input).success && loop.Service.awaitingDishAcknowledgement, "Serve after return failed");
+        float money = state.money;
+        Check(loop.LeaveBistro() && loop.Phase == GamePhase.Market && state.money == money && state.inventory[0].servings == 2, "Leaving after a dish changed state");
+        Check(loop.EnterBistro() && loop.Phase == GamePhase.Results, "Served guest came back, or the empty queue did not end service");
+        Check(loop.FinishDay().success && !loop.BistroOpened && loop.Phase == GamePhase.Market, "Next day kept the bistro open");
     }
 
     private static void CheckFlowAndRecipes()

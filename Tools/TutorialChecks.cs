@@ -11,10 +11,12 @@ public static class TutorialChecks
     public static TutorialDatabase Content()
     {
         var result=new TutorialDatabase();result.tutorials.AddRange(new[]{
-            Def("shop","tutorial.shopping_available","Shopping","Market","shop"),
+            Def("shop","tutorial.shopping_available","Shopping","Market","recipes","plan","close","shop","store","shelf"),
             Def("sort","tutorial.sorting_available","TextOnly","FoodSorting","explain"),
+            Def("bistro",TutorialFlags.BistroAvailable,"TextOnly","Market","explain"),
             Def("cook","tutorial.cooking_available","FirstMeal","Service","choose","build","feedback"),
-            Def("crash",TutorialFlags.CrashExplained,"TextOnly","Service","explain")});return result;
+            Def("crash",TutorialFlags.CrashExplained,"TextOnly","Service","explain"),
+            Def("store",TutorialFlags.SeenStore,"TextOnly","Market","explain")});return result;
     }
     public static string Run()
     {
@@ -30,19 +32,43 @@ public static class TutorialChecks
         var customer=new CustomerData{id="U",startingHealth=50};var customers=new CustomerDatabase();customers.SetItems(new List<CustomerData>{customer});
         var dialogues=new DialogueDatabase();dialogues.SetItems(new List<DialogueSequenceData>{new DialogueSequenceData{id="crash",customer=customer,trigger=DialogueTrigger.CrashArrival,lines=new[]{new DialogueLineData{speakerId="U",textTemplate="The lift faded."}}}});
         var plan=new IntroMealPlan(state,foods,recipes,listings,balance);
-        var lessons=new TutorialController(state,Content(),plan);
-        var loop=new GameLoop(new PurchaseService(state,listings,balance),new MealService(state,foods,recipes,customers,balance),new DayService(state,balance,customers),new CustomerVisitService(state,customers,balance,()=>0),new EncounterScheduler(state,dialogues,customers,recipes),new FoodSortingService(state,foods));
+        var planner=new MealPlanService(state,foods,recipes,listings);
+        var lessons=new TutorialController(state,Content(),plan){Planner=planner};
+        var visits=new CustomerVisitService(state,customers,balance,()=>0);visits.GetTodaysCustomers(); // today's guests cap the plan
+        var loop=new GameLoop(new PurchaseService(state,listings,balance),new MealService(state,foods,recipes,customers,balance),new DayService(state,balance,customers),visits,new EncounterScheduler(state,dialogues,customers,recipes),new FoodSortingService(state,foods));
         loop.AttachTutorials(lessons);
-        Check(lessons.Active.id=="shop"&&!loop.ContinueTutorial(),"Shopping start/text bypass failed");
+        Check(lessons.Active.id=="shop"&&lessons.Step=="recipes"&&lessons.HardActive&&!loop.ContinueTutorial(),"Shopping start/text bypass failed");
         Check(!loop.Checkout(new List<CartEntry>()).success&&state.money==30,"Empty checkout bypassed tutorial");
+        // Lesson 1: open the recipe book, plan exactly one affordable dish, close the book, then buy everything planned.
+        Check(!loop.AskTutorial(TutorialAction.PlanDish,"R001")&&!loop.AskTutorial(TutorialAction.CloseRecipes),"Planning before opening the book was allowed");
+        Check(loop.AskTutorial(TutorialAction.OpenRecipes),"Opening the recipe book was refused");loop.TellTutorial(TutorialAction.OpenRecipes);
+        Check(lessons.Step=="plan"&&!loop.AskTutorial(TutorialAction.CloseRecipes),"Closing the book before planning was allowed");
+        Check(loop.AskTutorial(TutorialAction.PlanDish,"R001")&&planner.Add("R001"),"Planning an affordable dish failed");loop.TellTutorial(TutorialAction.PlanDish);
+        Check(lessons.Step=="close"&&!loop.AskTutorial(TutorialAction.PlanDish,"R001"),"A second dish could be planned");
+        // Swapping is allowed: unplanning the only dish goes back to "plan", and planning again returns to "close".
+        Check(loop.AskTutorial(TutorialAction.UnplanDish,"R001")&&planner.Remove("R001"),"Unplanning was refused");loop.TellTutorial(TutorialAction.UnplanDish);
+        Check(lessons.Step=="plan"&&!loop.AskTutorial(TutorialAction.CloseRecipes),"Book closed with nothing planned");
+        Check(planner.Add("R001"),"Re-planning failed");loop.TellTutorial(TutorialAction.PlanDish);
+        // No text-lesson flag survives during a hard lesson, so nothing piles up behind it.
+        loop.NoteSeen(TutorialFlags.SeenStore);
+        Check(!state.flags.HasFlag(TutorialFlags.SeenStore)&&!state.tutorials.Any(r=>r.tutorialId=="store")&&lessons.Active.id=="shop","A tip was queued during a hard lesson");
+        Check(loop.AskTutorial(TutorialAction.CloseRecipes),"Closing the book was refused");loop.TellTutorial(TutorialAction.CloseRecipes);
+        Check(lessons.Step=="shop","Lesson did not reach shopping");
+        loop.TellTutorial(TutorialAction.EnterStore);Check(lessons.Step=="store","Entering a store did not advance the lesson");
+        loop.TellTutorial(TutorialAction.OpenShelf);Check(lessons.Step=="shelf","Opening a shelf did not advance the lesson");
+        Check(!loop.Checkout(new List<CartEntry>{new CartEntry{listingId="LG"}}).success&&lessons.LastError.Contains("Vegetable")&&state.money==30,"Checkout before buying everything planned was allowed");
         var cart=new List<CartEntry>{new CartEntry{listingId="LG"},new CartEntry{listingId="LV"}};
+        Check(!loop.EnterBistro()&&loop.Phase==GamePhase.Market,"Bistro opened before the shopping lesson's purchase");
         Check(loop.Checkout(cart).success&&state.flags.HasFlag("shop.done")&&lessons.Active.id=="sort","Shopping to sorting chain failed");
         var answers=new List<SortingChoice>{new SortingChoice{foodId="G",answer=TrafficLight.Green},new SortingChoice{foodId="V",answer=TrafficLight.Green}};
         Check(!loop.SubmitSorting(answers).success&&!loop.BeginService(),"Sorting tutorial lock bypassed");
-        Check(loop.ContinueTutorial()&&loop.SubmitSorting(answers).success&&loop.BeginService(),"Sorting lesson continuation failed");
+        Check(loop.ContinueTutorial()&&loop.SubmitSorting(answers).success&&loop.ReturnToMarket()&&loop.Phase==GamePhase.Market,"Sorting lesson continuation failed");
+        Check(lessons.Active.id=="bistro"&&!loop.EnterBistro()&&loop.ContinueTutorial()&&loop.EnterBistro(),"Back-at-market lesson failed");
         Check(lessons.Active.id=="cook"&&lessons.Record.stepId=="choose","Cooking start failed");
         Check(!loop.SelectRecipe("OTHER").success&&!loop.SkipCustomer(),"Unknown recipe or skip was not blocked");
         Check(loop.SelectRecipe("R001").success&&lessons.Record.stepId=="build","Recipe step did not advance");
+        Check(loop.LeaveBistro()&&loop.Phase==GamePhase.Market&&loop.EnterBistro()&&loop.Phase==GamePhase.Service&&
+            lessons.Active.id=="cook"&&lessons.Record.stepId=="build","A lesson blocked leaving the bistro, or did not continue after returning");
         var input=new ServeInput{customerId="U",recipeId="R001",slotSelections=new List<MealSlotSelection>{new MealSlotSelection{slotIndex=0,foodId="G",servings=1},new MealSlotSelection{slotIndex=1,foodId="V",servings=1}}};
         Check(loop.PreviewServe(input).success&&!loop.PreviewServe(input).recipeBuilt,"Mismatched preview was hidden");
         int before=state.inventory.Sum(e=>e.servings);
@@ -53,7 +79,7 @@ public static class TutorialChecks
         Check(!loop.ContinueAfterDish()&&!loop.SkipCustomer(),"Meal feedback skipped");
         Check(loop.ContinueTutorial()&&state.flags.HasFlag("cook.done")&&loop.ContinueAfterDish(),"Cooking completion failed");
         RushCrashProgress.Served(state.customers[0],1,true);
-        Check(loop.FinishDay().success&&loop.Checkout(new List<CartEntry>()).success&&loop.Dialogue.IsActive,"Crash setup failed");
+        Check(loop.FinishDay().success&&loop.EnterBistro()&&loop.Dialogue.IsActive,"Crash setup failed");
         Check(lessons.Active==null,"Crash tutorial started before dialogue completion");
         Check(loop.AdvanceDialogue()&&lessons.Active.id=="crash"&&!loop.SkipCustomer(),"Crash tutorial did not pause the next action");
         Check(loop.ContinueTutorial()&&state.flags.HasFlag("crash.done")&&loop.SkipCustomer(),"Crash lesson did not release restrictions");
@@ -68,9 +94,8 @@ public static class TutorialChecks
         poorLoop.AttachTutorials(skipped);
         Check(skipped.Active==null&&poor.tutorials.Any(r=>r.tutorialId=="shop"&&r.status=="skipped")&&!poor.flags.HasFlag("shop.done"),"Infeasible lesson did not skip safely");
         Check(poorLoop.Checkout(new List<CartEntry>()).success,"Skipped lesson retained lock");skipped.Dispose();
-        // Regression (2026-10-30): a checkout that leaves money below rent must still move the day on, and the
-        // money-low lesson (sell pantry food) must not start after checkout. It used to block the move to service
-        // after the purchase had already gone through, leaving the market stuck.
+        // Regression (2026-10-30, updated 2026-11-13 for multiple checkouts): after a checkout that leaves money below
+        // rent, the money-low lesson (sell pantry food) must not start and block the player; the bistro must still open.
         var rentBalance=new BalanceConfig{rentPerDay=10,rentStartDay=1};
         var tight=new GameSessionState{money=11};tight.correctlySortedFoodIds.Add("G");
         var sellLesson=new TutorialDatabase();sellLesson.tutorials.Add(Def("sell",TutorialFlags.MoneyLow,"TextOnly","Market","explain"));
@@ -78,9 +103,9 @@ public static class TutorialChecks
         var tightLoop=new GameLoop(new PurchaseService(tight,listings,rentBalance),new MealService(tight,foods,recipes,customers,rentBalance),new DayService(tight,rentBalance),new CustomerVisitService(tight,emptyCustomers,rentBalance),null,new FoodSortingService(tight,foods));
         tightLoop.AttachTutorials(tightLessons);
         Check(tightLessons.Active==null&&tightLoop.Checkout(new List<CartEntry>{new CartEntry{listingId="LG"}}).success,"Known-food checkout failed");
-        Check(tight.money<10&&tightLoop.Phase!=GamePhase.Market,"Checkout left the day stuck at the market");
-        Check(tightLessons.Active==null&&!tight.flags.HasFlag(TutorialFlags.MoneyLow),"Money-low lesson started after checkout");
+        Check(tight.money<10&&tightLoop.Phase==GamePhase.Market&&tightLessons.Active==null&&!tight.flags.HasFlag(TutorialFlags.MoneyLow),"Money-low lesson started after checkout");
+        Check(tightLoop.EnterBistro()&&tightLoop.Phase!=GamePhase.Market,"Checkout left the day stuck at the market");
         tightLessons.Dispose();
-        return "PASS: all four tutorial flows, progress guards, preview freedom, no partial mutations, actual dish feedback, crash timing, resume, infeasible skips and post-checkout transitions.";
+        return "PASS: all five tutorial flows, progress guards, preview freedom, no partial mutations, actual dish feedback, crash timing, resume, infeasible skips and the bistro gate.";
     }
 }

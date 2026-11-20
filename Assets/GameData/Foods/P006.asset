@@ -15,6 +15,7 @@ MonoBehaviour:
   id: P006
   displayName: Whole-grain bread
   recipeCategory: 4
+  alsoCategories: 
   dailyDozenCategories: 0a000000
   trafficLight: 1
   ingredientAppeal: 6

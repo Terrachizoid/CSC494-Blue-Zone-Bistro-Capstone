@@ -1,0 +1,27 @@
+{
+  "date": "2026-11-19",
+  "generator": "built-in image_gen",
+  "reference": "Assets/Art/Events/EV_OATS_icon.png",
+  "common_prompt": "Create ONE square transparent production game UI illustration, not a sheet. Retro newspaper editorial cut-paper icon; bold simple silhouette; four or five flat muted colours; restrained printed grain within shapes; no gradients, realistic shading, 3D, tiny details, words, letters, numbers, border, background rectangle or humans. One balanced central emblem readable as a thumbnail, comfortable transparent margin. Use the provided existing oats icon ONLY as style reference for cut-paper edges, broad shapes, printed grain and muted colour mood; replace its subject entirely with the requested subject. Keep detail minimal. Subject: ",
+  "subjects": {
+    "HARVEST": "A woven harvest basket overflowing with a few chunky simple vegetables and one apple, with a large downward price arrow beside it. Muted sage, tomato coral, wheat gold and charcoal.",
+    "BEAN_WEEK": "A simple jar and small scoop of beans and lentils with a blank round celebration ribbon badge. Warm brown, clay, cream and sage.",
+    "FESTIVAL": "Three simple round paper lanterns on a string above a small fruit tart, soft evening feel. Lantern orange, dusty plum, cream and charcoal.",
+    "COLD_SNAP": "A steaming bowl of hearty vegetable stew with a large simple snowflake behind it. Dusty blue, warm ochre, cream and charcoal.",
+    "WORKSHOP": "A simple open food label card with three blank rounded bars and a large check mark, beside a small apple. Sage, cream, dusty teal and charcoal.",
+    "FREEZER_DELAY": "A small delivery truck with a large simple clock face above it and an empty freezer door ajar. Clock hands but no numerals. Cool grey-blue, ochre and charcoal.",
+    "SWEET_POTATO": "One sweet potato and one purple sweet potato beside an empty crate with a large simple upward price arrow. Clay orange, dusty purple, wheat and charcoal.",
+    "HEAT_WAVE": "A large simple sun over a fizzy drink glass with a few bubbles and one wilting leaf. Mustard yellow, coral, dusty teal and charcoal."
+  },
+  "sources": {
+    "HARVEST": "C:\\Users\\TERRA\\.codex\\generated_images\\01a0c490-ad67-7e80-9c87-d625cf4b4e02\\exec-f54a580c-c3d5-4f63-9003-d50da0c1cabe.png",
+    "BEAN_WEEK": "C:\\Users\\TERRA\\.codex\\generated_images\\01a0c490-ad67-7e80-9c87-d625cf4b4e02\\exec-af2d4153-7352-4007-8cc9-aa389a484365.png",
+    "FESTIVAL": "C:\\Users\\TERRA\\.codex\\generated_images\\01a0c490-ad67-7e80-9c87-d625cf4b4e02\\exec-78902bdc-1850-4ebf-8b40-3c4674babd69.png",
+    "COLD_SNAP": "C:\\Users\\TERRA\\.codex\\generated_images\\01a0c490-ad67-7e80-9c87-d625cf4b4e02\\exec-3140c3d0-55c3-46be-95e3-a650e3466eb5.png",
+    "WORKSHOP": "C:\\Users\\TERRA\\.codex\\generated_images\\01a0c490-ad67-7e80-9c87-d625cf4b4e02\\exec-21f58962-c2d3-4673-bd06-33c4db86add9.png",
+    "FREEZER_DELAY": "C:\\Users\\TERRA\\.codex\\generated_images\\01a0c490-ad67-7e80-9c87-d625cf4b4e02\\exec-fa194a18-8088-441d-8ff0-74633d6112ab.png",
+    "SWEET_POTATO": "C:\\Users\\TERRA\\.codex\\generated_images\\01a0c490-ad67-7e80-9c87-d625cf4b4e02\\exec-3d5529e5-43c1-4112-a89a-25754eeb14cd.png",
+    "HEAT_WAVE": "C:\\Users\\TERRA\\.codex\\generated_images\\01a0c490-ad67-7e80-9c87-d625cf4b4e02\\exec-d83e8359-43e0-4c7e-9714-b31d0530c2f7.png"
+  },
+  "status": "Eight PNGs saved and visually inspected; CSV paths and live EventDatabase sprite references assigned. Disposable Unity import verified all 13 events on 2026-11-20. Live Play Mode/WebGL interaction remains unverified."
+}

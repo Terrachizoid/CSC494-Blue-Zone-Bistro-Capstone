@@ -15,6 +15,7 @@ MonoBehaviour:
   id: P042
   displayName: Grass-fed beef
   recipeCategory: 6
+  alsoCategories: 
   dailyDozenCategories: 00000000
   trafficLight: 2
   ingredientAppeal: 8

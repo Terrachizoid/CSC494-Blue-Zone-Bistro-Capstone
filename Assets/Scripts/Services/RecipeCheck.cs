@@ -2,6 +2,7 @@
 // Shared RecipeRequirements supplies slot bounds. MealService remains authoritative when serving.
 
 using System.Collections.Generic;
+using System.Linq;
 
 // Availability checks stock across batches without reserving or consuming it.
 public class RecipeCheck
@@ -13,24 +14,25 @@ public class RecipeCheck
     {
         if (state == null || recipe == null || recipe.unlockDay > state.currentDay ||
             !RecipeRequirements.TryGetBounds(recipe, out var required, out var capacity)) return false;
-        var available = new Dictionary<FoodCategory, long>();
+        var available = new Dictionary<FoodData, long>();
         bool anyUsable = false;
         foreach (var entry in state.inventory)
         {
             if (entry == null || entry.servings <= 0 || entry.daysRemaining == 0 ||
                 entry.daysRemaining < -1 || string.IsNullOrWhiteSpace(entry.inventoryEntryId)) continue;
             var food = foods.GetById(entry.foodId);
-            if (food == null || !capacity.ContainsKey(food.recipeCategory) ||
+            if (food == null || !food.Categories.Any(capacity.ContainsKey) ||
                 (food.trafficLight != TrafficLight.Green && food.trafficLight != TrafficLight.Yellow &&
                  food.trafficLight != TrafficLight.Red) ||
                 (!recipe.allowNonGreenChoices && food.trafficLight != TrafficLight.Green)) continue;
             anyUsable = true;
-            available.TryGetValue(food.recipeCategory, out long count);
-            available[food.recipeCategory] = count + entry.servings;
+            available.TryGetValue(food, out long count);
+            available[food] = count + entry.servings;
         }
+        var byCategory = RecipeRequirements.Assign(available, required, capacity, ignoreSurplus: true);
         foreach (var pair in required)
         {
-            available.TryGetValue(pair.Key, out long count);
+            byCategory.TryGetValue(pair.Key, out long count);
             if (count < pair.Value) return false;
         }
         return anyUsable; // MealService requires at least one ingredient, even for optional-only recipes.

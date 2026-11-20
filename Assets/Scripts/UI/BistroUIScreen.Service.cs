@@ -12,6 +12,32 @@ public partial class BistroUIScreen
     private ServeResult mealPreview;
     private AudioSource dialogueAudio;
     private DialogueLineData lastVoicedLine;
+    private enum ServeLight{Red,Yellow,Green}
+    // Live check of the plate being built (preview only, nothing is committed).
+    private ServeLight MealLight(out string reason)
+    {
+        if(mealRecipe==null||mealSelections.Count==0){reason="Add ingredients to the slots first.";return ServeLight.Red;}
+        var preview=game.Loop.PreviewServe(MealInput());
+        if(!preview.success){reason=preview.error;return ServeLight.Red;}
+        if(!preview.recipeBuilt){reason="The plate doesn't match the recipe yet.";return ServeLight.Yellow;}
+        if(preview.activeCravings.Length>preview.cravingsResolved.Length){reason="The guest's request isn't met.";return ServeLight.Yellow;}
+        reason="Ready to serve!";return ServeLight.Green;
+    }
+    private static Color LightFill(ServeLight l)=>l==ServeLight.Green?new Color(.24f,.47f,.32f):l==ServeLight.Yellow?new Color(.88f,.68f,.24f):new Color(.70f,.30f,.27f);
+    private static Color LightInk(ServeLight l)=>l==ServeLight.Green?new Color(.16f,.38f,.25f):l==ServeLight.Yellow?new Color(.55f,.38f,.06f):new Color(.62f,.22f,.20f);
+    private static void TintLight(Button button,ServeLight l)
+    {
+        if(button==null)return;
+        var image=button.GetComponent<Image>();if(image!=null)image.color=LightFill(l);
+        foreach(var text in button.GetComponentsInChildren<Text>())text.color=l==ServeLight.Yellow?new Color(.18f,.13f,.03f):new Color(.98f,.97f,.93f);
+    }
+    // The dish result's button says what comes next.
+    private string AfterDishLabel()
+    {
+        var service=game.Loop.Service;
+        var rest=service.encounters==null?Enumerable.Empty<EncounterEntry>():service.encounters.Skip(service.encounterIndex+1);
+        return rest.Any(e=>e.kind==EncounterKind.Customer)?"Next guest":rest.Any()?"Continue":"See today's results";
+    }
     private void ResetMeal(){mealRecipe=null;mealSelections.Clear();mealPreview=null;}
     private ServeInput MealInput()=>new ServeInput{customerId=game.Loop.Service.CurrentCustomerId,recipeId=mealRecipe.id,
         slotSelections=mealSelections.Select(s=>new MealSlotSelection{slotIndex=s.slotIndex,foodId=s.foodId,servings=s.servings}).ToList()};
@@ -43,12 +69,12 @@ public partial class BistroUIScreen
         var room=scene;
         if(!game.Loop.Service.awaitingDishAcknowledgement){
             BistroWidgets.Box(room,"Cooking dim",new Color(0,0,0,.24f),Vector2.zero,Vector2.one);
-            scene=BistroShelfStyle.Panel(room,"Cooking workspace",new Color(.94f,.92f,.86f,.96f),new Vector2(.025f,.025f),new Vector2(.975f,.97f));
+            scene=BistroShelfStyle.PaperPanel(room,"Cooking workspace",theme,new Vector2(.025f,.025f),new Vector2(.975f,.97f));
         }
         var customer=game.Queries.GetCustomer(game.Loop.Service.CurrentCustomerId);
         if(game.Loop.Service.awaitingDishAcknowledgement)
         {
-            DialoguePanel(customer?.displayName??"Your guest",DishText(game.Loop.Service.lastDishResult),"Continue",()=>{ResetMeal();game.Loop.ContinueAfterDish();});return;
+            DialoguePanel(customer?.displayName??"Your guest",DishText(game.Loop.Service.lastDishResult),AfterDishLabel(),()=>{ResetMeal();game.Loop.ContinueAfterDish();});return;
         }
         // Header, left-aligned in two bands: who the guest is (name, request, stats), then the dish being built.
         var muted=new Color(.30f,.36f,.33f);
@@ -57,7 +83,7 @@ public partial class BistroUIScreen
         BistroShelfStyle.Text(scene,cravings.Length==0?"No special request today":"Hoping for: "+string.Join(", ",cravings),theme,new Vector2(.03f,.898f),new Vector2(.74f,.935f),18,BistroShelfStyle.Ink);
         BistroShelfStyle.Text(scene,GuestInfo(customer),theme,new Vector2(.03f,.865f),new Vector2(.74f,.898f),15,muted);
         ServiceButton(scene,"Skip customer",new Vector2(.78f,.89f),new Vector2(.97f,.97f),BistroActionRole.Caution,()=>Change(()=>{
-            if(game.Loop.SkipCustomer())ResetMeal();else notice=game.Loop.Tutorials?.LastError??"Cannot skip right now.";}));
+            if(game.Loop.SkipCustomer())ResetMeal();else Explain(game.Loop.Tutorials?.LastError??"Cannot skip right now.");}));
         if(mealRecipe==null)
         {
             bool aid=!string.IsNullOrEmpty(game.Loop.Service.foodAidMessage);
@@ -67,12 +93,15 @@ public partial class BistroUIScreen
             ((RectTransform)recipes.parent).GetComponent<Image>().color=Color.clear;
             foreach(var recipe in game.Queries.GetUnlockedRecipes()){
                 var card=BistroRecipeCard.Create(recipes,recipe,theme,game.Queries.Foods);
+                if(NewRecipe(recipe))NewBadge(card.FrontLayer,new Vector2(.04f,.90f),new Vector2(.22f,.975f));
                 card.Selected=()=>Change(()=>{
                     var result=game.Loop.SelectRecipe(recipe.id);
-                    if(result.success){mealRecipe=recipe;mealSelections.Clear();notice="";}else notice=result.error;});
+                    if(result.success){mealRecipe=recipe;mealSelections.Clear();notice="";}else Explain(result.error);});
                 bool ready=game.Queries.CanMake(recipe);if(!ready)card.MarkUnavailable();
+                string fit=RequestFit(recipe,cravings,out bool fitsAll);
+                if(fit!=null)card.MarkRequestFit(fitsAll?LightFill(ServeLight.Green):LightFill(ServeLight.Yellow),cravings.Where(t=>t==CravingTag.Comfort||(recipe.cravingTags??new CravingTag[0]).Contains(t)).ToArray());
                 string history=RecipeHistory(recipe);
-                string footer=!ready?"Not enough in your pantry":history==""?"Choose recipe":history;
+                string footer=!ready?"Not enough in your pantry":fit!=null?fit+(history==""?"":" · "+history):history==""?"Choose recipe":history;
                 foreach(var label in card.GetComponentsInChildren<Text>())if(label.text=="Click to flip")label.text=footer;
             }
             BistroWidgets.EmptyShelf(recipes,"No recipes are unlocked yet.",theme);
@@ -82,13 +111,20 @@ public partial class BistroUIScreen
         ServiceButton(scene,"← Recipes",new Vector2(.03f,.775f),new Vector2(.17f,.845f),BistroActionRole.Secondary,()=>Change(ResetMeal));
         BistroShelfStyle.Text(scene,mealRecipe.displayName,theme,new Vector2(.19f,.81f),new Vector2(.70f,.85f),22,BistroShelfStyle.Ink,true);
         BistroShelfStyle.Text(scene,$"Base price ${mealRecipe.baseSalePrice:0.00} · "+PlateAppealText(),theme,new Vector2(.19f,.775f),new Vector2(.70f,.81f),16,muted);
-        ServiceButton(scene,"Review dish",new Vector2(.75f,.775f),new Vector2(.97f,.845f),BistroActionRole.Primary,()=>Change(()=>{
-            mealPreview=game.Loop.PreviewServe(MealInput());if(mealPreview.success)modal="meal-preview";else notice=mealPreview.error;}));
+        // Traffic-light button (supervisor, 2026-11-13): red = can't serve yet, yellow = can serve with a warning, green = all good.
+        var light=MealLight(out string lightReason);
+        var review=BistroActionButton.Create(scene,light==ServeLight.Red?"Can't serve yet":light==ServeLight.Yellow?"Review (check warning)":"Review dish",theme,
+            new Vector2(.75f,.775f),new Vector2(.97f,.845f),BistroActionRole.Primary,()=>Change(()=>{
+            if(light==ServeLight.Red){Explain(lightReason);return;}
+            mealPreview=game.Loop.PreviewServe(MealInput());if(mealPreview.success)modal="meal-preview";else Explain(mealPreview.error);}));
+        TintLight(review,light);
+        BistroShelfStyle.Text(scene,lightReason,theme,new Vector2(.72f,.745f),new Vector2(.97f,.775f),14,LightInk(light),false,TextAnchor.MiddleRight);
         var slots=BistroWidgets.Grid(scene,theme,new Vector2(.03f,.43f),new Vector2(.97f,.76f));
         slots.GetComponent<BistroResponsiveGrid>().SetPreferred(new Vector2(230,185));
-        for(int i=0;i<=mealRecipe.slots.Length;i++)
+        // No "Extra ingredients" slot (removed 2026-11-20): anything placed there only made the dish a mismatch.
+        for(int i=0;i<mealRecipe.slots.Length;i++)
         {
-            int index=i==mealRecipe.slots.Length?-1:i;
+            int index=i;
             var requirement=index<0?null:mealRecipe.slots[index];
             string title=requirement==null?"Extra ingredients":$"{IntroMealPlan.CategoryName(requirement.category)} ×{requirement.servings}"+(requirement.optional?" (optional)":"");
             string warning=MealAllocation.SlotWarning(mealRecipe,index,mealSelections,game.Queries.Foods);
@@ -111,6 +147,19 @@ public partial class BistroUIScreen
             foodCard.ApplyShelfArtwork(game.Queries.Foods.GetById(group.Key),"",available);
         }
         BistroWidgets.EmptyShelf(pantry,"No usable food remains in your pantry.",theme);
+    }
+    // Recipe choice rim (2026-11-20). Comfort is answered by appeal, not by the recipe, so any dish can still answer it:
+    // it counts as possible here. Null when the guest asked for nothing.
+    private string RequestFit(RecipeData recipe,CravingTag[] asked,out bool all)
+    {
+        all=false;
+        var wanted=(asked??new CravingTag[0]).Where(t=>t!=CravingTag.None).Distinct().ToArray();
+        if(wanted.Length==0)return null;
+        var tags=recipe.cravingTags??new CravingTag[0];
+        int fits=wanted.Count(t=>t==CravingTag.Comfort||tags.Contains(t));
+        all=fits==wanted.Length;
+        string comfort=wanted.Contains(CravingTag.Comfort)?" (Comfort: appeal "+game.Balance.comfortMinimumAppeal.ToString("0.#")+"+)":"";
+        return (all?(wanted.Length==1?"Fits the request":"Fits every request"):fits==0?"Doesn't fit the request"+(wanted.Length==1?"":"s"):$"Fits {fits} of {wanted.Length} requests")+comfort;
     }
     // Global recipe fatigue, from the same helper MealService uses. Shown on the service recipe card.
     private string RecipeHistory(RecipeData recipe)
@@ -144,7 +193,7 @@ public partial class BistroUIScreen
     private void AddServing(int index,string foodId)
     {
         int available=game.State.inventory.Where(e=>MealAllocation.Usable(e)&&string.Equals(e.foodId,foodId,StringComparison.OrdinalIgnoreCase)).Sum(e=>e.servings);
-        if(mealSelections.Where(s=>s.foodId==foodId).Sum(s=>s.servings)>=available){notice="No more available servings.";return;}
+        if(mealSelections.Where(s=>s.foodId==foodId).Sum(s=>s.servings)>=available){Explain("No more servings of that food in your pantry.");return;}
         var item=mealSelections.Find(s=>s.slotIndex==index&&s.foodId==foodId);
         if(item==null)mealSelections.Add(new MealSlotSelection{slotIndex=index,foodId=foodId});else item.servings++;
         notice="";
@@ -200,7 +249,7 @@ public partial class BistroUIScreen
             $"{game.Queries.GetCustomer(d.customerId)?.displayName} · {d.recipeId}\n"+
             $"{(d.result.recipeBuilt?"Recipe built":"Recipe mismatch")} · Health {d.result.healthDelta:+0;-0;0} · Delight {d.result.delightDelta:+0;-0;0} · Earned ${d.result.moneyEarned:0.00}"));
         DialoguePanel("Day complete",totals+"\n\n"+dishes,"Next day",()=>{
-            if(!complete){var result=game.Loop.FinishDay();notice=result.success?"":result.error;}
+            if(!complete){var result=game.Loop.FinishDay();if(result.success)notice="";else Explain(result.error);}
         });
     }
 }

@@ -29,6 +29,8 @@ public class DialoguePlaybackController
         LineIndex = 0;
         return true;
     }
+    // Abandons the sequence without its effects (the player left the bistro); it may play again later.
+    public void Cancel() { Sequence = null; lines = Array.Empty<DialogueLineData>(); LineIndex = 0; }
     // True only when a whole sequence has just completed.
     public bool Next()
     {

@@ -15,6 +15,7 @@ MonoBehaviour:
   id: P010
   displayName: Tofu
   recipeCategory: 1
+  alsoCategories: 07000000
   dailyDozenCategories: 01000000
   trafficLight: 1
   ingredientAppeal: 4

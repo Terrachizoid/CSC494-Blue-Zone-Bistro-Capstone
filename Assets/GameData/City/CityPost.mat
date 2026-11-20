@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: CityPost
+  m_Shader: {fileID: 4800000, guid: 26fb1b11a81d479ab35ac804af31f24e, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs: []
+    m_Ints: []
+    m_Floats:
+    - _BlurRadius: 4.9
+    - _Contrast: 1
+    - _DepthSensitivity: 0.043
+    - _FocusCenter: 0.48
+    - _FocusWidth: 0.188
+    - _LineDarkness: 0.321
+    - _LineFade: 1600
+    - _NormalSensitivity: 0.214
+    - _Saturation: 1.13
+    - _SideBlur: 0.421
+    - _Thickness: 1.26
+    m_Colors:
+    - _Tint: {r: 1, g: 1, b: 1, a: 1}
+  m_BuildTextureStacks: []
+  m_AllowLocking: 1

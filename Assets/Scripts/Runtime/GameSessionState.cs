@@ -33,6 +33,9 @@ public class GameSessionState
     public DialogueHistoryState dialogueHistory = new DialogueHistoryState();
     // Correct answers only. Wrong foods can return after a later day's purchase.
     public List<string> correctlySortedFoodIds = new List<string>();
+    // Every food ever bought (for the "New" marker on shelf cards). Older saves start empty; the UI also treats
+    // foods in the pantry or already sorted as known.
+    public List<string> boughtFoodIds = new List<string>();
     public ShoppingReceipt shoppingReceipt;
     // Last day the farmer gave free food (0 = never). At most once per day.
     public int lastFoodAidDay;

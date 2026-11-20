@@ -35,7 +35,9 @@ public class FoodAidService
     public bool Needed()
     {
         var check = new RecipeCheck(foods);
-        return balance.foodAidEnabled && state.lastFoodAidDay != state.currentDay && !Unlocked.Any(r => check.CanMake(r, state));
+        // With the city open during service the player can shop instead, so the farmer only helps when money is short too.
+        return balance.foodAidEnabled && state.lastFoodAidDay != state.currentDay &&
+            (!balance.cityDuringService || state.money < balance.foodAidMoneyBelow) && !Unlocked.Any(r => check.CanMake(r, state));
     }
 
     public FoodAidResult TryGive()

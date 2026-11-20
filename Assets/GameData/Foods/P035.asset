@@ -15,6 +15,7 @@ MonoBehaviour:
   id: P035
   displayName: Bacon
   recipeCategory: 6
+  alsoCategories: 
   dailyDozenCategories: 00000000
   trafficLight: 3
   ingredientAppeal: 9

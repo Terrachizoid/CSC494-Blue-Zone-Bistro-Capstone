@@ -15,6 +15,7 @@ MonoBehaviour:
   id: P054
   displayName: Frozen pizza
   recipeCategory: 4
+  alsoCategories: 
   dailyDozenCategories: 00000000
   trafficLight: 3
   ingredientAppeal: 9

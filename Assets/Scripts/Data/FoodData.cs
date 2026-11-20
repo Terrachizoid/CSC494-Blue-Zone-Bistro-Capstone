@@ -1,6 +1,7 @@
 // File responsibility: Authored food definition: classification, recipe category, labels, claims, and optional visuals.
 // Keep runtime stock and expiry in InventoryEntry; CSV import owns content fields.
 
+using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(
@@ -14,6 +15,10 @@ public class FoodData : ScriptableObject
 
     [Header("Classification")]
     public FoodCategory recipeCategory = FoodCategory.Unassigned;
+    // Foods.csv also_categories (| separated, optional): other recipe slots this food can fill, e.g. tofu as a
+    // meat substitute. One serving still counts toward one category only (RecipeRequirements.Assign).
+    [Tooltip("Foods.csv also_categories: other recipe categories this food can fill (e.g. Tofu: MeatSubstitute).")]
+    public FoodCategory[] alsoCategories = new FoodCategory[0];
     public DailyDozenCategory[] dailyDozenCategories =
         { DailyDozenCategory.None };
     public TrafficLight trafficLight = TrafficLight.Unassigned;
@@ -55,6 +60,23 @@ public class FoodData : ScriptableObject
     public bool darkPlaque;
     [Tooltip("Foods.csv card_style: sprig. Adds the leaf sprig beside the name plaque.")]
     public bool cardSprig;
+
+    // Can this food go in a slot of this category (its main category or one of also_categories)?
+    public bool Fits(FoodCategory category) =>
+        category != FoodCategory.Unassigned &&
+        (recipeCategory == category || (alsoCategories != null && System.Array.IndexOf(alsoCategories, category) >= 0));
+
+    // Main category first, then the extra ones (no duplicates, no Unassigned).
+    public IEnumerable<FoodCategory> Categories
+    {
+        get
+        {
+            yield return recipeCategory;
+            if (alsoCategories == null) yield break;
+            var seen = new HashSet<FoodCategory> { recipeCategory, FoodCategory.Unassigned };
+            foreach (var c in alsoCategories) if (seen.Add(c)) yield return c;
+        }
+    }
 
     public bool HasShortListStamp =>
         approvalStatus == ApprovalStatus.Approved &&

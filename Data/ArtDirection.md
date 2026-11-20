@@ -237,3 +237,9 @@ Subjects:
 - PUBLICITY: A small teal bistro storefront, three large upward arrows, and a nearby sage leaf seal representing the partner grocery store. Local newspaper publicity. Dusty teal, sage and warm cream.
 - CHEAP_CLOSED: A small ochre convenience shop with closed shutter, two stacked cardboard boxes and a simple circular restocking arrow. Muted ochre, clay and charcoal.
 
+
+## Event icon expansion (2026-11-19)
+User postponed further 3D work to focus on gameplay, UX and content. Eight new event icons use EV_OATS_icon.png as the existing visual reference: transparent square, bold cut-paper silhouettes, four/five principal muted colours, restrained printed grain, no baked text or background rectangle. Individual built-in image_gen calls generated HARVEST, BEAN_WEEK, FESTIVAL, COLD_SNAP, WORKSHOP, FREEZER_DELAY, SWEET_POTATO and HEAT_WAVE. Preserved generated alpha and original pixel data. Saved under Assets/Art/Events and linked in Events.csv; still reviewable artwork. Exact prompts and source filenames: Data/EventArt_20261119.json. Unity reimport and runtime review remain pending (see Events.md).
+
+### Reusable panel family — 2026-11-20
+Generated six transparent UI assets with warm cream paper, quiet sage gradients and dusty-teal accents; a clay stamp and coral sticker provide status accents. User requested generated artwork with procedural sizing/reuse. Interior text regions stay quiet, frame centres transparent, words absent from source art. Built-in image generation; exact prompts and source paths in PanelArt_20261120.md. Unity nine-sliced renders reviewed in Data/Previews/2026-11-20-Panels; these are integrated review placeholders, not final approved production art.

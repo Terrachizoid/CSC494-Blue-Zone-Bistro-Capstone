@@ -13,6 +13,8 @@ public sealed class BistroRecipeCard : MonoBehaviour, IPointerClickHandler
     private float flipSeconds;
     public System.Action Selected;
     public bool IsFlipped=>back!=null&&back.activeSelf;
+    // Extras that belong on the front only (plan +/-, "New" tag): children of the front face, so they hide on flip.
+    public Transform FrontLayer=>front!=null?front.transform:transform;
     public void OnPointerClick(PointerEventData e){if(e.button==PointerEventData.InputButton.Left&&!e.dragging){if(Selected!=null)Selected();else Flip();}}
     public void Flip()
     {
@@ -44,6 +46,24 @@ public sealed class BistroRecipeCard : MonoBehaviour, IPointerClickHandler
         var wash=BistroWidgets.Box(transform,"Unavailable wash",new Color(.95f,.93f,.87f,.55f),Vector2.zero,Vector2.one);
         wash.SetAsLastSibling();wash.GetComponent<Image>().raycastTarget=false;
     }
+    // Request fit on the bistro's recipe choice (2026-11-20): a coloured rim inside the card edge (green: can answer
+    // every request; amber: answers some or none), and the request badges this guest asked for are filled darker.
+    public void MarkRequestFit(Color rim,CravingTag[] asked)
+    {
+        if(transform.Find("Request rim")!=null)return;
+        var frame=new GameObject("Request rim",typeof(RectTransform)).GetComponent<RectTransform>();
+        frame.SetParent(transform,false);frame.anchorMin=Vector2.zero;frame.anchorMax=Vector2.one;frame.offsetMin=frame.offsetMax=Vector2.zero;
+        const float t=.028f;float side=t*.7f; // thinner left/right: cards are taller than wide
+        foreach(var edge in new[]{(new Vector2(0,0),new Vector2(1,t)),(new Vector2(0,1-t),new Vector2(1,1)),(new Vector2(0,0),new Vector2(side*1.45f,1)),(new Vector2(1-side*1.45f,0),new Vector2(1,1))})
+        {var bar=BistroWidgets.Box(frame,"Edge",rim,edge.Item1,edge.Item2);bar.GetComponent<Image>().raycastTarget=false;}
+        frame.SetAsLastSibling();
+        foreach(var tag in asked??new CravingTag[0])
+        {
+            var badge=front!=null?front.transform.Find("Craving "+tag):null;if(badge==null)continue;
+            badge.GetComponent<Image>().color=new Color(.24f,.47f,.32f);
+            foreach(var text in badge.GetComponentsInChildren<Text>())text.color=new Color(.98f,.97f,.93f);
+        }
+    }
     // Art: recipe.icon (dish) and recipe.cardBack (background only) from Recipes.csv; category icons from Categories.csv via foods.
     // The dish is drawn once, in the top picture; the rest of the front shows the background-only card back.
     public static BistroRecipeCard Create(Transform parent,RecipeData recipe,BistroUITheme theme,FoodDatabase foods)
@@ -66,7 +86,7 @@ public sealed class BistroRecipeCard : MonoBehaviour, IPointerClickHandler
         var tags=(recipe.cravingTags??new CravingTag[0]).Where(t=>t!=CravingTag.None).Distinct().ToArray();
         for(int i=0;i<tags.Length;i++)
         {
-            float w=.9f/tags.Length;var badge=BistroShelfStyle.Panel(front,"Craving",new Color(.77f,.82f,.69f),new Vector2(.05f+i*w,.08f),new Vector2(.04f+(i+1)*w,.15f));
+            float w=.9f/tags.Length;var badge=BistroShelfStyle.Panel(front,"Craving "+tags[i],new Color(.77f,.82f,.69f),new Vector2(.05f+i*w,.08f),new Vector2(.04f+(i+1)*w,.15f));
             BistroShelfStyle.Text(badge,tags[i].ToString(),theme,Vector2.zero,Vector2.one,16,BistroShelfStyle.Ink,false,TextAnchor.MiddleCenter);
         }
         BistroShelfStyle.Text(front,"Click to flip",theme,new Vector2(.08f,.01f),new Vector2(.92f,.07f),14,BistroShelfStyle.Ink,false,TextAnchor.MiddleCenter);

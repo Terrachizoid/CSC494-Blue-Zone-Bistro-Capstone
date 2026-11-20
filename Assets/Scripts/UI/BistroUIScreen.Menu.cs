@@ -49,7 +49,7 @@ public partial class BistroUIScreen
         foreach(var image in root.GetComponentsInChildren<UnityEngine.UI.Image>(true))
         {
             if(image.GetComponentInParent<BistroFoodCard>()!=null)continue;
-            if(image.color==theme.background)image.color=BistroShelfStyle.Cream;
+            if(image.color==theme.background){image.color=BistroShelfStyle.Cream;BistroShelfStyle.ApplySurface((RectTransform)image.transform,theme.panelPaper);}
             else if(image.color==theme.panel)image.color=new Color(.86f,.88f,.81f);
             else if(image.color==theme.accent)image.color=new Color(.72f,.79f,.64f);
             if(image.name=="Tutorial")image.color=BistroShelfStyle.Cream;

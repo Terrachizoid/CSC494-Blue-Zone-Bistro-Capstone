@@ -91,9 +91,11 @@ public class BistroDropSlot : MonoBehaviour, IDropHandler, IPointerClickHandler,
             row.gameObject.AddComponent<LayoutElement>().preferredHeight=34;
             var thumb=BistroWidgets.Box(row,"Food thumbnail",Color.clear,new Vector2(.02f,.08f),new Vector2(.2f,.92f));
             var image=thumb.GetComponent<Image>();image.raycastTarget=false;if(item.art!=null){image.sprite=item.art;image.color=Color.white;image.preserveAspect=true;}
-            BistroShelfStyle.Text(row,item.label,theme,new Vector2(.23f,0),new Vector2(.98f,1),15,BistroShelfStyle.Ink).raycastTarget=false;
+            BistroShelfStyle.Text(row,item.label,theme,new Vector2(.23f,0),new Vector2(takeOut!=null?.84f:.98f,1),15,BistroShelfStyle.Ink).raycastTarget=false;
             string key=item.key;
             BistroDragChip.Attach(row,key,kind,item.art).DroppedOutside=()=>takeOut?.Invoke(key);
+            // A click alternative to dragging the row out (supervisor, 2026-11-18).
+            if(takeOut!=null)BistroShelfStyle.Button(row,"−",theme,new Vector2(.86f,.1f),new Vector2(.98f,.9f),new Color(.84f,.83f,.77f),BistroShelfStyle.Ink,()=>takeOut(key),true);
         }
     }
     public void OnDrop(PointerEventData e){hoverScale=1;hoveringCard=null;var source=e.pointerDrag?.GetComponent<IBistroDragSource>();if(drop!=null && source!=null && source.TryClaimDrop(e.pointerId))drop(source.Key,source.Kind);}

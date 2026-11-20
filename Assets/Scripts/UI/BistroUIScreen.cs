@@ -21,6 +21,8 @@ public partial class BistroUIScreen : MonoBehaviour
     private readonly Dictionary<string,int> sellSelections=new Dictionary<string,int>(StringComparer.OrdinalIgnoreCase);
     private StoreData store;
     private string shelf, notice="", modal;
+    // Where the player checked out, so finishing that purchase's sorting returns them to the same store/shelf.
+    private StoreData returnStore; private string returnShelf;
     private bool dirty;
     private string motionContext;
     private bool ownsTheme;
@@ -36,10 +38,19 @@ public partial class BistroUIScreen : MonoBehaviour
         else if(EventSystem.current.GetComponent<BaseInputModule>()==null)EventSystem.current.gameObject.AddComponent<InputSystemUIInputModule>();
         subscribedLoop=game.Loop;subscribedLoop.PhaseChanged+=PhaseChanged;Refresh();
     }
-    private void PhaseChanged(GamePhase phase){ResetMeal();sellSelections.Clear();store=null;shelf=null;modal=null;answers.Clear();notice="";dirty=true;}
-    private void LateUpdate(){TickEventToast();if(!game.IsMainMenu)SyncVoice();if(dirty){dirty=false;Refresh();}}
+    private void PhaseChanged(GamePhase phase)
+    {
+        ResetMeal();sellSelections.Clear();store=null;shelf=null;modal=null;answers.Clear();notice="";dirty=true;
+        if(phase==GamePhase.Market&&returnStore!=null){store=returnStore;shelf=returnShelf;notice=PurchaseDone;}
+        else if(phase==GamePhase.Market&&game.Loop.BistroOpened)notice="Your guests will wait. Shop, then click your Bistro on the map to go back.";
+        if(phase!=GamePhase.FoodSorting){returnStore=null;returnShelf=null;}
+    }
+    private const string PurchaseDone="Purchase complete. Shop more, or click your Bistro on the map when you're ready to cook.";
+    private void LateUpdate(){TickEventToast();TickPlanHint();if(!game.IsMainMenu)TickChatter();if(!game.IsMainMenu)SyncVoice();if(dirty){dirty=false;Refresh();}}
     private void OnDestroy(){if(subscribedLoop!=null)subscribedLoop.PhaseChanged-=PhaseChanged;if(ownsTheme)Destroy(theme);}
     private void Change(Action action){action();dirty=true;}
+    // Redraw after something outside the UI changed the session (debug panel).
+    public void MarkDirty(){dirty=true;}
     private void Refresh()
     {
         canvas.gameObject.SetActive(true);
@@ -52,11 +63,16 @@ public partial class BistroUIScreen : MonoBehaviour
         if(game.Loop.Phase==GamePhase.Completed){EndingScreen();FlushDialogue();AnimateNavigation();return;}
         game.Loop.RefreshTutorials();
         BistroWidgets.Label(screen,game.SaveFailed?game.SaveMessage:notice,theme,new Vector2(.03f,0),new Vector2(.97f,.065f),18);
+        TrackShopLesson();
         if(game.Loop.Phase==GamePhase.Market)Market();else if(game.Loop.Phase==GamePhase.FoodSorting)Sorting();else if(game.Loop.Phase==GamePhase.Service)ServiceScreen();else ResultsScreen();
+        MealPlanPanel();
         if(game.SaveFailed)BistroWidgets.Button(screen,"Retry checkpoint save",theme,new Vector2(.72f,.005f),new Vector2(.98f,.06f),()=>Change(()=>game.RetrySave()));
         GlobalToolbar();
-        PresentTutorial();
         if(modal=="news"||modal=="event-detail")EventPanel();else if(modal=="main-menu")ReturnMenuPanel();else if(modal!=null && modal!="tutorial-help")Modal();
+        // Guide dialogues come after every panel so they are always on top (they are layered where requested).
+        LessonOverlays();
+        PresentTutorial();
+        ChatterBubble();
         foreach(Transform child in screen)if(child.name=="Modal blocker"||child.name=="Return shade"||child.name=="Tutorial")StyleMenu(child);
         FlushDialogue();
         RestoreScroll();
@@ -82,8 +98,9 @@ public partial class BistroUIScreen : MonoBehaviour
     private void AddToCart(string id,string kind)
     {
         if(kind!="offer")return;
-        Change(()=>{var entry=cart.Find(c=>c.listingId==id);if(entry==null)cart.Add(new CartEntry{listingId=id});else if(entry.packageQuantity<10000)entry.packageQuantity++;notice="Package added to your cart.";});
+        Change(()=>AddToCartNow(id));
     }
+    private void AddToCartNow(string id){var entry=cart.Find(c=>c.listingId==id);if(entry==null)cart.Add(new CartEntry{listingId=id});else if(entry.packageQuantity<10000)entry.packageQuantity++;notice="Package added to your cart.";}
     // Sorting uses the same illustrated kitchen as cooking: room behind, cream workspace, art cards,
     // and three bins with Traffic Light shapes (circle GO, triangle SLOW, octagon STOP) so colour is never the only cue.
     private static readonly TrafficLight[] SortBins={TrafficLight.Green,TrafficLight.Yellow,TrafficLight.Red};
@@ -95,7 +112,7 @@ public partial class BistroUIScreen : MonoBehaviour
         var background=room.GetComponent<Image>();background.raycastTarget=false;
         if(theme.serviceBackground!=null){background.sprite=theme.serviceBackground;background.color=Color.white;}
         BistroWidgets.Box(room,"Kitchen dim",new Color(0,0,0,.24f),Vector2.zero,Vector2.one).GetComponent<Image>().raycastTarget=false;
-        return BistroShelfStyle.Panel(room,name,new Color(.94f,.92f,.86f,.96f),new Vector2(.025f,.025f),new Vector2(.975f,.97f));
+        return BistroShelfStyle.PaperPanel(room,name,theme,new Vector2(.025f,.025f),new Vector2(.975f,.97f));
     }
     private void Sorting()
     {
@@ -105,8 +122,8 @@ public partial class BistroUIScreen : MonoBehaviour
         if(result!=null){SortingResults(desk,result);return;}
         var ink=BistroShelfStyle.Ink;
         int total=game.Loop.SortingQuestions.Count(),placed=answers.Count;
-        BistroShelfStyle.Text(desk,"Sort today's shopping",theme,new Vector2(.03f,.905f),new Vector2(.62f,.99f),30,ink,true);
-        BistroShelfStyle.Text(desk,"Drag each new food into a bin. Click a card to read its label. Correct answers earn back part of today's bill.",theme,new Vector2(.03f,.845f),new Vector2(.64f,.905f),17,ink);
+        BistroShelfStyle.Text(desk,"Sort your new food",theme,new Vector2(.03f,.905f),new Vector2(.62f,.99f),30,ink,true);
+        BistroShelfStyle.Text(desk,$"Drag each new food into a bin, or press one of the shapes on its card. Click a card to read its label. Each correct answer gives back {game.Balance.maximumSortingDiscount*100:0}% of what you paid for that food.",theme,new Vector2(.03f,.845f),new Vector2(.64f,.905f),17,ink);
         var grid=BistroWidgets.Grid(desk,theme,new Vector2(.015f,.13f),new Vector2(.64f,.84f));
         ((RectTransform)grid.parent).GetComponent<Image>().color=Color.clear;
         grid.GetComponent<BistroResponsiveGrid>().SetPreferred(new Vector2(176,250));
@@ -118,6 +135,15 @@ public partial class BistroUIScreen : MonoBehaviour
             int servings=batches.Sum(e=>e.servings);
             var card=BistroFoodCard.Create(grid,food,q.foodId,"sort",$"{servings} purchased servings\n{Expiry(earliest)}",theme);
             card.ApplyShelfArtwork(food,"",servings);
+            // Click alternative to dragging (2026-11-18): one small button per bin, with that bin's shape and colour.
+            string foodId=q.foodId;
+            for(int b=0;b<SortBins.Length;b++)
+            {
+                var answer=SortBins[b];float y=.70f-b*.12f;
+                var pick=BistroShelfStyle.Button(card.FrontLayer,"",theme,new Vector2(.80f,y),new Vector2(.96f,y+.105f),Color.Lerp(Color.white,LightColour(answer),.35f),ink,()=>Change(()=>answers[foodId]=answer));
+                BistroShelfIcon.Add(pick.transform,LightSymbol(answer),new Vector2(.15f,.15f),new Vector2(.85f,.85f),LightColour(answer));
+                pick.transform.SetAsLastSibling();
+            }
         }
         BistroWidgets.EmptyShelf(grid,"All foods placed.\nDrag a food between bins, or out of a bin to take it back.",theme);
         for(int i=0;i<SortBins.Length;i++)
@@ -144,7 +170,7 @@ public partial class BistroUIScreen : MonoBehaviour
     {
         var ink=BistroShelfStyle.Ink;
         BistroShelfStyle.Text(desk,$"{result.correctCount} of {result.questionCount} sorted correctly",theme,new Vector2(.03f,.905f),new Vector2(.70f,.99f),30,ink,true);
-        BistroShelfStyle.Text(desk,result.refundAmount>0?$"Refund ${result.refundAmount:0.00} added to your wallet":"No refund this time: only correctly sorted new foods earn one",theme,new Vector2(.03f,.845f),new Vector2(.70f,.905f),18,ink);
+        BistroShelfStyle.Text(desk,result.refundAmount>0?$"Refund ${result.refundAmount:0.00} added to your wallet":$"No refund this time: each correct answer gives back {game.Balance.maximumSortingDiscount*100:0}% of that food's price",theme,new Vector2(.03f,.845f),new Vector2(.70f,.905f),18,ink);
         var list=BistroWidgets.Grid(desk,theme,new Vector2(.015f,.13f),new Vector2(.985f,.84f));
         ((RectTransform)list.parent).GetComponent<Image>().color=Color.clear;
         list.GetComponent<BistroResponsiveGrid>().SetPreferred(new Vector2(620,170));
@@ -157,27 +183,29 @@ public partial class BistroUIScreen : MonoBehaviour
             if(food?.icon==null)thumb.GetComponent<Image>().color=new Color(.84f,.87f,.79f);
             BistroShelfStyle.Text(row,food?.displayName??f.foodId,theme,new Vector2(.23f,.70f),new Vector2(.80f,.96f),21,ink,true);
             BistroShelfIcon.Add(row,LightSymbol(f.correct),new Vector2(.83f,.70f),new Vector2(.89f,.95f),LightColour(f.correct));
-            BistroShelfStyle.Text(row,f.isCorrect?(f.refund>0?$"Correct · ${f.refund:0.00} back":"Correct"):"Needs another look · no refund",theme,new Vector2(.23f,.52f),new Vector2(.97f,.71f),16,f.isCorrect?BistroShelfStyle.Green:theme.warning);
+            BistroShelfStyle.Text(row,f.isCorrect?(f.refund>0?$"Correct · ${f.refund:0.00} back":"Correct"):"Wrong bin · no refund",theme,new Vector2(.23f,.52f),new Vector2(.97f,.71f),16,f.isCorrect?BistroShelfStyle.Green:theme.warning);
             var why=BistroShelfStyle.Text(row,f.explanation,theme,new Vector2(.23f,.05f),new Vector2(.97f,.52f),15,ink);why.alignment=TextAnchor.UpperLeft;
         }
-        BistroActionButton.Create(desk,"Continue to service",theme,new Vector2(.64f,.025f),new Vector2(.975f,.115f),BistroActionRole.Primary,()=>Change(()=>game.Loop.BeginService()),true);
+        BistroActionButton.Create(desk,"Back to the market",theme,new Vector2(.64f,.025f),new Vector2(.975f,.115f),BistroActionRole.Primary,()=>Change(()=>{if(!game.Loop.ReturnToMarket())notice=game.Loop.Tutorials?.LastError??"";}),true);
     }
     // Opening a bin shows its cards in the same style as the cart review; drag one out to take it back.
     private void Modal()
     {
         if(modal=="recipes"){RecipeBook();return;}
         if(modal=="meal-preview"){
-            DialoguePanel("Review your dish",ReviewText(mealPreview),"Confirm and serve",()=>{
-                var result=game.Loop.Serve(MealInput());modal=null;if(result.success)ResetMeal();else notice=result.error;
-            },()=>modal=null);return;
+            bool warning=!mealPreview.recipeBuilt||mealPreview.activeCravings.Length>mealPreview.cravingsResolved.Length;
+            DialoguePanel("Review your dish",ReviewText(mealPreview),warning?"Serve anyway":"Serve",()=>{
+                var result=game.Loop.Serve(MealInput());modal=null;if(result.success)ResetMeal();else Explain(result.error);
+            },()=>modal=null,true,null,"Keep cooking");return;
         }
-        if(modal=="guests"){
+        if(modal=="guests"){game.Loop.NoteSeen(TutorialFlags.SeenGuests);
             var text=$"Morning popularity: {game.State.morningPopularity:0} · Up to {game.State.dailyCustomerCapacity} guests\n\n"+string.Join("\n\n",game.Queries.GetExpectedCustomers().Select(c=>{
                 var requests=game.Queries.GetActiveCravings(c.id);return c.displayName+" · "+(requests.Length==0?"No specific request today":string.Join(", ",requests));}));
             DialoguePanel("Today's guests",text,"Back",()=>modal=null);return;
         }
         if(modal=="cart"){IllustratedCartReview();return;}
         if(modal=="checkout-confirm"){CheckoutConfirmation();return;}
+        if(modal=="bistro-confirm"){BistroConfirmation();return;}
         if(modal!="pantry"){modal=null;return;} // the only remaining generic panel
         var shade=BistroWidgets.Box(screen,"Modal blocker",new Color(0,0,0,.70f),Vector2.zero,new Vector2(1,.91f));
         var panel=BistroWidgets.Box(shade,"Pantry panel",theme.background,new Vector2(.05f,.05f),new Vector2(.95f,.95f));
@@ -185,7 +213,7 @@ public partial class BistroUIScreen : MonoBehaviour
         BistroWidgets.Button(panel,"Close",theme,new Vector2(.81f,.90f),new Vector2(.97f,.97f),()=>Change(()=>modal=null));
         BistroWidgets.Label(panel,notice,theme,new Vector2(.04f,.845f),new Vector2(.96f,.89f),16);
         var grid=BistroWidgets.Grid(panel,theme,new Vector2(.03f,.23f),new Vector2(.97f,.84f));
-        if(modal=="pantry")PantryModal(panel,grid);
+        if(modal=="pantry"){game.Loop.NoteSeen(TutorialFlags.SeenPantry);PantryModal(panel,grid);}
     }
     // Pantry batches; at the market, drag one serving at a time into SELL, drag a row out of SELL to keep one, then confirm.
     private void PantryModal(RectTransform panel,RectTransform grid)
@@ -208,9 +236,11 @@ public partial class BistroUIScreen : MonoBehaviour
             string price=!selling?"":each>=0?$"\nSells for ${each:0.00} each":"\nCannot be sold";
             var pantryCard=BistroFoodCard.Create(grid,game.Queries.Foods.GetById(e.foodId),e.inventoryEntryId,"sell-batch",$"{left} servings · {Expiry(e.daysRemaining)}"+price,theme,selling&&each>=0&&left>0);
             pantryCard.ApplyShelfArtwork(game.Queries.Foods.GetById(e.foodId),Expiry(e.daysRemaining),left);
+            string batchId=e.inventoryEntryId;
+            if(selling&&each>=0&&left>0)RoundButton(pantryCard.FrontLayer,"+",new Vector2(.76f,.60f),new Vector2(.94f,.72f),true,()=>AddSellServing(batchId));
         }
         BistroWidgets.EmptyShelf(grid,"Your pantry is empty.\nPurchased food appears here as individual batches.",theme);
-        if(!selling){BistroWidgets.Label(panel,"Pantry food can be sold at the market, before checkout.",theme,new Vector2(.03f,.05f),new Vector2(.97f,.18f),18);return;}
+        if(!selling){BistroWidgets.Label(panel,"Pantry food can be sold at the market.",theme,new Vector2(.03f,.05f),new Vector2(.97f,.18f),18);return;}
         var sellSlot=BistroDropSlot.Create(panel,"SELL",items.Count==0?"Drag one serving at a time here":$"{items.Sum(i=>i.servings)} servings · ${(quote!=null&&quote.success?quote.amount:0):0.00}",theme,
             new Vector2(.03f,.025f),new Vector2(.55f,.21f),quote!=null&&!quote.success,(id,kind)=>{if(kind=="sell-batch")Change(()=>AddSellServing(id));},null);
         // Each row is one batch waiting to be sold; drag it out of the slot to keep one serving.

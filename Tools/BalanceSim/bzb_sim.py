@@ -35,6 +35,7 @@ class Content:
         for f in foods:
             dd = [x for x in f["daily_dozen_categories"].split("|") if x and x != "None"]
             self.foods[f["id"]] = dict(id=f["id"], name=f["display_name"], cat=f["recipe_category"], dd=dd,
+                                       cats={f["recipe_category"]} | {x for x in f.get("also_categories", "").split("|") if x},
                                        tl=f["traffic_light"], storage=f["storage_type"], appeal=float(f["ingredient_appeal"]))
         self.stores = {s["store_id"]: dict(id=s["store_id"], unlock=int(s["unlock_day"])) for s in stores}
         self.listings = []
@@ -83,7 +84,7 @@ def evaluate(C, recipe, foods_by_slot, cust, day, cravings, popularity, wellbein
         if len(picks) != slot["n"]: built = False
         for fid in picks:
             f = C.foods[fid]
-            if f["cat"] != slot["cat"]: built = False
+            if slot["cat"] not in f["cats"]: built = False
             total += 1; appeal += f["appeal"]; minval += C.minprice[fid]
             if f["tl"] == "Green": green += 1; gcov.update(f["dd"])
             elif f["tl"] == "Yellow": yellow += 1
@@ -153,7 +154,7 @@ def best_build(C, recipe, avail, cust, day, cravings, pop, well, strat, cost_of,
     bycat = defaultdict(list)
     for fid in avail:
         f = C.foods[fid]
-        if f["tl"] in lights and (not recipe["green_only"] or f["tl"] == "Green"): bycat[f["cat"]].append(fid)
+        if f["tl"] in lights and (not recipe["green_only"] or f["tl"] == "Green"): [bycat[c].append(fid) for c in f["cats"]]
     options = []
     for s in recipe["slots"]:
         cands = bycat.get(s["cat"], [])
@@ -249,7 +250,7 @@ class Run:
         for e in self.inv: pantry[e["food"]] += e["servings"]
         avail = set(buy_price) | set(pantry)
         recipes = [r for r in C.recipes.values() if r["unlock"] <= self.day]
-        cats = {C.foods[f]["cat"] for f in avail}
+        cats = set().union(*[C.foods[f]["cats"] for f in avail]) if avail else set()
         recipes_avail = [r for r in recipes if all(s["cat"] in cats for s in r["slots"] if not s["opt"])]
         cravings = {g: self.choose_cravings(g, recipes_avail) for g in guests}
         cost_of = lambda f: 0.0 if pantry[f] > 0 else buy_price.get(f, (99,))[0]
@@ -355,7 +356,7 @@ class Run:
             have = Counter()
             for x in self.inv: have[x["food"]] += x["servings"]
             if any(best_build(C, r, set(have), self.cust[g], self.day, cravings[g], self.pop, self.well, "thrift", lambda f: 0) for r in recipes): continue
-            cand = lambda cat: sorted(f for f, d in C.foods.items() if d["cat"] == cat and d["tl"] == "Green" and d["appeal"] <= b.get("foodAidMaxAppeal", 4) and f in C.minprice)
+            cand = lambda cat: sorted(f for f, d in C.foods.items() if cat in d["cats"] and d["tl"] == "Green" and d["appeal"] <= b.get("foodAidMaxAppeal", 4) and f in C.minprice)
             opts = sorted([r for r in recipes if all(cand(s["cat"]) for s in r["slots"] if not s["opt"])], key=lambda r: r["id"])
             if not opts: break
             rng = random.Random(self.day * 7919 + len(opts)); r = opts[rng.randrange(len(opts))]; sel = []

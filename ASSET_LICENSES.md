@@ -32,3 +32,9 @@ Everyday.png, EverydayBacks.png, Treats.png, TreatsBacks.png, Luxury.png and Lux
 BistroArt/city.png and S001.png/S002.png/S003.png are runtime copies of this project's selected waterfront city and Architecture_v2 concept images; original sources remain in Assets/Art/Concepts. StoreLogos.png is OpenAI-generated source exec-93c8ff11-95a7-4410-bde1-833a86846d71.png, prompt summarized in Data/ArtDirection.md. These are prototype assets.
 
 Recipe and category atlases: generated with the built-in image-generation tool on 2026-10-27 for this project. Sources exec-50398f94-67d7-4f1f-a78c-a11423e2b156.png and exec-5e38e141-4eee-48de-918f-09e7816ce3da.png. Runtime copies: Assets/Resources/BistroArt/Recipes.png and Categories.png. Generated illustrations; no third-party logo assets included.
+
+## Additional event icons (2026-11-19)
+Eight individual EV_*_icon.png files (HARVEST, BEAN_WEEK, FESTIVAL, COLD_SNAP, WORKSHOP, FREEZER_DELAY, SWEET_POTATO, HEAT_WAVE) are OpenAI built-in image_gen outputs using this project's existing EV_OATS_icon.png as style reference. Exact prompts/source paths are recorded in Data/EventArt_20261119.json. Reviewable generated artwork; no assertion of exclusive copyright.
+
+## Generated UI panel family — 2026-11-20
+Assets/Art/UI/{panelPaper,guideNotePanel,planPanel,suggestionFrame,soldOutStamp,newTag}.png were created with built-in OpenAI image generation from the user's visual specification. Source paths and exact prompts: Data/PanelArt_20261120.md. Transparent alpha preserved; text is rendered separately by the game. Integrated review placeholders. No third-party downloaded image pack was used; this record does not assert exclusive copyright.

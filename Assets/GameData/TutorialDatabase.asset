@@ -21,10 +21,26 @@ MonoBehaviour:
     completionFlags:
     - tutorial.shopping_lesson_complete
     steps:
+    - stepId: recipes
+      text: 'Welcome to your bistro! Before shopping, let''s plan today''s cooking.
+        Open your recipe book: Recipes, in the top bar.'
+    - stepId: plan
+      text: Each card is a dish. Press + on one dish you'd like to cook today. Dishes
+        you can't afford yet are greyed out.
+    - stepId: close
+      text: Your plan is set! The panel in the top-left now tracks what this dish
+        still needs. Close the recipe book to go shopping.
     - stepId: shop
-      text: Welcome to your bistro! First, shop for today's cooking. Open Recipes
-        in the top bar to see what each dish needs, then drag food from the shelves
-        into your cart. Buy enough for at least one recipe, then check out.
+      text: Now let's buy what your dish needs. Click a food type in the plan panel
+        to see where to find it, or click a store on the map.
+    - stepId: store
+      text: 'Welcome in! Each aisle is a shelf: click one to see what''s on it. The
+        same food can cost different amounts in different stores.'
+    - stepId: shelf
+      text: Press + on a food card, or drag it onto your cart, to add a package.
+        Click a card to flip it and read its label. When the plan panel shows nothing
+        missing, check out. After that first purchase, you can shop as often as you
+        like.
   - id: T_SORTING
     triggerFlag: tutorial.sorting_available
     behaviourId: TextOnly
@@ -39,6 +55,18 @@ MonoBehaviour:
         are moving away from. Red foods are the ones to avoid. Flip a card to read
         its ingredients. Each new food you sort correctly gives back {maxDiscount}
         of what you paid for it. Answers are final once you submit.
+  - id: T_BISTRO
+    triggerFlag: tutorial.bistro_available
+    behaviourId: TextOnly
+    priority: 88
+    activationPhase: Market
+    completionFlags:
+    - tutorial.bistro_lesson_complete
+    steps:
+    - stepId: explain
+      text: Back at the market! You can visit other stores and check out again; each
+        purchase gets its own quick sort. When you're done shopping, click your Bistro
+        on the map to start cooking.
   - id: T_COOKING
     triggerFlag: tutorial.cooking_available
     behaviourId: FirstMeal
@@ -109,9 +137,9 @@ MonoBehaviour:
     - stepId: explain
       text: From today, guests may ask for something, like Savory, Creamy or Crunchy.
         Each recipe shows what it answers. Answering a request delights a guest and
-        grows your popularity; ignoring it costs a little. Health still comes only
-        from the foods you choose. Comfort is answered by any dish with an appeal
-        of {comfort} or more.
+        grows your popularity. Each request a dish leaves unanswered costs {missedCraving}
+        popularity, even when the dish itself is built right. Health still comes
+        only from the foods you choose.
   - id: T_FARMER
     triggerFlag: tutorial.food_aid_given
     behaviourId: TextOnly
@@ -160,4 +188,163 @@ MonoBehaviour:
         money for food. From day {rentStart}, rent of ${rent} is due each morning.
         You can only shop while you have money, and ending deep in debt closes the
         bistro. Short on cash? Sell spare food from the Pantry.
-  fingerprint: X90rd7/R9tEcSkgq8zNBK/oGQdh2Mm1j+R6DgtlDZ1s=
+  - id: T_SEEN_PANTRY
+    triggerFlag: tutorial.seen_pantry
+    behaviourId: TextOnly
+    priority: 50
+    activationPhase: Any
+    completionFlags:
+    - tutorial.seen_pantry_lesson_complete
+    steps:
+    - stepId: explain
+      text: 'This is your pantry: the food you own. Each card shows its servings
+        and how many days are left before it spoils. At the market you can sell pantry
+        food back for {sellRate} of what you paid.'
+  - id: T_SEEN_GUESTS
+    triggerFlag: tutorial.seen_guests
+    behaviourId: TextOnly
+    priority: 50
+    activationPhase: Any
+    completionFlags:
+    - tutorial.seen_guests_lesson_complete
+    steps:
+    - stepId: explain
+      text: These are today's guests. Some ask for something special. Meeting a request
+        helps your popularity; ignoring it can hurt it.
+  - id: T_LOCKED_STORE
+    triggerFlag: tutorial.clicked_locked_store
+    behaviourId: TextOnly
+    priority: 50
+    activationPhase: Market
+    completionFlags:
+    - tutorial.locked_store_lesson_complete
+    steps:
+    - stepId: explain
+      text: Hmm, that store isn't open yet. I wonder what's inside... Keep an eye
+        on the News.
+  - id: T_CLOSED_STORE
+    triggerFlag: tutorial.clicked_closed_store
+    behaviourId: TextOnly
+    priority: 50
+    activationPhase: Market
+    completionFlags:
+    - tutorial.closed_store_lesson_complete
+    steps:
+    - stepId: explain
+      text: Closed today? Darn. Events can close a store for a while. Try another
+        store, and check the News to see when it reopens.
+  - id: T_STORE_CLOSED_EVENT
+    triggerFlag: tutorial.store_closed_event
+    behaviourId: TextOnly
+    priority: 55
+    activationPhase: Market
+    completionFlags:
+    - tutorial.store_closed_event_lesson_complete
+    steps:
+    - stepId: explain
+      text: 'Heads up: an event has closed a store today. Open the News to see what
+        happened.'
+  - id: T_NEW_RECIPES
+    triggerFlag: tutorial.new_recipes
+    behaviourId: TextOnly
+    priority: 55
+    activationPhase: Market
+    completionFlags:
+    - tutorial.new_recipes_lesson_complete
+    steps:
+    - stepId: explain
+      text: New recipes are in your book today! Open Recipes to see what's new, and
+        plan them with +.
+  - id: T_SECOND_CHECKOUT
+    triggerFlag: tutorial.first_second_checkout
+    behaviourId: TextOnly
+    priority: 50
+    activationPhase: Market
+    completionFlags:
+    - tutorial.second_checkout_lesson_complete
+    steps:
+    - stepId: explain
+      text: Back for more? You can shop at as many stores as you like each day. Each
+        purchase gets its own quick sort.
+  - id: T_SORT_MISTAKE
+    triggerFlag: tutorial.first_sort_mistake
+    behaviourId: TextOnly
+    priority: 50
+    activationPhase: FoodSorting
+    completionFlags:
+    - tutorial.sort_mistake_lesson_complete
+    steps:
+    - stepId: explain
+      text: Not every answer was right this time. Foods you got wrong come back on
+        a later purchase, so you'll get another try.
+  - id: T_SKIP_CUSTOMER
+    triggerFlag: tutorial.first_skip_customer
+    behaviourId: TextOnly
+    priority: 50
+    activationPhase: Service
+    completionFlags:
+    - tutorial.skip_customer_lesson_complete
+    steps:
+    - stepId: explain
+      text: You skipped a guest. That saves your ingredients, but they leave without
+        a meal.
+  - id: T_INCOMPLETE_DISH
+    triggerFlag: tutorial.first_incomplete_dish
+    behaviourId: TextOnly
+    priority: 50
+    activationPhase: Service
+    completionFlags:
+    - tutorial.incomplete_dish_lesson_complete
+    steps:
+    - stepId: explain
+      text: That dish didn't match its recipe exactly. Fill every slot with the right
+        food type to build the full recipe.
+  - id: T_CITY_DURING_SERVICE
+    triggerFlag: tutorial.first_city_during_service
+    behaviourId: TextOnly
+    priority: 50
+    activationPhase: Market
+    completionFlags:
+    - tutorial.city_during_service_lesson_complete
+    steps:
+    - stepId: explain
+      text: Your guests will wait while you shop. Click your Bistro on the map to
+        go back to them.
+  - id: T_EXPIRING
+    triggerFlag: tutorial.food_expiring
+    behaviourId: TextOnly
+    priority: 55
+    activationPhase: Market
+    completionFlags:
+    - tutorial.expiring_lesson_complete
+    steps:
+    - stepId: explain
+      text: Some food in your pantry spoils tomorrow. It's a good day to cook with
+        it, or you can sell it while you're at the market. A quick peek at the pantry
+        each morning helps you spot what to use first.
+  - id: T_POPULARITY_DROP
+    triggerFlag: tutorial.first_popularity_drop
+    behaviourId: TextOnly
+    priority: 50
+    activationPhase: Service
+    completionFlags:
+    - tutorial.popularity_drop_lesson_complete
+    steps:
+    - stepId: explain
+      text: 'Your dish was built right, but popularity went down a little. That''s
+        because it didn''t answer what this guest asked for: each missed request
+        costs {missedCraving} popularity. Before picking a recipe, check the guest''s
+        request; each recipe card shows which requests it answers.'
+  - id: T_COMFORT
+    triggerFlag: tutorial.first_comfort_request
+    behaviourId: TextOnly
+    priority: 60
+    activationPhase: Service
+    completionFlags:
+    - tutorial.comfort_lesson_complete
+    steps:
+    - stepId: explain
+      text: 'This guest would like something comforting. Comfort isn''t tied to one
+        recipe: any dish whose ingredients have an average appeal of {comfort} or
+        more answers it. You can see each food''s appeal in the corner of its card.'
+  fingerprint: KGKTPH7E2eyGquyCjv9JDiRQ01YTQ7NSrv3bFU9aaqs=

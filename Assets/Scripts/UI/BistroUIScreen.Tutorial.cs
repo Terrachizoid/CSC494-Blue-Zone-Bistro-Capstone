@@ -13,9 +13,13 @@ public partial class BistroUIScreen
         // An action step's instruction opens by itself once, as soon as no other panel is open. "Seen" is stored
         // on the lesson record, so another lesson stepping in between does not make this one start over.
         if(!tutorial.IsText && !tutorial.InstructionSeen && modal==null){game.Loop.MarkTutorialSeen();modal="tutorial-help";}
-        if(modal!=null&&modal!="tutorial-help")return;
+        // Day-1 lesson steps that happen inside the recipe book show their text over the book (the book stays open).
+        if(!tutorial.IsText && !tutorial.InstructionSeen && modal=="recipes" && ShopLesson()){game.Loop.MarkTutorialSeen();ShowLessonNote(tutorial.Instruction);}
+        // Text lessons show over any open panel (Guide dialogues are drawn last) and leave that panel open.
+        if(modal=="main-menu")return;
         if(!tutorial.IsText&&modal!="tutorial-help")return;
-        DialoguePanel("Blue Zone Guide",tutorial.Instruction,tutorial.IsText?"Continue":"Back to play",()=>{
-            if(tutorial.IsText)game.Loop.ContinueTutorial();modal=null;});
+        bool text=tutorial.IsText;
+        DialoguePanel("Blue Zone Guide",tutorial.Instruction,text?"Continue":"Back to play",()=>{
+            if(text)game.Loop.ContinueTutorial();if(!text||modal=="tutorial-help")modal=null;});
     }
 }

@@ -65,6 +65,8 @@ MonoBehaviour:
   foodAidEnabled: 1
   foodAidMaxAppeal: 4
   foodAidShelfLifeDays: 1
+  foodAidMoneyBelow: 4
+  cityDuringService: 1
   popularityPerMissedCraving: 15
   maxDelight: 100
   startingDelight: 50

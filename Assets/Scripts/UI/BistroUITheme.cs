@@ -28,6 +28,13 @@ public class BistroUITheme : ScriptableObject
     public Sprite cartIcon;
     public Sprite cardFrame;
     public Sprite slotFrame;
+    [Header("Reusable illustrated surfaces")]
+    public Sprite panelPaper;
+    public Sprite guideNotePanel;
+    public Sprite planPanel;
+    public Sprite suggestionFrame;
+    public Sprite soldOutStamp;
+    public Sprite newTag;
     public Font font;
     [Header("Contextual action buttons")]
     public Color actionPrimary=new Color(.67f,.77f,.58f);
@@ -45,6 +52,13 @@ public class BistroUITheme : ScriptableObject
     public bool showCardAppeal = true;
     [Tooltip("Extra classification labels only appear in editor/development builds.")]
     public bool debugCardDetails;
+    [Header("Low-poly 3D city (preview)")]
+    [Tooltip("Show the generated low-poly city instead of the painted map. Off by default; the 2D map stays the fallback.")]
+    public bool use3DCity;
+    [Tooltip("Assets/GameData/City/LowPolyCity.prefab (Tools > Blue Zone Bistro > Generate Low-Poly City).")]
+    public GameObject city3DPrefab;
+    [Tooltip("Orthographic 3D city camera (diorama look) instead of perspective.")]
+    public bool city3DOrthographic;
     [Header("Recipe reading overlays")]
     [Range(0,1)] public float recipeFrontVeilOpacity=.50f;
 }

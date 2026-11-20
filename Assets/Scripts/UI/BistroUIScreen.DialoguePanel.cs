@@ -13,19 +13,19 @@ public partial class BistroUIScreen
     private float typingStart;
     private bool typingSkipped;
     private static Sprite dialogueFade;
-    private class DialogueRequest{public RectTransform slot;public string speaker,text,actionLabel;public Action action,cancel;public bool block;public Action<RectTransform> decorate;}
+    private class DialogueRequest{public RectTransform slot;public string speaker,text,actionLabel,cancelLabel;public Action action,cancel;public bool block;public Action<RectTransform> decorate;}
     private readonly List<DialogueRequest> dialogueRequests=new List<DialogueRequest>();
     // Only one dialogue box is ever on screen. Calls made while a screen is built are queued and
     // FlushDialogue (end of Refresh) shows the one requested last, which is also the top layer:
     // a panel the player opened > the Blue Zone Guide > guest lines, dish results and day summaries.
     // The others are not lost: they are requested again on the next refresh, after the shown one is closed.
     // Callers keep ownership of all actions; decorate adds extra buttons to the frame if it is shown.
-    private void DialoguePanel(string speaker,string text,string actionLabel,Action action,Action cancel=null,bool block=true,Action<RectTransform> decorate=null)
+    private void DialoguePanel(string speaker,string text,string actionLabel,Action action,Action cancel=null,bool block=true,Action<RectTransform> decorate=null,string cancelLabel=null)
     {
         // An inactive placeholder keeps the request's layer order among other screen elements.
         var slot=BistroWidgets.Box(screen,"Dialogue presentation",Color.clear,Vector2.zero,new Vector2(1,.91f));
         slot.gameObject.SetActive(false);
-        dialogueRequests.Add(new DialogueRequest{slot=slot,speaker=speaker,text=text,actionLabel=actionLabel,action=action,cancel=cancel,block=block,decorate=decorate});
+        dialogueRequests.Add(new DialogueRequest{slot=slot,speaker=speaker,text=text,actionLabel=actionLabel,cancelLabel=cancelLabel,action=action,cancel=cancel,block=block,decorate=decorate});
     }
     private void FlushDialogue()
     {
@@ -35,10 +35,10 @@ public partial class BistroUIScreen
         dialogueRequests.Clear();
         if(shown.slot==null)return;
         shown.slot.gameObject.SetActive(true);
-        var frame=BuildDialogue(shown.slot,shown.speaker,shown.text,shown.actionLabel,shown.action,shown.cancel,shown.block);
+        var frame=BuildDialogue(shown.slot,shown.speaker,shown.text,shown.actionLabel,shown.action,shown.cancel,shown.block,shown.cancelLabel);
         shown.decorate?.Invoke(frame);
     }
-    private RectTransform BuildDialogue(RectTransform root,string speaker,string text,string actionLabel,Action action,Action cancel,bool block)
+    private RectTransform BuildDialogue(RectTransform root,string speaker,string text,string actionLabel,Action action,Action cancel,bool block,string cancelLabel=null)
     {
         string key=speaker+"/"+text;
         if(dialoguePageKey!=key){dialoguePageKey=key;dialoguePage=0;}
@@ -73,7 +73,7 @@ public partial class BistroUIScreen
             if(!Typed()){typingSkipped=true;return;}
             if(!last)dialoguePage++;else{dialoguePageKey=null;action?.Invoke();}}));
         if(dialoguePage>0)BistroActionButton.Create(frame,"‹  Previous",theme,new Vector2(.25f,.045f),new Vector2(.40f,.19f),BistroActionRole.Secondary,()=>Change(()=>dialoguePage--));
-        if(cancel!=null)BistroActionButton.Create(frame,"Back",theme,new Vector2(.59f,.045f),new Vector2(.74f,.19f),BistroActionRole.Secondary,()=>Change(()=>{dialoguePageKey=null;cancel();}));
+        if(cancel!=null)BistroActionButton.Create(frame,cancelLabel??"Back",theme,new Vector2(.59f,.045f),new Vector2(.74f,.19f),BistroActionRole.Secondary,()=>Change(()=>{dialoguePageKey=null;cancel();}));
         if(pages.Count>1)BistroShelfStyle.Text(frame,$"{dialoguePage+1} / {pages.Count}",theme,new Vector2(.045f,.08f),new Vector2(.20f,.20f),14,Color.white);
         return frame;
     }

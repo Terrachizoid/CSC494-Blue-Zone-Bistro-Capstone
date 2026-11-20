@@ -20,23 +20,29 @@ public partial class BistroUIScreen
         BistroShelfStyle.Text(logo.transform,"BLUE ZONE",theme,new Vector2(.21f,.1f),new Vector2(1,.9f),15,BistroShelfStyle.Green,true);
         bool back=market&&store!=null;
         if(back)BistroShelfStyle.Button(header,shelf!=null?"← Store":"← City",theme,new Vector2(.096f,.18f),new Vector2(.178f,.82f),new Color(.84f,.83f,.77f),ink,()=>Change(()=>{if(shelf!=null)shelf=null;else store=null;}));
+        // Easy-mode switch: leave the bistro mid-service to shop, then click the Bistro on the map to come back.
+        else if(game.Balance.cityDuringService&&game.Loop.CanLeaveBistro){back=true;
+            BistroShelfStyle.Button(header,"← City",theme,new Vector2(.096f,.18f),new Vector2(.178f,.82f),new Color(.84f,.83f,.77f),ink,()=>Change(()=>{if(!game.Loop.LeaveBistro())notice=game.Loop.Tutorials?.LastError??"You can't leave right now.";}));}
         string place=market?(store?.displayName??"City"):game.Loop.Phase==GamePhase.Service?(mealRecipe==null?"Bistro":"Meal building"):game.Loop.Phase==GamePhase.FoodSorting?"Sorting":"Day complete";
         if(market&&store!=null&&shelf!=null)place+=" · "+(store.shelves.FirstOrDefault(s=>s!=null&&s.id==shelf)?.displayName??shelf);
         string symbol=market?"City":game.Loop.Phase==GamePhase.Service?"Bistro":game.Loop.Phase==GamePhase.FoodSorting?"Sort":"Day";
         HudItem(header,symbol,place,back?.185f:.10f,.345f,null,market&&store!=null?store.logo:null);
-        HudItem(header,"Day",$"Day {game.State.currentDay} / {game.Balance.totalDays}",.35f,.43f,()=>game.Loop.InspectToolbar("day"));
+        // Lesson 1 before shopping: these still respond, but the Guide says to plan first (Gate).
+        HudItem(header,"Day",$"Day {game.State.currentDay} / {game.Balance.totalDays}",.35f,.43f,Gate(()=>game.Loop.InspectToolbar("day")));
         float publicity=game.Queries.Market.Publicity;
-        HudItem(header,"Popularity",$"Popularity {game.State.popularity:0}"+(publicity==0?"":$" ({publicity:+0;-0})"),.43f,.575f,()=>game.Loop.InspectToolbar("popularity"));
-        HudItem(header,"wallet","$"+game.State.money.ToString("0.00"),.575f,.645f,()=>game.Loop.InspectToolbar("wallet"));
-        if(market)HudItem(header,"Cart","Cart · "+cart.Sum(c=>c.packageQuantity),.645f,.725f,()=>modal="cart");
-        HudItem(header,"Recipes","Recipes",.725f,.80f,()=>modal="recipes");
-        HudItem(header,"Guests","Guests",.80f,.868f,()=>modal="guests");
-        HudItem(header,"Pantry","Pantry",.868f,.935f,()=>modal="pantry");
-        HudItem(header,"Help","Help",.935f,.997f,()=>modal="tutorial-help");
+        HudItem(header,"Popularity",$"Popularity {game.State.popularity:0}"+(publicity==0?"":$" ({publicity:+0;-0})"),.43f,.575f,Gate(()=>game.Loop.InspectToolbar("popularity")));
+        HudItem(header,"wallet","$"+game.State.money.ToString("0.00"),.575f,.645f,Gate(()=>game.Loop.InspectToolbar("wallet")));
+        if(market)HudItem(header,"Cart","Cart · "+cart.Sum(c=>c.packageQuantity),.645f,.725f,Gate(()=>modal="cart"));
+        // Recipes never locks: if the book gets closed another way (e.g. Help), the player can always reopen it.
+        HudItem(header,"Recipes","Recipes",.725f,.80f,()=>{modal="recipes";if(ShopLesson())game.Loop.TellTutorial(TutorialAction.OpenRecipes);});
+        HudItem(header,"Guests","Guests",.80f,.868f,Gate(()=>modal="guests"));
+        HudItem(header,"Pantry","Pantry",.868f,.935f,Gate(()=>modal="pantry"));
+        // Help: the lesson in progress, else a line of idle chatter, else "all guides complete".
+        HudItem(header,"Help","Help",.935f,.997f,()=>{if(game.Loop.Tutorials?.Active==null&&ShowChatter(IdleKind.Click))return;modal="tutorial-help";});
     }
     // One top-bar item: a fixed-size icon, then the label in the body font and ink colour.
     // action==null makes a plain label (the current place); sprite overrides the vector symbol (store logo).
-    private void HudItem(RectTransform header,string symbol,string label,float left,float right,System.Action action,Sprite sprite=null)
+    private RectTransform HudItem(RectTransform header,string symbol,string label,float left,float right,System.Action action,Sprite sprite=null)
     {
         var ink=BistroShelfStyle.Ink;
         RectTransform host;
@@ -59,6 +65,7 @@ public partial class BistroUIScreen
             if(action==null)BistroTextMotion.Typewriter(text,label,changedAt,90f,false);
             else BistroTextMotion.Pop(text,changedAt);
         }
+        return host;
     }
     private readonly System.Collections.Generic.Dictionary<string,(string label,float changedAt)> hudLabels=
         new System.Collections.Generic.Dictionary<string,(string label,float changedAt)>();
@@ -70,7 +77,9 @@ public partial class BistroUIScreen
         Color rack; if(!ColorUtility.TryParseHtmlString(shelfInfo?.colour,out rack))rack=new Color(.43f,.51f,.44f);
         screen.GetComponent<Image>().color=rack*.94f;
         // Wide full-height viewport; four cards per row at normal desktop sizes.
-        var grid=BistroWidgets.Grid(screen,theme,new Vector2(.012f,.015f),new Vector2(.705f,.90f));
+        // Sort bar above the aisle (price per serving, appeal, food type); see BistroUIScreen.Sort.cs.
+        ShelfSortBar(screen,new Vector2(.014f,.855f),new Vector2(.703f,.895f));
+        var grid=BistroWidgets.Grid(screen,theme,new Vector2(.012f,.015f),new Vector2(.705f,.845f));
         var viewport=(RectTransform)grid.parent;viewport.GetComponent<Image>().color=rack;
         // Dragging a cart row back onto the shelf puts one package back.
         viewport.gameObject.AddComponent<BistroShelfCartTarget>().Drop=(id,kind)=>{if(kind=="remove-cart")Change(()=>RemoveOnePackage(id));};
@@ -78,13 +87,32 @@ public partial class BistroUIScreen
         var layout=grid.GetComponent<GridLayoutGroup>();layout.spacing=new Vector2(20,32);layout.padding=new RectOffset(30,26,22,24);
         var rails=BistroWidgets.Box(grid,"Continuous shelf rails",Color.clear,Vector2.zero,Vector2.one);rails.GetComponent<Image>().raycastTarget=false;
         rails.gameObject.AddComponent<LayoutElement>().ignoreLayout=true;
-        foreach(var listing in game.Queries.GetListings(store).Where(l=>l.shelfId==shelf))
+        var placed=new System.Collections.Generic.List<System.Collections.Generic.KeyValuePair<RectTransform,string>>();
+        foreach(var listing in SortShelf(game.Queries.GetListings(store).Where(l=>l.shelfId==shelf)))
         {
             var price=game.Queries.GetPrice(listing);
-            var card=BistroFoodCard.Create(grid,listing.food,listing.id,"offer",price.Display+" · "+listing.servingsPerPackage+" servings",theme);
-            card.ApplyShelfArtwork(listing.food,"$"+price.effectivePrice.ToString("0.00"),listing.servingsPerPackage,store.logo);
+            // Sold out by an event (food or aisle shortage): still shown, greyed, and can't be added.
+            string soldOut=game.Queries.Market.UnavailableReason(listing);
+            var card=BistroFoodCard.Create(grid,listing.food,listing.id,"offer",(soldOut??price.Display)+" · "+listing.servingsPerPackage+" servings",theme,soldOut==null);
+            card.ApplyShelfArtwork(listing.food,soldOut!=null?"Sold out":"$"+price.effectivePrice.ToString("0.00"),listing.servingsPerPackage,store.logo);
+            placed.Add(new System.Collections.Generic.KeyValuePair<RectTransform,string>((RectTransform)card.transform,store.id+"/"+listing.id));
+            if(soldOut!=null)
+            {
+                // The card already has a CanvasGroup (its drag fade), and Unity allows only one: reuse it.
+                var faded=card.GetComponent<CanvasGroup>();if(faded==null)faded=card.gameObject.AddComponent<CanvasGroup>();faded.alpha=.45f;
+                var stamp=BistroShelfStyle.Artwork(card.FrontLayer,"Sold out stamp",theme.soldOutStamp,new Vector2(.08f,.40f),new Vector2(.92f,.63f),Color.white,true);
+                if(theme.soldOutStamp!=null)
+                {
+                    var label=BistroShelfStyle.Text(stamp,"Sold out",theme,new Vector2(.13f,.22f),new Vector2(.87f,.78f),21,new Color(.53f,.24f,.20f),true,TextAnchor.MiddleCenter);
+                    label.rectTransform.localRotation=Quaternion.Euler(0,0,5);label.raycastTarget=false;
+                }
+                continue;
+            }
+            if(NewFood(listing.food.id))NewBadge(card.FrontLayer,new Vector2(.04f,.78f),new Vector2(.26f,.855f));
+            string offer=listing.id;RoundButton(card.FrontLayer,"+",new Vector2(.76f,.60f),new Vector2(.94f,.72f),true,()=>AddToCartNow(offer));
         }
         grid.gameObject.AddComponent<BistroShelfLayout>().Initialize(rails,theme.shelfRail);
+        SlideShelfCards(grid,placed);
         AddShelfScrollbar(viewport);
         // Repeating rack hardware is decorative; cards remain the only product targets.
         var upright=BistroShelfStyle.Panel(viewport,"Sage steel upright",new Color(.56f,.61f,.51f),new Vector2(.006f,0),new Vector2(.023f,1),false);
@@ -96,6 +124,7 @@ public partial class BistroUIScreen
             slot.GetComponent<Image>().raycastTarget=false;
         }
         var panel=BistroShelfStyle.Panel(screen,"Your cart",cream,new Vector2(.724f,.025f),new Vector2(.985f,.89f));
+        BistroShelfStyle.ApplySurface(panel,theme.panelPaper);
         panel.gameObject.AddComponent<BistroShelfCartTarget>().Drop=AddToCart;
         BistroShelfIcon.Add(panel,theme.cartIcon,"cart",new Vector2(.06f,.85f),new Vector2(.24f,.97f),ink);
         var quote=game.Loop.QuoteCart(cart);
@@ -115,7 +144,8 @@ public partial class BistroUIScreen
             BistroDragChip.Attach(row,listingId,"remove-cart",listing.food?.icon).DroppedOutside=()=>Change(()=>RemoveOnePackage(listingId));
             var thumb=BistroShelfStyle.Panel(row,"Food thumbnail",Color.white,new Vector2(.02f,.10f),new Vector2(.25f,.90f));
             var art=listing.food?.icon;thumb.GetComponent<Image>().sprite=art;thumb.GetComponent<Image>().raycastTarget=false;
-            BistroShelfStyle.Text(row,listing.food.displayName,theme,new Vector2(.29f,.45f),new Vector2(.96f,.94f),22,ink,true);
+            BistroShelfStyle.Text(row,listing.food.displayName,theme,new Vector2(.29f,.45f),new Vector2(.84f,.94f),22,ink,true);
+            RoundButton(row,"−",new Vector2(.86f,.52f),new Vector2(.97f,.94f),false,()=>RemoveOnePackage(listingId));
             BistroShelfStyle.Text(row,$"{entry.packageQuantity} × {listing.servingsPerPackage} servings",theme,new Vector2(.29f,.08f),new Vector2(.70f,.46f),17,ink);
             BistroShelfStyle.Text(row,"$"+(game.Queries.GetPrice(listing).effectivePrice*entry.packageQuantity).ToString("0.00"),theme,new Vector2(.68f,.08f),new Vector2(.96f,.46f),21,ink,false,TextAnchor.MiddleRight);
         }
@@ -139,6 +169,7 @@ public partial class BistroUIScreen
     {
         var quote=game.Loop.QuoteCart(cart);
         if(!quote.success){notice=quote.error;return;}
+        if(cart.Count==0){notice="Your cart is empty. Drag food in, or click your Bistro on the map when you're ready to cook.";return;}
         if(quote.total>Mathf.Max(0f,game.State.money)){notice="Your cart costs more than your wallet. Drag something back to the shelf.";return;}
         modal="checkout-confirm";
     }
@@ -146,12 +177,11 @@ public partial class BistroUIScreen
     {
         var quote=game.Loop.QuoteCart(cart);
         int packages=cart.Sum(c=>c.packageQuantity);
-        string text=packages==0
-            ?"Your cart is empty. Check out anyway and cook with what is already in your pantry?"
-            :$"Buy {packages} package{(packages==1?"":"s")} for ${quote.total:0.00}? You will have ${game.State.money-quote.total:0.00} left.";
+        string text=$"Buy {packages} package{(packages==1?"":"s")} for ${quote.total:0.00}? You will have ${game.State.money-quote.total:0.00} left.";
         DialoguePanel("Checkout",text,"Confirm checkout",()=>{
+            returnStore=store;returnShelf=shelf;
             var result=game.Loop.Checkout(cart);modal=null;
-            if(result.success)cart.Clear();notice=result.success?"Checkout complete":result.error;
+            if(result.success)cart.Clear();if(result.success)notice=PurchaseDone;else Refused(result.error);
         },()=>modal=null);
     }
     private void AddShelfScrollbar(RectTransform viewport)
@@ -165,7 +195,7 @@ public partial class BistroUIScreen
     private void IllustratedCartReview()
     {
         var shade=BistroWidgets.Box(screen,"Modal blocker",new Color(0,0,0,.55f),Vector2.zero,new Vector2(1,.91f));
-        var panel=BistroShelfStyle.Panel(shade,"Cart review",BistroShelfStyle.Cream,new Vector2(.07f,.06f),new Vector2(.93f,.94f));
+        var panel=BistroShelfStyle.PaperPanel(shade,"Cart review",theme,new Vector2(.07f,.06f),new Vector2(.93f,.94f));
         BistroShelfStyle.Text(panel,"Review your cart",theme,new Vector2(.04f,.88f),new Vector2(.70f,.98f),34,BistroShelfStyle.Ink,true);
         BistroShelfStyle.Button(panel,"Close",theme,new Vector2(.83f,.90f),new Vector2(.96f,.97f),theme.accent,BistroShelfStyle.Ink,()=>Change(()=>modal=null));
         BistroShelfStyle.Text(panel,notice,theme,new Vector2(.04f,.83f),new Vector2(.96f,.89f),17,BistroShelfStyle.Ink);
@@ -185,7 +215,8 @@ public partial class BistroUIScreen
         var quote=game.Loop.QuoteCart(cart);
         BistroShelfStyle.Text(panel,quote.success?$"Total ${quote.total:0.00}  ·  Wallet ${game.State.money:0.00}":quote.error,theme,new Vector2(.54f,.16f),new Vector2(.96f,.23f),23,BistroShelfStyle.Ink);
         BistroShelfStyle.Button(panel,"Confirm checkout",theme,new Vector2(.54f,.05f),new Vector2(.96f,.15f),BistroShelfStyle.Green,BistroShelfStyle.Cream,()=>Change(()=>{
-            var result=game.Loop.Checkout(cart);if(result.success){cart.Clear();modal=null;}notice=result.success?"Checkout complete":result.error;
+            returnStore=store;returnShelf=shelf;
+            var result=game.Loop.Checkout(cart);if(result.success){cart.Clear();modal=null;}if(result.success)notice=PurchaseDone;else{modal=null;Refused(result.error);}
         }));
     }
 }

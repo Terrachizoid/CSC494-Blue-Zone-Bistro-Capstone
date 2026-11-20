@@ -1,4 +1,4 @@
-// Regression tests for checkout atomicity, unique food questions, mastery, and one-time refunds.
+// Regression tests for checkout atomicity, per-checkout sorting, the bistro gate, unique food questions, mastery, and one-time refunds.
 using System;
 using System.Collections.Generic;
 public static class ShoppingChecks
@@ -24,7 +24,7 @@ public static class ShoppingChecks
         var cart = new List<CartEntry> { new CartEntry { listingId="A", packageQuantity=2 },
             new CartEntry { listingId="B" }, new CartEntry { listingId="C" } };
         Check(loop.QuoteCart(cart).total == 20 && state.money == 100 && state.inventory.Count == 0, "Quote mutated state");
-        Check(!loop.BeginService() && !loop.Buy("A").success, "Checkout bypass");
+        Check(!loop.Buy("A").success, "Direct buy bypassed the cart");
         state.money = 19;
         Check(!loop.Checkout(cart).success && state.inventory.Count == 0 && state.shoppingReceipt == null, "Overbudget partial purchase");
         state.money = 100; c.unlockDay = 2;
@@ -37,7 +37,7 @@ public static class ShoppingChecks
         Check(loop.Checkout(cart).success && state.money == 80 && state.inventory.Count == 5 &&
             loop.Phase == GamePhase.FoodSorting && loop.SortingQuestions.Count == 2, "Checkout batches or deduplication failed");
         Check(state.inventory[1].inventoryEntryId != state.inventory[2].inventoryEntryId && state.inventory[1].listingId == "A", "Batch identity lost");
-        Check(!loop.BeginService() && !loop.FinishDay().success && !loop.Checkout(cart).success, "Unsubmitted phase bypass");
+        Check(!loop.BeginService() && !loop.ReturnToMarket() && !loop.EnterBistro() && !loop.FinishDay().success && !loop.Checkout(cart).success, "Unsubmitted phase bypass");
         var answers = new List<SortingChoice> { new SortingChoice { foodId="g", answer=TrafficLight.Green },
             new SortingChoice { foodId="R", answer=TrafficLight.Green } };
         Check(!loop.SubmitSorting(new List<SortingChoice>()).success, "Incomplete answers accepted");
@@ -50,16 +50,20 @@ public static class ShoppingChecks
         Check(Math.Abs(state.inventory[1].purchaseCostPerServing - .7f) < .0001 && Math.Abs(state.inventory[4].purchaseCostPerServing - 1f) < .0001 &&
             old.purchaseCostPerServing == 9, "Refund cost allocation incorrect");
         Check(!loop.SubmitSorting(answers).success && state.money == 84.5f && loop.Summary.moneySpent == 15.5f, "Double refund");
-        Check(loop.BeginService() && loop.Phase == GamePhase.Results && loop.FinishDay().success, "Post-sorting flow failed");
-        Check(loop.Checkout(cart).success && loop.SortingQuestions.Count == 1 && loop.SortingQuestions[0].foodId == "R", "Wrong food failed to return or mastered food repeated");
-        Check(loop.SubmitSorting(new List<SortingChoice> { new SortingChoice { foodId="R", answer=TrafficLight.Red } }).refundAmount == 1.5f,
+        Check(loop.ReturnToMarket() && loop.Phase == GamePhase.Market, "Sorting did not return to the market");
+        // A second checkout the same day gets its own receipt and sorting round.
+        Check(loop.Checkout(new List<CartEntry> { new CartEntry { listingId="C" } }).success && loop.Phase == GamePhase.FoodSorting &&
+            loop.SortingQuestions.Count == 1 && loop.SortingQuestions[0].foodId == "R" && state.money == 79.5f, "Wrong food failed to return or mastered food repeated");
+        Check(loop.SubmitSorting(new List<SortingChoice> { new SortingChoice { foodId="R", answer=TrafficLight.Red } }).refundAmount == 1.5f && state.money == 81f,
             "Retry on later purchase must refund only the new food's own price");
-        loop.BeginService(); loop.FinishDay();
+        Check(loop.ReturnToMarket() && loop.EnterBistro() && loop.Phase == GamePhase.Results && loop.FinishDay().success, "Bistro did not start service");
         float before = state.money;
-        Check(loop.Checkout(cart).success && loop.Phase == GamePhase.Results && state.money == before-20 && sorting.GetQuestions().Count == 0,
-            "Known-food-only cart granted refund or failed to skip sorting");
+        Check(loop.Checkout(cart).success && loop.Phase == GamePhase.Market && state.money == before-20 && sorting.GetQuestions().Count == 0,
+            "Known-food-only cart granted refund or left the market");
+        Check(loop.Checkout(cart).success && state.money == before-40 && loop.Phase == GamePhase.Market, "Known-food-only second checkout failed");
+        Check(loop.EnterBistro() && loop.Phase == GamePhase.Results, "Known-food-only day failed to open the bistro");
         loop.FinishDay(); before = state.money;
-        Check(loop.Checkout(new List<CartEntry>()).success && loop.Phase == GamePhase.Results && state.money == before, "Empty checkout failed");
-        return "PASS: cart atomicity, phase guards, batch IDs, unique questions, partial refunds, correct-only mastery, later retries, and empty/known-only skips.";
+        Check(loop.EnterBistro() && loop.Phase == GamePhase.Results && state.money == before, "Opening the bistro without shopping failed");
+        return "PASS: cart atomicity, per-checkout sorting, phase guards, bistro gate, batch IDs, unique questions, partial refunds, correct-only mastery, later retries, and no-shopping/known-only days.";
     }
 }

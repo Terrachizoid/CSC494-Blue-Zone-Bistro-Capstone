@@ -84,7 +84,7 @@ public class MealService : IMealService
         long totalServings = 0;
         var coverage = new HashSet<DailyDozenCategory>();
         var greenCoverage = new HashSet<DailyDozenCategory>();
-        var categories = new Dictionary<FoodCategory, long>();
+        var servingsByFood = new Dictionary<FoodData, long>();
         var consumed = new List<ConsumedIngredient>();
         var batches = new List<InventoryEntry>();
         long green = 0, yellow = 0, red = 0;
@@ -118,8 +118,8 @@ public class MealService : IMealService
                 minimumPrice < 0 || float.IsNaN(minimumPrice) || float.IsInfinity(minimumPrice))
                 return Fail($"Missing minimum price for {entry.foodId}. Import the price CSV again.");
             minimumIngredientValue += minimumPrice * (double)pair.Value;
-            categories.TryGetValue(food.recipeCategory, out long count);
-            categories[food.recipeCategory] = count + pair.Value;
+            servingsByFood.TryGetValue(food, out long count);
+            servingsByFood[food] = count + pair.Value;
             foreach (var category in food.dailyDozenCategories ?? Array.Empty<DailyDozenCategory>())
             {
                 if (category == DailyDozenCategory.None) continue;
@@ -136,15 +136,17 @@ public class MealService : IMealService
         // Optional slots can be empty or partially filled; no category may exceed total slot capacity.
         if (!RecipeRequirements.TryGetBounds(recipe, out var required, out var capacity))
             return Fail("Invalid recipe slot.");
+        // Multi-category foods (e.g. tofu as Beans or Meat substitute) count where the recipe needs them.
+        var categories = RecipeRequirements.Assign(servingsByFood, required, capacity);
         foreach (var pair in required)
         {
             categories.TryGetValue(pair.Key, out long amount);
-            if (amount < pair.Value) warnings.Add($"Missing {pair.Key}: {pair.Value - amount} serving(s) (selected {amount}, required {pair.Value}).");
+            if (amount < pair.Value) warnings.Add($"Missing {IntroMealPlan.CategoryName(pair.Key)}: {pair.Value - amount} serving(s) (selected {amount}, required {pair.Value}).");
         }
         foreach (var pair in categories)
         {
             capacity.TryGetValue(pair.Key, out long maximum);
-            if (pair.Value > maximum) warnings.Add($"Surplus {pair.Key}: {pair.Value - maximum} serving(s) (selected {pair.Value}, maximum {maximum}).");
+            if (pair.Value > maximum) warnings.Add($"Surplus {IntroMealPlan.CategoryName(pair.Key)}: {pair.Value - maximum} serving(s) (selected {pair.Value}, maximum {maximum}).");
         }
         result.recipeBuilt = warnings.Count == 0;
         result.recipeWarnings = warnings.ToArray();

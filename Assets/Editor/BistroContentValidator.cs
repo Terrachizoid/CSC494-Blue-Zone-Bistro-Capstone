@@ -33,6 +33,8 @@ public static class BistroContentValidator
             if (food.recipeCategory == FoodCategory.Unassigned || !Enum.IsDefined(typeof(FoodCategory), food.recipeCategory) ||
                 food.trafficLight == TrafficLight.Unassigned || !Enum.IsDefined(typeof(TrafficLight), food.trafficLight))
                 errors.Add($"Food {food.id}: invalid category or Traffic Light.");
+            if ((food.alsoCategories ?? Array.Empty<FoodCategory>()).Any(c => c == FoodCategory.Unassigned || !Enum.IsDefined(typeof(FoodCategory), c)))
+                errors.Add($"Food {food.id}: invalid also_categories value.");
             int shelfLife = balance.GetShelfLife(food.storageType);
             if (shelfLife == 0 || shelfLife < -1)
                 errors.Add($"Food {food.id}: storage type or shelf-life tuning prevents purchase.");

@@ -15,6 +15,7 @@ MonoBehaviour:
   id: P043
   displayName: Protein bar
   recipeCategory: 12
+  alsoCategories: 
   dailyDozenCategories: 00000000
   trafficLight: 3
   ingredientAppeal: 7

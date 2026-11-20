@@ -39,5 +39,41 @@ public static class MealSlotChecks
         Check(!meals.Serve(input).success,"Repeated serve allowed");
         return "PASS: earliest-expiry allocation, expired exclusions, non-mutating previews, slot mismatches, optional slots, extras, and commit revalidation.";
     }
-}
 
+    // Multi-category foods (Foods.csv also_categories, 2026-11-20): tofu fills Beans or Meat substitute, one serving once.
+    public static string RunMultiCategory()
+    {
+        var tofu=new FoodData{id="T",recipeCategory=FoodCategory.Beans,alsoCategories=new[]{FoodCategory.MeatSubstitute},trafficLight=TrafficLight.Green,ingredientAppeal=5};
+        var beans=new FoodData{id="B",recipeCategory=FoodCategory.Beans,trafficLight=TrafficLight.Green,ingredientAppeal=4};
+        Check(tofu.Fits(FoodCategory.Beans)&&tofu.Fits(FoodCategory.MeatSubstitute)&&!beans.Fits(FoodCategory.MeatSubstitute)&&!tofu.Fits(FoodCategory.Unassigned),"Fits is wrong");
+        var burger=new RecipeData{id="R",baseSalePrice=10,allowNonGreenChoices=true,slots=new[]{new RecipeSlot{category=FoodCategory.Beans,servings=1},new RecipeSlot{category=FoodCategory.MeatSubstitute,servings=1,optional=true}}};
+        var nuggets=new RecipeData{id="N",baseSalePrice=10,allowNonGreenChoices=true,slots=new[]{new RecipeSlot{category=FoodCategory.MeatSubstitute,servings=1}}};
+        var state=new GameSessionState();
+        state.inventory.Add(new InventoryEntry{foodId="T",servings=2,daysRemaining=3,purchaseCostPerServing=1});
+        state.inventory.Add(new InventoryEntry{foodId="B",servings=2,daysRemaining=3,purchaseCostPerServing=1});
+        var foods=new FoodDatabase();foods.SetItems(new List<FoodData>{tofu,beans});
+        foods.RebuildMinimumPrices(new[]{new StoreListingData{store=new StoreData{id="S"},food=tofu,gamePrice=1,servingsPerPackage=1},
+            new StoreListingData{store=new StoreData{id="S"},food=beans,gamePrice=1,servingsPerPackage=1}});
+        Check(foods.InCategory(FoodCategory.MeatSubstitute).Count==1&&foods.InCategory(FoodCategory.Beans).Count==2,"Category index ignores also_categories");
+        var recipes=new RecipeDatabase();recipes.SetItems(new List<RecipeData>{burger,nuggets});
+        var customers=new CustomerDatabase();customers.SetItems(new List<CustomerData>{new CustomerData{id="U",startingHealth=50}});
+        var meals=new MealService(state,foods,recipes,customers,new BalanceConfig());
+        var choices=new List<MealSlotSelection>{new MealSlotSelection{foodId="B",slotIndex=0},new MealSlotSelection{foodId="T",slotIndex=1}};
+        var input=new ServeInput{recipeId="R",customerId="U",slotSelections=choices};
+        var preview=meals.Preview(input);
+        Check(preview.success&&preview.recipeBuilt,"Tofu as a meat substitute rejected: "+string.Join("; ",preview.recipeWarnings??new string[0]));
+        choices[0].foodId="T";choices[1].foodId="B";
+        Check(!meals.Preview(input).recipeBuilt,"Beans accepted as a meat substitute");
+        choices.RemoveAt(1);
+        Check(meals.Preview(input).recipeBuilt,"Tofu in the beans slot rejected");
+        Check(new RecipeCheck(foods).CanMake(nuggets,state),"Tofu cannot cover a meat-substitute recipe");
+        var both=new Dictionary<FoodCategory,long>{{FoodCategory.Beans,1},{FoodCategory.MeatSubstitute,1}};
+        var one=RecipeRequirements.Assign(new Dictionary<FoodData,long>{{tofu,1}},both,null,true);
+        long b,m;one.TryGetValue(FoodCategory.Beans,out b);one.TryGetValue(FoodCategory.MeatSubstitute,out m);
+        Check(b+m==1,"One tofu serving counted twice");
+        var two=RecipeRequirements.Assign(new Dictionary<FoodData,long>{{tofu,1},{beans,1}},both,null,true);
+        two.TryGetValue(FoodCategory.Beans,out b);two.TryGetValue(FoodCategory.MeatSubstitute,out m);
+        Check(b==1&&m==1,"Tofu not moved to the category that needs it");
+        return "PASS: multi-category foods fit either slot, count once, and cover recipes, checks and the category index.";
+    }
+}

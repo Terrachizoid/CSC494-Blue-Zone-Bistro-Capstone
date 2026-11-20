@@ -9,6 +9,7 @@ foreach ($row in (Read-ContentCsv 'Foods')) {
     $food.id = $row.id
     $food.ingredientAppeal = [float]$row.ingredient_appeal
     $food.recipeCategory = [FoodCategory]$row.recipe_category
+    if ($row.PSObject.Properties['also_categories'] -and $row.also_categories) { $food.alsoCategories = @($row.also_categories.Split('|') | ForEach-Object { [FoodCategory]$_ }) }
     $food.trafficLight = [TrafficLight]$row.traffic_light
     $food.storageType = [StorageType]$row.storage_type
     $food.dailyDozenCategories = @($row.daily_dozen_categories.Split('|') | ForEach-Object { [DailyDozenCategory]$_ })
@@ -74,7 +75,7 @@ foreach ($recipe in $recipeItems) {
     $recipeBuyer=[PurchaseService]::new($recipeState,$listingDb,$recipeBalance)
     foreach ($slot in $recipe.slots | Where-Object { !$_.optional }) {
         $offer=$listingItems | Where-Object {
-            $_.food.recipeCategory -eq $slot.category -and $_.food.trafficLight -eq [TrafficLight]::Green -and
+            $_.food.Fits($slot.category) -and $_.food.trafficLight -eq [TrafficLight]::Green -and
             $_.unlockDay -le $recipe.unlockDay -and $_.store.unlockDay -le $recipe.unlockDay -and
             !$_.requiredFlag
         } | Sort-Object { $_.gamePrice / $_.servingsPerPackage } | Select-Object -First 1
@@ -200,8 +201,9 @@ for ($day=1; $day -le 6; $day++) {
             $answer.answer=$foodDb.GetById($question.foodId).trafficLight; $answers.Add($answer)
         }
         if (!$loop.SubmitSorting($answers).success) { throw 'CSV sorting failed' }
-        $loop.BeginService() | Out-Null
+        if (!$loop.ReturnToMarket()) { throw "Day $day could not return to the market" }
     }
+    if (!$loop.EnterBistro()) { throw "Day $day bistro did not open" }
     if (!([RecipeCheck]::new($foodDb)).CanMake($recipeDb.GetById('R002'),$state)) { throw 'Daily bowl not makeable' }
     if ($day -eq 4 -and $loop.Dialogue.Sequence.id -ne 'D_CHEF_OKINAWA_ARRIVAL') { throw 'CSV chef not first on day four' }
     $dialogueSteps=0

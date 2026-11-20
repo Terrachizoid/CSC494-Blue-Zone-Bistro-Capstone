@@ -69,6 +69,22 @@ public static class BistroShelfStyle
         if(round){var image=r.GetComponent<Image>();image.sprite=Rounded;image.type=Image.Type.Sliced;}
         return r;
     }
+    // Shared authored paper; layout and live content stay owned by the caller. Missing art keeps the fallback.
+    public static void ApplySurface(RectTransform panel,Sprite art,bool sliced=true)
+    {
+        if(art==null)return;
+        var image=panel.GetComponent<Image>();
+        image.sprite=art;image.type=sliced?Image.Type.Sliced:Image.Type.Simple;
+        image.color=Color.white;
+        // Border pixels are authored at illustration resolution, not screen resolution.
+        image.pixelsPerUnitMultiplier=4;
+    }
+    public static RectTransform PaperPanel(Transform parent,string name,BistroUITheme theme,Vector2 min,Vector2 max)
+    {
+        var panel=Panel(parent,name,Cream,min,max);
+        ApplySurface(panel,theme.panelPaper);
+        return panel;
+    }
     public static Text Text(Transform parent,string value,BistroUITheme theme,Vector2 min,Vector2 max,int size,Color color,bool title=false,TextAnchor align=TextAnchor.MiddleLeft)
     {
         var t=BistroWidgets.Label(parent,value,theme,min,max,size,color);t.font=title?TitleFont:BodyFont;

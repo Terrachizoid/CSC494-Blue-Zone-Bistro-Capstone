@@ -123,15 +123,20 @@ public class FoodDatabase : ScriptableObject
                 continue;
             }
 
-            if (!byCategory.TryGetValue(food.recipeCategory, out var group))
-                byCategory[food.recipeCategory] = group = new List<FoodData>();
             if (!byId.TryAdd(food.id, food))
             {
                 Debug.LogError(
                     $"Duplicate FoodData ID '{food.id}'.",
                     this);
+                continue;
             }
-            else group.Add(food);
+            // A multi-category food (also_categories) is listed under each of its categories.
+            foreach (var category in food.Categories)
+            {
+                if (!byCategory.TryGetValue(category, out var group))
+                    byCategory[category] = group = new List<FoodData>();
+                group.Add(food);
+            }
         }
     }
 }

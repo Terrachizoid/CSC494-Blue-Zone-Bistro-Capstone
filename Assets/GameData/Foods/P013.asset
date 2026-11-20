@@ -15,6 +15,7 @@ MonoBehaviour:
   id: P013
   displayName: Vegan chicken nuggets
   recipeCategory: 7
+  alsoCategories: 
   dailyDozenCategories: 00000000
   trafficLight: 3
   ingredientAppeal: 8

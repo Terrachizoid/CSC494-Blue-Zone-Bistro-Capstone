@@ -70,11 +70,11 @@ public class CustomerVisitService : ICustomerVisitService
         var categories=new HashSet<FoodCategory>();
         var greenCategories=new HashSet<FoodCategory>();
         if(foods!=null)foreach(var entry in state.inventory.Where(MealAllocation.Usable))
-        {var food=foods.GetById(entry.foodId);if(food!=null){categories.Add(food.recipeCategory);if(food.trafficLight==TrafficLight.Green)greenCategories.Add(food.recipeCategory);}}
+        {var food=foods.GetById(entry.foodId);if(food!=null)foreach(var c in food.Categories){categories.Add(c);if(food.trafficLight==TrafficLight.Green)greenCategories.Add(c);}}
         if(listings!=null)foreach(var l in listings.Listings)
-            if(l!=null&&l.food!=null&&l.store!=null&&new MarketEffects(state).ClosureReason(l.store.id)==null&&l.unlockDay<=state.currentDay&&l.store.unlockDay<=state.currentDay&&
+            if(l!=null&&l.food!=null&&l.store!=null&&new MarketEffects(state).UnavailableReason(l)==null&&l.unlockDay<=state.currentDay&&l.store.unlockDay<=state.currentDay&&
                 (string.IsNullOrEmpty(l.requiredFlag)||state.flags.HasFlag(l.requiredFlag))&&CommunityProgress.Finite(l.gamePrice)&&l.gamePrice>0&&l.servingsPerPackage>0)
-                {categories.Add(l.food.recipeCategory);if(l.food.trafficLight==TrafficLight.Green)greenCategories.Add(l.food.recipeCategory);}
+                foreach(var c in l.food.Categories){categories.Add(c);if(l.food.trafficLight==TrafficLight.Green)greenCategories.Add(c);}
         return recipes.Recipes.Where(r=>r!=null&&r.unlockDay<=state.currentDay&&RecipeRequirements.TryGetBounds(r,out _,out _) &&
             (foods==null||listings==null||r.slots.Where(s=>!s.optional).All(s=>(r.allowNonGreenChoices?categories:greenCategories).Contains(s.category)))).ToList();
     }
@@ -88,7 +88,11 @@ public class CustomerVisitService : ICustomerVisitService
             // Comfort is met by plate appeal, so any recipe can answer it alongside its own tags.
             var options=pool.Where(t=>available==null||available.Any(r=>chosen.Concat(new[]{t}).All(tag=>tag==CravingTag.Comfort||(r.cravingTags??Array.Empty<CravingTag>()).Contains(tag)))).ToList();
             if(options.Count==0)break;
-            var tag=options[(int)(Roll()*options.Count)];chosen.Add(tag);pool.Remove(tag);
+            // Events can make a craving more likely (Craving effect); otherwise every option is equally likely.
+            var effects=new MarketEffects(state);var weights=options.Select(t=>Math.Max(0.0,(double)effects.CravingWeight(t))).ToList();
+            double total=weights.Sum(),ticket=Roll()*(total>0?total:options.Count);var tag=options[options.Count-1];
+            for(int i=0;i<options.Count;i++){ticket-=total>0?weights[i]:1;if(ticket<0){tag=options[i];break;}}
+            chosen.Add(tag);pool.Remove(tag);
         }
         return chosen.ToArray();
     }

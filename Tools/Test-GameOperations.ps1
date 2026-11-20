@@ -55,13 +55,18 @@ $files += Join-Path $PSScriptRoot 'TutorialChecks.cs'
 $files += Join-Path $PSScriptRoot 'CommunityChecks.cs'
 $files += Join-Path $PSScriptRoot 'EventChecks.cs'
 $files += Join-Path $PSScriptRoot 'PantryChecks.cs'
+$files += Join-Path $PSScriptRoot 'MealPlanChecks.cs'
+$files += Join-Path $PSScriptRoot 'IdleChatterChecks.cs'
 $files += Join-Path $PSScriptRoot 'ComfortFatigueChecks.cs'
+$files += Join-Path $PSScriptRoot 'DebugToolsChecks.cs'
 Add-Type -Path $files -CompilerOptions '/nowarn:0649'
 [GameOperationsChecks]::Run()
 [DialogueChecks]::Run()
 [ShoppingChecks]::Run()
 
 [MealSlotChecks]::Run()
+[MealSlotChecks]::RunMultiCategory()
+[DebugToolsChecks]::Run()
 
 
 
@@ -71,5 +76,7 @@ Add-Type -Path $files -CompilerOptions '/nowarn:0649'
 [CommunityChecks]::Run()
 [EventChecks]::Run()
 [PantryChecks]::Run()
+[MealPlanChecks]::Run()
+[IdleChatterChecks]::Run($projectRoot)
 [ComfortFatigueChecks]::Run()
 

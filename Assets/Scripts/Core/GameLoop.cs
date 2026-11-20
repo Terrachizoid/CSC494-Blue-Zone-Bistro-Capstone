@@ -22,7 +22,10 @@ public class GameLoop
     public DialoguePlaybackController Dialogue { get; }
     public ServiceSessionState Service { get; private set; } = new ServiceSessionState();
     public DaySummary Summary { get; private set; } = new DaySummary();
+    // Phase is where the player is (city/market, sorting, bistro, results). Service progress lives in Service and
+    // survives a trip back to the city (easy mode, BalanceConfig.cityDuringService; 2026-11-13).
     public GamePhase Phase { get; private set; } = GamePhase.Market;
+    public bool BistroOpened { get; private set; } // Service has started today; the queue continues on return.
     public event Action<GamePhase> PhaseChanged;
     public event Action DayFinished;
     public TutorialController Tutorials { get; private set; }
@@ -38,6 +41,11 @@ public class GameLoop
         Tutorials?.Succeeded(TutorialAction.SelectRecipe);
         return new OperationResult{success=true};
     }
+    // UI-only steps of a hard lesson (open/close the recipe book, plan a dish): ask first, report after.
+    public bool AskTutorial(TutorialAction action, string recipeId=null) => TutorialAllows(action, recipeId:recipeId);
+    public void TellTutorial(TutorialAction action) { Tutorials?.Succeeded(action); RefreshTutorials(); }
+    // First-time screens the UI reports (store, shelf, pantry, guests) and map clicks on unavailable stores.
+    public void NoteSeen(string flag) { if (flag != null && flag.StartsWith("tutorial.")) Tutorials?.Note(flag); RefreshTutorials(); }
     public bool ContinueTutorial() { bool done=Tutorials?.ContinueText()==true; RefreshTutorials(); return done; }
     public void MarkTutorialSeen() => Tutorials?.MarkInstructionSeen();
     public void InspectToolbar(string item) { Tutorials?.NoteToolbarClick(item); RefreshTutorials(); }
@@ -68,13 +76,13 @@ public class GameLoop
         return result;
     }
 
-    // Pantry sales happen at the market, before checkout, so a broke player can raise cash to shop.
+    // Pantry sales happen at the market, before opening the bistro, so a broke player can raise cash to shop.
     public bool CanSellPantry => pantry != null && Phase == GamePhase.Market;
     public float PantryValuePerServing(string inventoryEntryId) => pantry == null ? -1 : pantry.ValuePerServing(inventoryEntryId);
     public PantrySaleResult QuotePantrySale(List<PantrySaleItem> items) => pantry == null ? new PantrySaleResult { error = "Selling is unavailable." } : pantry.Quote(items);
     public PantrySaleResult SellPantry(List<PantrySaleItem> items)
     {
-        if (!CanSellPantry) return new PantrySaleResult { error = "Pantry food can be sold at the market, before checkout." };
+        if (!CanSellPantry) return new PantrySaleResult { error = "Pantry food can be sold at the market." };
         var result = pantry.Sell(items);
         if (result.success) { Summary.pantrySales += result.amount; RefreshTutorials(); }
         return result;
@@ -88,16 +96,64 @@ public class GameLoop
         if (Phase != GamePhase.Market || sorting == null || !(purchases is ICartPurchaseService carts))
             return new CartResult { error = "Checkout requires Market phase and sorting services." };
         if(!TutorialAllows(TutorialAction.Checkout,cart))return new CartResult{error=Tutorials.LastError};
+        bool shoppedBefore = sorting.HasCheckout;
         var result = carts.Checkout(cart);
         if (!result.success) return result;
+        if (shoppedBefore) Tutorials?.Note(TutorialFlags.SecondCheckout);
         Tutorials?.Succeeded(TutorialAction.Checkout);
         Summary.moneySpent += result.total;
         SortingResult = null;
-        // The purchase is committed, so the day must move on: a lesson that switches on now (e.g. money low)
-        // shows on the next screen instead of blocking the transition and leaving the market stuck.
-        if (sorting.IsComplete) StartService();
+        // Each purchase is sorted right away (if it has new foods), then the player returns to the market
+        // (ReturnToMarket) and may check out again. Only EnterBistro ends shopping (2026-11-13).
+        if (sorting.IsComplete) RefreshTutorials();
         else SetPhase(GamePhase.FoodSorting);
         return result;
+    }
+
+    // After a purchase's sorting round is submitted, go back to the market to keep shopping.
+    public bool ReturnToMarket()
+    {
+        if (Phase != GamePhase.FoodSorting || sorting == null || !sorting.IsComplete) return false;
+        if (!TutorialAllows(TutorialAction.BeginService)) return false;
+        SetPhase(GamePhase.Market);
+        return true;
+    }
+
+    // The only way out of the market (the Bistro on the city map): start service, or continue it after a trip to the city.
+    public bool EnterBistro()
+    {
+        if (Phase != GamePhase.Market) return false;
+        if (!TutorialAllows(TutorialAction.BeginService)) return false;
+        Tutorials?.Succeeded(TutorialAction.BeginService);
+        return BistroOpened ? ResumeService() : StartService();
+    }
+
+    // Leaving is allowed at any service step and is never blocked by a lesson (Owen, 2026-11-13); the UI shows
+    // the button only when the switch is on. An active lesson simply continues when the player returns.
+    public bool CanLeaveBistro => Phase == GamePhase.Service && Service.CurrentEncounter != null;
+    public bool LeaveBistro()
+    {
+        if (!CanLeaveBistro) return false;
+        // A served guest (dish result or closing dialogue) does not wait: the next encounter starts on return.
+        if (Service.step == ServiceStep.DishResult || Service.step == ServiceStep.AfterDialogue)
+        { Service.encounterIndex++; Service.lastDishResult = null; Service.lastRecipeId = null; Service.step = ServiceStep.ArrivalDialogue; }
+        // An unfinished dialogue is dropped without its effects; that encounter starts again on return.
+        Dialogue?.Cancel();
+        if (Service.step != ServiceStep.MealSelection) Service.step = ServiceStep.ArrivalDialogue;
+        Tutorials?.Note(TutorialFlags.CityDuringService);
+        SetPhase(GamePhase.Market);
+        return true;
+    }
+    private bool ResumeService()
+    {
+        Phase = GamePhase.Service;
+        // Meal selection resumes directly (the farmer check runs again, since the pantry may have changed);
+        // anything else restarts the current encounter. An empty queue goes straight to Results.
+        if (Service.step == ServiceStep.MealSelection && Service.CurrentEncounter?.kind == EncounterKind.Customer) EnterMealSelection();
+        else StartEncounter();
+        RefreshTutorials();
+        if (Phase == GamePhase.Service) PhaseChanged?.Invoke(Phase);
+        return true;
     }
 
     public SortingResult SubmitSorting(List<SortingChoice> choices)
@@ -110,6 +166,7 @@ public class GameLoop
         {
             SortingResult = result;
             Summary.moneySpent -= result.refundAmount;
+            if (result.correctCount < result.questionCount) Tutorials?.Note(TutorialFlags.SortMistake);
         }
         return result;
     }
@@ -130,6 +187,8 @@ public class GameLoop
         {
             Service.lastDishResult = result;
             Service.step = ServiceStep.DishResult;
+            if (!result.recipeBuilt) Tutorials?.Note(TutorialFlags.IncompleteDish);
+            else if (result.popularityDelta < 0) Tutorials?.Note(TutorialFlags.PopularityDrop);
             Service.lastRecipeId = input.recipeId;
             Summary.moneyEarned += result.moneyEarned;
             Summary.dishes.Add(new DishRecord { customerId = input.customerId,
@@ -141,16 +200,19 @@ public class GameLoop
 
     public bool BeginService()
     {
+        if (Phase == GamePhase.Market) return EnterBistro();
+        if (Phase == GamePhase.FoodSorting) return ReturnToMarket();
         if(!TutorialAllows(TutorialAction.BeginService))return false;
         return StartService();
     }
-    // Starts service without asking the tutorial (used right after a committed checkout).
+    // Starts service; callers ask the tutorial first (EnterBistro).
     private bool StartService()
     {
-        if (Phase != GamePhase.Market && Phase != GamePhase.FoodSorting) return false;
-        if (sorting != null && !sorting.IsComplete) return false;
+        if (Phase != GamePhase.Market) return false;
+        if (sorting != null && sorting.HasCheckout && !sorting.IsComplete) return false;
         var customers = visits.GetTodaysCustomers();
         Service = new ServiceSessionState();
+        BistroOpened = true;
         if (encounters != null) Service.encounters = encounters.Build(customers);
         else foreach (string id in customers) Service.encounters.Add(new EncounterEntry { kind = EncounterKind.Customer, customerId = id });
         // Finish preparing the encounter before notifying observers. An empty queue
@@ -179,6 +241,7 @@ public class GameLoop
             (Service.step != ServiceStep.MealSelection && Service.step != ServiceStep.DishResult)) return false;
         if (Service.awaitingDishAcknowledgement) return ContinueAfterDish();
         Summary.skippedCustomerIds.Add(Service.CurrentCustomerId);
+        Tutorials?.Note(TutorialFlags.SkippedCustomer);
         AdvanceEncounter();
         return true;
     }
@@ -262,6 +325,22 @@ public class GameLoop
     {
         if(!TutorialAllows(TutorialAction.FinishDay))return new DayResult{error=Tutorials.LastError};
         if (Phase != GamePhase.Results) return new DayResult { error = "Finish the day from Results." };
+        return EndDay();
+    }
+
+    // Debug panel only (development builds): ends today from any screen, without serving the remaining guests and
+    // without asking the tutorial. Rent, spoilage, events, guests and the day-start save then run as normal.
+    public DayResult DebugEndDay()
+    {
+        if (Phase == GamePhase.Completed) return new DayResult { error = "The run is already complete." };
+        if (Dialogue != null && Dialogue.IsActive) Dialogue.Cancel();
+        Service = new ServiceSessionState();
+        Phase = GamePhase.Results;
+        return EndDay();
+    }
+
+    private DayResult EndDay()
+    {
         var result = days.FinishDay();
         if (result.success)
         {
@@ -269,6 +348,7 @@ public class GameLoop
             {
                 Summary = new DaySummary { rentPaid = result.rentCharged };
                 Service = new ServiceSessionState();
+                BistroOpened = false;
                 SortingResult = null;
                 events?.PrepareMorning();
                 visits.GetTodaysCustomers();

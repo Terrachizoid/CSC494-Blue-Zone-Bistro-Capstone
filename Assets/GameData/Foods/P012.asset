@@ -15,6 +15,7 @@ MonoBehaviour:
   id: P012
   displayName: Olive oil
   recipeCategory: 10
+  alsoCategories: 
   dailyDozenCategories: 00000000
   trafficLight: 2
   ingredientAppeal: 4

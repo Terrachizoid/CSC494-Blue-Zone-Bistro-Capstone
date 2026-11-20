@@ -15,6 +15,7 @@ MonoBehaviour:
   id: P047
   displayName: Pistachios
   recipeCategory: 10
+  alsoCategories: 
   dailyDozenCategories: 08000000
   trafficLight: 1
   ingredientAppeal: 8

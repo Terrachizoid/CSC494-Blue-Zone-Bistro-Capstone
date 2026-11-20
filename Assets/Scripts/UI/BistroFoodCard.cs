@@ -1,6 +1,7 @@
 // Reusable interaction view. Gameplay decisions belong to the owning screen and services.
 using System;
 using System.Collections;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
@@ -14,6 +15,22 @@ public class BistroFoodCard : MonoBehaviour, IBistroDragSource, IPointerClickHan
     public bool IsFlipped => flipped;
     private Color dragColor, inkColor;
     private string front, back;
+    private GameObject frontLayer;
+    // Extras that belong on the front only (+ buttons, sorting shapes, "New" tags): hidden while the back is showing.
+    public Transform FrontLayer
+    {
+        get
+        {
+            if (frontLayer == null)
+            {
+                var layer = BistroWidgets.Box(transform, "Front extras", Color.clear, Vector2.zero, Vector2.one);
+                layer.GetComponent<UnityEngine.UI.Image>().raycastTarget = false;
+                frontLayer = layer.gameObject; frontLayer.SetActive(!flipped);
+            }
+            frontLayer.transform.SetAsLastSibling();
+            return frontLayer.transform;
+        }
+    }
     private Text heading, detail;
     private bool illustrated;
     private GameObject titlePlate;
@@ -71,7 +88,7 @@ public class BistroFoodCard : MonoBehaviour, IBistroDragSource, IPointerClickHan
             appeal.resizeTextForBestFit=false;appeal.horizontalOverflow=HorizontalWrapMode.Overflow;appeal.verticalOverflow=VerticalWrapMode.Overflow;
         }
         card.front=(food?.marketingLabel??"")+"\n"+stats+"\nClick to flip";
-        card.back=food==null?"Food unavailable": "Category: "+IntroMealPlan.CategoryName(food.recipeCategory)+"\n\nIngredients\n"+food.ingredientList+"\n\nDaily Dozen\n"+IntroMealPlan.ReadableList(food.dailyDozenCategories)+"\n\nStorage: "+IntroMealPlan.Readable(food.storageType);
+        card.back=food==null?"Food unavailable": "Category: "+IntroMealPlan.JoinAnd(food.Categories.Select(IntroMealPlan.CategoryName).ToList())+"\n\nIngredients\n"+food.ingredientList+"\n\nDaily Dozen\n"+IntroMealPlan.ReadableList(food.dailyDozenCategories)+"\n\nStorage: "+IntroMealPlan.Readable(food.storageType);
         if(theme.debugCardDetails && Debug.isDebugBuild && food!=null) card.back+="\nDEBUG: "+food.trafficLight;
         card.detail=BistroWidgets.Label(rect,card.front,theme,new Vector2(.06f,.03f),new Vector2(.94f,.33f),17,theme.ink);
         return card;
@@ -143,6 +160,7 @@ public class BistroFoodCard : MonoBehaviour, IBistroDragSource, IPointerClickHan
     private void SetFace()
     {
         icon.SetActive(!flipped); detail.text=flipped?back:front;
+        if(frontLayer!=null)frontLayer.SetActive(!flipped);
         detail.rectTransform.anchorMax=new Vector2(.94f,flipped?.77f:.33f);
         if(illustrated)
         {

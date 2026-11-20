@@ -148,6 +148,12 @@ public static class FoodCsvImporter
                 id,
                 "recipe_category");
 
+            // Optional: other recipe categories this food can fill (e.g. tofu: MeatSubstitute), | separated.
+            food.alsoCategories = columns.ContainsKey("also_categories") && !string.IsNullOrWhiteSpace(Get(row, columns, "also_categories"))
+                ? ParseEnumList(Get(row, columns, "also_categories"), FoodCategory.Unassigned, id, "also_categories")
+                    .Where(c => c != FoodCategory.Unassigned && c != food.recipeCategory).Distinct().ToArray()
+                : new FoodCategory[0];
+
             food.dailyDozenCategories = ParseEnumList(
                 Get(row, columns, "daily_dozen_categories"),
                 DailyDozenCategory.None,

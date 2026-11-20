@@ -13,6 +13,7 @@ public class IntroMealPlan
     private readonly PurchaseService purchase;
     private readonly BalanceConfig balance;
     public float ComfortMinimumAppeal=>balance.comfortMinimumAppeal;
+    public float PopularityPerMissedCraving=>balance.popularityPerMissedCraving;
     public float MaximumDiscount=>balance.maximumSortingDiscount;
     public float RentPerDay=>balance.rentPerDay;
     public int RentStartDay=>balance.rentStartDay;
@@ -36,6 +37,8 @@ public class IntroMealPlan
     public RecipeData Recipe=>Candidates.Select(r=>new{r,cost=CostToComplete(r)}).OrderBy(x=>x.cost).ThenBy(x=>x.r.id,StringComparer.Ordinal).FirstOrDefault()?.r;
 
     public bool PantryReady()=>Candidates.Any(r=>new RecipeCheck(Foods).CanMake(r,State));
+    // The pantry holds everything this menu dish needs right now (the first-meal lesson only accepts these).
+    public bool CanMakeNow(string recipeId)=>Candidates.Any(r=>string.Equals(r.id,recipeId,StringComparison.OrdinalIgnoreCase)&&new RecipeCheck(Foods).CanMake(r,State));
     public bool CartReady(List<CartEntry> cart)
     {
         if(cart==null || !purchase.Quote(cart).success)return false;
@@ -51,22 +54,31 @@ public class IntroMealPlan
         return Candidates.Any(r=>new RecipeCheck(Foods).CanMake(r,projected));
     }
     public bool ShoppingFeasible()=>Candidates.Any(r=>CostToComplete(r)<=State.money);
+    // The day-1 lesson only lets the player plan a dish they can complete with today's money.
+    public bool Affordable(string recipeId)=>Candidates.Any(r=>string.Equals(r.id,recipeId,StringComparison.OrdinalIgnoreCase)&&CostToComplete(r)<=State.money);
 
     // Cheapest package cost to cover a recipe's required slots from pantry plus open listings.
     private double CostToComplete(RecipeData recipe)
     {
         if(!RecipeRequirements.TryGetBounds(recipe,out var needed,out _))return double.PositiveInfinity;
         double cost=0;
+        var owned=new Dictionary<FoodData,long>();
+        foreach(var e in State.inventory.Where(MealAllocation.Usable))
+        {
+            var food=Foods.GetById(e.foodId);
+            if(food==null||(!recipe.allowNonGreenChoices&&food.trafficLight!=TrafficLight.Green))continue;
+            long n;owned.TryGetValue(food,out n);owned[food]=n+e.servings;
+        }
+        var assigned=RecipeRequirements.Assign(owned,needed,null,ignoreSurplus:true);
         foreach(var pair in needed)
         {
-            long have=State.inventory.Where(MealAllocation.Usable).Where(e=>Foods.GetById(e.foodId)?.recipeCategory==pair.Key &&
-                (recipe.allowNonGreenChoices||Foods.GetById(e.foodId).trafficLight==TrafficLight.Green)).Sum(e=>(long)e.servings);
+            long have;assigned.TryGetValue(pair.Key,out have);
             long missing=Math.Max(0,pair.Value-have);if(missing==0)continue;
             // Small integer package-cost DP considers mixed offers, not just cheapest price per serving.
             if(missing>10000)return double.PositiveInfinity;
             var best=Enumerable.Repeat(double.PositiveInfinity,(int)missing+1).ToArray();best[0]=0;
             var effects=new MarketEffects(State);
-            var offers=listings.Listings.Where(l=>l!=null&&l.food!=null&&l.food.recipeCategory==pair.Key&&
+            var offers=listings.Listings.Where(l=>l!=null&&l.food!=null&&l.food.Fits(pair.Key)&&
                 (recipe.allowNonGreenChoices||l.food.trafficLight==TrafficLight.Green)&&purchase.Quote(new List<CartEntry>{new CartEntry{listingId=l.id}}).success).ToList();
             for(int n=0;n<missing;n++)foreach(var offer in offers)
             {int next=(int)Math.Min(missing,(long)n+offer.servingsPerPackage);best[next]=Math.Min(best[next],best[n]+effects.Quote(offer).effectivePrice);}

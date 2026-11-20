@@ -21,6 +21,8 @@ public static class EventCsvImporter
             {
                 Func<string,string> g=k=>CsvImportUtility.Get(row,cols,k).Trim();
                 var e=new EventDefinition{id=g("event_id"),headline=g("headline"),summary=g("summary"),details=g("details"),minDay=Int(g("min_day")),maxDay=Int(g("max_day")),durationDays=Int(g("duration_days")),weight=Float(g("weight"))};
+                // Optional column: easy_mode (blank/true = allowed in easy mode, false = normal mode only).
+                if(cols.ContainsKey("easy_mode")){var easy=g("easy_mode").ToLowerInvariant();e.easyMode=easy!="false"&&easy!="0"&&easy!="no";}
                 if(string.IsNullOrWhiteSpace(e.id)||data.Any(d=>string.Equals(d.id,e.id,StringComparison.OrdinalIgnoreCase))||string.IsNullOrWhiteSpace(e.headline)||e.minDay<2||(e.maxDay!=-1&&e.maxDay<e.minDay)||e.durationDays<1||e.durationDays>365||e.weight<=0)throw new Exception("Invalid event fields: "+e.id);
                 var previous=old?.events.Find(d=>d.id==e.id);
                 e.image=CsvImportUtility.LoadOptionalAsset(g("image_path"),previous?.image,e.id,"image_path");
@@ -40,6 +42,11 @@ public static class EventCsvImporter
                 if(!MarketEffects.ValidEffect(effect))throw new Exception("Unsupported effect on "+parent.id);
                 if(effect.target==EventTarget.Store&&AssetDatabase.LoadAssetAtPath<StoreData>("Assets/GameData/Stores/"+effect.targetId+".asset")==null)throw new Exception("Unknown store: "+effect.targetId);
                 if(effect.target==EventTarget.Food&&AssetDatabase.LoadAssetAtPath<FoodData>("Assets/GameData/Foods/"+effect.targetId+".asset")==null)throw new Exception("Unknown food: "+effect.targetId);
+                if(effect.target==EventTarget.Shelf)
+                {
+                    var parts=effect.targetId.Split('/');var shelfStore=parts.Length==2?AssetDatabase.LoadAssetAtPath<StoreData>("Assets/GameData/Stores/"+parts[0]+".asset"):null;
+                    if(shelfStore==null||shelfStore.shelves==null||!shelfStore.shelves.Any(s=>s!=null&&s.id==parts[1]))throw new Exception("Unknown shelf: "+effect.targetId+" (use storeId/shelfId)");
+                }
                 parent.effects.Add(effect);
             }
             if(data.Count==0||data.Any(e=>e.effects.Count==0))throw new Exception("Each event needs at least one effect.");

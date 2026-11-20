@@ -15,6 +15,7 @@ MonoBehaviour:
   id: P050
   displayName: Keto allulose dessert
   recipeCategory: 12
+  alsoCategories: 
   dailyDozenCategories: 00000000
   trafficLight: 3
   ingredientAppeal: 8

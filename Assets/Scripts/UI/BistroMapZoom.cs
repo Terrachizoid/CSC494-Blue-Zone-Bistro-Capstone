@@ -1,6 +1,6 @@
 // Mouse-wheel zoom for a panned map (the city). Zooms toward the cursor and eases to the target, so the point
-// under the mouse stays put. Sits on the ScrollRect's viewport; the ScrollRect keeps click-drag panning and its
-// elastic edges pull the map back if a zoom-out leaves it past an edge.
+// under the mouse stays put. Sits on the map viewport; BistroMapPan does click-drag panning and keeps the map
+// inside the artwork after a zoom-out.
 using System;
 using UnityEngine;
 using UnityEngine.EventSystems;

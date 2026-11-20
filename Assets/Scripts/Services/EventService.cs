@@ -21,7 +21,7 @@ public class EventService
         if(state.currentDay>=Math.Max(2,balance.eventsStartDay)&&content!=null)
         {
             double roll=Roll();int count=roll<balance.noEventChance?0:roll<balance.noEventChance+balance.twoEventChance?2:1;
-            var candidates=content.events.Where(e=>e!=null&&e.minDay<=state.currentDay&&(e.maxDay<0||state.currentDay<=e.maxDay)&&e.durationDays>0&&e.weight>0&&CommunityProgress.Finite(e.weight)&&e.effects.Count>0&&e.effects.All(MarketEffects.ValidEffect)&&!state.events.Any(r=>r.eventId==e.id&&r.Active(state.currentDay))).ToList();
+            var candidates=content.events.Where(e=>e!=null&&e.minDay<=state.currentDay&&(e.maxDay<0||state.currentDay<=e.maxDay)&&e.durationDays>0&&e.weight>0&&CommunityProgress.Finite(e.weight)&&e.effects.Count>0&&e.effects.All(MarketEffects.ValidEffect)&&(!balance.easyMode||e.easyMode)&&!state.events.Any(r=>r.eventId==e.id&&r.Active(state.currentDay))).ToList();
             while(additions.Count<count)
             {
                 var choices=candidates.Where(e=>Allowed(e,additions)).ToList();if(choices.Count==0)break;
@@ -42,8 +42,10 @@ public class EventService
         {
             if(e.target==EventTarget.Store&&!available.Any(l=>l.store.id==e.targetId))return false;
             if(e.target==EventTarget.Food&&!available.Any(l=>l.food.id==e.targetId))return false;
+            if(e.target==EventTarget.Category&&!available.Any(l=>l.food.Categories.Any(c=>string.Equals(c.ToString(),e.targetId,StringComparison.OrdinalIgnoreCase))))return false;
+            if(e.target==EventTarget.Shelf&&!available.Any(l=>string.Equals(l.store.id+"/"+l.shelfId,e.targetId,StringComparison.OrdinalIgnoreCase)))return false;
         }
-        var closed=new HashSet<string>(all.Where(e=>e.type==EventEffectType.Availability).Select(e=>e.targetId),StringComparer.OrdinalIgnoreCase);
+        var closed=new HashSet<string>(all.Where(e=>e.type==EventEffectType.Availability&&e.target==EventTarget.Store).Select(e=>e.targetId),StringComparer.OrdinalIgnoreCase);
         if(closed.Count>0&&!available.Any(l=>!closed.Contains(l.store.id)))return false;
         // Avoid announcing a sale in a store simultaneously closed by any active event.
         if(all.Any(e=>e.type==EventEffectType.Price&&e.target==EventTarget.Store&&closed.Contains(e.targetId)))return false;

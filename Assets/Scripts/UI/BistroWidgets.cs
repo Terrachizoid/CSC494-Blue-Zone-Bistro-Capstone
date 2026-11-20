@@ -24,7 +24,9 @@ public static class BistroWidgets
         var r = (RectTransform)go.transform;
         r.anchorMin = min; r.anchorMax = max;
         r.offsetMin = Vector2.zero; r.offsetMax = Vector2.zero;
-        var t=go.GetComponent<Text>(); t.text=value; t.font=theme.font != null ? theme.font : Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+        // Font: the theme font, else the bundled body font (Liberation Sans, Arial metrics). Unity's built-in
+        // LegacyRuntime font has no dashes or arrows in web builds (no OS fallback there): "Days 2–2" showed as "Days 22".
+        var t=go.GetComponent<Text>(); t.text=value; t.font=theme.font != null ? theme.font : BistroShelfStyle.BodyFont != null ? BistroShelfStyle.BodyFont : Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
         t.fontSize=size; t.color=color ?? theme.card; t.alignment=TextAnchor.MiddleCenter;
         t.resizeTextForBestFit=true; t.resizeTextMinSize=12; t.resizeTextMaxSize=size; t.raycastTarget=false;
         return t;

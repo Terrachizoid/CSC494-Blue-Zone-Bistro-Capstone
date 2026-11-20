@@ -10,7 +10,7 @@ The game is a six-day, data-driven loop. The solo GDD supplies the scope and cat
 2. Run **Tools > Blue Zone Bistro > Import All CSV Content** after editing any CSV. It imports foods, stores, claims, prices, recipes, customers, dialogue, endings, events and tutorials in dependency order, wires loaded scenes, then validates the library.
 3. **Tools > Blue Zone Bistro > Validate Imported Content** re-checks the imported assets without importing.
 4. Open `Assets/Scenes/SampleScene.unity` with one active `GameBootstrap`. Missing default references are filled automatically by `GameBootstrapSetup`; explicit Inspector assignments are preserved. Save the scene after setup.
-5. Press Play. Main menu → New Game / Resume → Market (city, stores, cart) → checkout → food sorting (skipped if nothing new) → service encounters → meal preview/confirm → reaction → daily results → next day's Market, until day 6 shows the ending.
+5. Press Play. Main menu → New Game / Resume → Market (city, stores, cart; check out any number of times, each purchase followed by its food sorting if anything is new) → click the Bistro on the map and confirm (skipped if nothing new) → service encounters → meal preview/confirm → reaction → daily results → next day's Market, until day 6 shows the ending.
 
 Dialogue CSV changes are detected before Play and build; a failed dialogue import blocks Play with a Console error rather than using stale conversations. Other CSVs need the explicit import command. Editing a CSV alone does not update the imported `.asset` files.
 
@@ -80,6 +80,7 @@ The UI calls GameLoop commands. GameLoop calls services. Services change the sha
 Use stable, unique IDs. CSV column names and enum values are part of the authoring contract; renaming them needs a migration. Reimport updates assets with the same IDs and preserves blank optional media references. Removing a row removes database membership but can leave the old asset on disk; do not infer active content from folder contents.
 
 **Food:** add a Foods row (category, Daily Dozen tags, Traffic Light, label, ingredient list, storage, appeal 0–10, plus art: `icon_path`, `back_path`, `card_style`) and at least one Prices row (store, shelf ID that exists in the store's `shelf_definitions`, unlock day, servings, game price). Classification must come from the approved table.
+Optional `also_categories` (| separated, 2026-11-20): other recipe slots the food can fill, e.g. Tofu (Beans) also fills MeatSubstitute. One serving counts toward one category only: `RecipeRequirements.Assign` places each serving of a multi-category food where the recipe needs it (meal results, `RecipeCheck`, the meal plan, the day-1 affordability check). Slots accept the food under any of its categories (`FoodData.Fits`), events targeting a category include it, and the card back lists every category. Keep this list short and supervisor-approved.
 
 **Store / shelf:** add a Stores row with `shelf_definitions` (`ID:Display name|…`). Art and colours also live in the row: `logo_path`, `shop_background_path`, `shelf_colours` (`ID:#hex|…`). Shelf IDs are what 2D hotspots or 3D colliders should reference.
 

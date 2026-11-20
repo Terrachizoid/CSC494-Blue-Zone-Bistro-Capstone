@@ -45,10 +45,11 @@ public static class ComfortFatigueChecks
         b.recipeFatigueThreshold=0;s.currentDay=4;
         var u1=s.customers.Find(c=>c.customerId=="U1");u1.lastServedDay=0;
         b.healthPerGreenDailyDozenCategory=2;
-        b.dailyDozenNewGroupsOnly=false;int repeatOff=meals.Preview(Plate("U1","O")).dishHealthEffect;
-        b.dailyDozenNewGroupsOnly=true;int repeatOn=meals.Preview(Plate("U1","O")).dishHealthEffect;
-        int freshGuest=meals.Preview(Plate("U4","O")).dishHealthEffect;
-        Check(repeatOff-repeatOn==2&&freshGuest==repeatOff,"Already-eaten group must not add Daily Dozen health; new guests still get it");
+        b.dailyDozenNewGroupsOnly=false;float repeatOff=meals.Preview(Plate("U1","O")).dishHealthEffect;
+        b.dailyDozenNewGroupsOnly=true;float repeatOn=meals.Preview(Plate("U1","O")).dishHealthEffect;
+        float freshGuest=meals.Preview(Plate("U4","O")).dishHealthEffect;
+        // dishHealthEffect became a float (2026-10-28); compare with a tolerance. This line kept the whole suite from compiling.
+        Check(Math.Abs(repeatOff-repeatOn-2)<.001f&&Math.Abs(freshGuest-repeatOff)<.001f,"Already-eaten group must not add Daily Dozen health; new guests still get it");
         // Crowd popularity: plate appeal above the pivot adds popularity; plain plates get none.
         b.popularityPerAppealPoint=0;float noCrowd=meals.Preview(Plate("U4","C")).popularityDelta;float plainNo=meals.Preview(Plate("U4","O")).popularityDelta;
         b.popularityPerAppealPoint=10;b.popularityAppealPivot=7;float crowd=meals.Preview(Plate("U4","C")).popularityDelta;float plainYes=meals.Preview(Plate("U4","O")).popularityDelta;

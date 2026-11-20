@@ -15,6 +15,7 @@ MonoBehaviour:
   id: P005
   displayName: Brown rice
   recipeCategory: 4
+  alsoCategories: 
   dailyDozenCategories: 0a000000
   trafficLight: 1
   ingredientAppeal: 3

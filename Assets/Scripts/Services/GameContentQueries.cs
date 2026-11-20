@@ -47,6 +47,20 @@ public class GameContentQueries
                 result.Add(listing);
         return result;
     }
+    // Navigation helper (plan panel): one food of this category the player could buy today. Open stores and listings
+    // available today only; random among what the player can afford now, else the cheapest. Not the optimal pick.
+    // A listing's food is already the resolved FoodData, so its category needs no extra lookup.
+    public StoreListingData SuggestListing(FoodCategory category, System.Random random, string excludeListingId = null)
+    {
+        var options = GetStores().Where(s => Market.ClosureReason(s.id) == null).SelectMany(GetListings)
+            .Where(l => l.food.Fits(category) && !string.IsNullOrEmpty(l.shelfId) && Market.UnavailableReason(l) == null)
+            .Select(l => new { listing = l, price = Market.Quote(l) }).Where(o => o.price.valid).ToList();
+        if (options.Count > 1) options = options.Where(o => o.listing.id != excludeListingId).ToList();
+        if (options.Count == 0) return null;
+        var affordable = options.Where(o => o.price.effectivePrice <= state.money).ToList();
+        if (affordable.Count > 0) return affordable[(random ?? new System.Random()).Next(affordable.Count)].listing;
+        return options.OrderBy(o => o.price.effectivePrice).ThenBy(o => o.listing.id, System.StringComparer.Ordinal).First().listing;
+    }
     // True when today's usable pantry covers every required slot (a hint; MealService decides when serving).
     public bool CanMake(RecipeData recipe) => recipeCheck.CanMake(recipe, state);
     public List<RecipeData> GetUnlockedRecipes()

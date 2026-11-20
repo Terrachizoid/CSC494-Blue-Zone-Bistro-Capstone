@@ -42,6 +42,40 @@ public sealed class BistroArtImport : AssetPostprocessor
         importer.filterMode = FilterMode.Bilinear;
         importer.maxTextureSize = 2048;
         importer.textureCompression = TextureImporterCompression.Compressed;
+        ConfigurePanel(importer);
+    }
+
+    // Screen surfaces only; per-item food/recipe/store art still comes from CSVs.
+    private static bool ConfigurePanel(TextureImporter importer)
+    {
+        Vector4 border;
+        switch(importer.assetPath)
+        {
+            case "Assets/Art/UI/panelPaper.png": border=new Vector4(80,80,80,80);break;
+            case "Assets/Art/UI/guideNotePanel.png": border=new Vector4(90,80,220,190);break;
+            case "Assets/Art/UI/planPanel.png": border=new Vector4(80,80,80,145);break;
+            case "Assets/Art/UI/suggestionFrame.png": border=new Vector4(110,110,110,110);break;
+            case "Assets/Art/UI/newTag.png": border=new Vector4(220,220,220,220);break;
+            case "Assets/Art/UI/soldOutStamp.png": border=Vector4.zero;break;
+            default:return false;
+        }
+        importer.spriteBorder=border;
+        importer.textureCompression=TextureImporterCompression.Uncompressed;
+        importer.maxTextureSize=4096;
+        var settings=new TextureImporterSettings();importer.ReadTextureSettings(settings);
+        settings.spriteMeshType=SpriteMeshType.FullRect;importer.SetTextureSettings(settings);
+        return true;
+    }
+
+    [MenuItem("Tools/Blue Zone Bistro/Configure illustrated panel borders")]
+    public static void ConfigurePanelBorders()
+    {
+        foreach(string guid in AssetDatabase.FindAssets("t:Texture2D",new[]{"Assets/Art/UI"}))
+        {
+            var importer=AssetImporter.GetAtPath(AssetDatabase.GUIDToAssetPath(guid)) as TextureImporter;
+            if(importer==null||!ConfigurePanel(importer))continue;
+            importer.SaveAndReimport();
+        }
     }
 
     // Fixes images that were imported before this script compiled (they would not load as sprites).

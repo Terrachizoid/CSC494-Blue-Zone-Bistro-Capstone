@@ -1,0 +1,101 @@
+id,kind,places,condition,weight,seconds,text
+C_FIND,click,Any,plan_missing,5,,"Need {category}? Try {food} at {store}, {aisle}."
+C_NOPLAN,click,City;Store;Shelf,no_plan,4,,Not sure what to buy? Open Recipes and press + on a dish. The plan panel then keeps your shopping list.
+C_NOPLAN2,click,Service,no_plan,2,,Planning tomorrow's dishes in the morning makes shopping much quicker.
+C_READY,click,City;Store;Shelf,plan_ready,4,,"Everything for your plan is in hand. Shop a little extra, or head to the Bistro when you're ready."
+C_READY2,click,Service,plan_ready,3,,Your plan's ingredients are all here. Pick a planned dish to cook it.
+C_FULL,click,Any,plan_full,2,,Your plan has one dish for every guest today. Nicely organised!
+C_ROOM,click,City;Store;Shelf,plan_room,2,,You have more guests than planned dishes. Add another dish with + if you like.
+C_TILE,click,City;Store;Shelf,plan_missing,3,,Tip: click a food type in the plan panel and I'll suggest where to find it.
+C_MISS_STARCHY,click,City;Store;Shelf,missing:StarchyVegetable,4,,Starchy vegetables are things like potatoes and sweet potatoes. Look in the produce sections.
+C_MISS_BEANS,click,City;Store;Shelf,missing:Beans,3,,"Beans come dried, canned or frozen. Bargain and bulk shelves often have good prices."
+C_MISS_GRAIN,click,City;Store;Shelf,missing:Grain,3,,"Grains include bread, oats, rice and pasta. Whole grains are worth looking for."
+C_MISS_FRUIT,click,City;Store;Shelf,missing:Fruit,3,,Fresh fruit spoils sooner; frozen fruit keeps longer.
+C_MISS_VEG,click,City;Store;Shelf,missing:Vegetable,3,,Fresh vegetables are in produce; frozen ones keep longer and are often cheaper.
+C_MISS_SUB,click,City;Store;Shelf,missing:MeatSubstitute,3,,Meat substitutes include tofu and similar foods. Check a few stores and compare.
+C_MONEY,click,Any,money_low,4,,Money's tight. Spare pantry food can be sold back at the market.
+C_MONEY2,click,City;Store;Shelf,money_low,3,,Low on cash? Cheaper staples on bargain and bottom shelves can stretch your money.
+C_DEBT,click,Any,money_negative,5,,You're below zero. Selling spare pantry food and cooking what you have can help you recover.
+C_RICH,click,City;Store;Shelf,money_rich,2,,You're doing well! There's room to try a new recipe or a better ingredient.
+C_OVER,click,Store;Shelf,cart_over_budget,5,,Your cart costs more than you have. Press − on a cart item to take something out.
+C_BIG,click,Store;Shelf,cart_big,2,,That's a big cart! Check the plan panel so nothing you need is missing.
+C_CART_EMPTY,click,Shelf,cart_empty,2,,Press + on a card or drag it to your cart to add a package.
+C_CART_SOME,click,Store;Shelf,cart_some,2,,"When you're done here, check out from your cart. You can visit other stores afterwards."
+C_EXPIRE,click,Any,expiring,4,,Something in your pantry spoils tomorrow. Cooking it today saves waste.
+C_EMPTY_PANTRY,click,City;Store;Shelf,pantry_empty,3,,"Your pantry is empty, so everything for today has to come from the market."
+C_FULL_PANTRY,click,Any,pantry_full,2,,Your pantry is well stocked. Check what you already have before buying more.
+C_VERDANT,click,Store;Shelf,store:S001,3,,"Verdant & Co. has lovely produce, but watch the prices on the fancier shelves."
+C_LUXURY,click,Shelf,shelf:LUXURY,4,,The luxury shelf looks tempting. Compare prices: the same kind of food is often cheaper elsewhere.
+C_WELLNESS,click,Shelf,shelf:WELLNESS,3,,Health claims on a package aren't the whole story. Flip the card and read the label.
+C_PRODUCE,click,Shelf,shelf:PRODUCE,3,,"Fresh produce is great, but it spoils sooner. Buy what you'll cook soon."
+C_CHEAP,click,Store;Shelf,store:S002,3,,CheapCart puts its most processed foods at eye level. The plainer staples are often lower down.
+C_EYE,click,Shelf,shelf:EYE_LEVEL,3,,Eye-level shelves get the most attention. It's worth checking the other shelves too.
+C_BARGAIN,click,Shelf,shelf:BARGAIN_BIN,3,,The bargain bin can hide real deals. Check what each package actually contains.
+C_BOTTOM,click,Shelf,shelf:BOTTOM_SHELF,3,,Bottom shelves often hold simple staples at good prices.
+C_FREEZER,click,Shelf,shelf:BACK_FREEZER,3,,Frozen fruit and vegetables keep much longer than fresh ones.
+C_BULK,click,Store;Shelf,store:S003,3,,MegaBulk packs cost more upfront but less per serving. Only buy what you can use before it spoils.
+C_PALLETS,click,Shelf,shelf:PALLETS,2,,Big packages are only a bargain if you use them up.
+C_SACKS,click,Shelf,shelf:BULK_SACKS,2,,"Bulk grains and beans keep well, which makes them good value."
+C_BULKPRODUCE,click,Shelf,shelf:BULK_PRODUCE,2,,A lot of fresh produce at once can spoil. Plan a few days of dishes first.
+C_CLOSED,click,City,store_closed,4,,A store is closed today. The News explains why and when it reopens.
+C_PRICES,click,Store;Shelf,,1,,Prices change from store to store. A quick look around can save you money.
+C_LABEL,click,Shelf,,2,,Not sure about a food? Flip its card and read the label.
+C_NEWS,click,City,,2,,The News tower keeps track of what's happening around town.
+C_BULK_SOON,click,City,day:3,2,,Rumour has it a big warehouse store is opening soon.
+C_SORT_START,click,Sorting,sort_none,4,,"Drag each food into a bin, or press one of the shapes on its card."
+C_SORT_SOME,click,Sorting,sort_some,3,,"Not sure about one? Click its card to read the label, then decide."
+C_SORT_ALL,click,Sorting,sort_all,4,,Everything's placed. Press Submit answers when you're happy.
+C_SORT_REFUND,click,Sorting,,2,,Every right answer gives back part of what you paid for that food.
+C_SORT_PERFECT,click,Sorting,sort_perfect,4,,All correct! Those foods won't need sorting again.
+C_SORT_WRONG,click,Sorting,sort_mistakes,4,,"Foods you got wrong will come back on a later purchase, so you'll have another go."
+C_SORT_TAKEBACK,click,Sorting,sort_some,2,,Changed your mind? Press − on a food in a bin to take it back.
+C_REQUEST,click,Service,guest_request,4,,"This guest asked for something. The Guests list shows what, and meeting it helps your popularity."
+C_SWEET,click,Service,craving:Sweet,4,,Your guest would like something sweet. Fruit-based dishes are a good start.
+C_CRUNCHY,click,Service,craving:Crunchy,4,,"Your guest wants some crunch. Seeds, nuts and fresh vegetables help."
+C_CREAMY,click,Service,craving:Creamy,4,,A creamy dish would please this guest. Look at the dishes tagged Creamy.
+C_HEARTY,click,Service,craving:Hearty,4,,This guest is hungry for something hearty. Beans and grains are filling.
+C_SAVORY,click,Service,craving:Savory,4,,Your guest fancies something savoury. Recipe cards show their tags at the bottom.
+C_FIZZY,click,Service,craving:Fizzy,4,,This guest would like something fizzy. Check which dishes are tagged Fizzy.
+C_COMFORT,click,Service,craving:Comfort,4,,Your guest wants comfort food. Dishes made with appealing ingredients feel extra comforting.
+C_NOREQ,click,Service,guest_no_request,2,,"No special request today, so any dish you can make will do."
+C_PICK,click,Service,not_building,3,,Pick a recipe card to start cooking. Dishes you can make right now are ready to choose.
+C_BUILD,click,Service,building,3,,Fill each slot with the right food type. Press − on a slot to take something back out.
+C_CANT,click,Service,cant_cook,5,,"Nothing on the menu can be made with your pantry right now. You can skip this guest, or shop more tomorrow."
+C_BUILT,click,Service,dish_built,3,,That's the full recipe. Well done!
+C_INCOMPLETE,click,Service,dish_incomplete,4,,That dish didn't match its recipe. Filling every slot with the right type builds the full recipe.
+C_HEALTHY,click,Service,dish_healthy,3,,Your guest's health went up with that meal. Good choice!
+C_LASTGUEST,click,Service,last_guest,3,,Last guest of the day. You're nearly done!
+C_BUSY,click,Service,many_guests,2,,A busy day! Cooking your planned dishes first keeps things simple.
+C_REPEAT,click,Service,,1,,Guests enjoy variety. Serving the same dish again and again earns less popularity.
+C_DOZEN,click,Service,,1,,Dishes with many different plant foods cover more of the Daily Dozen.
+C_FIRSTDAY,click,Any,first_day,2,,First day! Take your time and look around.
+C_LASTDAY,click,Any,last_day,3,,It's the last day. Make it count!
+C_POPULAR,click,Any,popularity_high,2,,Word is spreading: your bistro is getting popular. More guests come as popularity grows.
+C_UNPOPULAR,click,Any,popularity_low,3,,Popularity is low. Meeting guests' requests is a good way to win them back.
+C_BEANS,click,Any,,1,,Beans and lentils are an everyday staple in the Blue Zones.
+C_OKINAWA,click,Any,,1,,"Okinawa is one of the world's Blue Zones: places where many people live long, active lives."
+C_PLATE,click,Any,,1,,"Whole grains, beans, fruit and vegetables: plenty of plants is the Blue Zone way."
+C_WALK,click,Any,,1,,"In the Blue Zones, daily life keeps people moving: walking, gardening, cooking at home."
+C_SHARE,click,Any,,1,,Sharing meals with friends and family is part of life in the Blue Zones.
+C_HELP,click,Any,,1,,Click me any time you're unsure. I'll do my best to point you the right way.
+I_CAPTAIN,idle,City,,1,,"Where to, captain?"
+I_MAP,idle,City,,1,,Pick a store on the map to start shopping.
+I_CITY_PLAN,idle,City,plan_missing,2,,Your plan still needs a few things. Click a food type in the plan panel for ideas.
+I_CITY_READY,idle,City,plan_ready,2,,All set for your plan. Your Bistro is waiting whenever you are.
+I_CITY_NOPLAN,idle,City,no_plan,2,,A plan makes shopping easier. Open Recipes and press + on a dish.
+I_AISLES,idle,Store,,1,,So many aisles. Click one to take a look.
+I_STORE_CART,idle,Store,cart_some,2,,Your cart is waiting. Check out whenever you're ready.
+I_SHELF,idle,Shelf,,1,,"Press + on a card, or drag it to your cart."
+I_SHELF_LABEL,idle,Shelf,,1,,Curious about something? Click a card to flip it.
+I_SHELF_OVER,idle,Shelf,cart_over_budget,3,,Your cart costs more than you have right now.
+I_GUT,idle,Sorting,sort_none,1,,"Green, yellow or red? Go with your best guess."
+I_SORT_SOME,idle,Sorting,sort_some,1,,Nearly there. A few more foods to place.
+I_SORT_ALL,idle,Sorting,sort_all,2,,All placed! Submit when you're ready.
+I_SERVICE,idle,Service,not_building,1,,Your guests are ready whenever you are.
+I_HUNGRY,idle,Service,not_building,1,,Pick a recipe card to start cooking for your guest.
+I_BUILDING,idle,Service,building,1,,"Fill the remaining slots, then serve when it looks right."
+I_REQUEST,idle,Service,guest_request,2,,This guest has a request. Check the Guests list if you're unsure.
+I_CANT,idle,Service,cant_cook,3,,Nothing can be made right now. Skipping this guest is okay.
+I_RESULT,idle,Service,dish_built,1,,Nice dish! Continue when you're ready for the next guest.
+I_RESULTS,idle,Results,,1,,A full day's work! Take a look at how it went.
+I_LASTDAY,idle,Any,last_day,1,,Last day. Enjoy it!

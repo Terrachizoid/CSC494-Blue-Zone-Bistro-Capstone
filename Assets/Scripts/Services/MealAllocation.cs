@@ -19,8 +19,8 @@ public static class MealAllocation
         if(index==-1)return count==0?null:"Extra ingredients do not belong to this recipe.";
         var slot=recipe.slots[index];
         if(slot.optional && count==0)return null;
-        if(items.Any(s=>foods.GetById(s.foodId)?.recipeCategory!=slot.category))return $"{slot.category}: contains an ingredient of another category.";
-        return count==slot.servings?null:$"{slot.category}: needs exactly {slot.servings} serving(s); selected {count}.";
+        if(items.Any(s=>{var food=foods.GetById(s.foodId);return food==null||!food.Fits(slot.category);}))return $"{IntroMealPlan.CategoryName(slot.category)}: has a food from another category.";
+        return count==slot.servings?null:$"{IntroMealPlan.CategoryName(slot.category)}: needs exactly {slot.servings} serving(s); selected {count}.";
     }
     public static bool TryResolve(GameSessionState state, RecipeData recipe, List<MealSlotSelection> selection,
         out List<IngredientSelection> batches, out string error)

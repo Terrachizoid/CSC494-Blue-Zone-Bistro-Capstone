@@ -15,6 +15,7 @@ MonoBehaviour:
   id: P007
   displayName: Refined-flour bread
   recipeCategory: 4
+  alsoCategories: 
   dailyDozenCategories: 00000000
   trafficLight: 2
   ingredientAppeal: 6

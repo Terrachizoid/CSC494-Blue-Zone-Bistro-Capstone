@@ -11,6 +11,17 @@ or creating inventory. Each package gets a separate batch ID plus its source lis
 The bootstrap enables this flow; legacy `Buy` remains available to isolated service tests,
 but GameLoop rejects it when sorting is enabled.
 
+Several checkouts per day (2026-11-13, Owen). Each checkout gets its own `ShoppingReceipt`; if it
+has new foods the loop enters FoodSorting for that purchase only, and `ReturnToMarket` (the sorting
+result's "Back to the market") returns to the store the player checked out from. A checkout of known
+foods only stays at the market. A new checkout is refused while the previous one is unsorted (the
+phase makes this unreachable from the UI). `GameLoop.EnterBistro` (the city map's Bistro click, after
+a confirmation) is the only way out of the market and starts service, also with no purchase at all.
+With `BalanceConfig.cityDuringService` on (easy-mode switch), `LeaveBistro` returns to the market mid-service
+and `EnterBistro` resumes the same queue (`ResumeService`): a guest at meal selection waits, an unfinished
+dialogue restarts without its effects (`DialoguePlaybackController.Cancel`), and a guest already served is
+done. Checkpoints still save only at day end, so leaving never writes a mid-day save.
+
 Checkout snapshots distinct food questions and the configured maximum discount in the
 session's `ShoppingReceipt`. `correctlySortedFoodIds` excludes previously correct foods.
 Wrong answers remain eligible on later purchases. UI submits only `SortingChoice` records;
@@ -20,7 +31,7 @@ each share rounded to cents). Known foods and wrong answers refund nothing (2026
 30% of the whole cart × accuracy). Default discount is 0.50. Empty question sets grant no refund.
 Only the refunded foods' batches record the lower unit cost; daily spending reflects the refund;
 minimum catalogue prices used for meal scoring are unchanged. Sorting feedback remains visible
-until Continue. No reattempt of that checkout is possible.
+until Continue. No reattempt of that sorting round is possible; a food answered wrong comes back on the next purchase, even the same day.
 
 Codex is available from market, cart, sorting and pantry cards. Pantry inspection is available
 in all phases; serving still selects by inventory batch ID. Optional FoodData.sortingExplanation
@@ -48,7 +59,8 @@ Press Play with the configured GameBootstrap scene object active. Bootstrap adds
 The old IMGUI `GreyboxUIController` was removed from startup on 2026-10-22 and its file emptied on 2026-10-28.
 
 Market: pan the city map, enter stores and shelves, drag packages into the cart,
-inspect the pantry, review the cart, and confirm checkout before sorting/service.
+inspect the pantry, review the cart and check out (each purchase is sorted right after, as often as
+needed), then click the Bistro on the map and confirm to start service.
 Service shows one queued encounter at a time. Eligible story
 encounters run first in descending priority, then customers chosen by attendance.
 Customer arrival dialogue and first-visit introductions precede meal selection. All unlocked

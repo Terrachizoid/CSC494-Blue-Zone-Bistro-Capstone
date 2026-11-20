@@ -73,7 +73,7 @@ StoreData.shopBackground and FoodData.icon are already used when supplied.
 ## Milestone 2 — meal slots, dialogue and results implemented
 
 - Meal pantry cards group usable batches by food ID, sum servings and show earliest expiry.
-- Each drop assigns one serving to a recipe slot; optional and extra slots are included.
+- Each drop assigns one serving to a recipe slot; optional slots are included. There is no "Extra ingredients" slot (removed 2026-11-20: anything placed there only made the dish a mismatch).
 - Required slots need exact category/count. Optional slots are empty or exactly filled.
   Placement remains permissive, with warning rims and explanations in slot contents.
 - Remove one serving by dragging from the slot contents panel to the return area.
@@ -401,3 +401,15 @@ Event UI exception (2026-10-30): event details/Codex use a layered newspaper and
 
 ### City map: wheel zoom and elastic edges — 2026-10-30 (Claude, Owen's request)
 - Click-drag pans; the edges are elastic (`ScrollRect.MovementType.Elastic`, elasticity 0.12): dragging past an edge gets harder the further you pull and the map springs back on release. The mouse wheel zooms toward the cursor between 1× and 2.6× with easing (`BistroMapZoom`), and no longer scrolls. Zoom level and position are kept across rebuilds and reset on a new game. Touch pinch-zoom is not added yet (needed for the phone build).
+
+### Reusable illustrated panels — 2026-11-20
+- Six transparent PNGs under Assets/Art/UI: panelPaper (general paper), guideNotePanel (sage left strip/corner sprig), planPanel (teal header), suggestionFrame (transparent centre), soldOutStamp (blank clay outline), newTag (blank coral sticker). All text remains live. Theme Sprite fields, not a runtime JSON/ID lookup, own these screen assets.
+- BistroShelfStyle.PaperPanel creates a resizable paper surface; ApplySurface dresses an existing Image while preserving raycast/layout settings. It uses nine-slicing and a pixels-per-unit multiplier of 4 to keep high-resolution borders modest on screen. Missing sprites preserve existing plain fallbacks. Use these helpers for future neutral panels; do not indiscriminately replace buttons, colour-coded tiles, dark dialogue, or newspapers.
+- Applied to guide chatter, the expanded/collapsed plan, suggestion frame, recipe-book shell, kitchen/sorting workspace, cooking workspace, cart/review, and generic legacy menu backgrounds (including pantry). New badges use the sticker; unavailable shelf cards get a stamp with live text on the front only and retain disabled/dimmed behaviour. No tutorial rules, timings, planning rules, event effects or inventory semantics changed.
+- BistroArtImport defaults to full-rect, uncompressed UI textures with authored borders. Later Inspector changes survive normal reimport. Tools > Blue Zone Bistro > Configure illustrated panel borders explicitly restores these six defaults. GameBootstrapSetup auto-fills empty theme slots from matching filenames; explicit references are also saved in the theme.
+- Verified in disposable Tools/UI/ReviewProject: Unity compilation and PanelArtCapture passed; reviewed plan/guide/suggestion, recipe-book/New, and stamp previews in Data/Previews/2026-11-20-Panels. This is an Edit Mode render, not manual Play Mode/WebGL interaction. The initial restricted launch could not access Unity licensing/cache; the normal-permission retry completed. Test-ContentImport passed. Test-GameOperations and Test-CsvContent remain blocked by the pre-existing float-to-int error at Tools/ComfortFatigueChecks.cs:48.
+
+## Shelf sorting (2026-11-20)
+A "Sort" pill above each aisle opens options: Shelf order, Price per serving, Appeal, Food type. Pressing the active option again reverses it; sold-out cards always go last. The shelf rebuilds as usual and `BistroSortSlide` slides each card from its previous grid spot to the new one (0.5 s ease-out, skipped with reduced motion). It is visual only: if the grid rebuilds mid-slide, cards simply land early. State lives in `BistroUIScreen.Sort.cs` (per session, not saved).
+
+Map name tags (2026-11-20): the store/News/Bistro name tag on the city map is clickable and does the same as clicking the area.

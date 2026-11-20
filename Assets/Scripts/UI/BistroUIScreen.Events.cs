@@ -20,11 +20,24 @@ public partial class BistroUIScreen
     private string EffectText(EventEffect e)
     {
         string target=e.target==EventTarget.Food?game.Queries.Foods.GetById(e.targetId)?.displayName:
-            e.target==EventTarget.Store?game.Queries.GetStores().Find(s=>s.id==e.targetId)?.displayName:"Bistro";
+            e.target==EventTarget.Store?game.Queries.GetStores().Find(s=>s.id==e.targetId)?.displayName:
+            e.target==EventTarget.Category&&System.Enum.TryParse(e.targetId,true,out FoodCategory category)?"All "+IntroMealPlan.CategoryName(category).ToLowerInvariant():
+            e.target==EventTarget.Shelf?ShelfName(e.targetId):e.target==EventTarget.Craving?e.targetId:"Bistro";
         target=target??e.targetId;
-        if(e.type==EventEffectType.Availability)return target+": temporarily closed";
+        if(e.type==EventEffectType.Availability)return target+(e.target==EventTarget.Store?": temporarily closed":": sold out");
         if(e.type==EventEffectType.AttendancePopularity)return "More people are curious about the bistro: extra guests may visit";
+        if(e.type==EventEffectType.Craving)return $"Guests ask for {target.ToLowerInvariant()} food more often";
+        if(e.type==EventEffectType.SortingRefund)return $"Sorting refunds ×{e.value:0.##} for purchases today";
+        if(e.type==EventEffectType.ShelfLife)return $"{target} bought today keeps {System.Math.Abs(e.value):0} day{(System.Math.Abs(e.value)==1?"":"s")} {(e.value<0?"less":"longer")}";
         return target+(e.operation==EventOperation.Add?$": package price {e.value:+$0.00;-$0.00;$0.00}":$": package prices {(e.value-1)*100:+0.#;-0.#;0}%");
+    }
+    // "S002/BACK_FREEZER" → "CheapCart · Back freezer".
+    private string ShelfName(string id)
+    {
+        int slash=id?.IndexOf('/')??-1;if(slash<0)return id;
+        var owner=game.Queries.GetStores().Find(s=>s.id==id.Substring(0,slash));string shelfId=id.Substring(slash+1);
+        string aisle=owner?.shelves?.FirstOrDefaultShelf(shelfId)??shelfId;
+        return owner==null?aisle:owner.displayName+" · "+aisle;
     }
     private void TickEventToast()
     {
@@ -117,7 +130,7 @@ public partial class BistroUIScreen
                 var row=BistroShelfStyle.Panel(list,"News entry",NewsColor(news?.paperColor,BistroShelfStyle.Cream),Vector2.zero,Vector2.one);
                 NewsArt(row,news?.thumbnail??news?.image,new Vector2(.02f,.15f),new Vector2(.25f,.85f));
                 BistroShelfStyle.Text(row,news?.headline??record.eventId,theme,new Vector2(.29f,.40f),new Vector2(.95f,.90f),22,BistroShelfStyle.Ink,true);
-                BistroWidgets.Label(row,$"Days {record.startDay}–{record.expiresOnDay-1} · {(record.Active(game.State.currentDay)?"Active":"Expired")}",theme,new Vector2(.29f,.08f),new Vector2(.95f,.35f),16,BistroShelfStyle.Ink);
+                BistroWidgets.Label(row,$"{DayRange(record)} · {(record.Active(game.State.currentDay)?"Active":"Expired")}",theme,new Vector2(.29f,.08f),new Vector2(.95f,.35f),16,BistroShelfStyle.Ink);
                 row.gameObject.AddComponent<Button>().onClick.AddListener(()=>OpenEvent(record));
             }
             if(game.Queries.GetEventHistory().Count==0)BistroWidgets.Label(panel,"No news yet.",theme,new Vector2(.1f,.3f),new Vector2(.9f,.7f));
@@ -142,7 +155,7 @@ public partial class BistroUIScreen
         var field=BistroWidgets.Box(panel,"Printed colour field",accent,new Vector2(.04f,.14f),new Vector2(.48f,.70f));field.GetComponent<Image>().raycastTarget=false;
         NewsArt(panel,definition?.image,new Vector2(.055f,.17f),new Vector2(.465f,.68f));
         BistroShelfStyle.Text(panel,definition?.summary??"",theme,new Vector2(.53f,.57f),new Vector2(.95f,.70f),24,BistroShelfStyle.Ink,true);
-        string duration=$"Days {detailRecord?.startDay}–{detailRecord?.expiresOnDay-1} · "+(detailRecord?.Active(game.State.currentDay)==true?"Active":"Expired");
+        string duration=$"{DayRange(detailRecord)} · "+(detailRecord?.Active(game.State.currentDay)==true?"Active":"Expired");
         string effects=detailRecord==null?"":string.Join("\n",detailRecord.effects.Select(EffectText));
         NewsReading(panel,(definition?.details??"Details are unavailable.")+"\n\n"+duration+"\n\n"+effects,new Vector2(.53f,.14f),new Vector2(.95f,.55f));
         foreach(var reading in panel.GetComponentsInChildren<Image>())if(reading.name=="Reading panel")reading.color=Color.clear;
@@ -150,5 +163,12 @@ public partial class BistroUIScreen
         NewsRule(panel,new Vector2(.04f,.11f),new Vector2(.96f,.112f),BistroShelfStyle.Ink);
         var entries=(definition?.codex??Array.Empty<ClaimData>()).Where(c=>c!=null).ToArray();
         if(entries.Length>0)BistroActionButton.Create(panel,"Codex · Read more",theme,new Vector2(.65f,.025f),new Vector2(.96f,.085f),BistroActionRole.Secondary,()=>Change(()=>{if(entries.Length==1)eventCodex=entries[0];else choosingEventCodex=true;}));
+    }
+    // "Day 2" for a one-day event, "Days 2 to 4" otherwise. The old "Days 2–2" lost its dash in the web build and read as "Days 22".
+    private static string DayRange(EventRecord r)
+    {
+        if(r==null)return "";
+        int last=r.expiresOnDay-1;
+        return last<=r.startDay?$"Day {r.startDay}":$"Days {r.startDay} to {last}";
     }
 }

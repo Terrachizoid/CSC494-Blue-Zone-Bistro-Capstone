@@ -65,6 +65,10 @@ public class BalanceConfig : ScriptableObject
     [Tooltip("At most once a day, a farmer gives free low-appeal food for one recipe when nothing on the menu can be completed.")] public bool foodAidEnabled = false;
     [Tooltip("Farmer gifts are green foods with ingredient appeal at or below this.")] [Range(0, 10)] public float foodAidMaxAppeal = 4f;
     [Tooltip("Days before gifted food spoils.")] [Min(1)] public int foodAidShelfLifeDays = 1;
+    [Tooltip("When the city is open during service, the farmer only helps if money is also below this (otherwise the player can shop).")] [Min(0)] public float foodAidMoneyBelow = 4f;
+    [Header("Easy-mode switches (2026-11-13)")]
+    [Tooltip("Show a City button during service so the player can leave the bistro to shop and come back. Off = the market closes once the bistro opens.")] public bool cityDuringService = false;
+    [Tooltip("Easy mode: events marked easy_mode=false in Events.csv (closures, shortages) are never chosen. More easy-mode values to come.")] public bool easyMode = false;
     [Tooltip("Pantry batches sell back for this share of the lower of the cheapest shelf price and the price paid, per serving.")] [Range(0, 1)] public float pantrySellRate = 0f;
     [Tooltip("Popularity lost per active craving a built dish leaves unresolved (day cravingsStartDay onward).")] [Min(0)] public float popularityPerMissedCraving = 0f;
     [Header("Customer visits and finance")]

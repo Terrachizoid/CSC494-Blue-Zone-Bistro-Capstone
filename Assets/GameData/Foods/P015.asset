@@ -15,6 +15,7 @@ MonoBehaviour:
   id: P015
   displayName: Eggs
   recipeCategory: 9
+  alsoCategories: 
   dailyDozenCategories: 00000000
   trafficLight: 2
   ingredientAppeal: 6

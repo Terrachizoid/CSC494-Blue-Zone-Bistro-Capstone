@@ -15,6 +15,7 @@ MonoBehaviour:
   id: P051
   displayName: Instant noodles
   recipeCategory: 4
+  alsoCategories: 
   dailyDozenCategories: 00000000
   trafficLight: 3
   ingredientAppeal: 8

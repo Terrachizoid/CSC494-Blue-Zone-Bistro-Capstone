@@ -29,11 +29,24 @@ MonoBehaviour:
   cartIcon: {fileID: 21300000, guid: 9fcc2292b950a15469f46e1492cd8ce1, type: 3}
   cardFrame: {fileID: 0}
   slotFrame: {fileID: 0}
+  panelPaper: {fileID: 21300000, guid: 33aa1a26ce0234c429811067942b8f32, type: 3}
+  guideNotePanel: {fileID: 21300000, guid: adb2ae543e88ab5419905ef6108ec4a8, type: 3}
+  planPanel: {fileID: 21300000, guid: a70ddf5f3dc681048b991a66d8c4b974, type: 3}
+  suggestionFrame: {fileID: 21300000, guid: 1c8021c3f7cbe584bb37bdaf9d86ca23, type: 3}
+  soldOutStamp: {fileID: 21300000, guid: 6b99ffc48b8ef9247a35a5ce4a2d6ed6, type: 3}
+  newTag: {fileID: 21300000, guid: 3fb5728303e206f49b23cd6903bffc95, type: 3}
   font: {fileID: 0}
+  actionPrimary: {r: 0.67, g: 0.77, b: 0.58, a: 1}
+  actionSecondary: {r: 0.91, g: 0.89, b: 0.81, a: 1}
+  actionCaution: {r: 0.84, g: 0.68, b: 0.57, a: 1}
+  actionInk: {r: 0.1, g: 0.18, b: 0.15, a: 1}
   reducedMotion: 0
   cardFlipSeconds: 0.26
   panelRevealSeconds: 0.18
+  screenFadeSeconds: 0.16
   showCardAppeal: 1
   debugCardDetails: 0
+  use3DCity: 0
+  city3DPrefab: {fileID: 0}
+  city3DOrthographic: 0
   recipeFrontVeilOpacity: 0.5
-  recipeBackVeilOpacity: 0.56

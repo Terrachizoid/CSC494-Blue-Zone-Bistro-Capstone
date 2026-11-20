@@ -15,6 +15,7 @@ MonoBehaviour:
   id: P058
   displayName: Artisan sourdough
   recipeCategory: 4
+  alsoCategories: 
   dailyDozenCategories: 00000000
   trafficLight: 2
   ingredientAppeal: 9

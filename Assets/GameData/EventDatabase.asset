@@ -16,13 +16,13 @@ MonoBehaviour:
   - id: EV_SALE
     headline: CheapCart announces a sale
     summary: 20% off CheapCart packages for two days.
-    details: A neighbourhood promotion lowers package prices at CheapCart. The original
-      price remains visible beside the effective price. Other active price effects
-      can combine with this sale.
+    details: CheapCart is running a two-day neighbourhood promotion. Look for the
+      sale price on its shelves.
     minDay: 2
     maxDay: -1
     durationDays: 2
     weight: 1
+    easyMode: 1
     image: {fileID: 21300000, guid: cf2f3e8d19a840ec95405a2975113a9d, type: 3}
     thumbnail: {fileID: 21300000, guid: cf2f3e8d19a840ec95405a2975113a9d, type: 3}
     paperColor: '#EAE0CB'
@@ -40,13 +40,13 @@ MonoBehaviour:
   - id: EV_OATS
     headline: Oats go viral
     summary: Oat prices rise 50% across stores today.
-    details: A fictional online trend has increased demand for rolled oats. All offers
-      for rolled oats cost more today. This popularity story is not evidence of a
-      new health benefit; food classifications and ingredient appeal are unchanged.
+    details: An online trend has everyone buying rolled oats, so they cost more today.
+      The trend doesn't make oats any healthier than they were yesterday.
     minDay: 2
     maxDay: -1
     durationDays: 1
     weight: 1
+    easyMode: 0
     image: {fileID: 21300000, guid: bcc1f242ed4a412e83016f2743b95cae, type: 3}
     thumbnail: {fileID: 21300000, guid: bcc1f242ed4a412e83016f2743b95cae, type: 3}
     paperColor: '#E8E3D5'
@@ -64,13 +64,13 @@ MonoBehaviour:
   - id: EV_CLOSED
     headline: Verdant & Co. closes for maintenance
     summary: The store is closed today. Pantry food is unaffected.
-    details: Scheduled maintenance closes Verdant & Co. for the day. You can still
-      use ingredients already in your pantry. The store reopens tomorrow; another
-      accessible store remains available.
+    details: Verdant & Co. is closed for maintenance today. You can still cook with
+      what's in your pantry, or shop at another store. It reopens tomorrow.
     minDay: 2
     maxDay: -1
     durationDays: 1
     weight: 1
+    easyMode: 0
     image: {fileID: 21300000, guid: 508a8e9b3588484aba7dfbcb11a395a7, type: 3}
     thumbnail: {fileID: 21300000, guid: 508a8e9b3588484aba7dfbcb11a395a7, type: 3}
     paperColor: '#E4E7DA'
@@ -87,15 +87,14 @@ MonoBehaviour:
       value: 0
   - id: EV_PUBLICITY
     headline: The bistro makes local news
-    summary: Two days of publicity plus a Verdant & Co. promotion.
-    details: A local feature brings temporary attention to the bistro. Morning attendance
-      uses an additional 200 publicity points for two days. Earned popularity and
-      ending scores are unchanged. Verdant & Co. also offers 10% off packages during
-      the feature.
+    summary: More visitors expected, plus a Verdant & Co. promotion.
+    details: A local feature has put the bistro in the news, so more people may drop
+      by over the next two days. Verdant & Co. is celebrating with 10% off.
     minDay: 2
     maxDay: -1
     durationDays: 2
     weight: 1
+    easyMode: 1
     image: {fileID: 21300000, guid: b408e0ee1679469aa50205737cd99443, type: 3}
     thumbnail: {fileID: 21300000, guid: b408e0ee1679469aa50205737cd99443, type: 3}
     paperColor: '#E5E8DE'
@@ -118,12 +117,13 @@ MonoBehaviour:
   - id: EV_CHEAP_CLOSED
     headline: CheapCart closes for restocking
     summary: CheapCart is closed today. Pantry food is unaffected.
-    details: CheapCart is closed for a full restock today. You can still cook with
-      what is in your pantry, or shop at another open store. CheapCart reopens tomorrow.
+    details: CheapCart is closed for a full restock today. Cook with what's in your
+      pantry, or shop at another store. It reopens tomorrow.
     minDay: 2
     maxDay: -1
     durationDays: 1
     weight: 1
+    easyMode: 0
     image: {fileID: 21300000, guid: 022dbe41244043b59a05a172591dfe50, type: 3}
     thumbnail: {fileID: 21300000, guid: 022dbe41244043b59a05a172591dfe50, type: 3}
     paperColor: '#EAE0D1'
@@ -138,3 +138,219 @@ MonoBehaviour:
       targetId: S002
       operation: 2
       value: 0
+  - id: EV_HARVEST
+    headline: Harvest week arrives
+    summary: Fruit and vegetables are 30% cheaper at every store for two days.
+    details: Local farms are bringing in a big harvest. Fresh and frozen fruit and
+      vegetables are on sale across town.
+    minDay: 2
+    maxDay: -1
+    durationDays: 2
+    weight: 1
+    easyMode: 1
+    image: {fileID: 21300000, guid: 807b59d9e6946f84eaa90c0c26c79849, type: 3}
+    thumbnail: {fileID: 21300000, guid: 807b59d9e6946f84eaa90c0c26c79849, type: 3}
+    paperColor: '#E8EBD3'
+    accentColor: '#8FB06F'
+    notificationAudio: {fileID: 0}
+    detailAudio: {fileID: 0}
+    codex: []
+    effects:
+    - type: 0
+      target: 3
+      targetId: Fruit
+      operation: 1
+      value: 0.7
+    - type: 0
+      target: 3
+      targetId: Vegetable
+      operation: 1
+      value: 0.7
+  - id: EV_BEAN_WEEK
+    headline: Bean & lentil week
+    summary: Beans are 25% cheaper everywhere for two days.
+    details: Stores are celebrating beans and lentils with a two-day promotion. A
+      good time to stock up on pantry staples.
+    minDay: 2
+    maxDay: -1
+    durationDays: 2
+    weight: 1
+    easyMode: 1
+    image: {fileID: 21300000, guid: 92ef5d37495356e4981bdcd8ee31f6c8, type: 3}
+    thumbnail: {fileID: 21300000, guid: 92ef5d37495356e4981bdcd8ee31f6c8, type: 3}
+    paperColor: '#EDE3CF'
+    accentColor: '#B58A5B'
+    notificationAudio: {fileID: 0}
+    detailAudio: {fileID: 0}
+    codex: []
+    effects:
+    - type: 0
+      target: 3
+      targetId: Beans
+      operation: 1
+      value: 0.75
+  - id: EV_FESTIVAL
+    headline: Lantern festival in town
+    summary: More visitors expected, and guests are in the mood for something sweet.
+    details: The lantern festival brings people out into the streets. Expect extra
+      visitors, and plenty of requests for sweet dishes.
+    minDay: 4
+    maxDay: -1
+    durationDays: 2
+    weight: 0.8
+    easyMode: 1
+    image: {fileID: 21300000, guid: 7d9fed27f638f344d99f447754a7e398, type: 3}
+    thumbnail: {fileID: 21300000, guid: 7d9fed27f638f344d99f447754a7e398, type: 3}
+    paperColor: '#F2E2C9'
+    accentColor: '#D98B4A'
+    notificationAudio: {fileID: 0}
+    detailAudio: {fileID: 0}
+    codex: []
+    effects:
+    - type: 2
+      target: 2
+      targetId: 
+      operation: 0
+      value: 150
+    - type: 3
+      target: 5
+      targetId: Sweet
+      operation: 1
+      value: 2
+  - id: EV_COLD_SNAP
+    headline: A cold snap
+    summary: Guests are asking for hearty, comforting food.
+    details: Chilly weather has everyone craving something warm and filling. Hearty
+      and comforting dishes will be popular for two days.
+    minDay: 4
+    maxDay: -1
+    durationDays: 2
+    weight: 1
+    easyMode: 1
+    image: {fileID: 21300000, guid: 5827156f56b9f1d45bdd7146af8d938e, type: 3}
+    thumbnail: {fileID: 21300000, guid: 5827156f56b9f1d45bdd7146af8d938e, type: 3}
+    paperColor: '#DDE5EA'
+    accentColor: '#7E98AC'
+    notificationAudio: {fileID: 0}
+    detailAudio: {fileID: 0}
+    codex: []
+    effects:
+    - type: 3
+      target: 5
+      targetId: Hearty
+      operation: 1
+      value: 2
+    - type: 3
+      target: 5
+      targetId: Comfort
+      operation: 1
+      value: 2
+  - id: EV_WORKSHOP
+    headline: Community nutrition workshop
+    summary: Sorting refunds are 50% higher for purchases today.
+    details: The community centre is running a food-label workshop today. Every correct
+      sorting answer on today's purchases earns a bigger refund.
+    minDay: 2
+    maxDay: -1
+    durationDays: 1
+    weight: 0.8
+    easyMode: 1
+    image: {fileID: 21300000, guid: 5a9e35229f3b08844b2a995d6e69052f, type: 3}
+    thumbnail: {fileID: 21300000, guid: 5a9e35229f3b08844b2a995d6e69052f, type: 3}
+    paperColor: '#E6EDDF'
+    accentColor: '#6F9A78'
+    notificationAudio: {fileID: 0}
+    detailAudio: {fileID: 0}
+    codex: []
+    effects:
+    - type: 4
+      target: 2
+      targetId: 
+      operation: 1
+      value: 1.5
+  - id: EV_FREEZER_DELAY
+    headline: CheapCart's freezer delivery is late
+    summary: CheapCart's back freezer is sold out today.
+    details: A delayed delivery truck has left CheapCart's freezer aisle empty for
+      the day. Frozen foods will need to come from another store.
+    minDay: 2
+    maxDay: -1
+    durationDays: 1
+    weight: 0.8
+    easyMode: 1
+    image: {fileID: 21300000, guid: f4007a0d7c92ad749bb0ee1abdd57b3e, type: 3}
+    thumbnail: {fileID: 21300000, guid: f4007a0d7c92ad749bb0ee1abdd57b3e, type: 3}
+    paperColor: '#E3E6EA'
+    accentColor: '#8A9BB0'
+    notificationAudio: {fileID: 0}
+    detailAudio: {fileID: 0}
+    codex: []
+    effects:
+    - type: 1
+      target: 4
+      targetId: S002/BACK_FREEZER
+      operation: 2
+      value: 0
+  - id: EV_SWEET_POTATO
+    headline: Sweet potato shortage
+    summary: Sweet potatoes are sold out, and purple sweet potatoes cost 30% more.
+    details: A poor harvest has left stores short of sweet potatoes for two days.
+      Purple sweet potatoes are still around, at a higher price.
+    minDay: 3
+    maxDay: -1
+    durationDays: 2
+    weight: 0.7
+    easyMode: 0
+    image: {fileID: 21300000, guid: 4c2337fdb18220143b1177775b601f88, type: 3}
+    thumbnail: {fileID: 21300000, guid: 4c2337fdb18220143b1177775b601f88, type: 3}
+    paperColor: '#EFE1D6'
+    accentColor: '#B0705A'
+    notificationAudio: {fileID: 0}
+    detailAudio: {fileID: 0}
+    codex: []
+    effects:
+    - type: 1
+      target: 1
+      targetId: P009
+      operation: 2
+      value: 0
+    - type: 0
+      target: 1
+      targetId: P039
+      operation: 1
+      value: 1.3
+  - id: EV_HEAT_WAVE
+    headline: Heat wave
+    summary: Guests want cool, sweet treats, and fruit and vegetables bought today
+      keep a day less.
+    details: A hot spell is rolling through town. Guests are asking for something
+      sweet and cool, and fresh produce won't keep as long, so buy only what you'll
+      cook soon.
+    minDay: 4
+    maxDay: -1
+    durationDays: 2
+    weight: 0.7
+    easyMode: 0
+    image: {fileID: 21300000, guid: 8e127357cf95d164ab29b27777d0704b, type: 3}
+    thumbnail: {fileID: 21300000, guid: 8e127357cf95d164ab29b27777d0704b, type: 3}
+    paperColor: '#F3E4CC'
+    accentColor: '#D9A441'
+    notificationAudio: {fileID: 0}
+    detailAudio: {fileID: 0}
+    codex: []
+    effects:
+    - type: 3
+      target: 5
+      targetId: Sweet
+      operation: 1
+      value: 2
+    - type: 5
+      target: 3
+      targetId: Fruit
+      operation: 0
+      value: -1
+    - type: 5
+      target: 3
+      targetId: Vegetable
+      operation: 0
+      value: -1
