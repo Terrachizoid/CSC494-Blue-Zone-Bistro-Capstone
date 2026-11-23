@@ -25,6 +25,8 @@ public static class BistroWebBuild
         // Fallback supports hosts that do not supply compression response headers.
         PlayerSettings.WebGL.compressionFormat = WebGLCompressionFormat.Gzip;
         PlayerSettings.WebGL.decompressionFallback = true;
+        PlayerSettings.WebGL.dataCaching = true;
+        EditorUserBuildSettings.development = false;
         Directory.CreateDirectory(output);
         var report = BuildPipeline.BuildPlayer(new BuildPlayerOptions
         {

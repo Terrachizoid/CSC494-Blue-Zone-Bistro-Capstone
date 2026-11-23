@@ -35,6 +35,7 @@ public sealed class BistroDragChip : MonoBehaviour, IBistroDragSource, IBeginDra
         if(canvas==null)return;
         pointer=e.pointerId;
         dragging=true;claimed=false;group.alpha=.5f;
+        BistroAudio.Play("card.pick");
         ghost=BistroWidgets.Box(canvas.transform,"Dragging cart item",Color.white,Vector2.zero,Vector2.zero);
         ghost.sizeDelta=new Vector2(110,110);
         var image=ghost.GetComponent<Image>();image.raycastTarget=false;image.preserveAspect=true;
@@ -53,7 +54,7 @@ public sealed class BistroDragChip : MonoBehaviour, IBistroDragSource, IBeginDra
         if(pointer!=e.pointerId)return;
         bool outside=dragging&&!claimed;
         Cancel();
-        if(outside)DroppedOutside?.Invoke();
+        if(outside){BistroAudio.Play("card.return");DroppedOutside?.Invoke();}
     }
     private void Cancel()
     {

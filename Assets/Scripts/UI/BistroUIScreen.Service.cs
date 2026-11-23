@@ -52,15 +52,12 @@ public partial class BistroUIScreen
     private void ServiceScreen()
     {
         var scene=BistroWidgets.Box(screen,"Bistro interior",theme.panel,Vector2.zero,new Vector2(1,.91f));
-        var background=scene.GetComponent<Image>();background.sprite=theme.serviceBackground;background.color=Color.white;background.raycastTarget=false;
+        var background=scene.GetComponent<Image>();background.sprite=theme.serviceBackground;background.color=Color.white;background.raycastTarget=false;GradeScenery(background);
         var playback=game.Loop.Dialogue;
-        var guest=game.Queries.GetCustomer(playback?.IsActive==true?playback.CurrentLine.speakerId:game.Loop.Service.CurrentCustomerId);
-        var portraitArt=playback?.IsActive==true&&playback.CurrentLine.portrait!=null?playback.CurrentLine.portrait:guest?.portrait;
         var person=BistroWidgets.Box(scene,"Customer layer",Color.clear,new Vector2(.34f,.13f),new Vector2(.66f,.88f));
         person.GetComponent<Image>().raycastTarget=false;
-        if(portraitArt!=null){person.GetComponent<Image>().sprite=portraitArt;person.GetComponent<Image>().color=Color.white;person.GetComponent<Image>().preserveAspect=true;}
-        else BistroShelfIcon.Add(person,"Customer",Vector2.zero,Vector2.one,new Color(.30f,.39f,.36f));
-        BistroShelfStyle.Artwork(scene,"Service counter",theme.serviceCounter,Vector2.zero,new Vector2(1,.30f),Color.white);
+        CharacterStage(person); // Expressions, motion and fallbacks: BistroUIScreen.Characters.cs.
+        GradeScenery(BistroShelfStyle.Artwork(scene,"Service counter",theme.serviceCounter,Vector2.zero,new Vector2(1,.30f),Color.white).GetComponent<Image>());
         if(playback!=null && playback.IsActive)
         {
             var speaker=game.Queries.GetCustomer(playback.CurrentLine.speakerId);
@@ -234,7 +231,7 @@ public partial class BistroUIScreen
     {
         var summary=game.Loop.Summary;bool complete=game.Loop.Phase==GamePhase.Completed;
         if(complete && game.State.completedDaySummary!=null)summary=game.State.completedDaySummary;
-        BistroShelfStyle.Artwork(screen,"Service room",theme.serviceBackground,Vector2.zero,new Vector2(1,.91f),Color.white);
+        GradeScenery(BistroShelfStyle.Artwork(screen,"Service room",theme.serviceBackground,Vector2.zero,new Vector2(1,.91f),Color.white).GetComponent<Image>());
         string totals=$"Spent ${summary.moneySpent:0.00}\nEarned ${summary.moneyEarned:0.00}\nServed {summary.dishes.Count} · Skipped {summary.skippedCustomerIds.Count}";
         totals+=$"\nPopularity {game.State.popularity:0} ({summary.dishes.Sum(d=>d.result.popularityDelta):+0.#;-0.#;0} today)";
         if(summary.walkInIncome>0)totals+=$"\nWalk-in takeaway ${summary.walkInIncome:0.00} (included in earnings)";

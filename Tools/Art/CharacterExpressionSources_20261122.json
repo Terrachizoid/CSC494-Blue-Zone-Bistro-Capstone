@@ -1,0 +1,126 @@
+{
+  "purpose": "Offline art provenance only; runtime ownership remains in the CSV.",
+  "sourceDirectory": "C:/Users/TERRA/.codex/generated_images/01a0c490-ad67-7e80-9c87-d625cf4b4e02",
+  "records": [
+    {
+      "id": "U001_happy",
+      "source": "exec-0c3b54fb-cb74-4c32-a023-fa58661fe002.png",
+      "prompt": "Edit the attached approved neutral character sprite into ONE expression variant for Blue Zone Bistro. Preserve EXACT identity, hairstyle, clothing, colours, pose, arm/hand position, body silhouette, scale and canvas framing. Do not redesign or turn the body. Only alter eyes, eyebrows and mouth, with very subtle facial changes. Keep extremely simple chunky cartoon shapes, thick dark brown contours, flat muted colours, sparse shading, no extra detail or conventional anime. Head through waist, transparent outside silhouette, no text, no props, no background, no glow. Match source alignment so expression swapping does not move the character. HAPPY / pleased / welcoming: small clear warm smile, lightly lifted cheeks, softly relaxed raised brows, eyes pleasantly open. Sincere understated pleasure, not huge grin or manic excitement."
+    },
+    {
+      "id": "U001_concerned",
+      "source": "exec-de749ce4-28b2-4b1f-8b13-7f0cc7d66c16.png",
+      "prompt": "Edit the attached approved neutral character sprite into ONE expression variant for Blue Zone Bistro. Preserve EXACT identity, hairstyle, clothing, colours, pose, arm/hand position, body silhouette, scale and canvas framing. Do not redesign or turn the body. Only alter eyes, eyebrows and mouth, with very subtle facial changes. Keep extremely simple chunky cartoon shapes, thick dark brown contours, flat muted colours, sparse shading, no extra detail or conventional anime. Head through waist, transparent outside silhouette, no text, no props, no background, no glow. Match source alignment so expression swapping does not move the character. CONCERNED / cautious: inner eyebrows gently raised and drawn together, eyes attentive and slightly worried, small uncertain mouth. Quiet thoughtful concern, not anger, horror or tears."
+    },
+    {
+      "id": "U001_disappointed",
+      "source": "exec-2ae87538-ad74-4a91-a35c-262392d27349.png",
+      "prompt": "Earlier facial variant, subdued disappointment; retained after interruption."
+    },
+    {
+      "id": "U001_tired",
+      "source": "exec-955d207e-d9ed-4cac-966e-4769c47b018e.png",
+      "prompt": "Create ONE expression variant of the attached approved character for Blue Zone Bistro. Preserve identity, hairstyle, skin colour, outfit, simple chunky graphic cartoon style, thick dark brown contours, flat muted palette and sparse shading. Keep adult proportions and head scale close to reference, mostly front-facing with both eyes visible, HEAD THROUGH WAIST ONLY, entire silhouette within frame. Give the requested NATURAL expression-specific body pose, not the same pose for every expression. Avoid exaggerated acting, angry blame, shame or infantilization. Hands simple but anatomically clear, two arms only, no props. No text, scene, gradient, 3D or detailed anime. Transparent background, no outer glow. June tired: half-open heavy eyelids, level loose mouth, a tiny slump with one hand lightly touching her temple and other arm down. Head still looking toward host. Low energy, not sadness or crying."
+    },
+    {
+      "id": "U002_happy",
+      "source": "exec-2f84edaf-58b4-452f-a125-1a7477c5ce66.png",
+      "prompt": "Create ONE expression variant of the attached approved character for Blue Zone Bistro. Preserve identity, hairstyle, skin colour, outfit, simple chunky graphic cartoon style, thick dark brown contours, flat muted palette and sparse shading. Keep adult proportions and head scale close to reference, mostly front-facing with both eyes visible, HEAD THROUGH WAIST ONLY, entire silhouette within frame. Give the requested NATURAL expression-specific body pose, not the same pose for every expression. Avoid exaggerated acting, angry blame, shame or infantilization. Hands simple but anatomically clear, two arms only, no props. No text, scene, gradient, 3D or detailed anime. Transparent background, no outer glow. Dev happy: release folded arms, one small open palm near lower chest as if warmly responding, other arm relaxed; slight forward engagement, soft smile and open eyes."
+    },
+    {
+      "id": "U002_concerned",
+      "source": "exec-c85467cf-43b2-47a5-86d0-04311ffab619.png",
+      "prompt": "Create ONE expression variant of the attached approved character for Blue Zone Bistro. Preserve identity, hairstyle, skin colour, outfit, simple chunky graphic cartoon style, thick dark brown contours, flat muted palette and sparse shading. Keep adult proportions and head scale close to reference, mostly front-facing with both eyes visible, HEAD THROUGH WAIST ONLY, entire silhouette within frame. Give the requested NATURAL expression-specific body pose, not the same pose for every expression. Avoid exaggerated acting, angry blame, shame or infantilization. Hands simple but anatomically clear, two arms only, no props. No text, scene, gradient, 3D or detailed anime. Transparent background, no outer glow. Dev concerned: one hand lightly touching chin, opposite forearm supports elbow low, brow gently furrowed upward centrally, mouth small and unsure. Thoughtful not angry."
+    },
+    {
+      "id": "U002_disappointed",
+      "source": "exec-d3b8f4e7-6a39-4dfb-80d5-533cb0b4c9fc.png",
+      "prompt": "Create ONE expression variant of the attached approved character for Blue Zone Bistro. Preserve identity, hairstyle, skin colour, outfit, simple chunky graphic cartoon style, thick dark brown contours, flat muted palette and sparse shading. Keep adult proportions and head scale close to reference, mostly front-facing with both eyes visible, HEAD THROUGH WAIST ONLY, entire silhouette within frame. Give the requested NATURAL expression-specific body pose, not the same pose for every expression. Avoid exaggerated acting, angry blame, shame or infantilization. Hands simple but anatomically clear, two arms only, no props. No text, scene, gradient, 3D or detailed anime. Transparent background, no outer glow. Dev disappointed: arms relaxed down and shoulders a little lower, head slightly dipped, small downturned mouth and lowered gaze, no scowl."
+    },
+    {
+      "id": "U002_tired",
+      "source": "exec-76e37184-dbaf-4d33-b7b1-8e0f53d80031.png",
+      "prompt": "Create ONE expression variant of the attached approved character for Blue Zone Bistro. Preserve identity, hairstyle, skin colour, outfit, simple chunky graphic cartoon style, thick dark brown contours, flat muted palette and sparse shading. Keep adult proportions and head scale close to reference, mostly front-facing with both eyes visible, HEAD THROUGH WAIST ONLY, entire silhouette within frame. Give the requested NATURAL expression-specific body pose, not the same pose for every expression. Avoid exaggerated acting, angry blame, shame or infantilization. Hands simple but anatomically clear, two arms only, no props. No text, scene, gradient, 3D or detailed anime. Transparent background, no outer glow. Dev tired: one hand loosely rests on opposite upper arm, shoulders gently rounded, half-open heavy eyelids and short flat mouth, calm fatigue."
+    },
+    {
+      "id": "U003_happy",
+      "source": "exec-35161ded-8784-4423-b24c-0bfafaa69131.png",
+      "prompt": "Create ONE expression variant of the attached approved character for Blue Zone Bistro. Preserve identity, hairstyle, skin colour, outfit, simple chunky graphic cartoon style, thick dark brown contours, flat muted palette and sparse shading. Keep adult proportions and head scale close to reference, mostly front-facing with both eyes visible, HEAD THROUGH WAIST ONLY, entire silhouette within frame. Give the requested NATURAL expression-specific body pose, not the same pose for every expression. Avoid exaggerated acting, angry blame, shame or infantilization. Hands simple but anatomically clear, two arms only, no props. No text, scene, gradient, 3D or detailed anime. Transparent background, no outer glow. Rosa happy: hands open slightly apart low at waist as if pleasantly acknowledging the meal, warm modest smile, slightly lifted chin, relaxed shoulders."
+    },
+    {
+      "id": "U003_concerned",
+      "source": "exec-e22a4531-145c-4591-8d94-41a87d2f8e1f.png",
+      "prompt": "Create ONE expression variant of the attached approved character for Blue Zone Bistro. Preserve identity, hairstyle, skin colour, outfit, simple chunky graphic cartoon style, thick dark brown contours, flat muted palette and sparse shading. Keep adult proportions and head scale close to reference, mostly front-facing with both eyes visible, HEAD THROUGH WAIST ONLY, entire silhouette within frame. Give the requested NATURAL expression-specific body pose, not the same pose for every expression. Avoid exaggerated acting, angry blame, shame or infantilization. Hands simple but anatomically clear, two arms only, no props. No text, scene, gradient, 3D or detailed anime. Transparent background, no outer glow. Rosa concerned: hands loosely together near upper waist, one thumb gently touching opposite hand, slight sideways head inclination and worried inner brows, small uncertain mouth."
+    },
+    {
+      "id": "U003_disappointed",
+      "source": "exec-3f66aa72-1501-43cb-80a7-5f691e57969f.png",
+      "prompt": "Create ONE expression variant of the attached approved character for Blue Zone Bistro. Preserve identity, hairstyle, skin colour, outfit, simple chunky graphic cartoon style, thick dark brown contours, flat muted palette and sparse shading. Keep adult proportions and head scale close to reference, mostly front-facing with both eyes visible, HEAD THROUGH WAIST ONLY, entire silhouette within frame. Give the requested NATURAL expression-specific body pose, not the same pose for every expression. Avoid exaggerated acting, angry blame, shame or infantilization. Hands simple but anatomically clear, two arms only, no props. No text, scene, gradient, 3D or detailed anime. Transparent background, no outer glow. Rosa disappointed: arms lower, one hand loosely holding opposite wrist at waist, lowered shoulders and slight downturned mouth, eyes down a little, no blaming gesture."
+    },
+    {
+      "id": "U003_tired",
+      "source": "exec-08cdc16a-8599-45fb-811f-694e7091a6ac.png",
+      "prompt": "Create ONE expression variant of the attached approved character for Blue Zone Bistro. Preserve identity, hairstyle, skin colour, outfit, simple chunky graphic cartoon style, thick dark brown contours, flat muted palette and sparse shading. Keep adult proportions and head scale close to reference, mostly front-facing with both eyes visible, HEAD THROUGH WAIST ONLY, entire silhouette within frame. Give the requested NATURAL expression-specific body pose, not the same pose for every expression. Avoid exaggerated acting, angry blame, shame or infantilization. Hands simple but anatomically clear, two arms only, no props. No text, scene, gradient, 3D or detailed anime. Transparent background, no outer glow. Rosa tired: one forearm low across waist and other arm comfortably resting over it, modest slouch, heavy eyelids, loose neutral mouth, no strong frown."
+    },
+    {
+      "id": "U004_happy",
+      "source": "exec-966acdfd-20cf-417f-8822-b4caa0d3ee5a.png",
+      "prompt": "Create ONE expression variant of the attached approved character for Blue Zone Bistro. Preserve identity, hairstyle, skin colour, outfit, simple chunky graphic cartoon style, thick dark brown contours, flat muted palette and sparse shading. Keep adult proportions and head scale close to reference, mostly front-facing with both eyes visible, HEAD THROUGH WAIST ONLY, entire silhouette within frame. Give the requested NATURAL expression-specific body pose, not the same pose for every expression. Avoid exaggerated acting, angry blame, shame or infantilization. Hands simple but anatomically clear, two arms only, no props. No text, scene, gradient, 3D or detailed anime. Transparent background, no outer glow. Sam happy: upright gentle forward lean, one hand in a SMALL open conversational gesture at waist, other arm down, bright open eyes and small smile. NO hand inside hoodie pocket."
+    },
+    {
+      "id": "U004_concerned",
+      "source": "exec-3f277496-1c74-48b2-b33b-ca7e9f65c277.png",
+      "prompt": "Create ONE expression variant of the attached approved character for Blue Zone Bistro. Preserve identity, hairstyle, skin colour, outfit, simple chunky graphic cartoon style, thick dark brown contours, flat muted palette and sparse shading. Keep adult proportions and head scale close to reference, mostly front-facing with both eyes visible, HEAD THROUGH WAIST ONLY, entire silhouette within frame. Give the requested NATURAL expression-specific body pose, not the same pose for every expression. Avoid exaggerated acting, angry blame, shame or infantilization. Hands simple but anatomically clear, two arms only, no props. No text, scene, gradient, 3D or detailed anime. Transparent background, no outer glow. Sam concerned: shoulders slightly drawn inward, arms loose beside body, head tilted subtly, inner brows raised and eyes uncertain, small asymmetric hesitant mouth. NO hand inside hoodie."
+    },
+    {
+      "id": "U004_disappointed",
+      "source": "exec-97c5b8dc-2a90-4bdd-8432-daf7c003ac25.png",
+      "prompt": "Create ONE expression variant of the attached approved character for Blue Zone Bistro. Preserve identity, hairstyle, skin colour, outfit, simple chunky graphic cartoon style, thick dark brown contours, flat muted palette and sparse shading. Keep adult proportions and head scale close to reference, mostly front-facing with both eyes visible, HEAD THROUGH WAIST ONLY, entire silhouette within frame. Give the requested NATURAL expression-specific body pose, not the same pose for every expression. Avoid exaggerated acting, angry blame, shame or infantilization. Hands simple but anatomically clear, two arms only, no props. No text, scene, gradient, 3D or detailed anime. Transparent background, no outer glow. Sam disappointed: head slightly lowered, one hand lightly rests on opposite forearm at waist, shoulders dropped, small downturned mouth, mildly disappointed rather than angry. NO hoodie-pocket hand."
+    },
+    {
+      "id": "U004_tired",
+      "source": "exec-6e5edb05-a1cb-4da2-9184-540aabd31013.png",
+      "prompt": "Create ONE expression variant of the attached approved character for Blue Zone Bistro. Preserve identity, hairstyle, skin colour, outfit, simple chunky graphic cartoon style, thick dark brown contours, flat muted palette and sparse shading. Keep adult proportions and head scale close to reference, mostly front-facing with both eyes visible, HEAD THROUGH WAIST ONLY, entire silhouette within frame. Give the requested NATURAL expression-specific body pose, not the same pose for every expression. Avoid exaggerated acting, angry blame, shame or infantilization. Hands simple but anatomically clear, two arms only, no props. No text, scene, gradient, 3D or detailed anime. Transparent background, no outer glow. Sam tired: mild natural slump, one hand rubbing the back of neck with elbow modestly out, other arm down, half-lidded eyes and relaxed flat mouth. No huge head tilt, no pocket hand."
+    },
+    {
+      "id": "U005_happy",
+      "source": "exec-c82b3c59-b165-4194-b1d8-8bb857782a58.png",
+      "prompt": "Create ONE expression variant of the attached approved character for Blue Zone Bistro. Preserve identity, hairstyle, skin colour, outfit, simple chunky graphic cartoon style, thick dark brown contours, flat muted palette and sparse shading. Keep adult proportions and head scale close to reference, mostly front-facing with both eyes visible, HEAD THROUGH WAIST ONLY, entire silhouette within frame. Give the requested NATURAL expression-specific body pose, not the same pose for every expression. Avoid exaggerated acting, angry blame, shame or infantilization. Hands simple but anatomically clear, two arms only, no props. No text, scene, gradient, 3D or detailed anime. Transparent background, no outer glow. Marco happy: warm small smile visible within beard, raised relaxed brows, one open hand slightly forward at waist and other arm relaxed, chest gently open. Keep ochre beanie and beard."
+    },
+    {
+      "id": "U005_concerned",
+      "source": "exec-29a748b9-9958-4904-a67b-a569fd5aaa74.png",
+      "prompt": "Create ONE expression variant of the attached approved character for Blue Zone Bistro. Preserve identity, hairstyle, skin colour, outfit, simple chunky graphic cartoon style, thick dark brown contours, flat muted palette and sparse shading. Keep adult proportions and head scale close to reference, mostly front-facing with both eyes visible, HEAD THROUGH WAIST ONLY, entire silhouette within frame. Give the requested NATURAL expression-specific body pose, not the same pose for every expression. Avoid exaggerated acting, angry blame, shame or infantilization. Hands simple but anatomically clear, two arms only, no props. No text, scene, gradient, 3D or detailed anime. Transparent background, no outer glow. Marco concerned: one hand touching beard lightly in thought, other forearm low across torso, attentive worried brow and small uncertain mouth. No scowl, no point."
+    },
+    {
+      "id": "U005_disappointed",
+      "source": "exec-fe72869e-f8d9-465a-9420-3804fdc4423e.png",
+      "prompt": "Create ONE expression variant of the attached approved character for Blue Zone Bistro. Preserve identity, hairstyle, skin colour, outfit, simple chunky graphic cartoon style, thick dark brown contours, flat muted palette and sparse shading. Keep adult proportions and head scale close to reference, mostly front-facing with both eyes visible, HEAD THROUGH WAIST ONLY, entire silhouette within frame. Give the requested NATURAL expression-specific body pose, not the same pose for every expression. Avoid exaggerated acting, angry blame, shame or infantilization. Hands simple but anatomically clear, two arms only, no props. No text, scene, gradient, 3D or detailed anime. Transparent background, no outer glow. Marco disappointed: both forearms resting low loosely together, shoulders lower, slight head dip, small downturned mouth and lowered eyes. Understated, not angry."
+    },
+    {
+      "id": "U005_tired",
+      "source": "exec-a25c5add-2444-4978-81bc-3203803c125c.png",
+      "prompt": "Create ONE expression variant of the attached approved character for Blue Zone Bistro. Preserve identity, hairstyle, skin colour, outfit, simple chunky graphic cartoon style, thick dark brown contours, flat muted palette and sparse shading. Keep adult proportions and head scale close to reference, mostly front-facing with both eyes visible, HEAD THROUGH WAIST ONLY, entire silhouette within frame. Give the requested NATURAL expression-specific body pose, not the same pose for every expression. Avoid exaggerated acting, angry blame, shame or infantilization. Hands simple but anatomically clear, two arms only, no props. No text, scene, gradient, 3D or detailed anime. Transparent background, no outer glow. Marco tired: head subtly inclined, shoulders rounded a little, one forearm resting low like on unseen counter, other arm hanging, heavy eyelids and flat relaxed mouth, no added aging."
+    },
+    {
+      "id": "U006_happy",
+      "source": "exec-2addf01c-4238-414b-b997-4680b6db88ba.png",
+      "prompt": "Create ONE expression variant of the attached approved character for Blue Zone Bistro. Preserve identity, hairstyle, skin colour, outfit, simple chunky graphic cartoon style, thick dark brown contours, flat muted palette and sparse shading. Keep adult proportions and head scale close to reference, mostly front-facing with both eyes visible, HEAD THROUGH WAIST ONLY, entire silhouette within frame. Give the requested NATURAL expression-specific body pose, not the same pose for every expression. Avoid exaggerated acting, angry blame, shame or infantilization. Hands simple but anatomically clear, two arms only, no props. No text, scene, gradient, 3D or detailed anime. Transparent background, no outer glow. Priya happy: one hand gently open near lower chest, other arm down, posture a little lifted and engaged, clear small warm smile and relaxed bright eyes, keep ponytail."
+    },
+    {
+      "id": "U006_concerned",
+      "source": "exec-1c59096a-5ce6-4ff0-b453-b1a7211fec14.png",
+      "prompt": "Create ONE expression variant of the attached approved character for Blue Zone Bistro. Preserve identity, hairstyle, skin colour, outfit, simple chunky graphic cartoon style, thick dark brown contours, flat muted palette and sparse shading. Keep adult proportions and head scale close to reference, mostly front-facing with both eyes visible, HEAD THROUGH WAIST ONLY, entire silhouette within frame. Give the requested NATURAL expression-specific body pose, not the same pose for every expression. Avoid exaggerated acting, angry blame, shame or infantilization. Hands simple but anatomically clear, two arms only, no props. No text, scene, gradient, 3D or detailed anime. Transparent background, no outer glow. Priya concerned: one hand near chin with index finger resting lightly on cheek, other arm low, slight head inclination, raised inner brows and small uncertain mouth. Thoughtful without exaggerated worry."
+    },
+    {
+      "id": "U006_disappointed",
+      "source": "exec-1c2a1828-0581-4e14-9135-b4a5c307a5d4.png",
+      "prompt": "Create ONE expression variant of the attached approved character for Blue Zone Bistro. Preserve identity, hairstyle, skin colour, outfit, simple chunky graphic cartoon style, thick dark brown contours, flat muted palette and sparse shading. Keep adult proportions and head scale close to reference, mostly front-facing with both eyes visible, HEAD THROUGH WAIST ONLY, entire silhouette within frame. Give the requested NATURAL expression-specific body pose, not the same pose for every expression. Avoid exaggerated acting, angry blame, shame or infantilization. Hands simple but anatomically clear, two arms only, no props. No text, scene, gradient, 3D or detailed anime. Transparent background, no outer glow. Priya disappointed: hands loosely resting together at waist, head turned only slightly and gaze lowered, a small downturned mouth and lowered shoulders. No blame or anger."
+    },
+    {
+      "id": "U006_tired",
+      "source": "exec-4c5057fc-4b94-431d-bb0a-8d1f58d0015a.png",
+      "prompt": "Create ONE expression variant of the attached approved character for Blue Zone Bistro. Preserve identity, hairstyle, skin colour, outfit, simple chunky graphic cartoon style, thick dark brown contours, flat muted palette and sparse shading. Keep adult proportions and head scale close to reference, mostly front-facing with both eyes visible, HEAD THROUGH WAIST ONLY, entire silhouette within frame. Give the requested NATURAL expression-specific body pose, not the same pose for every expression. Avoid exaggerated acting, angry blame, shame or infantilization. Hands simple but anatomically clear, two arms only, no props. No text, scene, gradient, 3D or detailed anime. Transparent background, no outer glow. Priya tired: arms gently folded low at waist rather than chest, subtle lean to one side, heavy upper eyelids and flat slack mouth, no strong head tilt or sadness."
+    }
+  ]
+}

@@ -1,0 +1,77 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6852f3275b3b4254aa4113d5ddba5b29, type: 3}
+  m_Name: D_ROSA_AFTER_LOW_APPEAL
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueSequenceData
+  id: D_ROSA_AFTER_LOW_APPEAL
+  displayName: Rosa reacts to the meal
+  mode: 0
+  trigger: 3
+  repeatRule: 1
+  priority: 93
+  variantOf: 
+  randomWeight: 1
+  customer: {fileID: 11400000, guid: 96092889bbf9f4e449e789a43c792f70, type: 2}
+  minDay: 1
+  maxDay: -1
+  minCustomerHealth: -1
+  maxCustomerHealth: -1
+  minCustomerDelight: -1
+  maxCustomerDelight: -1
+  requiredRecipe: {fileID: 0}
+  recipeBuildCondition: 1
+  mealHealthCondition: 0
+  requiredRecipeTiers: 
+  requestCondition: 0
+  missedRequests: 
+  recipeFatigued: 0
+  minIngredientAppeal: -1
+  maxIngredientAppeal: 4.5
+  delightFull: 0
+  redServed: 0
+  minServedMealDelight: -1
+  maxServedMealDelight: -1
+  requiredFlags: []
+  forbiddenFlags: []
+  setFlags: []
+  clearFlags: []
+  lines:
+  - lineOrder: 0
+    speakerId: U003
+    textTemplate: The {servedRecipe} was alright, but it was missing some flavour.
+    claim: {fileID: 0}
+    portrait: {fileID: 0}
+    backgroundImage: {fileID: 0}
+    emotion: Neutral
+    voiceOver: {fileID: 0}
+  - lineOrder: 1
+    speakerId: U003
+    textTemplate: Plain cooking is easy to give up on. I'd love something with a
+      bit more life.
+    claim: {fileID: 0}
+    portrait: {fileID: 0}
+    backgroundImage: {fileID: 0}
+    emotion: Cautious
+    voiceOver: {fileID: 0}
+  - lineOrder: 2
+    speakerId: Blue Zone Guide
+    textTemplate: This dish's ingredient appeal was only {ingredientAppeal} out of
+      10, and guests enjoy higher-appeal dishes more. Each food card shows its appeal,
+      and many green foods rate 7 or higher, so swapping one or two of those in helps.
+    claim: {fileID: 0}
+    portrait: {fileID: 0}
+    backgroundImage: {fileID: 0}
+    emotion: 
+    voiceOver: {fileID: 0}
+  approvalStatus: 0
+  reviewNotes: 'Reason reaction (2026-11-22): the guest names the main issue and
+    the Blue Zone Guide adds one tip. Pending supervisor review. No medical claims.'

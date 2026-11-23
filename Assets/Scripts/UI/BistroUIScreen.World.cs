@@ -11,7 +11,7 @@ public partial class BistroUIScreen
         var viewport=BistroWidgets.Box(screen,city?"City viewport":"Store viewport",new Color(.65f,.66f,.64f),new Vector2(0,0),new Vector2(1,.91f));
         viewport.gameObject.AddComponent<RectMask2D>();
         var world=BistroWidgets.Box(viewport,city?"City artwork":"Store artwork",Color.white,new Vector2(.5f,.5f),new Vector2(.5f,.5f));
-        var image=world.GetComponent<Image>();image.sprite=art;
+        var image=world.GetComponent<Image>();image.sprite=art;GradeScenery(image);
         var layout=world.gameObject.AddComponent<BistroWorldLayout>();layout.Viewport=viewport;layout.Aspect=image.sprite.rect.width/image.sprite.rect.height;layout.Cover=city;layout.Zoom=city?Mathf.Max(1.1f,theme.cityMapZoom):1;
         Canvas.ForceUpdateCanvases();layout.Apply();
         if(city)
@@ -54,7 +54,6 @@ public partial class BistroUIScreen
     }
     private void CityMap()
     {
-        if(theme.use3DCity&&theme.city3DPrefab!=null&&City3DMap())return;
         var view=BistroWorldArt.Get("city");if(view==null||theme.cityBackground==null){FallbackCityMap();return;}
         var world=WorldImage(theme.cityBackground,true);var stores=game.Queries.GetStores();
         foreach(var region in view.regions??Array.Empty<BistroWorldArt.Region>())
@@ -108,41 +107,6 @@ public partial class BistroUIScreen
         }
         int index=0;foreach(var id in listings.Select(l=>l.shelfId).Distinct().Where(id=>!(view.regions??Array.Empty<BistroWorldArt.Region>()).Any(r=>r.id==id)))
         {string target=id;BistroShelfStyle.Button(screen,target,theme,new Vector2(.02f+index*.19f,.2f),new Vector2(.20f+index++*.19f,.26f),BistroShelfStyle.Cream,BistroShelfStyle.Ink,()=>Change(()=>{if(game.Queries.Market.ClosureReason(store.id)==null)shelf=target;}));}
-        return true;
-    }
-    // Optional low-poly city (theme.use3DCity). Same actions as the painted map; returns false to fall back to 2D.
-    private bool City3DMap()
-    {
-        var city=BistroCity3D.Ensure(theme.city3DPrefab,theme.city3DOrthographic);if(city==null)return false;
-        var viewport=BistroWidgets.Box(screen,"City viewport",new Color(.84f,.88f,.89f),new Vector2(0,0),new Vector2(1,.91f));
-        viewport.gameObject.AddComponent<RectMask2D>();
-        var image=new GameObject("City 3D view",typeof(RectTransform),typeof(RawImage)).GetComponent<RawImage>();
-        image.transform.SetParent(viewport,false);var rect=(RectTransform)image.transform;rect.anchorMin=Vector2.zero;rect.anchorMax=Vector2.one;rect.offsetMin=rect.offsetMax=Vector2.zero;
-        var view=BistroCity3DView.Attach(image,city);
-        var stores=game.Queries.GetStores();
-        Action<string> open=id=>{
-            if(id=="NEWS"){modal="news";return;}
-            var current=game.Queries.GetStores().FirstOrDefault(s=>s.id==id);
-            if(current!=null&&game.Queries.Market.ClosureReason(current.id)==null){store=current;shelf=null;}
-        };
-        view.Clicked=id=>{if(id=="NEWS"||stores.Any(s=>s.id==id))Change(()=>open(id));};
-        foreach(var landmark in city.Landmarks)
-        {
-            if(landmark==null)continue;string id=landmark.landmarkId;
-            var item=stores.FirstOrDefault(s=>s.id==id);
-            if(id!="NEWS"&&item==null)continue; // the bistro and other props have no city action
-            string closed=id=="NEWS"?null:game.Queries.Market.ClosureReason(id);
-            string label=id=="NEWS"?"News":closed==null?item.displayName:item.displayName+" · "+closed;
-            var tag=BistroShelfStyle.Panel(rect,"Marker "+id,closed==null?new Color(.94f,.92f,.86f,.92f):new Color(.78f,.78f,.75f,.88f),new Vector2(.5f,.5f),new Vector2(.5f,.5f));
-            tag.sizeDelta=new Vector2(Mathf.Clamp(label.Length*9+56,120,320),36);
-            BistroSurface.Dress(tag,BistroShelfStyle.Green,theme.cardSprig);
-            var shadow=tag.gameObject.AddComponent<Shadow>();shadow.effectColor=new Color(.10f,.17f,.14f,.16f);shadow.effectDistance=new Vector2(1,-2);
-            BistroShelfIcon.Add(tag,item?.logo,id=="NEWS"?"Help":"City",new Vector2(.03f,.16f),new Vector2(.12f,.84f),BistroShelfStyle.Green);
-            BistroShelfStyle.Text(tag,label,theme,new Vector2(.14f,.05f),new Vector2(.96f,.95f),16,BistroShelfStyle.Ink,false,TextAnchor.MiddleCenter);
-            var button=tag.gameObject.AddComponent<Button>();button.targetGraphic=tag.GetComponent<Image>();button.interactable=closed==null;
-            button.onClick.AddListener(()=>Change(()=>open(id)));
-            view.AddTag(id,tag);
-        }
         return true;
     }
 }

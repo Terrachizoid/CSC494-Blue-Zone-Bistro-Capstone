@@ -1,0 +1,77 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6852f3275b3b4254aa4113d5ddba5b29, type: 3}
+  m_Name: D_JUNE_AFTER_FATIGUED
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueSequenceData
+  id: D_JUNE_AFTER_FATIGUED
+  displayName: June reacts to the meal
+  mode: 0
+  trigger: 3
+  repeatRule: 1
+  priority: 100
+  variantOf: 
+  randomWeight: 1
+  customer: {fileID: 11400000, guid: 354c9165e8b342645aba4683c6f3b0f7, type: 2}
+  minDay: 1
+  maxDay: -1
+  minCustomerHealth: -1
+  maxCustomerHealth: -1
+  minCustomerDelight: -1
+  maxCustomerDelight: -1
+  requiredRecipe: {fileID: 0}
+  recipeBuildCondition: 1
+  mealHealthCondition: 0
+  requiredRecipeTiers: 
+  requestCondition: 0
+  missedRequests: 
+  recipeFatigued: 1
+  minIngredientAppeal: -1
+  maxIngredientAppeal: -1
+  delightFull: 0
+  redServed: 0
+  minServedMealDelight: -1
+  maxServedMealDelight: -1
+  requiredFlags: []
+  forbiddenFlags: []
+  setFlags: []
+  clearFlags: []
+  lines:
+  - lineOrder: 0
+    speakerId: U001
+    textTemplate: '{servedRecipe} again? I do like it, but it''s starting to feel
+      like the only thing on the menu.'
+    claim: {fileID: 0}
+    portrait: {fileID: 0}
+    backgroundImage: {fileID: 0}
+    emotion: Cautious
+    voiceOver: {fileID: 0}
+  - lineOrder: 1
+    speakerId: U001
+    textTemplate: A little variety would keep me looking forward to lunch.
+    claim: {fileID: 0}
+    portrait: {fileID: 0}
+    backgroundImage: {fileID: 0}
+    emotion: Neutral
+    voiceOver: {fileID: 0}
+  - lineOrder: 2
+    speakerId: Blue Zone Guide
+    textTemplate: '{servedRecipe} has been served {recipeRecentServes} times lately,
+      so this dish earned less popularity. Rotating between recipes keeps guests
+      interested.'
+    claim: {fileID: 0}
+    portrait: {fileID: 0}
+    backgroundImage: {fileID: 0}
+    emotion: 
+    voiceOver: {fileID: 0}
+  approvalStatus: 0
+  reviewNotes: 'Reason reaction (2026-11-22): the guest names the main issue and
+    the Blue Zone Guide adds one tip. Pending supervisor review. No medical claims.'

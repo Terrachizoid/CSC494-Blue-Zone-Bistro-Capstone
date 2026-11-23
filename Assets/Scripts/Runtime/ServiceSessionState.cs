@@ -15,6 +15,9 @@ public class ServiceSessionState
     public ServeResult lastDishResult;
     public string lastRecipeId;
     public string foodAidMessage; // Set when the farmer gives food during this service; shown on the meal screen.
+    // The closing dialogue chosen when the dish was served, so its first expression can show with the dish result
+    // (characters, 2026-11-22). Never saved: service progress is not part of the day-start checkpoint.
+    [NonSerialized] public DialogueSequenceData pendingAfterDialogue;
     public EncounterEntry CurrentEncounter => encounters != null && encounterIndex >= 0 &&
         encounterIndex < encounters.Count ? encounters[encounterIndex] : null;
     public string CurrentCustomerId => CurrentEncounter?.customerId;

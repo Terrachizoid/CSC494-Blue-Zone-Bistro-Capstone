@@ -100,6 +100,37 @@ public class GameDebugTools
         return added;
     }
 
+    // Colour grade checks (2026-11-22): community wellbeing drives the scenery grade (and the endings).
+    public void SetCommunityWellbeing(float value)
+    {
+        if (float.IsNaN(value) || float.IsInfinity(value)) return;
+        state.communityWellbeing = CommunityProgress.Clamp(value, balance.maximumCommunityWellbeing);
+    }
+
+    public CustomerState Customer(string customerId) =>
+        state.customers.Find(c => string.Equals(c.customerId, customerId, StringComparison.OrdinalIgnoreCase));
+
+    // A guest's health (0-100); their portrait grade follows it. Health history and finance are left alone.
+    public bool SetCustomerHealth(string customerId, int health)
+    {
+        var customer = Customer(customerId);
+        if (customer == null) return false;
+        customer.health = Math.Max(0, Math.Min(100, health));
+        return true;
+    }
+
+    // The rush/crash visual offset, as RushCrashProgress sets it: rush = served red food today (+rushVisualBoost),
+    // crash = the day after (-crashVisualDrop, and the crash conversation plays at their next arrival), clear = neither.
+    public bool SetRushCrash(string customerId, int mode)
+    {
+        var customer = Customer(customerId);
+        if (customer == null) return false;
+        if (mode > 0) { customer.rushDay = state.currentDay; customer.visualScore = balance.rushVisualBoost; customer.crashDialoguePending = false; }
+        else if (mode < 0) { customer.rushDay = state.currentDay - 1; customer.visualScore = -balance.crashVisualDrop; customer.crashDialoguePending = true; }
+        else { customer.rushDay = 0; customer.visualScore = 0; customer.crashDialoguePending = false; }
+        return true;
+    }
+
     public int ClearPantry()
     {
         int n = state.inventory.Count;

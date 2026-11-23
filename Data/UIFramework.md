@@ -413,3 +413,9 @@ Event UI exception (2026-10-30): event details/Codex use a layered newspaper and
 A "Sort" pill above each aisle opens options: Shelf order, Price per serving, Appeal, Food type. Pressing the active option again reverses it; sold-out cards always go last. The shelf rebuilds as usual and `BistroSortSlide` slides each card from its previous grid spot to the new one (0.5 s ease-out, skipped with reduced motion). It is visual only: if the grid rebuilds mid-slide, cards simply land early. State lives in `BistroUIScreen.Sort.cs` (per session, not saved).
 
 Map name tags (2026-11-20): the store/News/Bistro name tag on the city map is clickable and does the same as clicking the area.
+
+### Web panel footprint — 2026-11-20
+Supersedes the uncompressed texture default above: six new panel sprites use normal compression, 2048 default max size and explicit WebGL override at 1024, normal quality. PNG originals and authored borders are retained. The first 2D-only disposable render passed after compression; Web-target verification is recorded in SubmissionCleanup_20261120.md.
+
+### Main-menu sound controls (2026-11-22)
+User kept the existing Claude-generated music; both audition tracks remain external and unapproved. Main menu now has a separate matching sage sound panel with Background music and Sound effects sliders, percentages, and 0% mute. Uses existing BistroAudio PlayerPrefs keys; changes apply immediately without rebuilding UI or altering the CSV. Preference writes are debounced 0.35 seconds and flushed on pause/quit/destruction. Active effects and outgoing crossfade music now respect master volume changes immediately. No gameplay/save-progress ownership changes.

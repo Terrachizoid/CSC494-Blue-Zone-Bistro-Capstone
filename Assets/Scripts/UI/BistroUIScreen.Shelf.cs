@@ -98,8 +98,8 @@ public partial class BistroUIScreen
             placed.Add(new System.Collections.Generic.KeyValuePair<RectTransform,string>((RectTransform)card.transform,store.id+"/"+listing.id));
             if(soldOut!=null)
             {
-                // The card already has a CanvasGroup (its drag fade), and Unity allows only one: reuse it.
-                var faded=card.GetComponent<CanvasGroup>();if(faded==null)faded=card.gameObject.AddComponent<CanvasGroup>();faded.alpha=.45f;
+                // Faded through the card's own CanvasGroup (Unity allows one), so it stays faded after a drag attempt.
+                card.RestingAlpha=.45f;
                 var stamp=BistroShelfStyle.Artwork(card.FrontLayer,"Sold out stamp",theme.soldOutStamp,new Vector2(.08f,.40f),new Vector2(.92f,.63f),Color.white,true);
                 if(theme.soldOutStamp!=null)
                 {

@@ -16,10 +16,14 @@ public class GameBootstrap : MonoBehaviour
     [SerializeField] private BalanceConfig balance;
     [SerializeField] private BistroUITheme uiTheme;
     [SerializeField] private TutorialDatabase tutorials;
+    [SerializeField] private CharacterExpressionDatabase characterExpressions; // Optional: expression art per character.
+    [SerializeField] private SoundDatabase sounds; // Optional: sound cues and music (Sounds CSV).
     [SerializeField] private GameSessionState state = new GameSessionState();
 
     public GameSessionState State => state;
     public BalanceConfig Balance => balance;
+    public CharacterExpressionDatabase Expressions => characterExpressions;
+    public SoundDatabase Sounds => sounds;
     public GameLoop Loop { get; private set; }
     public GameContentQueries Queries { get; private set; }
     public MealPlanService Planner { get; private set; } // Today's pinned recipes ("Today's plan" panel).
@@ -101,7 +105,7 @@ public class GameBootstrap : MonoBehaviour
     {
         tutorialController?.Dispose();
         foods.RebuildMinimumPrices(listings.Listings);
-        scheduler = new EncounterScheduler(state, dialogues, customers, recipes);
+        scheduler = new EncounterScheduler(state, dialogues, customers, recipes, balance != null ? balance.comfortMinimumAppeal : 7f);
         Loop = new GameLoop(new PurchaseService(state, listings, balance),
             new MealService(state, foods, recipes, customers, balance), new DayService(state, balance, customers),
             new CustomerVisitService(state, customers, balance, recipes:recipes, foods:foods, listings:listings), scheduler,

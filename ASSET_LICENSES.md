@@ -38,3 +38,12 @@ Eight individual EV_*_icon.png files (HARVEST, BEAN_WEEK, FESTIVAL, COLD_SNAP, W
 
 ## Generated UI panel family — 2026-11-20
 Assets/Art/UI/{panelPaper,guideNotePanel,planPanel,suggestionFrame,soldOutStamp,newTag}.png were created with built-in OpenAI image generation from the user's visual specification. Source paths and exact prompts: Data/PanelArt_20261120.md. Transparent alpha preserved; text is rendered separately by the game. Integrated review placeholders. No third-party downloaded image pack was used; this record does not assert exclusive copyright.
+
+## Audio (rules, 2026-11-22)
+Assets/Audio/Music/{city,choosing,cooking}{,_low,_high}.ogg are project-made procedural placeholders (Tools/Art/ProceduralMusic/tension.py, pure synthesis, no samples or third-party material), 2026-11-22. Rule for anything added: sound effects must be CC0 (e.g. Kenney UI Audio, Interface Sounds, Casino Audio; Freesound items with the CC0 filter); music must be CC0 or made on a paid AI-music plan whose terms allow use in a game (record tool, plan, date, prompt and receipt). Record each file here and in Assets/GameData/CSV/Blue_Zone_Bistro_Sounds.csv (source/license columns). See Data/Sound.md.
+
+## Imported sound effects — 2026-11-22
+37 Ogg files under Assets/Audio/Sfx: CC0 Kenney UI Audio / Interface Sounds / Casino Audio / RPG Audio, plus a six-second CC0 cafe ambience excerpt by gydisvyddhvduh (Freesound 855905 public preview). Full per-file attribution, exact source filenames, processing and links: Data/SoundEffects_20261122.md; hashes: Tools/Art/SoundEffectSources_20261122.csv. Kenney licence texts retained under Data/Licenses/Audio. Music placeholders unchanged; no paid generation used.
+
+
+Audio revision: HenKonen paper 757221 and CapsLok register 184438, CC0 public HQ previews. URLs and transformations in Data/SoundEffects_20261122.md.

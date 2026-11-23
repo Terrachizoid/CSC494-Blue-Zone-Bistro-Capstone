@@ -98,7 +98,7 @@ public class BistroDropSlot : MonoBehaviour, IDropHandler, IPointerClickHandler,
             if(takeOut!=null)BistroShelfStyle.Button(row,"−",theme,new Vector2(.86f,.1f),new Vector2(.98f,.9f),new Color(.84f,.83f,.77f),BistroShelfStyle.Ink,()=>takeOut(key),true);
         }
     }
-    public void OnDrop(PointerEventData e){hoverScale=1;hoveringCard=null;var source=e.pointerDrag?.GetComponent<IBistroDragSource>();if(drop!=null && source!=null && source.TryClaimDrop(e.pointerId))drop(source.Key,source.Kind);}
+    public void OnDrop(PointerEventData e){hoverScale=1;hoveringCard=null;var source=e.pointerDrag?.GetComponent<IBistroDragSource>();if(drop!=null && source!=null && source.TryClaimDrop(e.pointerId)){BistroAudio.Play("card.drop");drop(source.Key,source.Kind);}}
     public void OnPointerClick(PointerEventData e){if(e.button==PointerEventData.InputButton.Left&&!e.dragging)open?.Invoke();}
     public void OnPointerEnter(PointerEventData e){hoveringCard=e.pointerDrag?.GetComponent<BistroFoodCard>();if(!reducedMotion && hoveringCard!=null && hoveringCard.IsDragging)hoverScale=1.025f;}
     public void OnPointerExit(PointerEventData e){hoveringCard=null;hoverScale=1;rim.enabled=warning;}

@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 // Phase orchestration is separate from operations and presentation.
 public class GameLoop
@@ -136,7 +137,7 @@ public class GameLoop
         if (!CanLeaveBistro) return false;
         // A served guest (dish result or closing dialogue) does not wait: the next encounter starts on return.
         if (Service.step == ServiceStep.DishResult || Service.step == ServiceStep.AfterDialogue)
-        { Service.encounterIndex++; Service.lastDishResult = null; Service.lastRecipeId = null; Service.step = ServiceStep.ArrivalDialogue; }
+        { Service.encounterIndex++; Service.lastDishResult = null; Service.lastRecipeId = null; Service.pendingAfterDialogue = null; Service.step = ServiceStep.ArrivalDialogue; }
         // An unfinished dialogue is dropped without its effects; that encounter starts again on return.
         Dialogue?.Cancel();
         if (Service.step != ServiceStep.MealSelection) Service.step = ServiceStep.ArrivalDialogue;
@@ -194,6 +195,9 @@ public class GameLoop
             Summary.dishes.Add(new DishRecord { customerId = input.customerId,
                 recipeId = input.recipeId, result = result });
             Tutorials?.Succeeded(TutorialAction.Serve,result);
+            // Pick the closing dialogue now (it may be a weighted random pick), so the guest's reaction can show with the
+            // dish result and the same conversation plays after Continue.
+            Service.pendingAfterDialogue = FindCustomerDialogue(DialogueTrigger.AfterService, out _);
         }
         return result;
     }
@@ -251,7 +255,12 @@ public class GameLoop
         if(!TutorialAllows(TutorialAction.ContinueDish))return false;
         if (Phase != GamePhase.Service || Service.step != ServiceStep.DishResult || !Service.awaitingDishAcknowledgement) return false;
         Service.step = ServiceStep.AfterDialogue;
-        if (!StartCustomerDialogue(DialogueTrigger.AfterService)) AdvanceEncounter();
+        var pending = Service.pendingAfterDialogue;
+        Service.pendingAfterDialogue = null;
+        bool started = pending != null && encounters != null
+            ? Dialogue.Start(pending, encounters.Context(Service.CurrentCustomerId, Service.lastRecipeId, Service.lastDishResult))
+            : StartCustomerDialogue(DialogueTrigger.AfterService);
+        if (!started) AdvanceEncounter();
         return true;
     }
 
@@ -260,6 +269,7 @@ public class GameLoop
         Service.encounterIndex++;
         Service.lastDishResult = null;
         Service.lastRecipeId = null;
+        Service.pendingAfterDialogue = null;
         StartEncounter();
     }
 
@@ -286,10 +296,28 @@ public class GameLoop
     }
     private bool StartCustomerDialogue(DialogueTrigger trigger)
     {
-        if (encounters == null) return false;
-        var context = encounters.Context(Service.CurrentCustomerId, Service.lastRecipeId, Service.lastDishResult);
+        var sequence = FindCustomerDialogue(trigger, out var context);
+        return sequence != null && Dialogue.Start(sequence, context);
+    }
+    private DialogueSequenceData FindCustomerDialogue(DialogueTrigger trigger, out DialogueRuntimeContext context)
+    {
+        context = null;
+        if (encounters == null) return null;
+        context = encounters.Context(Service.CurrentCustomerId, Service.lastRecipeId, Service.lastDishResult);
         var selectedTrigger = encounters.CustomerTrigger(trigger, Service.CurrentCustomerId, Service.lastDishResult);
-        return Dialogue.Start(encounters.Dialogue.FindNext(selectedTrigger, context), context);
+        return encounters.Dialogue.FindNext(selectedTrigger, context);
+    }
+    // While the dish result shows: the guest's first line of the closing dialogue (its emotion previews the reaction).
+    public DialogueLineData UpcomingGuestLine
+    {
+        get
+        {
+            var lines = Phase == GamePhase.Service && Service.awaitingDishAcknowledgement ? Service.pendingAfterDialogue?.lines : null;
+            if (lines == null) return null;
+            string guest = Service.CurrentCustomerId;
+            return lines.Where(l => l != null && string.Equals(l.speakerId, guest, StringComparison.OrdinalIgnoreCase))
+                .OrderBy(l => l.lineOrder).FirstOrDefault();
+        }
     }
     // Every path into meal selection goes through here so the farmer can step in when nothing can be cooked.
     private void EnterMealSelection()

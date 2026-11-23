@@ -104,6 +104,8 @@ public sealed class BistroDebugPanel : MonoBehaviour
         if (GUILayout.Button("Empty pantry", button)) Done($"Removed {tools.ClearPantry()} batches.");
         GUILayout.EndHorizontal();
 
+        ColourGradeSection(state, tools);
+
         GUILayout.Label("Lessons", title);
         if (GUILayout.Button("Finish all lessons", button)) { game.Loop.Tutorials?.CompleteAll(); Done("All lessons marked finished."); }
 
@@ -125,6 +127,48 @@ public sealed class BistroDebugPanel : MonoBehaviour
         GUILayout.EndScrollView();
         GUILayout.EndArea();
     }
+
+    // Wellbeing and each guest's health/rush/crash apply at once; the colour grade eases toward them on screen.
+    private void ColourGradeSection(GameSessionState state, GameDebugTools tools)
+    {
+        GUILayout.Label("Colour grade", title);
+        float max = game.Balance.maximumCommunityWellbeing;
+        GUILayout.Label($"Community wellbeing {state.communityWellbeing:0} / {max:0} (scenery; also decides the ending)", small);
+        float wellbeing = GUILayout.HorizontalSlider(state.communityWellbeing, 0, max);
+        if (Mathf.Abs(wellbeing - state.communityWellbeing) > .01f) { tools.SetCommunityWellbeing(Mathf.Round(wellbeing)); Redraw(); }
+        GUILayout.BeginHorizontal();
+        if (GUILayout.Button("0", button)) { tools.SetCommunityWellbeing(0); Done("Wellbeing 0."); }
+        if (GUILayout.Button("Start", button)) { tools.SetCommunityWellbeing(game.Balance.startingCommunityWellbeing); Done("Wellbeing back to the start."); }
+        if (GUILayout.Button("Max", button)) { tools.SetCommunityWellbeing(max); Done("Wellbeing at maximum."); }
+        GUILayout.EndHorizontal();
+
+        float maxPopularity = game.Balance.maximumPopularity;
+        GUILayout.Label($"Popularity {state.popularity:0} / {maxPopularity:0} (scenery clarity; guest count updates tomorrow)", small);
+        float popularity = GUILayout.HorizontalSlider(state.popularity, 0, maxPopularity);
+        if (Mathf.Abs(popularity - state.popularity) > .5f) { tools.AddPopularity(Mathf.Round(popularity) - state.popularity); Redraw(); }
+        if (GUILayout.Button("Popularity back to the start", button)) { tools.AddPopularity(game.Balance.startingPopularity - state.popularity); Done("Popularity back to the start."); }
+
+        GUILayout.Label($"Guests (health; rush +{game.Balance.rushVisualBoost} / crash -{game.Balance.crashVisualDrop} shown on top)", small);
+        foreach (var customer in state.customers.ToList())
+        {
+            if (customer == null) continue;
+            string name = game.Queries.GetCustomer(customer.customerId)?.displayName ?? customer.customerId;
+            bool onStage = string.Equals(customer.customerId, game.Loop.Service.CurrentCustomerId, System.StringComparison.OrdinalIgnoreCase);
+            string offset = customer.visualScore > 0 ? $" rush +{customer.visualScore}" : customer.visualScore < 0 ? $" crash {customer.visualScore}" : "";
+            GUILayout.Label($"{name}{(onStage ? " (on stage)" : "")}: health {customer.health}{offset}", label);
+            int health = Mathf.RoundToInt(GUILayout.HorizontalSlider(customer.health, 0, 100));
+            if (health != customer.health) { tools.SetCustomerHealth(customer.customerId, health); Redraw(); }
+            GUILayout.BeginHorizontal();
+            if (GUILayout.Button("Rush", button)) { tools.SetRushCrash(customer.customerId, 1); Done($"{name}: rush (+{game.Balance.rushVisualBoost})."); }
+            if (GUILayout.Button("Crash", button)) { tools.SetRushCrash(customer.customerId, -1); Done($"{name}: crash (-{game.Balance.crashVisualDrop}); crash talk at their next arrival."); }
+            if (GUILayout.Button("Clear", button)) { tools.SetRushCrash(customer.customerId, 0); Done($"{name}: no rush or crash."); }
+            GUILayout.EndHorizontal();
+        }
+        GUILayout.Label("Only the guest on stage is visible; serve or skip to see others. Turn the grade off in the UI Theme to compare.", small);
+    }
+
+    // Slider drags redraw without lesson checks (cheap, every frame of the drag).
+    private void Redraw() { if (screen != null) screen.MarkDirty(); }
 
     private void EndDays(int count)
     {

@@ -8,10 +8,32 @@ real CSVs and `BalanceConfig.asset`.
 
 ```
 python Tools/Playtest/play.py <session.pkl> new <seed> <project_root>
-python Tools/Playtest/play.py <session.pkl> screen | shelf S002 | flip L004 | add L004 2 | checkout
-python Tools/Playtest/play.py <session.pkl> sort P001=G P013=R | preview R002 0=P017 1=P005 2=P008 | serve ... | skip | next
+python Tools/Playtest/play.py <session.pkl> screen | recipes | plan R001 | close | find Grain | shelf S002 [SHELF] | flip L004 | add L004 2 | checkout
+python Tools/Playtest/play.py <session.pkl> sort P001=G P013=R | bistro | preview R002 0=P017 1=P005 2=P008 | serve ... | skip | city | next
+python Tools/Playtest/play.py <session.pkl> guests | pantry | sell P006 2 | news | info day|popularity|money | note <text>
 python Tools/Playtest/analyze.py <folder with session .pkl files>
 ```
+
+## Day flow (same as the game since 2026-11-13; ported here 2026-11-22)
+
+- **Market:** shop at any open store and check out as often as you like. Each checkout with new foods goes to a
+  quick sort (`sort ...`), then you are back at the market. `bistro` opens the bistro; nothing else ends shopping.
+- **Recipe book and Today's plan:** `recipes` opens the book; `plan <RECIPE>` / `unplan <RECIPE>` (one dish per guest),
+  `close` closes it. The market and service screens show the plan and what it still needs. `find <food type>` is the
+  plan panel's navigation helper: one open listing of that type, its store and aisle.
+- **Day 1 lessons:** lesson 1 (open the book, plan one affordable dish, close, enter a store, open a shelf, buy everything
+  the plan needs) refuses other actions with the Guide's reason, like the game; lesson 2 needs one fully built dish.
+- **Service:** story encounters, then today's guests not yet served. `city` leaves the bistro (BalanceConfig
+  `cityDuringService`); the guest waits, and `bistro` brings you back to them. Pantry selling works at the market only.
+- **Dialogue:** the full `DialogueService` ladder (request, missed request, fatigue, appeal, delight-full, red-served
+  rungs, variants that never repeat back to back, Guide tips shown as `Guide:` lines, tokens). The closing dialogue
+  plays right after the dish result.
+- **Lessons:** the same flags and priorities as `TutorialController` (`[GUIDE]` lines). Lessons that name a click or a
+  drag get a short "(Text mode: ...)" hint with the matching command. One lesson at a time: a text lesson raised while
+  a day-1 lesson runs is dropped, so it shows the next time.
+- **Events:** all effect kinds (store closure, food or shelf sold out, store/food/category prices, publicity, request
+  weights, sorting refund boost, shelf life) with `EventService`'s rules for which events can run together.
+- **Foods in two categories** (tofu: Beans or Meat substitute) count wherever a recipe or plan needs them.
 
 ## Human limits
 
@@ -46,5 +68,7 @@ Cost observed (Oct 2026): ~80–100k tokens per six-day run, ~20–35 commands; 
 
 Approximates the Unity game: dialogue selection follows `DialogueService` rules; tutorials are shown
 as text at the matching moments; the shopping/first-meal tutorial gates are enforced. Not modelled:
-visuals, drag-and-drop friction, voice, the city map. Without limits, AI players read every word and use previews
+visuals (colour grade, character expressions, music), drag-and-drop friction, voice, the city map, idle chatter
+bubbles, Help replays. Random draws (events, guests, requests, variants) use the session seed, so they match
+the game's rules but not a given Unity run. Without limits, AI players read every word and use previews
 more than humans, so treat unlimited results as optimistic about clarity.

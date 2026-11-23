@@ -15,9 +15,9 @@ public static class ProgressChecks
         Check(visits.GetTodaysCustomers().Count==1 && rolls==1,"Forced attendance rerolled");
         progress.lastServedDay=1;Check(visits.GetTodaysCustomers().Count==0,"Forced customer attended twice");
         RushCrashProgress.Served(progress,1,true);
-        Check(progress.visualScore==10 && progress.health==50 && progress.finance==20,"Rush changed actual stats");
+        Check(progress.visualScore==20 && progress.health==50 && progress.finance==20,"Rush changed actual stats");
         new DayService(state,balance,customers).FinishDay();
-        Check(state.currentDay==2 && progress.visualScore==-15 && progress.crashDialoguePending && progress.health==50 && progress.finance==20,"Crash changed health or finance");
+        Check(state.currentDay==2 && progress.visualScore==-balance.crashVisualDrop && progress.crashDialoguePending && progress.health==50 && progress.finance==20,"Crash changed health or finance");
         new DayService(state,balance,customers).FinishDay();
         Check(progress.visualScore==0 && progress.crashDialoguePending,"Absent customer's pending dialogue lost");
         var database=new DialogueDatabase();
@@ -35,8 +35,9 @@ public static class ProgressChecks
         Check(!progress.crashDialoguePending && state.flags.HasFlag(TutorialFlags.CrashExplained),"Crash completion not recorded");
         Check(scheduler.CustomerTrigger(DialogueTrigger.CustomerArrival,"U",null)==DialogueTrigger.CustomerArrival,"Crash greeting repeated");
         var failed=new ServeResult{rushCrashTriggered=true,recipeBuilt=false};
-        Check(scheduler.CustomerTrigger(DialogueTrigger.AfterService,"U",failed)==DialogueTrigger.RushAfterService,"Failed red meal lost rush trigger");
-        Check(scheduler.Dialogue.FindNext(DialogueTrigger.RushAfterService,scheduler.Context("U",null,failed))==null,"Missing rush dialogue fabricated text");
+        // The rush is a rung of the closing ladder now (red_served), so the trigger stays AfterService (2026-11-22).
+        Check(scheduler.CustomerTrigger(DialogueTrigger.AfterService,"U",failed)==DialogueTrigger.AfterService,"Closing trigger swapped for the rush");
+        Check(scheduler.Dialogue.FindNext(DialogueTrigger.AfterService,scheduler.Context("U",null,failed))==null,"Missing closing dialogue fabricated text");
         var completed=new GameSessionState{currentDay=balance.totalDays};
         Check(new DayService(completed,balance).FinishDay().gameCompleted && completed.gameCompleted,"Completion not persisted");
         return "PASS: cached forced attendance, rush/crash without health/finance mutation, delayed greeting and completion-only flags.";

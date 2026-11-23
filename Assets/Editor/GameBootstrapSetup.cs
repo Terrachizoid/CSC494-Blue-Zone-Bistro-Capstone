@@ -58,6 +58,8 @@ public class GameBootstrapSetup : IProcessSceneWithReport, IPreprocessBuildWithR
         DialogueCsvImporter.EnsureCurrent();
         if(AssetDatabase.LoadAssetAtPath<EndingDatabase>(EndingCsvImporter.AssetPath)==null)EndingCsvImporter.Import();
         if(AssetDatabase.LoadAssetAtPath<EventDatabase>(EventCsvImporter.AssetPath)==null)EventCsvImporter.Import();
+        if(AssetDatabase.LoadAssetAtPath<CharacterExpressionDatabase>(CharacterExpressionCsvImporter.AssetPath)==null)CharacterExpressionCsvImporter.Import();
+        if(AssetDatabase.LoadAssetAtPath<SoundDatabase>(SoundCsvImporter.AssetPath)==null)SoundCsvImporter.Import();
         TutorialCsvImporter.EnsureCurrent();
         for (int i = 0; i < SceneManager.sceneCount; i++)
         {
@@ -131,6 +133,8 @@ public class GameBootstrapSetup : IProcessSceneWithReport, IPreprocessBuildWithR
             changed |= Fill<EventDatabase>(serialized, "events", EventCsvImporter.AssetPath);
             changed |= Fill<BalanceConfig>(serialized, "balance", BalancePath);
             changed |= Fill<TutorialDatabase>(serialized, "tutorials", TutorialCsvImporter.AssetPath);
+            changed |= Fill<CharacterExpressionDatabase>(serialized, "characterExpressions", CharacterExpressionCsvImporter.AssetPath);
+            changed |= Fill<SoundDatabase>(serialized, "sounds", SoundCsvImporter.AssetPath);
             changed |= Fill<BistroUITheme>(serialized, "uiTheme", ThemePath);
             if (changed)
             {

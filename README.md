@@ -19,7 +19,7 @@ Repository: https://github.com/Terrachizoid/CSC494-Blue-Zone-Bistro-Capstone
 
 Current content (2026-10-28): 63 foods, 87 store listings, 3 stores, 12 food categories, 15 recipes, 6 customers, 114 dialogue sequences (217 lines), 5 events, 5 endings, 11 tutorials (13 steps). All content is prototype and `Pending` supervisor review.
 
-Not yet done: researched claims / Codex content, balance tuning, final art integration (concepts exist, see [Art direction](Data/ArtDirection.md)), music and sound.
+Not yet done: researched claims / Codex content, balance tuning, final art integration (concepts exist, see [Art direction](Data/ArtDirection.md)), final music (procedural tracks currently used; CC0 sound effects integrated, see [Sound](Data/Sound.md)).
 
 ## Run locally
 
@@ -52,3 +52,5 @@ Source pushes alone do not publish a build. `BistroWebBuild.Build` is the batch-
 Zip the output with `index.html` at the archive root. On Unity Play open the game's **Options > Edit Game Details**, replace **Upload game build**, click **Update**, then verify the hosted game loads. Build output is excluded from source control; credentials are never stored in this repository.
 
 Current UI handover (2026-10-28): see AGENTS.md and Data/UIFramework.md for the integrated illustrated city/store/recipe/service UI and shared compact dialogue panel. Data/Previews holds offscreen Unity captures; manual Play Mode/WebGL interaction remains a separate check.
+
+Current submission (2026-11-20): the postponed 3D prototype has been archived outside the repository; the game uses the illustrated 2D city/store views. See Data/SubmissionCleanup_20261120.md. The Web build profile is configured as release (despite its legacy filename), gzip compression, decompression fallback and data caching. Use BistroWebBuild.Build for repeatable publication. Local Python packages must not be committed.

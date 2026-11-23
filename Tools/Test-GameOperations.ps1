@@ -48,6 +48,7 @@ $files = @($stubPath)
 foreach ($path in $paths) { $files += (Get-ChildItem (Join-Path $projectRoot $path)).FullName }
 $files += Join-Path $PSScriptRoot 'GameOperationsChecks.cs'
 $files += Join-Path $PSScriptRoot 'DialogueChecks.cs'
+$files += Join-Path $PSScriptRoot 'DialogueOutcomeChecks.cs'
 $files += Join-Path $PSScriptRoot 'ShoppingChecks.cs'
 $files += Join-Path $PSScriptRoot 'MealSlotChecks.cs'
 $files += Join-Path $PSScriptRoot 'ProgressChecks.cs'

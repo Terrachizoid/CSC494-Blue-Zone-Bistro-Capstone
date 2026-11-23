@@ -15,9 +15,10 @@ MonoBehaviour:
   id: D_SAM_RUSH
   displayName: Sam notices a brief lift
   mode: 0
-  trigger: 6
+  trigger: 3
   repeatRule: 1
-  priority: 150
+  priority: 195
+  variantOf: 
   randomWeight: 1
   customer: {fileID: 11400000, guid: 85a88e42cac868d49a7f9d5c51e83c56, type: 2}
   minDay: 1
@@ -27,9 +28,16 @@ MonoBehaviour:
   minCustomerDelight: -1
   maxCustomerDelight: -1
   requiredRecipe: {fileID: 0}
-  recipeBuildCondition: 0
+  recipeBuildCondition: 1
   mealHealthCondition: 0
   requiredRecipeTiers: 
+  requestCondition: 0
+  missedRequests: 
+  recipeFatigued: 0
+  minIngredientAppeal: -1
+  maxIngredientAppeal: -1
+  delightFull: 0
+  redServed: 1
   minServedMealDelight: -1
   maxServedMealDelight: -1
   requiredFlags: []
@@ -45,6 +53,15 @@ MonoBehaviour:
     portrait: {fileID: 0}
     backgroundImage: {fileID: 0}
     emotion: Happy
+    voiceOver: {fileID: 0}
+  - lineOrder: 1
+    speakerId: Blue Zone Guide
+    textTemplate: That quick lift came from the red food in this dish. It fades by
+      tomorrow, and {customerName} may arrive tired next time.
+    claim: {fileID: 0}
+    portrait: {fileID: 0}
+    backgroundImage: {fileID: 0}
+    emotion: 
     voiceOver: {fileID: 0}
   approvalStatus: 0
   reviewNotes: Prototype rush/crash narrative; character experience only; pending

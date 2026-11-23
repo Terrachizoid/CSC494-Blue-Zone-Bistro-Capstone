@@ -35,8 +35,35 @@ public partial class BistroUIScreen
         if(confirmNewGame)BistroShelfStyle.Button(panel,"Cancel",theme,new Vector2(.09f,.11f),new Vector2(.91f,.21f),new Color(.36f,.45f,.39f),BistroShelfStyle.Cream,()=>Change(()=>confirmNewGame=false));
         else if(game.HasCheckpoint)BistroShelfStyle.Button(panel,game.ResumeLabel,theme,new Vector2(.09f,.11f),new Vector2(.91f,.21f),new Color(.36f,.45f,.39f),BistroShelfStyle.Cream,()=>Change(()=>{if(game.Resume())BindNewSession();}));
         BistroShelfStyle.Text(panel,confirmNewGame?"Your existing save will be replaced.":game.SaveMessage??"",theme,new Vector2(.09f,.025f),new Vector2(.91f,.10f),16,BistroShelfStyle.Cream);
+        MainMenuSoundPanel();
         var caption=BistroShelfStyle.Panel(screen,"City caption",new Color(.22f,.32f,.29f,.86f),new Vector2(.64f,.10f),new Vector2(.94f,.20f));
         BistroShelfStyle.Text(caption,"A little bistro. A whole city.",theme,new Vector2(.06f,.12f),new Vector2(.94f,.88f),22,BistroShelfStyle.Cream,true,TextAnchor.MiddleCenter);
+    }
+
+    private void MainMenuSoundPanel()
+    {
+        var panel=BistroShelfStyle.Panel(screen,"Sound settings",new Color(.22f,.32f,.29f,.94f),new Vector2(.57f,.27f),new Vector2(.94f,.59f));
+        BistroShelfStyle.Text(panel,"Sound",theme,new Vector2(.08f,.76f),new Vector2(.92f,.95f),30,BistroShelfStyle.Cream,true);
+        MenuVolumeSlider(panel,"Background music",.43f,BistroAudio.MusicVolume,v=>BistroAudio.MusicVolume=v);
+        MenuVolumeSlider(panel,"Sound effects",.08f,BistroAudio.EffectsVolume,v=>BistroAudio.EffectsVolume=v);
+    }
+
+    private void MenuVolumeSlider(RectTransform panel,string label,float bottom,float value,System.Action<float> change)
+    {
+        BistroShelfStyle.Text(panel,label,theme,new Vector2(.08f,bottom+.14f),new Vector2(.76f,bottom+.30f),20,BistroShelfStyle.Cream);
+        var percent=BistroShelfStyle.Text(panel,Mathf.RoundToInt(value*100)+"%",theme,new Vector2(.76f,bottom+.14f),new Vector2(.92f,bottom+.30f),18,BistroShelfStyle.Cream,false,TextAnchor.MiddleRight);
+        var area=BistroWidgets.Box(panel,label+" volume",Color.clear,new Vector2(.08f,bottom),new Vector2(.92f,bottom+.14f));
+        var track=BistroShelfStyle.Panel(area,"Track",new Color(.12f,.21f,.18f),new Vector2(0,.38f),new Vector2(1,.62f));
+        track.GetComponent<UnityEngine.UI.Image>().raycastTarget=false;
+        var fill=BistroShelfStyle.Panel(track,"Fill",new Color(.74f,.81f,.65f),Vector2.zero,Vector2.one);
+        fill.GetComponent<UnityEngine.UI.Image>().raycastTarget=false;
+        var handle=BistroShelfStyle.Panel(area,"Handle",BistroShelfStyle.Cream,new Vector2(0,.12f),new Vector2(0,.88f));
+        handle.sizeDelta=new Vector2(20,0);
+        var slider=area.gameObject.AddComponent<UnityEngine.UI.Slider>();
+        slider.minValue=0;slider.maxValue=1;slider.fillRect=fill;slider.handleRect=handle;
+        slider.targetGraphic=handle.GetComponent<UnityEngine.UI.Image>();
+        slider.SetValueWithoutNotify(value);
+        slider.onValueChanged.AddListener(v=>{change(v);percent.text=Mathf.RoundToInt(v*100)+"%";});
     }
 
     private void ReturnMenuPanel()

@@ -20,7 +20,7 @@ public static class PanelArtCapture
             EditorSceneManager.NewScene(NewSceneSetup.EmptyScene,NewSceneMode.Single);
             AllContentCsvImporter.ImportAll();BistroArtImport.ConfigurePanelBorders();GameBootstrapSetup.SetupLoadedScenes();
             foreach(var e in Asset<EventDatabase>().events)if(e.image==null||e.thumbnail==null)throw new Exception("Missing event art: "+e.id);
-            var theme=UnityEngine.Object.Instantiate(Asset<BistroUITheme>());theme.reducedMotion=true;theme.use3DCity=false;
+            var theme=UnityEngine.Object.Instantiate(Asset<BistroUITheme>());theme.reducedMotion=true;
             foreach(string name in new[]{"panelPaper","guideNotePanel","planPanel","suggestionFrame","soldOutStamp","newTag"})
             {
                 var art=(Sprite)typeof(BistroUITheme).GetField(name).GetValue(theme);

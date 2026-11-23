@@ -27,6 +27,10 @@ public class BalanceConfig : ScriptableObject
     [Min(0)] public int healthPerGreenDailyDozenCategory = 1;
     [Min(0)] public int healthPenaltyPerYellowServing = 1;
     [Min(0)] public int healthPenaltyPerRedServing = 3;
+    [Tooltip("Rush (visual only): a guest served red food looks this much healthier until the next morning (colour grade).")]
+    [Range(0, 50)] public int rushVisualBoost = 20;
+    [Tooltip("Crash (visual only): the morning after a rush, the guest looks this much less healthy for that day.")]
+    [Range(0, 50)] public int crashVisualDrop = 20;
     [Header("Meal payments and recipe failure")]
     [Min(0)] public int failedRecipeDelightPenalty = 30;
     [Range(0, 1)] public float failedRecipePaymentRate = 0.75f;

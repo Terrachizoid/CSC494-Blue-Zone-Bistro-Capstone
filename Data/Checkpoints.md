@@ -22,9 +22,9 @@ crash dialogue. Cart/selection/active-dialogue cursors and receipts are not rest
 
 ## Presentation-only rush/crash
 
-Serving a red ingredient, in a built or failed recipe, sets visualScore to +10 and
+Serving a red ingredient, in a built or failed recipe, sets visualScore to +rushVisualBoost (20) and
 rushDay to the current day. No extra health, delight or finance change is introduced.
-At the next day boundary visualScore becomes -15 and crashDialoguePending becomes true.
+At the next day boundary visualScore becomes -crashVisualDrop (-20) and crashDialoguePending becomes true.
 The following day the offset returns to zero. The pending dialogue persists until the
 customer returns and finishes the crash greeting. It replaces the regular arrival
 conversation, while existing before-service introductions still run afterward.
@@ -39,7 +39,8 @@ is not set until an authored crash conversation actually completes. Existing bef
 introductions may still play independently after the arrival stage is skipped.
 
 visualScore is an OFFSET intended for future portrait presentation, not a second health
-score. No saturation shader or tutorial overlay has been added in this change.
+score. Since 2026-11-22 it drives the guest colour grade (displayed health = health + visualScore; see
+Data/ColorGrade.md). No tutorial overlay has been added.
 
 Stable tutorial flags:
 - tutorial.first_purchase: successful nonempty purchase.

@@ -18,6 +18,7 @@ MonoBehaviour:
   trigger: 3
   repeatRule: 1
   priority: 200
+  variantOf: 
   randomWeight: 1
   customer: {fileID: 11400000, guid: fb94378222c63294daba032ee3ec46e2, type: 2}
   minDay: 1
@@ -30,6 +31,13 @@ MonoBehaviour:
   recipeBuildCondition: 2
   mealHealthCondition: 0
   requiredRecipeTiers: 
+  requestCondition: 0
+  missedRequests: 
+  recipeFatigued: 0
+  minIngredientAppeal: -1
+  maxIngredientAppeal: -1
+  delightFull: 0
+  redServed: 0
   minServedMealDelight: -1
   maxServedMealDelight: -1
   requiredFlags: []
@@ -53,6 +61,16 @@ MonoBehaviour:
     portrait: {fileID: 0}
     backgroundImage: {fileID: 0}
     emotion: Disappointed
+    voiceOver: {fileID: 0}
+  - lineOrder: 2
+    speakerId: Blue Zone Guide
+    textTemplate: The plate didn't match the {servedRecipe} recipe, so it paid less
+      and earned no tip. Fill every slot with the food type it asks for, and check
+      the Review button's warning before serving.
+    claim: {fileID: 0}
+    portrait: {fileID: 0}
+    backgroundImage: {fileID: 0}
+    emotion: 
     voiceOver: {fileID: 0}
   approvalStatus: 0
   reviewNotes: Prototype narrative based on capstone character themes; pending supervisor

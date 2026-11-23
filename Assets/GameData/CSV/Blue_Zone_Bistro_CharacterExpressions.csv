@@ -1,0 +1,37 @@
+expression_id,character_id,expression,emotions,image_path,part_paths,video_path,tint,notes
+U001_neutral,U001,neutral,Neutral,Assets/Art/Characters/U001_neutral.png,,,,June
+U001_happy,U001,happy,Happy|Pleased|Welcoming,Assets/Art/Characters/U001_happy.png,,,,June
+U001_concerned,U001,concerned,Concerned|Cautious,Assets/Art/Characters/U001_concerned.png,,,,June
+U001_disappointed,U001,disappointed,Disappointed,Assets/Art/Characters/U001_disappointed.png,,,,June
+U001_tired,U001,tired,Tired,Assets/Art/Characters/U001_tired.png,,,,June
+U002_neutral,U002,neutral,Neutral,Assets/Art/Characters/U002_neutral.png,,,,Dev
+U002_happy,U002,happy,Happy|Pleased|Welcoming,Assets/Art/Characters/U002_happy.png,,,,Dev
+U002_concerned,U002,concerned,Concerned|Cautious,Assets/Art/Characters/U002_concerned.png,,,,Dev
+U002_disappointed,U002,disappointed,Disappointed,Assets/Art/Characters/U002_disappointed.png,,,,Dev
+U002_tired,U002,tired,Tired,Assets/Art/Characters/U002_tired.png,,,,Dev
+U003_neutral,U003,neutral,Neutral,Assets/Art/Characters/U003_neutral.png,,,,Rosa
+U003_happy,U003,happy,Happy|Pleased|Welcoming,Assets/Art/Characters/U003_happy.png,,,,Rosa
+U003_concerned,U003,concerned,Concerned|Cautious,Assets/Art/Characters/U003_concerned.png,,,,Rosa
+U003_disappointed,U003,disappointed,Disappointed,Assets/Art/Characters/U003_disappointed.png,,,,Rosa
+U003_tired,U003,tired,Tired,Assets/Art/Characters/U003_tired.png,,,,Rosa
+U004_neutral,U004,neutral,Neutral,Assets/Art/Characters/U004_neutral.png,,,,Sam
+U004_happy,U004,happy,Happy|Pleased|Welcoming,Assets/Art/Characters/U004_happy.png,,,,Sam
+U004_concerned,U004,concerned,Concerned|Cautious,Assets/Art/Characters/U004_concerned.png,,,,Sam
+U004_disappointed,U004,disappointed,Disappointed,Assets/Art/Characters/U004_disappointed.png,,,,Sam
+U004_tired,U004,tired,Tired,Assets/Art/Characters/U004_tired.png,,,,Sam
+U005_neutral,U005,neutral,Neutral,Assets/Art/Characters/U005_neutral.png,,,,Marco
+U005_happy,U005,happy,Happy|Pleased|Welcoming,Assets/Art/Characters/U005_happy.png,,,,Marco
+U005_concerned,U005,concerned,Concerned|Cautious,Assets/Art/Characters/U005_concerned.png,,,,Marco
+U005_disappointed,U005,disappointed,Disappointed,Assets/Art/Characters/U005_disappointed.png,,,,Marco
+U005_tired,U005,tired,Tired,Assets/Art/Characters/U005_tired.png,,,,Marco
+U006_neutral,U006,neutral,Neutral,Assets/Art/Characters/U006_neutral.png,,,,Priya
+U006_happy,U006,happy,Happy|Pleased|Welcoming,Assets/Art/Characters/U006_happy.png,,,,Priya
+U006_concerned,U006,concerned,Concerned|Cautious,Assets/Art/Characters/U006_concerned.png,,,,Priya
+U006_disappointed,U006,disappointed,Disappointed,Assets/Art/Characters/U006_disappointed.png,,,,Priya
+U006_tired,U006,tired,Tired,Assets/Art/Characters/U006_tired.png,,,,Priya
+VisitingChef_neutral,Visiting Chef,neutral,Neutral|Happy|Pleased|Welcoming,Assets/Art/Characters/VisitingChef_neutral.png,,,,Guest chef in the story dialogue
+Default_neutral,Default,neutral,Neutral,,,,#4D635C,Base for any character without art: the built-in silhouette (add an image_path to replace it for everyone)
+Default_happy,Default,happy,Happy|Pleased|Welcoming,,,,#4D7A5C,Silhouette tint: warmer green
+Default_concerned,Default,concerned,Concerned|Cautious,,,,#5C6170,Silhouette tint: cool grey-blue
+Default_disappointed,Default,disappointed,Disappointed,,,,#66575C,Silhouette tint: dusky
+Default_tired,Default,tired,Tired,,,,#666966,Silhouette tint: washed out

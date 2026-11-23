@@ -44,6 +44,19 @@ public static class DebugToolsChecks
             "Pantry stock did not pick the cheapest green food per serving");
         Check(tools.ClearPantry() == 1 && state.inventory.Count == 0, "ClearPantry failed");
 
+        balance.maximumCommunityWellbeing = 100;
+        tools.SetCommunityWellbeing(250);
+        Check(state.communityWellbeing == 100, "SetCommunityWellbeing ignored the maximum");
+        tools.SetCommunityWellbeing(-5);
+        Check(state.communityWellbeing == 0, "SetCommunityWellbeing went below zero");
+        state.customers.Add(new CustomerState { customerId = "U9", health = 50 });
+        Check(tools.SetCustomerHealth("u9", 140) && state.customers[0].health == 100, "SetCustomerHealth did not clamp");
+        Check(!tools.SetCustomerHealth("NOPE", 10), "Unknown guest accepted");
+        Check(tools.SetRushCrash("U9", 1) && state.customers[0].visualScore == balance.rushVisualBoost, "Rush offset wrong");
+        Check(tools.SetRushCrash("U9", -1) && state.customers[0].visualScore == -balance.crashVisualDrop && state.customers[0].crashDialoguePending, "Crash offset wrong");
+        Check(tools.SetRushCrash("U9", 0) && state.customers[0].visualScore == 0 && !state.customers[0].crashDialoguePending, "Clear left an offset");
+        state.customers.Clear();
+
         var customers = new CustomerDatabase(); customers.SetItems(new List<CustomerData> { new CustomerData { id = "U1", startingHealth = 50 } });
         var foods = new FoodDatabase(); foods.SetItems(new List<FoodData> { cheap, dear, red });
         foods.RebuildMinimumPrices(listings.Listings);

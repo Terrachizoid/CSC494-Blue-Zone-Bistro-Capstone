@@ -206,7 +206,7 @@ public class MealService : IMealService
             customerState.lastServedDay = state.currentDay;
             state.popularity=CommunityProgress.Clamp(state.popularity+result.popularityDelta,balance.maximumPopularity);
             state.communityWellbeing=CommunityProgress.Clamp(state.communityWellbeing+result.communityWellbeingDelta,balance.maximumCommunityWellbeing);
-            RushCrashProgress.Served(customerState, state.currentDay, red > 0);
+            RushCrashProgress.Served(customerState, state.currentDay, red > 0, balance.rushVisualBoost);
             if (customerState.dailyDozenEaten == null) customerState.dailyDozenEaten = new List<DailyDozenCategory>();
             foreach (var group in greenCoverage) if (!customerState.dailyDozenEaten.Contains(group)) customerState.dailyDozenEaten.Add(group);
             if (state.recipeServes == null) state.recipeServes = new List<RecipeServeRecord>();

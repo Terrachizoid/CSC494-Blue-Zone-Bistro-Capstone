@@ -22,6 +22,11 @@ public enum DialogueTrigger
 
 public enum RecipeBuildCondition { Any, Built, Failed }
 public enum MealHealthCondition { Any, Gain, Loss, Unchanged }
+// The guest's requests (cravings) for the dish just served. All/Some/None need at least one request; NoRequest = the
+// guest asked for nothing today; Missed = Some or None. A plate that did not build its recipe meets no request.
+public enum RequestCondition { Any, All, Some, None, NoRequest, Missed }
+// On/off checks on the dish just served (2026-11-22). Any = not checked.
+public enum DialogueSwitch { Any, Yes, No }
 
 public enum DialogueRepeatRule
 {

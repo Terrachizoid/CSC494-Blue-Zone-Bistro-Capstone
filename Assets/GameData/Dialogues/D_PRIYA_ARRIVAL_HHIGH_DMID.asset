@@ -18,6 +18,7 @@ MonoBehaviour:
   trigger: 1
   repeatRule: 1
   priority: 100
+  variantOf: 
   randomWeight: 1
   customer: {fileID: 11400000, guid: c01bf79774689d84383c9ddb9dc290f8, type: 2}
   minDay: 3
@@ -30,6 +31,13 @@ MonoBehaviour:
   recipeBuildCondition: 0
   mealHealthCondition: 0
   requiredRecipeTiers: 
+  requestCondition: 0
+  missedRequests: 
+  recipeFatigued: 0
+  minIngredientAppeal: -1
+  maxIngredientAppeal: -1
+  delightFull: 0
+  redServed: 0
   minServedMealDelight: -1
   maxServedMealDelight: -1
   requiredFlags: []

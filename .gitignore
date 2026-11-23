@@ -13,3 +13,9 @@
 *.slnx
 # Generated Unity Burst build output; Data/*.md contains project documentation.
 /Data/Plugins/
+
+# Local Python environments and downloaded tool dependencies are not game source.
+**/.deps/
+**/.venv/
+**/__pycache__/
+*.pyc

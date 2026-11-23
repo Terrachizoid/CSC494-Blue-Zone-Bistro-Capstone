@@ -19,6 +19,7 @@ public sealed class BistroRecipeCard : MonoBehaviour, IPointerClickHandler
     public void Flip()
     {
         if(flipAnimation!=null)return;
+        if(Application.isPlaying)BistroAudio.Play("card.flip");
         if(reducedMotion||!Application.isPlaying){SwapFace();return;}
         flipAnimation=StartCoroutine(AnimateFlip());
     }

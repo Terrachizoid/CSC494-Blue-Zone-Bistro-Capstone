@@ -93,8 +93,8 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 112000000, guid: 13b6b9acf18ef6549b4d5fd4e072a349, type: 2}
-  m_LightingSettings: {fileID: 4890085278179872738, guid: 52865fe425c8c404fb0f865ac96f8251, type: 2}
+  m_LightingDataAsset: {fileID: 0}
+  m_LightingSettings: {fileID: 0}
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -260,6 +260,8 @@ MonoBehaviour:
   balance: {fileID: 11400000, guid: 13db58f120d839e42a6b8e84616be0df, type: 2}
   uiTheme: {fileID: 11400000, guid: 2740a8fc5554fe14f8c1bd2279ab41cf, type: 2}
   tutorials: {fileID: 11400000, guid: c4d8cacb54f1bd842867c32e8ea5da74, type: 2}
+  characterExpressions: {fileID: 11400000, guid: 05c062fb6009d0b4bbd3af4ab890cd79, type: 2}
+  sounds: {fileID: 11400000, guid: 788886498403862489491b2d1e1030f3, type: 2}
   state:
     eventPlanDay: 0
     events: []

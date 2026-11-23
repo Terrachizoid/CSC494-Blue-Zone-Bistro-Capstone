@@ -13,11 +13,13 @@ using UnityEngine;
 public static class DialogueCsvImporter
 {
     private static string lastAutomaticAttempt;
+    // Bump the schema tag whenever columns are added or parsed differently: an import made by older code must not
+    // count as current (2026-11-22: request and reason columns were imported without their conditions).
     private static string SourceFingerprint()
     {
         using (var hash = SHA256.Create())
             return BitConverter.ToString(hash.ComputeHash(Encoding.UTF8.GetBytes(
-                "dialogue-schema-3\n" + File.ReadAllText(SequenceCsvPath) + "\nLINES\n" + File.ReadAllText(LineCsvPath))));
+                "dialogue-schema-6\n" + File.ReadAllText(SequenceCsvPath) + "\nLINES\n" + File.ReadAllText(LineCsvPath))));
     }
 
     public static bool EnsureCurrent()
@@ -266,6 +268,20 @@ public static class DialogueCsvImporter
             sequence.mealHealthCondition = !sequenceColumns.ContainsKey("meal_health_condition") || string.IsNullOrWhiteSpace(CsvImportUtility.Get(row, sequenceColumns, "meal_health_condition"))
                 ? MealHealthCondition.Any : CsvImportUtility.ParseEnum(
                     CsvImportUtility.Get(row, sequenceColumns, "meal_health_condition"), MealHealthCondition.Any, id, "meal_health_condition");
+            sequence.requestCondition = !sequenceColumns.ContainsKey("request_condition") || string.IsNullOrWhiteSpace(CsvImportUtility.Get(row, sequenceColumns, "request_condition"))
+                ? RequestCondition.Any : CsvImportUtility.ParseEnum(
+                    CsvImportUtility.Get(row, sequenceColumns, "request_condition"), RequestCondition.Any, id, "request_condition");
+            sequence.missedRequests = !sequenceColumns.ContainsKey("missed_request") ? Array.Empty<CravingTag>()
+                : CsvImportUtility.ParseEnumList(CsvImportUtility.Get(row, sequenceColumns, "missed_request"), CravingTag.None, id, "missed_request")
+                    .Where(t => t != CravingTag.None).ToArray();
+            sequence.recipeFatigued = OptionalEnum(row, sequenceColumns, "recipe_fatigued", DialogueSwitch.Any, id);
+            sequence.minIngredientAppeal = !sequenceColumns.ContainsKey("min_ingredient_appeal") ? -1f
+                : CsvImportUtility.ParseFloat(CsvImportUtility.Get(row, sequenceColumns, "min_ingredient_appeal"), -1f, 0f, id, "min_ingredient_appeal");
+            sequence.maxIngredientAppeal = !sequenceColumns.ContainsKey("max_ingredient_appeal") ? -1f
+                : CsvImportUtility.ParseFloat(CsvImportUtility.Get(row, sequenceColumns, "max_ingredient_appeal"), -1f, 0f, id, "max_ingredient_appeal");
+            sequence.delightFull = OptionalEnum(row, sequenceColumns, "delight_full", DialogueSwitch.Any, id);
+            sequence.redServed = OptionalEnum(row, sequenceColumns, "red_served", DialogueSwitch.Any, id);
+            sequence.variantOf = sequenceColumns.ContainsKey("variant_of") ? CsvImportUtility.Get(row, sequenceColumns, "variant_of").Trim() : "";
             sequence.requiredRecipeTiers = ParseOptionalEnumList<RecipeTier>(
                 CsvImportUtility.Get(
                     row, sequenceColumns, "required_recipe_tiers"),
@@ -430,6 +446,12 @@ public static class DialogueCsvImporter
         database.SetItems(imported
             .OrderBy(sequence => sequence.id)
             .ToList());
+        foreach (var variant in imported.Where(s => !string.IsNullOrWhiteSpace(s.variantOf)))
+        {
+            var original = imported.FirstOrDefault(s => string.Equals(s.id, variant.variantOf, StringComparison.OrdinalIgnoreCase));
+            if (original == null || original.priority != variant.priority || original.trigger != variant.trigger)
+                Debug.LogWarning($"{variant.id}: variant_of '{variant.variantOf}' must name a dialogue with the same trigger and priority.");
+        }
         database.importedCsvFingerprint = rejected == 0 && rejectedLines == 0 && imported.All(s => s.lines.Length > 0)
             ? SourceFingerprint() : string.Empty;
         EditorUtility.SetDirty(database);
@@ -605,6 +627,10 @@ public static class DialogueCsvImporter
             valid &= EnumIsValid<DialogueRepeatRule>(row, sequenceColumns, "repeat_rule", id);
             valid &= EnumIsValid<RecipeBuildCondition>(row, sequenceColumns, "recipe_build_condition", id);
             valid &= EnumIsValid<MealHealthCondition>(row, sequenceColumns, "meal_health_condition", id);
+            valid &= EnumIsValid<RequestCondition>(row, sequenceColumns, "request_condition", id);
+            valid &= EnumIsValid<DialogueSwitch>(row, sequenceColumns, "recipe_fatigued", id);
+            valid &= EnumIsValid<DialogueSwitch>(row, sequenceColumns, "delight_full", id);
+            valid &= EnumIsValid<DialogueSwitch>(row, sequenceColumns, "red_served", id);
         }
         foreach (var row in lines.Skip(1).Where(r => !CsvImportUtility.IsBlankRow(r)))
         {
@@ -624,6 +650,14 @@ public static class DialogueCsvImporter
             AssetDatabase.LoadAssetAtPath<T>($"{folder}/{id}.asset") != null)) return true;
         Debug.LogError($"{owner}: {column} '{id}' cannot be resolved. Import cancelled; existing dialogue assets preserved.");
         return false;
+    }
+
+    private static T OptionalEnum<T>(List<string> row, Dictionary<string, int> columns, string column, T fallback, string owner)
+        where T : struct, Enum
+    {
+        if (!columns.ContainsKey(column)) return fallback;
+        string raw = CsvImportUtility.Get(row, columns, column);
+        return string.IsNullOrWhiteSpace(raw) ? fallback : CsvImportUtility.ParseEnum(raw, fallback, owner, column);
     }
 
     private static bool EnumIsValid<T>(List<string> row, Dictionary<string, int> columns,

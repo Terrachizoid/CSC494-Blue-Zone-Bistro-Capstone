@@ -22,6 +22,8 @@ public static class AllContentCsvImporter
         StoreListingCsvImporter.ImportPrices();
         RecipeCsvImporter.ImportRecipes();
         CustomerCsvImporter.ImportCustomers();
+        CharacterExpressionCsvImporter.Import();
+        SoundCsvImporter.Import();
         DialogueCsvImporter.ImportDialogues();
         EndingCsvImporter.Import();
         EventCsvImporter.Import();

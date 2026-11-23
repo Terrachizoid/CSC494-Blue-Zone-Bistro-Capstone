@@ -20,6 +20,19 @@ public class DialogueRuntimeContext
     public bool hasServedMeal;
     public bool servedRecipeBuilt;
     public int servedMealHealthDelta;
+    // Requests for the served dish: -1 when no dish was served. Names are joined for {metRequest} / {missedRequest}.
+    public int requestCount = -1;
+    public int requestsMet = -1;
+    public string metRequests = string.Empty;
+    public string missedRequests = string.Empty;
+    public CravingTag[] missedRequestTags = Array.Empty<CravingTag>();
+    // More of the served dish (2026-11-22), so a closing dialogue can name the one thing to improve.
+    public bool recipeFatigued;
+    public int recipeRecentServes;
+    public float ingredientAppeal = -1f;
+    public float appealTarget = 7f;
+    public bool delightFull;
+    public bool redServed;
 
     private readonly Dictionary<string, string> additionalTokens =
         new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);

@@ -36,6 +36,10 @@ public class DialogueSequenceData : ScriptableObject
     public DialogueTrigger trigger = DialogueTrigger.CustomerArrival;
     public DialogueRepeatRule repeatRule = DialogueRepeatRule.Repeatable;
     public int priority;
+    // Variants (2026-11-22): sequences with the same variant group and priority are versions of one moment and
+    // alternate. Blank = its own id. Any other tie at the top priority is a content error (import warns).
+    public string variantOf;
+    public string VariantGroup => string.IsNullOrWhiteSpace(variantOf) ? id : variantOf.Trim();
 
     [Min(0f)]
     public float randomWeight = 1f;
@@ -61,6 +65,16 @@ public class DialogueSequenceData : ScriptableObject
     public RecipeBuildCondition recipeBuildCondition = RecipeBuildCondition.Any;
     public MealHealthCondition mealHealthCondition = MealHealthCondition.Any;
     public RecipeTier[] requiredRecipeTiers = Array.Empty<RecipeTier>();
+    public RequestCondition requestCondition = RequestCondition.Any;
+    // Matches when any listed request was asked for and missed (e.g. Comfort). Empty = not checked.
+    public CravingTag[] missedRequests = Array.Empty<CravingTag>();
+    public DialogueSwitch recipeFatigued = DialogueSwitch.Any;   // served too often lately (recipe fatigue)
+    // Average ingredient appeal of the served plate, inclusive (0-10). -1 means that this condition is not used.
+    // Each dialogue sets its own cutoff (e.g. general low appeal <= 4.5), independent of the Comfort target.
+    public float minIngredientAppeal = -1f;
+    public float maxIngredientAppeal = -1f;
+    public DialogueSwitch delightFull = DialogueSwitch.Any;      // the dish was enjoyable, but delight was already at the top
+    public DialogueSwitch redServed = DialogueSwitch.Any;        // a red food was on the plate (the rush; the crash greets them next visit)
 
     // These refer to the completed meal served to this customer.
     // -1 means that this condition is not used.

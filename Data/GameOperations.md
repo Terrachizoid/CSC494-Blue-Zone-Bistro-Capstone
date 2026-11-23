@@ -144,6 +144,9 @@ okinawa_chef_arrived; regional content itself is still unlocked by day, not by t
 
 Customer checkpoints select one eligible sequence each: CustomerArrival, BeforeService,
 and AfterService. Highest-priority mandatory wins; otherwise weighted ambient is used.
+Mandatory sequences that tie on the top priority are variants of one moment (2026-11-22): one is
+picked by `random_weight`, skipping the one played most recently. The AfterService dialogue is
+picked when the dish is served, so the guest's face can show its first emotion with the dish result.
 BeforeService selection happens after arrival completion, so it sees new flags. Each
 checkpoint runs only once per encounter; repeatable ambient lines cannot create a loop.
 Other legacy triggers (DayStart/DayEnd) remain available in the selector but are not
@@ -167,6 +170,65 @@ delight is already zero or health improves. Correct recipes with health loss sel
 concerned reaction; other built recipes use the successful delight-gain bands (0–7 or
 8–20), with premium/luxury reactions below the health-loss priority. Customer health bands describe current state, not a promised medical
 outcome. Legacy basic dialogue IDs remain as ambient fallbacks.
+
+Closing reactions (2026-11-22). Each guest's AfterService dialogue names the one main reason the dish
+went the way it did, and dialogues with something to improve end with one `Blue Zone Guide` line giving a
+tip (speaker id `Blue Zone Guide`; the guest stays on stage and keeps their face). Every condition is read
+from the served dish's own result, so nothing is fetched from elsewhere. Guests are not critics of
+everything: rather than one dialogue per combination of conditions, the **priority ladder** decides which
+single reason wins, and each dialogue talks only about its own reason.
+
+It works like a decision tree: the game walks down the ladder and the first rung whose conditions are all true is
+the leaf that plays (the guest's lines, then the Guide's tip). Dialogues at the same priority are either siblings
+whose conditions can never both be true (great vs okay) or variants marked with `variant_of`, which alternate.
+
+| Priority | Sequence suffix | Condition columns | Guest reacts to | Guide tip |
+|---|---|---|---|---|
+| 200 | `_AFTER_POOR` | `recipe_build_condition` Failed | plate didn't match | fill every slot; check Review |
+| 196 | `_RUSH_HEALTH_LOSS` | `red_served` Yes, `meal_health_condition` Loss | a quick lift, then "not good for me" | lift fades tomorrow; dish also cost health |
+| 195 | `_RUSH` | `red_served` Yes | a quick lift | lift fades tomorrow; they may arrive tired (crash) |
+| 190 | `_AFTER_HEALTH_LOSS` | `meal_health_condition` Loss, `red_served` No | health went down (yellow-heavy) | green foods in those slots |
+| 115 | `_AFTER_FANCY_REQ_MISSED` | tiers Premium/Luxury, `request_condition` Missed | pricier dish, request missed | price doesn't replace a request |
+| 110 | `_AFTER_FANCY` | tiers Premium/Luxury | pricier dish | none |
+| 100 | `_AFTER_FATIGUED` | `recipe_fatigued` Yes | served too often lately | rotate recipes |
+| 97 | `_AFTER_COMFORT_MISSED` | `missed_request` Comfort | Comfort request missed (Dev, Sam, Marco) | Comfort needs appeal {appealTarget}+ |
+| 95 | `_AFTER_HIGH_REQ_*`, `_AFTER_OKAY_REQ_*` | delight band + `request_condition` All/Some/None | dish and requests together | Some/None: the missed request, coloured rims |
+| 93 | `_AFTER_LOW_APPEAL` | `max_ingredient_appeal` 4.5 | a bit plain | appeal on cards; green foods rated 7+ |
+| 92 | `_AFTER_DELIGHT_FULL` | `delight_full` Yes | already a fan | delight is full; requests still add popularity |
+| 90 | `_AFTER_HIGH`, `_AFTER_OKAY` (+ `_V2` with `variant_of`) | delight band 8+ / 0–7 | the dish | none |
+
+Rush and health loss are different events (rush = any red food; health = +1 per green serving and Daily Dozen bonus,
+-1 per yellow, -3 per red), so the three rungs above never make each other obsolete. The rush used to be a separate
+trigger (`RushAfterService`) that replaced the whole ladder, so a mismatched red plate got a cheerful line and no tip;
+since 2026-11-22 it is a rung. The crash is still its own greeting at the guest's next arrival (`CrashArrival`).
+No recipe is Premium/Luxury yet, so the fancy rungs cannot play until one exists.
+
+Proof: `Tools/DialogueOutcomeChecks.cs` (run by `Test-CsvContent.ps1`) tries every guest x every combination of plate
+matched, health change, red food, fancy, tired recipe, requests, appeal, delight full and dish delight (15,552
+situations), fails on any situation with no winner or an unplanned tie, and writes the full table to
+`Data/DialogueOutcomes.csv` (filter it in a spreadsheet to see what plays when).
+
+Columns (all optional; blank = not checked): `request_condition` (All, Some, None need at least one
+request; NoRequest; Missed = Some or None; a plate that didn't build its recipe meets none), `missed_request`
+(tags, `|` separated; matches when any of them was asked for and missed), `recipe_fatigued`, `delight_full` and
+`red_served` (Yes/No), `variant_of` (the original dialogue this one alternates with), `min_ingredient_appeal` / `max_ingredient_appeal` (the plate's average ingredient
+appeal, inclusive, 0-10; each dialogue picks its own cutoff). General low appeal uses its own lower cutoff (4.5), while
+a Comfort request that fails because appeal was under `BalanceConfig.comfortMinimumAppeal` (7) is its own, higher
+reaction (`missed_request` Comfort, 97): the guest's expectation, not plain taste. `{appealTarget}` is that Comfort target.
+Mandatory dialogues that tie on the top priority are variants: one is picked by `random_weight`, never the
+one played most recently. Tokens for these lines: `{metRequest}`, `{missedRequest}` (tag names joined with
+"and", as on the guest card), `{requestsMet}`, `{requestCount}`, `{ingredientAppeal}`, `{appealTarget}`,
+`{recipeRecentServes}`, plus `{servedRecipe}` and `{customerName}`.
+
+Importer note: the dialogue import is skipped while its fingerprint (CSV text plus a schema tag in
+`DialogueCsvImporter.SourceFingerprint`) is unchanged. Bump the tag whenever a column is added or parsed
+differently; otherwise an import made by older code (before Unity recompiled) stays "current" with the new
+conditions missing. This happened on 2026-11-22: `_AFTER_FATIGUED` lost `recipe_fatigued` and fired on every dish.
+
+Adding a guest: copy one guest's `_AFTER_*` rows (both CSVs), change `customer_id`, `min_day` and the
+guest's own lines, keep the priorities and the Guide lines. Adding a new reason: give it its own
+condition column and a priority slot in this table, write one dialogue per guest, and add it here.
+195 sequences, 454 lines (2026-11-22).
 
 ```csharp
 PurchaseResult purchase = bootstrap.Loop.Buy("listing_id");

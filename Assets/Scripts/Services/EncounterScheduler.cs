@@ -13,8 +13,8 @@ public class EncounterScheduler
         var progress = state.customers.Find(c => string.Equals(c.customerId, customerId, StringComparison.OrdinalIgnoreCase));
         if (requested == DialogueTrigger.CustomerArrival && progress != null && progress.crashDialoguePending)
             return DialogueTrigger.CrashArrival;
-        if (requested == DialogueTrigger.AfterService && result != null && result.rushCrashTriggered)
-            return DialogueTrigger.RushAfterService;
+        // The rush (red food served) is no longer a separate trigger: it is a rung of the AfterService ladder
+        // (`red_served`, priorities 195/196), so a mismatched plate still says so and every rung can add a Guide tip.
         return requested;
     }
     public void OnDialogueCompleted(DialogueSequenceData sequence, string customerId)
@@ -28,9 +28,12 @@ public class EncounterScheduler
     private readonly CustomerDatabase customers;
     private readonly RecipeDatabase recipes;
     public DialogueService Dialogue { get; }
+    private readonly float appealTarget;
+    // appealTarget: the appeal a dish needs to count as appealing in dialogue (BalanceConfig.comfortMinimumAppeal).
     public EncounterScheduler(GameSessionState state, DialogueDatabase dialogues,
-        CustomerDatabase customers, RecipeDatabase recipes)
+        CustomerDatabase customers, RecipeDatabase recipes, float appealTarget = 7f)
     {
+        this.appealTarget = appealTarget;
         this.state = state ?? throw new ArgumentNullException(nameof(state));
         this.dialogues = dialogues ?? throw new ArgumentNullException(nameof(dialogues));
         this.customers = customers ?? throw new ArgumentNullException(nameof(customers));
@@ -57,7 +60,25 @@ public class EncounterScheduler
             customerDelight = progress?.delight ?? -1, servedRecipe = recipes.GetById(recipeId),
             servedMealDelight = result?.delightDelta ?? -1, hasServedMeal = result != null,
             servedRecipeBuilt = result != null && result.recipeBuilt,
-            servedMealHealthDelta = result?.healthDelta ?? 0 };
+            servedMealHealthDelta = result?.healthDelta ?? 0,
+            requestCount = result == null ? -1 : (result.activeCravings?.Length ?? 0),
+            requestsMet = result == null ? -1 : (result.cravingsResolved?.Length ?? 0),
+            metRequests = JoinTags(result?.cravingsResolved),
+            missedRequests = JoinTags(Missed(result)), missedRequestTags = Missed(result),
+            recipeFatigued = result != null && result.recipeFatigued, recipeRecentServes = result?.recipeRecentServes ?? 0,
+            ingredientAppeal = result?.ingredientAppeal ?? -1f, appealTarget = appealTarget,
+            // Same test as the dish result's "(guest was already fully delighted)".
+            delightFull = result != null && result.recipeBuilt && result.delightDelta == 0 && result.dishDelight > 0,
+            redServed = result != null && result.redServings > 0 };
+    }
+    private static CravingTag[] Missed(ServeResult result) => result?.activeCravings == null ? Array.Empty<CravingTag>()
+        : result.activeCravings.Except(result.cravingsResolved ?? Array.Empty<CravingTag>()).ToArray();
+    // "Crunchy", "Crunchy and Sweet", "Crunchy, Sweet and Savory": the same words the guest card shows.
+    private static string JoinTags(CravingTag[] tags)
+    {
+        if (tags == null || tags.Length == 0) return string.Empty;
+        var names = tags.Select(t => t.ToString()).ToArray();
+        return names.Length == 1 ? names[0] : string.Join(", ", names.Take(names.Length - 1)) + " and " + names[names.Length - 1];
     }
 }
 

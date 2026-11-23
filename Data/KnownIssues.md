@@ -201,3 +201,34 @@ Owen to do in Unity before the web build (cannot be done from the AI workspace):
 6. **Panel art import:** the six new panel PNGs (guide note, plan, paper, suggestion frame, New tag, Sold out stamp) are imported uncompressed at up to 4096 px (`BistroArtImport.ConfigurePanel`), about 6 MB of GPU memory each. For web, a WebGL override at 1024 px, compressed, is likely indistinguishable on screen.
 
 Checked and fine: every CSV art path exists; every food is sold somewhere; every shelf has stock; every recipe's required categories are buyable (and green-buyable) by its unlock day; event targets, dialogue references, tutorial trigger flags and idle-chatter conditions all resolve; no content IDs or art paths are hard-coded in C#; the UI never writes session state; no file IO, threads or Application.Quit (web-safe); saves use PlayerPrefs with `PlayerPrefs.Save()`.
+
+### Final audit before the demo — 2026-11-22 (Claude)
+Read-only review of this week's systems (dialogue ladder, characters and expressions, colour grade, rush/crash, sound and music, volume sliders, debug panel) plus the serve → dish result → closing dialogue flow. No C# compiler or PowerShell in the AI workspace: a bracket/string balance check passed on every script; run the three test scripts and a Play Mode pass in Unity.
+
+Fixed:
+- Colour grades were never reset between runs: after returning to the main menu, a new game or a loaded save eased each guest (and the scenery) over from the previous run's colours. The grades are now released when the main menu shows, and the LUT cache is reset so the new scenery grade receives its mood.
+- AI agent interface (`Tools/Playtest/play.py`) brought up to the current game; it had not changed since 2026-10-30. Now ported: several checkouts per day with a sort after each and `bistro` to open service; leaving during service (`city`) and returning; the recipe book, Today's plan and the navigation helper (`plan`, `unplan`, `close`, `find`); the day-1 lessons' gates and wording; every flag-driven text lesson with TutorialController's priorities and one-lesson-at-a-time rule; all ten event effect kinds with EventService's compatibility rules; multi-category foods; the full DialogueService ladder (request/missed/fatigue/appeal/delight-full/red-served rungs, variants, Guide tip lines, tokens), chosen at serve time; food aid's money condition when the city is open during service; crash pending until its dialogue plays. 40 random full runs: no crashes or stuck games, every lesson fires. See `Tools/Playtest/README.md`.
+
+Checked and fine: every Sounds.csv clip path exists; every cue the code plays has a row (the five `dish.*` rows are now unused since `result.dish` replaced them: harmless); the closing-dialogue ladder gives the expected rung for each case in the text port; the colour-grade shader loads from Resources and falls back to plain art if unsupported.
+
+Notes (not bugs): in the editor the scenery LUTs are rebuilt every frame so Inspector edits show live (editor-only cost, off in builds). The calm music versions of choosing and cooking still run at 144/136 bpm while normal and high are 128.
+
+### Submission footprint cleanup — 2026-11-20
+Downloaded Pillow/NumPy packages were accidentally included in the latest commit (398,510 added text lines, 1,575 files). Removed from the working tree and excluded future local dependency directories; tools are now external. Postponed 3D content moved to a SHA-256-verified external archive; no remaining references to removed asset GUIDs in Assets/ProjectSettings. This cleans the next snapshot, not already-pushed Git history. Panel/Web release settings adjusted. Actual download-size change requires a new Web build; no size percentage is claimed.
+
+### Web compression follow-up — 2026-11-22
+Verified release build payload 31.86 MiB versus prior 118.15 MiB (73% lower). Event imports report 1 MiB each instead of 6 MiB; all 13 render/navigation checks passed in the disposable review project. Parent output folder includes unrelated PDFs, so measure Build files separately. No deployed browser validation performed. Detailed evidence and optional remaining candidates: SubmissionCleanup_20261120.md.
+
+### Character neutral art — 2026-11-22
+All seven defaults imported and rendered using existing expression fallback. Chef has one default; regulars' other expressions remain pending. Actual Web imports are roughly 913x1024 RGBA32, so compression of these non-power-of-two portraits remains a measured follow-up candidate (not claimed compressed merely because the importer requests it). No release-build size measured after adding characters. See Characters.md and CharacterNeutralArt_20261122.md.
+
+### Character expression/compression follow-up — 2026-11-22
+Resolved the pending 24 expression images and measured RGBA32 import issue above. All 31 portraits now import as 1024-square DXT5 in the disposable WebGL-target project. Existing CSV slots and Default silhouette rows preserved, chef one default. Import/alias checks and all portrait captures passed; live dialogue transition continuity, mobile/browser checks and updated release size remain unverified. See CharacterExpressionArt_20261122.md.
+
+### Audio handoff — 2026-11-22
+Missing free SFX slots filled, panel/newspaper/service-entry cues wired, SampleScene SoundDatabase reference filled. Unity compile/import and Play Mode audio smoke checks pass. Need listening-based mix review, full UI click-through and deployed-browser audio unlock check. Existing six-voice pool can interrupt entrance ambience under rapid actions; acceptable short one-shot placeholder, not persistent ambience. Three standalone test scripts currently fail before running because their stubs lack Color used by CharacterExpressionDatabase.tint; this is not a Unity compile error. See Data/Sound.md.
+
+
+Audio follow-up (2026-11-22): replaced rejected electronic panel/click and door scrape sources, recorded paper and one-time register results integrated. Isolated Unity audio checks pass; subjective mix approval and browser listening still pending. Music reference titles recorded in Sound.md; no paid service used.
+
+Sound controls (2026-11-22): main-menu music/effects sliders implemented; immediate mute and independent values validated in isolated Unity. Browser interaction/restart persistence still needs normal playtesting.

@@ -46,7 +46,4 @@ MonoBehaviour:
   screenFadeSeconds: 0.16
   showCardAppeal: 1
   debugCardDetails: 0
-  use3DCity: 0
-  city3DPrefab: {fileID: 0}
-  city3DOrthographic: 0
   recipeFrontVeilOpacity: 0.5

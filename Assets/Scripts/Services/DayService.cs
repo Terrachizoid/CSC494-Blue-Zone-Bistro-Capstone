@@ -62,7 +62,7 @@ public class DayService : IDayService
                 (long)customer.finance + source.healthDelta));
         }
         state.currentDay++;
-        foreach (var customer in state.customers) RushCrashProgress.StartDay(customer, state.currentDay);
+        foreach (var customer in state.customers) RushCrashProgress.StartDay(customer, state.currentDay, balance.crashVisualDrop);
         // Morning rent. Money may go negative; purchases then need a positive balance again.
         float rent = state.currentDay >= balance.rentStartDay ? balance.rentPerDay : 0f;
         if (rent > 0)

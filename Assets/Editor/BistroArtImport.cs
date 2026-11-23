@@ -15,7 +15,8 @@ public sealed class BistroArtImport : AssetPostprocessor
         "Assets/Art/Recipes",
         "Assets/Art/Categories",
         "Assets/Art/Stores",
-        "Assets/Art/UI"
+        "Assets/Art/UI",
+        "Assets/Art/Characters"
     };
 
     private static bool IsGameArt(string path)
@@ -42,6 +43,17 @@ public sealed class BistroArtImport : AssetPostprocessor
         importer.filterMode = FilterMode.Bilinear;
         importer.maxTextureSize = 2048;
         importer.textureCompression = TextureImporterCompression.Compressed;
+        if (importer.assetPath.StartsWith("Assets/Art/Events/", StringComparison.OrdinalIgnoreCase) ||
+            importer.assetPath.StartsWith("Assets/Art/Characters/", StringComparison.OrdinalIgnoreCase))
+        {
+            var web = importer.GetPlatformTextureSettings("WebGL");
+            web.overridden = true;
+            web.maxTextureSize = 1024;
+            web.format = TextureImporterFormat.Automatic;
+            web.textureCompression = TextureImporterCompression.Compressed;
+            web.compressionQuality = 75;
+            importer.SetPlatformTextureSettings(web);
+        }
         ConfigurePanel(importer);
     }
 
@@ -60,8 +72,14 @@ public sealed class BistroArtImport : AssetPostprocessor
             default:return false;
         }
         importer.spriteBorder=border;
-        importer.textureCompression=TextureImporterCompression.Uncompressed;
-        importer.maxTextureSize=4096;
+        importer.textureCompression=TextureImporterCompression.Compressed;
+        importer.compressionQuality=50;
+        importer.maxTextureSize=2048;
+        var web=importer.GetPlatformTextureSettings("WebGL");
+        web.overridden=true;web.maxTextureSize=1024;
+        web.format=TextureImporterFormat.Automatic;
+        web.textureCompression=TextureImporterCompression.Compressed;web.compressionQuality=50;
+        importer.SetPlatformTextureSettings(web);
         var settings=new TextureImporterSettings();importer.ReadTextureSettings(settings);
         settings.spriteMeshType=SpriteMeshType.FullRect;importer.SetTextureSettings(settings);
         return true;

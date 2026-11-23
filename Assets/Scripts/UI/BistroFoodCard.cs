@@ -47,6 +47,9 @@ public class BistroFoodCard : MonoBehaviour, IBistroDragSource, IPointerClickHan
     private Coroutine flipAnimation;
     private float suppressClickUntil;
     private CanvasGroup faceGroup;
+    private float restingAlpha=1f;
+    // Alpha the card returns to after any drag attempt (sold-out cards rest faded at .45).
+    public float RestingAlpha{get=>restingAlpha;set{restingAlpha=value;if(!dragging&&faceGroup!=null)faceGroup.alpha=value;}}
     private ScrollRect browsingScroll;
     private bool scrolling;
     private bool reducedMotion;
@@ -148,6 +151,7 @@ public class BistroFoodCard : MonoBehaviour, IBistroDragSource, IPointerClickHan
     public void OnPointerClick(PointerEventData e)
     {
         if(e.button!=PointerEventData.InputButton.Left || dragging || scrolling || e.dragging || Time.unscaledTime<suppressClickUntil || flipAnimation!=null)return;
+        BistroAudio.Play("card.flip");
         if(reducedMotion){RestoreFace(!flipped);return;}
         flipAnimation=StartCoroutine(Flip());
     }
@@ -195,6 +199,7 @@ public class BistroFoodCard : MonoBehaviour, IBistroDragSource, IPointerClickHan
         activePointerId=e.pointerId;activePointerEvent=e;
         if(!canDrag){scrolling=browsingScroll!=null;if(scrolling)browsingScroll.OnBeginDrag(e);return;}
         dragging=true;dropClaimed=false;
+        BistroAudio.Play("card.pick");
         faceGroup.alpha=.6f;
         if(flipAnimation!=null){StopCoroutine(flipAnimation);flipAnimation=null;transform.localScale=Vector3.one;}
         ghost=BistroWidgets.Box(canvas.transform,"Dragging card",dragColor,Vector2.zero,Vector2.zero);
@@ -217,6 +222,7 @@ public class BistroFoodCard : MonoBehaviour, IBistroDragSource, IPointerClickHan
     {
         if(activePointerId!=e.pointerId)return;
         if(scrolling&&browsingScroll!=null)browsingScroll.OnEndDrag(e);
+        if(dragging&&!dropClaimed)BistroAudio.Play("card.return"); // dropped nowhere: it slides back
         scrolling=false;CancelDrag();suppressClickUntil=Time.unscaledTime+.1f;
     }
     private void CancelDrag()
@@ -224,7 +230,7 @@ public class BistroFoodCard : MonoBehaviour, IBistroDragSource, IPointerClickHan
         if(scrolling && browsingScroll!=null && activePointerEvent!=null)
         {browsingScroll.OnEndDrag(activePointerEvent);browsingScroll.StopMovement();}
         scrolling=false;activePointerId=null;activePointerEvent=null;
-        if(ghost!=null)Destroy(ghost.gameObject);ghost=null;dragging=false;if(faceGroup!=null)faceGroup.alpha=1;
+        if(ghost!=null)Destroy(ghost.gameObject);ghost=null;dragging=false;if(faceGroup!=null)faceGroup.alpha=restingAlpha;
     }
     private void OnApplicationFocus(bool focused){if(!focused)CancelDrag();}
     private void OnDisable(){CancelDrag();scrolling=false;StopAllCoroutines();flipAnimation=null;transform.localScale=Vector3.one;}

@@ -1,0 +1,1370 @@
+[
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\index.html",
+    "Length": 7878
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\ProjectVersion.txt",
+    "Length": 83
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\Build\\UofT.data",
+    "Length": 63842907
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\Build\\UofT.framework.js",
+    "Length": 734515
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\Build\\UofT.loader.js",
+    "Length": 39339
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\Build\\UofT.wasm",
+    "Length": 59275255
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\Material\\Test2 material\\55c234e3-85c1-4cbd-9d8e-2f9f50550d8f.pdf",
+    "Length": 121138
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\Material\\Test2 material\\943657cb-268f-44c4-91da-cf87b4eb825c.pdf",
+    "Length": 121138
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\Material\\Test2 material\\b3a51d71-cb31-4df0-9f74-cf42a994b0db.pdf",
+    "Length": 146696
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\Material\\Test2 material\\dfc9d18c-87ed-4989-95e2-85457cf64e67.pdf",
+    "Length": 120953
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\Material\\Test2 material\\L10-Mem-Management.pdf",
+    "Length": 457925
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\Material\\Test2 material\\L11-Address-Translation.pdf",
+    "Length": 356148
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\Material\\Test2 material\\L12-Page-Tables.pdf",
+    "Length": 602365
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\Material\\Test2 material\\L13-TLB.pdf",
+    "Length": 523497
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\Material\\Test2 material\\L14-Paging.pdf",
+    "Length": 257445
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\Material\\Test2 material\\L15-Page-Replacement.pdf",
+    "Length": 576530
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\Material\\Test2 material\\L8-Synch-Deadlock (1).pdf",
+    "Length": 823208
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\Material\\Test2 material\\L9-More-Scheduling (1).pdf",
+    "Length": 567897
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\Material\\Test2 material\\Midterm 2 Information_ CSC369H1F 20269 (All Lectures)_ Operating Systems.pdf",
+    "Length": 151627
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\tmp\\probes\\phase2_preemption_probe_notes.txt",
+    "Length": 1900
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\tmp\\probes\\phase2_victim_priority_round_notes.txt",
+    "Length": 1676
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\tmp\\probes\\before_boundary_round\\input_1.json",
+    "Length": 2196
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\tmp\\probes\\before_boundary_round\\input_2.json",
+    "Length": 2810
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\tmp\\probes\\before_boundary_round\\input_3.json",
+    "Length": 3674
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\tmp\\probes\\before_fresh_round\\input_1.json",
+    "Length": 503
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\tmp\\probes\\before_fresh_round\\input_2.json",
+    "Length": 982
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\tmp\\probes\\before_fresh_round\\input_3.json",
+    "Length": 2941
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\tmp\\probes\\phase2_before_ordering_fix_recheck\\input_1.json",
+    "Length": 5004
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\tmp\\probes\\phase2_before_ordering_fix_recheck\\input_2.json",
+    "Length": 2444
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\tmp\\probes\\phase2_before_ordering_fix_recheck\\input_3.json",
+    "Length": 6837
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\tmp\\probes\\phase2_before_victim_priority_round\\input_1.json",
+    "Length": 6210
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\tmp\\probes\\phase2_before_victim_priority_round\\input_2.json",
+    "Length": 6940
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\tmp\\probes\\phase2_before_victim_priority_round\\input_3.json",
+    "Length": 9101
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\tmp\\probes\\phase2_bottom_selection_and_io\\input_3.json",
+    "Length": 3528
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\tmp\\probes\\phase2_core_count\\input_1.json",
+    "Length": 7727
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\tmp\\probes\\phase2_core_count\\input_2.json",
+    "Length": 7727
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\tmp\\probes\\phase2_core_count\\input_3.json",
+    "Length": 7727
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\tmp\\probes\\phase2_fcfs_edge_cases\\input_2.json",
+    "Length": 7418
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\tmp\\probes\\phase2_fcfs_vs_sjf\\input_2.json",
+    "Length": 1463
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\tmp\\probes\\phase2_insertion_before_preemption\\input_3.json",
+    "Length": 7723
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\tmp\\probes\\phase2_io_11_vs_12\\input_3.json",
+    "Length": 3658
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\tmp\\probes\\phase2_seven_long_before_insertion\\input_3.json",
+    "Length": 1711
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\tmp\\probes\\phase2_short_arrival_and_seven_long\\input_1.json",
+    "Length": 1463
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\tmp\\probes\\phase2_short_arrival_and_seven_long\\input_2.json",
+    "Length": 1463
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\tmp\\probes\\phase2_short_arrival_and_seven_long\\input_3.json",
+    "Length": 1711
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\tmp\\probes\\phase3_round10_running_target\\input_2.json",
+    "Length": 3898
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\tmp\\probes\\phase3_round10_running_target\\oracle_output_2.csv",
+    "Length": 3418
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\tmp\\probes\\phase3_round1_discovery\\input_both.json",
+    "Length": 4415
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\tmp\\probes\\phase3_round1_discovery\\oracle_output_1.csv",
+    "Length": 18110
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\tmp\\probes\\phase3_round1_discovery\\oracle_output_2.csv",
+    "Length": 18110
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\tmp\\probes\\phase3_round2\\input_1.json",
+    "Length": 3124
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\tmp\\probes\\phase3_round2\\input_2.json",
+    "Length": 2815
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\tmp\\probes\\phase3_round2\\oracle_output_1.csv",
+    "Length": 13179
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\tmp\\probes\\phase3_round2\\oracle_output_2.csv",
+    "Length": 10540
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\tmp\\probes\\phase3_round3\\input_1.json",
+    "Length": 5078
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\tmp\\probes\\phase3_round3\\input_2.json",
+    "Length": 4274
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\tmp\\probes\\phase3_round3\\oracle_output_1.csv",
+    "Length": 7657
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\tmp\\probes\\phase3_round3\\oracle_output_2.csv",
+    "Length": 6286
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\tmp\\probes\\phase3_round4_wait_signal\\input_both.json",
+    "Length": 7542
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\tmp\\probes\\phase3_round4_wait_signal\\oracle_output_1.csv",
+    "Length": 11246
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\tmp\\probes\\phase3_round4_wait_signal\\oracle_output_2.csv",
+    "Length": 11242
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\tmp\\probes\\phase3_round5\\input_both.json",
+    "Length": 2311
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\tmp\\probes\\phase3_round5\\oracle_output_1.csv",
+    "Length": 1129
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\tmp\\probes\\phase3_round5\\oracle_output_2.csv",
+    "Length": 1129
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\tmp\\probes\\phase3_round6_boost_edges\\input_2.json",
+    "Length": 6498
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\tmp\\probes\\phase3_round6_boost_edges\\oracle_output_2.csv",
+    "Length": 7244
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\tmp\\probes\\phase3_round7_io_clears_boost\\input_2.json",
+    "Length": 2798
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\tmp\\probes\\phase3_round7_io_clears_boost\\oracle_output_2.csv",
+    "Length": 1931
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\tmp\\probes\\phase3_round8_edges\\input_both.json",
+    "Length": 8611
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\tmp\\probes\\phase3_round8_edges\\oracle_output_1.csv",
+    "Length": 8256
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\tmp\\probes\\phase3_round8_edges\\oracle_output_2.csv",
+    "Length": 8256
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\tmp\\probes\\phase3_round9_quantum_bookkeeping\\input_2.json",
+    "Length": 2307
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\tmp\\probes\\phase3_round9_quantum_bookkeeping\\oracle_output_2.csv",
+    "Length": 1565
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\tmp\\probes\\phase3_starter_inputs\\input_1.json",
+    "Length": 893
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\tmp\\probes\\phase3_starter_inputs\\input_2.json",
+    "Length": 893
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\.max_file_size",
+    "Length": 8
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\.required",
+    "Length": 508
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_1\\.gitkeep",
+    "Length": 0
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_1\\A1_CHAT_TEXT_TRANSCRIPT.txt",
+    "Length": 230739
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_1\\AI_DISCLOSURE_PHASE1_SUMMARY.txt",
+    "Length": 8509
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_1\\CMakeLists.txt",
+    "Length": 2584
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_1\\gantt_chart.py",
+    "Length": 11368
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_1\\HANDOUT.md",
+    "Length": 18908
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_1\\implementation_1.c",
+    "Length": 3320
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_1\\implementation_2.c",
+    "Length": 3695
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_1\\implementation_3.c",
+    "Length": 6355
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_1\\lowest_id_example.c",
+    "Length": 4195
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_1\\main.c",
+    "Length": 249
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_1\\Makefile",
+    "Length": 4751
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_1\\README.md",
+    "Length": 3433
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_1\\scheduler_api.h",
+    "Length": 4750
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_1\\tasks_example.json",
+    "Length": 893
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_1\\tasks_schema.json",
+    "Length": 1904
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_1\\examples\\.gitkeep",
+    "Length": 0
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_1\\examples\\gantt_example_input_lid.csv",
+    "Length": 81
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_1\\examples\\gantt_example_input_lid.png",
+    "Length": 19764
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_1\\examples\\gantt_example_input.json",
+    "Length": 466
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_1\\examples\\multicore_example_lid_c2.csv",
+    "Length": 103
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_1\\examples\\multicore_example_lid_c2.png",
+    "Length": 25481
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_1\\examples\\multicore_example_lid_c4.csv",
+    "Length": 88
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_1\\examples\\multicore_example_lid_c4.png",
+    "Length": 32419
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_1\\examples\\multicore_example_lid.csv",
+    "Length": 136
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_1\\examples\\multicore_example_lid.png",
+    "Length": 22537
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_1\\examples\\multicore_example.json",
+    "Length": 941
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_1\\examples\\tasks_example_lid_c2.csv",
+    "Length": 390
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_1\\examples\\tasks_example_lid_c2.png",
+    "Length": 26714
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_1\\examples\\tasks_example_lid.csv",
+    "Length": 372
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_1\\examples\\tasks_example_lid.png",
+    "Length": 21994
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_1\\examples\\tasks_example.json",
+    "Length": 893
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_1\\lib\\.gitkeep",
+    "Length": 0
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_1\\lib\\libscheduler_sim.a",
+    "Length": 249944
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_2\\.gitkeep",
+    "Length": 0
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_2\\A1_CHAT_TEXT_TRANSCRIPT.txt",
+    "Length": 230739
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_2\\AI_DISCLOSURE_PHASE2.txt",
+    "Length": 86534
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_2\\CMakeLists.txt",
+    "Length": 2584
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_2\\gantt_chart.py",
+    "Length": 11368
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_2\\HANDOUT.md",
+    "Length": 18908
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_2\\implementation_1.c",
+    "Length": 4122
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_2\\implementation_2.c",
+    "Length": 4078
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_2\\implementation_3.c",
+    "Length": 8719
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_2\\lowest_id_example.c",
+    "Length": 4175
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_2\\main.c",
+    "Length": 249
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_2\\Makefile",
+    "Length": 4757
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_2\\README.md",
+    "Length": 3349
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_2\\scheduler_api.h",
+    "Length": 4747
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_2\\tasks_example.json",
+    "Length": 893
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_2\\tasks_schema.json",
+    "Length": 1904
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_2\\examples\\.gitkeep",
+    "Length": 0
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_2\\examples\\gantt_example_input_lid.csv",
+    "Length": 81
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_2\\examples\\gantt_example_input_lid.png",
+    "Length": 19764
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_2\\examples\\gantt_example_input.json",
+    "Length": 466
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_2\\examples\\multicore_example_lid_c2.csv",
+    "Length": 103
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_2\\examples\\multicore_example_lid_c2.png",
+    "Length": 25481
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_2\\examples\\multicore_example_lid_c4.csv",
+    "Length": 88
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_2\\examples\\multicore_example_lid_c4.png",
+    "Length": 32419
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_2\\examples\\multicore_example_lid.csv",
+    "Length": 136
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_2\\examples\\multicore_example_lid.png",
+    "Length": 22537
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_2\\examples\\multicore_example.json",
+    "Length": 941
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_2\\examples\\tasks_example_lid_c2.csv",
+    "Length": 390
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_2\\examples\\tasks_example_lid_c2.png",
+    "Length": 26714
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_2\\examples\\tasks_example_lid.csv",
+    "Length": 372
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_2\\examples\\tasks_example_lid.png",
+    "Length": 21994
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_2\\examples\\tasks_example.json",
+    "Length": 893
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_2\\lib\\.gitkeep",
+    "Length": 0
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_2\\lib\\libscheduler_sim.a",
+    "Length": 249944
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_3\\.gitkeep",
+    "Length": 0
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_3\\AI_DISCLOSURE_PHASE3.txt",
+    "Length": 338082
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_3\\CMakeLists.txt",
+    "Length": 2779
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_3\\gantt_chart.py",
+    "Length": 11368
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_3\\implementation_1.c",
+    "Length": 9219
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_3\\implementation_2.c",
+    "Length": 12525
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_3\\lowest_id_example.c",
+    "Length": 4280
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_3\\main.c",
+    "Length": 249
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_3\\Makefile",
+    "Length": 4154
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_3\\scheduler_api.h",
+    "Length": 5746
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_3\\tasks_schema.json",
+    "Length": 1528
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_3\\examples\\.gitkeep",
+    "Length": 0
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_3\\examples\\gantt_example_input_lid.csv",
+    "Length": 81
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_3\\examples\\gantt_example_input_lid.png",
+    "Length": 19764
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_3\\examples\\gantt_example_input.json",
+    "Length": 466
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_3\\examples\\multicore_example_lid_c2.csv",
+    "Length": 103
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_3\\examples\\multicore_example_lid_c2.png",
+    "Length": 25481
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_3\\examples\\multicore_example_lid_c4.csv",
+    "Length": 88
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_3\\examples\\multicore_example_lid_c4.png",
+    "Length": 32419
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_3\\examples\\multicore_example_lid.csv",
+    "Length": 136
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_3\\examples\\multicore_example_lid.png",
+    "Length": 22537
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_3\\examples\\multicore_example.json",
+    "Length": 941
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_3\\examples\\priority_inversion.json",
+    "Length": 2110
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_3\\examples\\tasks_example_lid_c2.csv",
+    "Length": 390
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_3\\examples\\tasks_example_lid_c2.png",
+    "Length": 26714
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_3\\examples\\tasks_example_lid.csv",
+    "Length": 372
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_3\\examples\\tasks_example_lid.png",
+    "Length": 21994
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_3\\examples\\tasks_example.json",
+    "Length": 893
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_3\\examples\\wait_signal_example_lid_c2.csv",
+    "Length": 57
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_3\\examples\\wait_signal_example_lid_c2.png",
+    "Length": 23344
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_3\\examples\\wait_signal_example_lid.csv",
+    "Length": 73
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_3\\examples\\wait_signal_example_lid.png",
+    "Length": 19245
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_3\\examples\\wait_signal_example.json",
+    "Length": 820
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_3\\lib\\.gitkeep",
+    "Length": 0
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\A1_3\\lib\\libscheduler_sim_sync.a",
+    "Length": 282740
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\markus-hooks\\pre-commit",
+    "Length": 704
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\markus-hooks\\pre-commit.d\\02-block_change_top_level.sh",
+    "Length": 752
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\markus-hooks\\pre-commit.d\\03-check_required_files.sh",
+    "Length": 2242
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\markus-hooks\\pre-commit.d\\04-file_size_too_large.sh",
+    "Length": 580
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\OA1_1\\.gitkeep",
+    "Length": 0
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\OA1_1\\input_1.json",
+    "Length": 3063
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\OA1_1\\input_2.json",
+    "Length": 3180
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\OA1_1\\input_3.json",
+    "Length": 4183
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\OA1_2\\.gitkeep",
+    "Length": 0
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\OA1_2\\input_1.json",
+    "Length": 3915
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\OA1_2\\input_2.json",
+    "Length": 3915
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\OA1_2\\input_3.json",
+    "Length": 12817
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\OA1_3\\.gitkeep",
+    "Length": 0
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\OA1_3\\input_1.json",
+    "Length": 8611
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\OA1_3\\input_2.json",
+    "Length": 3898
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T1\\.gitignore",
+    "Length": 14
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T1\\.gitkeep",
+    "Length": 0
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T1\\main.c",
+    "Length": 1607
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T1\\Makefile",
+    "Length": 444
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T1\\node.h",
+    "Length": 513
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T1\\queue.c",
+    "Length": 4142
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T1\\queue.h",
+    "Length": 1881
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T2\\.gitignore",
+    "Length": 41
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T2\\.gitkeep",
+    "Length": 0
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T2\\interrupt.h",
+    "Length": 508
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T2\\Makefile",
+    "Length": 1198
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T2\\rand.c",
+    "Length": 1587
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T2\\schedule.c",
+    "Length": 606
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T2\\schedule.h",
+    "Length": 675
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T2\\thread.c",
+    "Length": 6814
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T2\\thread.h",
+    "Length": 400
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T2\\ut369.c",
+    "Length": 1889
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T2\\ut369.h",
+    "Length": 1970
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T2\\test\\.gitignore",
+    "Length": 81
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T2\\test\\.gitkeep",
+    "Length": 0
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T2\\test\\basic.c",
+    "Length": 402
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T2\\test\\create.c",
+    "Length": 2495
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T2\\test\\edge.c",
+    "Length": 2318
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T2\\test\\exit.c",
+    "Length": 1512
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T2\\test\\main.c",
+    "Length": 1670
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T2\\test\\yield.c",
+    "Length": 2426
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T3\\.gitignore",
+    "Length": 41
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T3\\.gitkeep",
+    "Length": 0
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T3\\fcfs.c",
+    "Length": 894
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T3\\interrupt.c",
+    "Length": 4288
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T3\\interrupt.h",
+    "Length": 736
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T3\\Makefile",
+    "Length": 1094
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T3\\queue.c",
+    "Length": 3176
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T3\\queue.h",
+    "Length": 1577
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T3\\schedule.c",
+    "Length": 1083
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T3\\schedule.h",
+    "Length": 1425
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T3\\thread.c",
+    "Length": 8296
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T3\\thread.h",
+    "Length": 1775
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T3\\ut369.c",
+    "Length": 1915
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T3\\ut369.h",
+    "Length": 6102
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T3\\test\\.gitignore",
+    "Length": 119
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T3\\test\\.gitkeep",
+    "Length": 0
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T3\\test\\crash.c",
+    "Length": 1182
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T3\\test\\demo.c",
+    "Length": 937
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T3\\test\\test.h",
+    "Length": 305
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T3\\test\\wait_blocked.c",
+    "Length": 2539
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T3\\test\\wait_invalid.c",
+    "Length": 1003
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T3\\test\\wait_many.c",
+    "Length": 2424
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T3\\test\\wait_reuse.c",
+    "Length": 1806
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T3\\test\\wait.c",
+    "Length": 2284
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T3\\test\\wakeup.c",
+    "Length": 3236
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T4\\.gitignore",
+    "Length": 33
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T4\\.gitkeep",
+    "Length": 0
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T4\\Makefile",
+    "Length": 971
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T4\\queue.c",
+    "Length": 1714
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T4\\queue.h",
+    "Length": 1391
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T4\\rwlock.c",
+    "Length": 5686
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T4\\rwlock.h",
+    "Length": 711
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T4\\synch.c",
+    "Length": 2647
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T4\\synch.h",
+    "Length": 2026
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T4\\test\\.gitkeep",
+    "Length": 0
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T4\\test\\rw_client.c",
+    "Length": 5378
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T4\\test\\rw_shared.c",
+    "Length": 4066
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T4\\test\\rw_tester.c",
+    "Length": 35878
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T5\\.gitignore",
+    "Length": 41
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T5\\.gitkeep",
+    "Length": 0
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T5\\AI_conversation_transcript.html",
+    "Length": 180385
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T5\\AI_conversation_transcript.txt",
+    "Length": 67696
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T5\\fcfs.c",
+    "Length": 894
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T5\\interrupt.c",
+    "Length": 4288
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T5\\interrupt.h",
+    "Length": 736
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T5\\Makefile",
+    "Length": 1654
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T5\\queue.c",
+    "Length": 3505
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T5\\queue.h",
+    "Length": 1921
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T5\\schedule.c",
+    "Length": 1083
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T5\\schedule.h",
+    "Length": 1425
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T5\\thread.c",
+    "Length": 11946
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T5\\thread.h",
+    "Length": 2557
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T5\\ut369.c",
+    "Length": 1915
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T5\\ut369.h",
+    "Length": 9067
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T5\\test\\.gitignore",
+    "Length": 115
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T5\\test\\.gitkeep",
+    "Length": 0
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T5\\test\\broadcast.c",
+    "Length": 3829
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T5\\test\\crash.c",
+    "Length": 7736
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T5\\test\\deadlock.c",
+    "Length": 19128
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T5\\test\\lock.c",
+    "Length": 2212
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T5\\test\\semantics.c",
+    "Length": 10406
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T5\\test\\signal.c",
+    "Length": 4071
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T5\\test\\test.h",
+    "Length": 346
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T5\\test\\timeout.h",
+    "Length": 5050
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T7\\.gitignore",
+    "Length": 38
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T7\\.gitkeep",
+    "Length": 0
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T7\\a2q.c",
+    "Length": 2606
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T7\\coremap.c",
+    "Length": 1660
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T7\\coremap.h",
+    "Length": 2528
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T7\\glrand.h",
+    "Length": 616
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T7\\LICENSE.md",
+    "Length": 2510
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T7\\list.h",
+    "Length": 4983
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T7\\Makefile",
+    "Length": 708
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T7\\pagetable.c",
+    "Length": 3113
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T7\\pagetable.h",
+    "Length": 3114
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T7\\physmem.h",
+    "Length": 671
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T7\\rand.c",
+    "Length": 508
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T7\\sim.c",
+    "Length": 7682
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T7\\swap.c",
+    "Length": 961
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T7\\swap.h",
+    "Length": 1020
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T7\\timer.h",
+    "Length": 463
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T7\\tlb.c",
+    "Length": 3509
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T7\\tlb.h",
+    "Length": 3477
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T7\\types.h",
+    "Length": 451
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T7\\vm.c",
+    "Length": 3443
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T7\\traces\\.gitignore",
+    "Length": 7
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC369\\wangowe6\\T7\\traces\\.gitkeep",
+    "Length": 0
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC413\\Complete\\fall26_hw5_cnns.ipynb",
+    "Length": 33739
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC413\\Complete\\Fall26_HW5_CNNs.py",
+    "Length": 24905
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC413\\Complete\\fall26_hw6_rnn.ipynb",
+    "Length": 38051
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC413\\Complete\\Fall26_HW6_RNN.py",
+    "Length": 29924
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC413\\Complete\\fall26_hw7_attention.ipynb",
+    "Length": 48537
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC413\\Complete\\Fall26_HW7_Attention.py",
+    "Length": 37292
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC413\\Complete\\fall26_hw8_transformer_part1.ipynb",
+    "Length": 20168
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC413\\Complete\\Fall26_HW8_Transformer_part1.py",
+    "Length": 15784
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC413\\FillInCodes\\copy_of_fall26_hw5_cnns.py",
+    "Length": 23110
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC413\\FillInCodes\\copy_of_fall26_hw6_rnn.py",
+    "Length": 26011
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC413\\FillInCodes\\copy_of_fall26_hw7_attention.py",
+    "Length": 33367
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC413\\FillInCodes\\fall26_hw8_transformer_part1.py",
+    "Length": 11612
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC413\\LectureMaterial\\Lecture 1.pdf",
+    "Length": 1939299
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC413\\LectureMaterial\\Lecture 2.pdf",
+    "Length": 1532112
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC413\\LectureMaterial\\Lecture 3.pdf",
+    "Length": 1424713
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC413\\LectureMaterial\\Lecture 4.pdf",
+    "Length": 1818730
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC413\\LectureMaterial\\Lecture 5.pdf",
+    "Length": 1700532
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC413\\LectureMaterial\\Lecture 6.pdf",
+    "Length": 1621727
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC413\\LectureMaterial\\Lecture 7.pdf",
+    "Length": 1581331
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\CSC413\\LectureMaterial\\Lecture 8.pdf",
+    "Length": 1529741
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\My project (5)_BurstDebugInformation_DoNotShip\\Data\\Plugins\\lib_burst_generated.txt",
+    "Length": 114626
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\TemplateData\\favicon.ico",
+    "Length": 2305
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\TemplateData\\fullscreen-button.png",
+    "Length": 175
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\TemplateData\\MemoryProfiler.png",
+    "Length": 665
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\TemplateData\\profiler.js",
+    "Length": 1573
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\TemplateData\\progress-bar-empty-dark.png",
+    "Length": 96
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\TemplateData\\progress-bar-empty-light.png",
+    "Length": 109
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\TemplateData\\progress-bar-full-dark.png",
+    "Length": 74
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\TemplateData\\progress-bar-full-light.png",
+    "Length": 84
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\TemplateData\\style.css",
+    "Length": 1448
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\TemplateData\\unity-logo-dark.png",
+    "Length": 3042
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\TemplateData\\unity-logo-light.png",
+    "Length": 3077
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\TemplateData\\unity-logo-title-footer.png",
+    "Length": 1151
+  },
+  {
+    "FullName": "C:\\Users\\TERRA\\Documents\\UofT\\TemplateData\\webmemd-icon.png",
+    "Length": 1670
+  }
+]

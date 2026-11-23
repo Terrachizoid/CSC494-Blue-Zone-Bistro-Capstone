@@ -47,5 +47,10 @@ agent runs `new …`; later agents start with `screen`. Day prompt:
 > 150-word reflection: ending, money, confusion, food learned, rent stress, fun 1–10, one change.]
 
 Round 5 used the same table and prompt, with commands `recipes`, `pantry`, `sell <FOOD> [servings]` added
-and `preview` described as "checks the plate only". The day-6 reflection also asked: "did you miss being
+and `preview` described as "checks the plate only".
+
+From 2026-11-22 (current game): list the commands as `recipes`, `plan <RECIPE>`, `unplan <RECIPE>`, `close`,
+`find <food type>`, `shelf <STORE> [SHELF]`, `flip`, `add`, `remove`, `checkout`, `sort`, `bistro`, `preview`, `serve`,
+`skip`, `city`, `guests`, `pantry`, `sell`, `news`, `info`, `next`. Tell agents that shopping continues after each
+checkout until they type `bistro`, and that `[GUIDE]` lines are the in-game guide. The day-6 reflection also asked: "did you miss being
 able to see a dish's result before serving?"

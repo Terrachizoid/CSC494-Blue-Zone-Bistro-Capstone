@@ -18,6 +18,7 @@ MonoBehaviour:
   trigger: 1
   repeatRule: 1
   priority: 100
+  variantOf: 
   randomWeight: 1
   customer: {fileID: 11400000, guid: cfd22689b8c5c2c44a55f0cc5ec67744, type: 2}
   minDay: 2
@@ -30,6 +31,13 @@ MonoBehaviour:
   recipeBuildCondition: 0
   mealHealthCondition: 0
   requiredRecipeTiers: 
+  requestCondition: 0
+  missedRequests: 
+  recipeFatigued: 0
+  minIngredientAppeal: -1
+  maxIngredientAppeal: -1
+  delightFull: 0
+  redServed: 0
   minServedMealDelight: -1
   maxServedMealDelight: -1
   requiredFlags: []
@@ -44,7 +52,7 @@ MonoBehaviour:
     claim: {fileID: 0}
     portrait: {fileID: 0}
     backgroundImage: {fileID: 0}
-    emotion: Neutral
+    emotion: Welcoming
     voiceOver: {fileID: 0}
   - lineOrder: 1
     speakerId: U005
@@ -53,7 +61,7 @@ MonoBehaviour:
     claim: {fileID: 0}
     portrait: {fileID: 0}
     backgroundImage: {fileID: 0}
-    emotion: Neutral
+    emotion: Welcoming
     voiceOver: {fileID: 0}
   approvalStatus: 0
   reviewNotes: Draft narrative inspired by Capstone Plan S7. Personal preferences

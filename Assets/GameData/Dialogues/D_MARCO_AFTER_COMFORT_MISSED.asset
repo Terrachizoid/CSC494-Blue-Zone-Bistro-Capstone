@@ -1,0 +1,76 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6852f3275b3b4254aa4113d5ddba5b29, type: 3}
+  m_Name: D_MARCO_AFTER_COMFORT_MISSED
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueSequenceData
+  id: D_MARCO_AFTER_COMFORT_MISSED
+  displayName: Marco reacts to the meal
+  mode: 0
+  trigger: 3
+  repeatRule: 1
+  priority: 97
+  variantOf: 
+  randomWeight: 1
+  customer: {fileID: 11400000, guid: cfd22689b8c5c2c44a55f0cc5ec67744, type: 2}
+  minDay: 2
+  maxDay: -1
+  minCustomerHealth: -1
+  maxCustomerHealth: -1
+  minCustomerDelight: -1
+  maxCustomerDelight: -1
+  requiredRecipe: {fileID: 0}
+  recipeBuildCondition: 1
+  mealHealthCondition: 0
+  requiredRecipeTiers: 
+  requestCondition: 0
+  missedRequests: 07000000
+  recipeFatigued: 0
+  minIngredientAppeal: -1
+  maxIngredientAppeal: -1
+  delightFull: 0
+  redServed: 0
+  minServedMealDelight: -1
+  maxServedMealDelight: -1
+  requiredFlags: []
+  forbiddenFlags: []
+  setFlags: []
+  clearFlags: []
+  lines:
+  - lineOrder: 0
+    speakerId: U005
+    textTemplate: After a cold morning on the water, I was hoping for something comforting.
+    claim: {fileID: 0}
+    portrait: {fileID: 0}
+    backgroundImage: {fileID: 0}
+    emotion: Cautious
+    voiceOver: {fileID: 0}
+  - lineOrder: 1
+    speakerId: U005
+    textTemplate: This didn't warm me up the way I hoped.
+    claim: {fileID: 0}
+    portrait: {fileID: 0}
+    backgroundImage: {fileID: 0}
+    emotion: Disappointed
+    voiceOver: {fileID: 0}
+  - lineOrder: 2
+    speakerId: Blue Zone Guide
+    textTemplate: Comfort requests need a dish with ingredient appeal of {appealTarget}
+      or more. This one was {ingredientAppeal}. Each food card shows its appeal;
+      many green foods rate 7 or higher.
+    claim: {fileID: 0}
+    portrait: {fileID: 0}
+    backgroundImage: {fileID: 0}
+    emotion: 
+    voiceOver: {fileID: 0}
+  approvalStatus: 0
+  reviewNotes: 'Reason reaction (2026-11-22): the guest names the main issue and
+    the Blue Zone Guide adds one tip. Pending supervisor review. No medical claims.'

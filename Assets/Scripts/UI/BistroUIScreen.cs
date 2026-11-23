@@ -40,14 +40,14 @@ public partial class BistroUIScreen : MonoBehaviour
     }
     private void PhaseChanged(GamePhase phase)
     {
-        ResetMeal();sellSelections.Clear();store=null;shelf=null;modal=null;answers.Clear();notice="";dirty=true;
+        ResetMeal();ResetStage();sellSelections.Clear();store=null;shelf=null;modal=null;answers.Clear();notice="";dirty=true;
         if(phase==GamePhase.Market&&returnStore!=null){store=returnStore;shelf=returnShelf;notice=PurchaseDone;}
         else if(phase==GamePhase.Market&&game.Loop.BistroOpened)notice="Your guests will wait. Shop, then click your Bistro on the map to go back.";
         if(phase!=GamePhase.FoodSorting){returnStore=null;returnShelf=null;}
     }
     private const string PurchaseDone="Purchase complete. Shop more, or click your Bistro on the map when you're ready to cook.";
-    private void LateUpdate(){TickEventToast();TickPlanHint();if(!game.IsMainMenu)TickChatter();if(!game.IsMainMenu)SyncVoice();if(dirty){dirty=false;Refresh();}}
-    private void OnDestroy(){if(subscribedLoop!=null)subscribedLoop.PhaseChanged-=PhaseChanged;if(ownsTheme)Destroy(theme);}
+    private void LateUpdate(){TickGrade();TickEventToast();TickPlanHint();if(!game.IsMainMenu)TickChatter();if(!game.IsMainMenu)SyncVoice();if(dirty){dirty=false;Refresh();}}
+    private void OnDestroy(){ReleaseGrades();if(subscribedLoop!=null)subscribedLoop.PhaseChanged-=PhaseChanged;if(ownsTheme)Destroy(theme);}
     private void Change(Action action){action();dirty=true;}
     // Redraw after something outside the UI changed the session (debug panel).
     public void MarkDirty(){dirty=true;}
@@ -59,8 +59,8 @@ public partial class BistroUIScreen : MonoBehaviour
         RetireScreen();
         screen=BistroWidgets.Box(canvas.transform,"Current screen",theme.background,Vector2.zero,Vector2.one);
         dialogueRequests.Clear();
-        if(game.IsMainMenu){MainMenu();StyleMenu(screen);FlushDialogue();AnimateNavigation();return;}
-        if(game.Loop.Phase==GamePhase.Completed){EndingScreen();FlushDialogue();AnimateNavigation();return;}
+        if(game.IsMainMenu){if(sceneryGrade!=null||panelGrade!=null||guestGrades.Count>0)ReleaseGrades();MainMenu();StyleMenu(screen);FlushDialogue();SoundPass();AnimateNavigation();return;}
+        if(game.Loop.Phase==GamePhase.Completed){EndingScreen();FlushDialogue();SoundPass();AnimateNavigation();return;}
         game.Loop.RefreshTutorials();
         BistroWidgets.Label(screen,game.SaveFailed?game.SaveMessage:notice,theme,new Vector2(.03f,0),new Vector2(.97f,.065f),18);
         TrackShopLesson();
@@ -77,6 +77,8 @@ public partial class BistroUIScreen : MonoBehaviour
         FlushDialogue();
         RestoreScroll();
         RestoreCardFaces();
+        GradePanels();
+        SoundPass();
         AnimateNavigation();
     }
     private void Market()
@@ -88,7 +90,7 @@ public partial class BistroUIScreen : MonoBehaviour
         // Fallback for a store without a background or world.json click regions: plain shelf buttons.
         BistroWidgets.Label(screen,store.displayName,theme,new Vector2(.03f,.82f),new Vector2(.96f,.89f),25);
         var interior=BistroWidgets.Box(screen,"Store interior",theme.panel,new Vector2(.03f,.20f),new Vector2(.97f,.79f));
-        if(store.shopBackground!=null){interior.GetComponent<Image>().sprite=store.shopBackground;interior.GetComponent<Image>().color=Color.white;}
+        if(store.shopBackground!=null){interior.GetComponent<Image>().sprite=store.shopBackground;interior.GetComponent<Image>().color=Color.white;GradeScenery(interior.GetComponent<Image>());}
         var shelves=game.Queries.GetListings(store).Select(l=>l.shelfId).Distinct().ToList();
         for(int i=0;i<shelves.Count;i++)
         {string id=shelves[i];var definition=store.shelves.FirstOrDefault(s=>s!=null&&s.id==id);float x=.04f+(i%3)*.32f,y=.64f-(i/3)*.25f;
@@ -110,7 +112,7 @@ public partial class BistroUIScreen : MonoBehaviour
     {
         var room=BistroWidgets.Box(screen,"Bistro interior",theme.panel,Vector2.zero,new Vector2(1,.91f));
         var background=room.GetComponent<Image>();background.raycastTarget=false;
-        if(theme.serviceBackground!=null){background.sprite=theme.serviceBackground;background.color=Color.white;}
+        if(theme.serviceBackground!=null){background.sprite=theme.serviceBackground;background.color=Color.white;GradeScenery(background);}
         BistroWidgets.Box(room,"Kitchen dim",new Color(0,0,0,.24f),Vector2.zero,Vector2.one).GetComponent<Image>().raycastTarget=false;
         return BistroShelfStyle.PaperPanel(room,name,theme,new Vector2(.025f,.025f),new Vector2(.975f,.97f));
     }

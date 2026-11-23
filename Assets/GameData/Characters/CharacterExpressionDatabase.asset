@@ -1,0 +1,363 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84595fef4c1311646b62acb45a290476, type: 3}
+  m_Name: CharacterExpressionDatabase
+  m_EditorClassIdentifier: Assembly-CSharp::CharacterExpressionDatabase
+  expressions:
+  - id: U001_neutral
+    characterId: U001
+    expression: neutral
+    emotions:
+    - Neutral
+    image: {fileID: 21300000, guid: 5d6dc12073b8c754cab0b171f00af5ff, type: 3}
+    parts: []
+    videoPath: 
+    tint: {r: 0, g: 0, b: 0, a: 0}
+  - id: U001_happy
+    characterId: U001
+    expression: happy
+    emotions:
+    - Happy
+    - Pleased
+    - Welcoming
+    image: {fileID: 21300000, guid: 2a3891b7e6ec58944b86b79a2d5ce573, type: 3}
+    parts: []
+    videoPath: 
+    tint: {r: 0, g: 0, b: 0, a: 0}
+  - id: U001_concerned
+    characterId: U001
+    expression: concerned
+    emotions:
+    - Concerned
+    - Cautious
+    image: {fileID: 21300000, guid: ae49ac8ccd567e94cba26cc0c75b36d6, type: 3}
+    parts: []
+    videoPath: 
+    tint: {r: 0, g: 0, b: 0, a: 0}
+  - id: U001_disappointed
+    characterId: U001
+    expression: disappointed
+    emotions:
+    - Disappointed
+    image: {fileID: 21300000, guid: fdd085f59aab9494c977277eb6172cf3, type: 3}
+    parts: []
+    videoPath: 
+    tint: {r: 0, g: 0, b: 0, a: 0}
+  - id: U001_tired
+    characterId: U001
+    expression: tired
+    emotions:
+    - Tired
+    image: {fileID: 21300000, guid: 4cf37637daeedea4bb9fe0c311b0f36a, type: 3}
+    parts: []
+    videoPath: 
+    tint: {r: 0, g: 0, b: 0, a: 0}
+  - id: U002_neutral
+    characterId: U002
+    expression: neutral
+    emotions:
+    - Neutral
+    image: {fileID: 21300000, guid: 2953735a04c20184ea0114827971868d, type: 3}
+    parts: []
+    videoPath: 
+    tint: {r: 0, g: 0, b: 0, a: 0}
+  - id: U002_happy
+    characterId: U002
+    expression: happy
+    emotions:
+    - Happy
+    - Pleased
+    - Welcoming
+    image: {fileID: 21300000, guid: 167b5948a45ed634587e4286cb340932, type: 3}
+    parts: []
+    videoPath: 
+    tint: {r: 0, g: 0, b: 0, a: 0}
+  - id: U002_concerned
+    characterId: U002
+    expression: concerned
+    emotions:
+    - Concerned
+    - Cautious
+    image: {fileID: 21300000, guid: 846d64c16ac8d1844b7f806370134f59, type: 3}
+    parts: []
+    videoPath: 
+    tint: {r: 0, g: 0, b: 0, a: 0}
+  - id: U002_disappointed
+    characterId: U002
+    expression: disappointed
+    emotions:
+    - Disappointed
+    image: {fileID: 21300000, guid: e944616a5452aef4695cda09b6e975bf, type: 3}
+    parts: []
+    videoPath: 
+    tint: {r: 0, g: 0, b: 0, a: 0}
+  - id: U002_tired
+    characterId: U002
+    expression: tired
+    emotions:
+    - Tired
+    image: {fileID: 21300000, guid: 2e0c2fc80fb55f242b218a4456418623, type: 3}
+    parts: []
+    videoPath: 
+    tint: {r: 0, g: 0, b: 0, a: 0}
+  - id: U003_neutral
+    characterId: U003
+    expression: neutral
+    emotions:
+    - Neutral
+    image: {fileID: 21300000, guid: c2db0e972a9c2e04b94da45e2eb09c5a, type: 3}
+    parts: []
+    videoPath: 
+    tint: {r: 0, g: 0, b: 0, a: 0}
+  - id: U003_happy
+    characterId: U003
+    expression: happy
+    emotions:
+    - Happy
+    - Pleased
+    - Welcoming
+    image: {fileID: 21300000, guid: ee1770d63a78e8c4b96b1203188513f2, type: 3}
+    parts: []
+    videoPath: 
+    tint: {r: 0, g: 0, b: 0, a: 0}
+  - id: U003_concerned
+    characterId: U003
+    expression: concerned
+    emotions:
+    - Concerned
+    - Cautious
+    image: {fileID: 21300000, guid: d74ba880b6cbfee4cbd5004a475933de, type: 3}
+    parts: []
+    videoPath: 
+    tint: {r: 0, g: 0, b: 0, a: 0}
+  - id: U003_disappointed
+    characterId: U003
+    expression: disappointed
+    emotions:
+    - Disappointed
+    image: {fileID: 21300000, guid: 969e66bc957694e408e2c6d01ad7db38, type: 3}
+    parts: []
+    videoPath: 
+    tint: {r: 0, g: 0, b: 0, a: 0}
+  - id: U003_tired
+    characterId: U003
+    expression: tired
+    emotions:
+    - Tired
+    image: {fileID: 21300000, guid: d0d8d98b22542314d8b96b7549cd8170, type: 3}
+    parts: []
+    videoPath: 
+    tint: {r: 0, g: 0, b: 0, a: 0}
+  - id: U004_neutral
+    characterId: U004
+    expression: neutral
+    emotions:
+    - Neutral
+    image: {fileID: 21300000, guid: 2bed126c948326a46b81ac571d613595, type: 3}
+    parts: []
+    videoPath: 
+    tint: {r: 0, g: 0, b: 0, a: 0}
+  - id: U004_happy
+    characterId: U004
+    expression: happy
+    emotions:
+    - Happy
+    - Pleased
+    - Welcoming
+    image: {fileID: 21300000, guid: 9b0b6a1f2f22b884b918e0a3549553a0, type: 3}
+    parts: []
+    videoPath: 
+    tint: {r: 0, g: 0, b: 0, a: 0}
+  - id: U004_concerned
+    characterId: U004
+    expression: concerned
+    emotions:
+    - Concerned
+    - Cautious
+    image: {fileID: 21300000, guid: ee2cff5291e803049b303e03fe617cf9, type: 3}
+    parts: []
+    videoPath: 
+    tint: {r: 0, g: 0, b: 0, a: 0}
+  - id: U004_disappointed
+    characterId: U004
+    expression: disappointed
+    emotions:
+    - Disappointed
+    image: {fileID: 21300000, guid: ca30ab63b8052e04e82d4cc16344b7ad, type: 3}
+    parts: []
+    videoPath: 
+    tint: {r: 0, g: 0, b: 0, a: 0}
+  - id: U004_tired
+    characterId: U004
+    expression: tired
+    emotions:
+    - Tired
+    image: {fileID: 21300000, guid: f314797727f6cde48b1492a4cbc636bf, type: 3}
+    parts: []
+    videoPath: 
+    tint: {r: 0, g: 0, b: 0, a: 0}
+  - id: U005_neutral
+    characterId: U005
+    expression: neutral
+    emotions:
+    - Neutral
+    image: {fileID: 21300000, guid: 16687c47ebfa501489d14a58a0ecda6e, type: 3}
+    parts: []
+    videoPath: 
+    tint: {r: 0, g: 0, b: 0, a: 0}
+  - id: U005_happy
+    characterId: U005
+    expression: happy
+    emotions:
+    - Happy
+    - Pleased
+    - Welcoming
+    image: {fileID: 21300000, guid: 9fc2879b25b6b074e8f99b4cde5383e2, type: 3}
+    parts: []
+    videoPath: 
+    tint: {r: 0, g: 0, b: 0, a: 0}
+  - id: U005_concerned
+    characterId: U005
+    expression: concerned
+    emotions:
+    - Concerned
+    - Cautious
+    image: {fileID: 21300000, guid: f6ccaf2e9c91f064f9c3e5f041da3ccc, type: 3}
+    parts: []
+    videoPath: 
+    tint: {r: 0, g: 0, b: 0, a: 0}
+  - id: U005_disappointed
+    characterId: U005
+    expression: disappointed
+    emotions:
+    - Disappointed
+    image: {fileID: 21300000, guid: 57f2f450cc15eda45807df1973df7f77, type: 3}
+    parts: []
+    videoPath: 
+    tint: {r: 0, g: 0, b: 0, a: 0}
+  - id: U005_tired
+    characterId: U005
+    expression: tired
+    emotions:
+    - Tired
+    image: {fileID: 21300000, guid: 3b719a50521125149ae851ed9d421013, type: 3}
+    parts: []
+    videoPath: 
+    tint: {r: 0, g: 0, b: 0, a: 0}
+  - id: U006_neutral
+    characterId: U006
+    expression: neutral
+    emotions:
+    - Neutral
+    image: {fileID: 21300000, guid: 0b86402accdcf694b8d636d4a1065433, type: 3}
+    parts: []
+    videoPath: 
+    tint: {r: 0, g: 0, b: 0, a: 0}
+  - id: U006_happy
+    characterId: U006
+    expression: happy
+    emotions:
+    - Happy
+    - Pleased
+    - Welcoming
+    image: {fileID: 21300000, guid: b9e0cf860a901314dae748d9f0072f2d, type: 3}
+    parts: []
+    videoPath: 
+    tint: {r: 0, g: 0, b: 0, a: 0}
+  - id: U006_concerned
+    characterId: U006
+    expression: concerned
+    emotions:
+    - Concerned
+    - Cautious
+    image: {fileID: 21300000, guid: 700dcc624b18e3f43aa65b8558c127ae, type: 3}
+    parts: []
+    videoPath: 
+    tint: {r: 0, g: 0, b: 0, a: 0}
+  - id: U006_disappointed
+    characterId: U006
+    expression: disappointed
+    emotions:
+    - Disappointed
+    image: {fileID: 21300000, guid: 5d3117b4165926e4784fa9277b20323b, type: 3}
+    parts: []
+    videoPath: 
+    tint: {r: 0, g: 0, b: 0, a: 0}
+  - id: U006_tired
+    characterId: U006
+    expression: tired
+    emotions:
+    - Tired
+    image: {fileID: 21300000, guid: f06279708824b084bba8109bcebe41ba, type: 3}
+    parts: []
+    videoPath: 
+    tint: {r: 0, g: 0, b: 0, a: 0}
+  - id: VisitingChef_neutral
+    characterId: Visiting Chef
+    expression: neutral
+    emotions:
+    - Neutral
+    - Happy
+    - Pleased
+    - Welcoming
+    image: {fileID: 21300000, guid: 42b7f1b10df94b04b87f29cf681bb1a1, type: 3}
+    parts: []
+    videoPath: 
+    tint: {r: 0, g: 0, b: 0, a: 0}
+  - id: Default_neutral
+    characterId: Default
+    expression: neutral
+    emotions:
+    - Neutral
+    image: {fileID: 0}
+    parts: []
+    videoPath: 
+    tint: {r: 0.3019608, g: 0.3882353, b: 0.36078432, a: 1}
+  - id: Default_happy
+    characterId: Default
+    expression: happy
+    emotions:
+    - Happy
+    - Pleased
+    - Welcoming
+    image: {fileID: 0}
+    parts: []
+    videoPath: 
+    tint: {r: 0.3019608, g: 0.47843137, b: 0.36078432, a: 1}
+  - id: Default_concerned
+    characterId: Default
+    expression: concerned
+    emotions:
+    - Concerned
+    - Cautious
+    image: {fileID: 0}
+    parts: []
+    videoPath: 
+    tint: {r: 0.36078432, g: 0.38039216, b: 0.4392157, a: 1}
+  - id: Default_disappointed
+    characterId: Default
+    expression: disappointed
+    emotions:
+    - Disappointed
+    image: {fileID: 0}
+    parts: []
+    videoPath: 
+    tint: {r: 0.4, g: 0.34117648, b: 0.36078432, a: 1}
+  - id: Default_tired
+    characterId: Default
+    expression: tired
+    emotions:
+    - Tired
+    image: {fileID: 0}
+    parts: []
+    videoPath: 
+    tint: {r: 0.4, g: 0.4117647, b: 0.4, a: 1}

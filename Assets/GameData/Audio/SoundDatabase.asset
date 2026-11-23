@@ -1,0 +1,302 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4fd75d492bcc4f54d9616bad2a378600, type: 3}
+  m_Name: SoundDatabase
+  m_EditorClassIdentifier: Assembly-CSharp::SoundDatabase
+  cues:
+  - id: button
+    kind: 0
+    clips:
+    - {fileID: 8300000, guid: d5e1d0d12e42e8f408fe2fd17fdddc94, type: 3}
+    volume: 0.4
+    pitchVariation: 0.02
+  - id: button.primary
+    kind: 0
+    clips:
+    - {fileID: 8300000, guid: 4b3d5c622bf10f6408104524bb4e35eb, type: 3}
+    - {fileID: 8300000, guid: 42e6b8db8440ea5478fd2933257bc742, type: 3}
+    volume: 0.4
+    pitchVariation: 0.02
+  - id: button.secondary
+    kind: 0
+    clips:
+    - {fileID: 8300000, guid: 98268f3eadd5a9148a96bc11a8e99c4c, type: 3}
+    - {fileID: 8300000, guid: a3c4bc66ecbb64b4a9bab9312cdf3dd2, type: 3}
+    volume: 0.4
+    pitchVariation: 0.02
+  - id: button.caution
+    kind: 0
+    clips:
+    - {fileID: 8300000, guid: b614df91e94b8de4f81a87c1a467c3b1, type: 3}
+    volume: 0.4
+    pitchVariation: 0.02
+  - id: card
+    kind: 0
+    clips:
+    - {fileID: 8300000, guid: da13d1039ea0d0547bd675f86ebe4523, type: 3}
+    volume: 0.36
+    pitchVariation: 0.08
+  - id: card.flip
+    kind: 0
+    clips:
+    - {fileID: 8300000, guid: 9690153859a4f08459d04d02b7f0ab8e, type: 3}
+    - {fileID: 8300000, guid: 93b8a7223e42cd443a070407c6e3813f, type: 3}
+    - {fileID: 8300000, guid: 640a69400ac67e14b8f429c98d52d85a, type: 3}
+    volume: 0.36
+    pitchVariation: 0.08
+  - id: card.pick
+    kind: 0
+    clips:
+    - {fileID: 8300000, guid: a4ff96254c003094faff6ee61a971995, type: 3}
+    - {fileID: 8300000, guid: 3f3fdaf2310db8340931a00443aac994, type: 3}
+    volume: 0.36
+    pitchVariation: 0.08
+  - id: card.drop
+    kind: 0
+    clips:
+    - {fileID: 8300000, guid: 064731cf7ee72c740a477149c225bb78, type: 3}
+    - {fileID: 8300000, guid: 0f9cdd50b28f2d34b807cfbe26948c29, type: 3}
+    - {fileID: 8300000, guid: 8aee8333b9f0c8b4bbdef587ca04ac5c, type: 3}
+    volume: 0.36
+    pitchVariation: 0.08
+  - id: card.return
+    kind: 0
+    clips:
+    - {fileID: 8300000, guid: 15d854d6d8f3b63489e0ca597b8b7ef5, type: 3}
+    volume: 0.36
+    pitchVariation: 0.05
+  - id: guest.arrive
+    kind: 0
+    clips:
+    - {fileID: 8300000, guid: 80cea1a1a5d93fb4bb03609ddc65aff5, type: 3}
+    volume: 0.14
+    pitchVariation: 0.03
+  - id: guest.leave
+    kind: 0
+    clips:
+    - {fileID: 8300000, guid: ff9dfeb6dccd7504c8a3c2b47b85fd0c, type: 3}
+    volume: 0.14
+    pitchVariation: 0.03
+  - id: dish
+    kind: 0
+    clips:
+    - {fileID: 8300000, guid: 5acdeb4d2bb4b1945aa96f4f6a0326c0, type: 3}
+    volume: 0.32
+    pitchVariation: 0
+  - id: dish.good
+    kind: 0
+    clips:
+    - {fileID: 8300000, guid: 4724540e1f97d1e4ebcd9b5298b8a4f7, type: 3}
+    volume: 0.32
+    pitchVariation: 0
+  - id: dish.okay
+    kind: 0
+    clips:
+    - {fileID: 8300000, guid: 46d705ea3f7ce0d46bd7312d7544cc1e, type: 3}
+    volume: 0.32
+    pitchVariation: 0
+  - id: dish.unhealthy
+    kind: 0
+    clips:
+    - {fileID: 8300000, guid: d098e47ff1cb3a44396fd3a4b202b4d6, type: 3}
+    volume: 0.32
+    pitchVariation: 0
+  - id: dish.failed
+    kind: 0
+    clips:
+    - {fileID: 8300000, guid: 3821fca24b2634d438017544010730be, type: 3}
+    volume: 0.32
+    pitchVariation: 0
+  - id: money.spend
+    kind: 0
+    clips:
+    - {fileID: 8300000, guid: 226c78b9f4f5a6c49940a16aed68065e, type: 3}
+    - {fileID: 8300000, guid: b00ac4e37a368154195e30f05bc5fb3b, type: 3}
+    volume: 0.28
+    pitchVariation: 0.04
+  - id: money.earn
+    kind: 0
+    clips:
+    - {fileID: 8300000, guid: f0a9f463b481762429851d986f721bf2, type: 3}
+    - {fileID: 8300000, guid: 58ac187b3f937854ba77dfe8dee7e309, type: 3}
+    volume: 0.28
+    pitchVariation: 0.04
+  - id: sort.done
+    kind: 0
+    clips:
+    - {fileID: 8300000, guid: bbfc4848f7d28ec478399b4d41cf50fc, type: 3}
+    volume: 0.36
+    pitchVariation: 0
+  - id: event.news
+    kind: 0
+    clips:
+    - {fileID: 8300000, guid: 7382b422b06625a4d85d76c9bd6c30d9, type: 3}
+    volume: 0.48
+    pitchVariation: 0.02
+  - id: day.start
+    kind: 0
+    clips:
+    - {fileID: 8300000, guid: 60ba91160a459384c9f3236a9a92a5ae, type: 3}
+    volume: 0.36
+    pitchVariation: 0
+  - id: music.menu
+    kind: 1
+    clips:
+    - {fileID: 8300000, guid: f5d29f28c0aaafa4b91db486d888ec86, type: 3}
+    volume: 0.55
+    pitchVariation: 0
+  - id: music.city
+    kind: 1
+    clips:
+    - {fileID: 8300000, guid: f5d29f28c0aaafa4b91db486d888ec86, type: 3}
+    volume: 0.5
+    pitchVariation: 0
+  - id: music.city.low
+    kind: 1
+    clips:
+    - {fileID: 8300000, guid: c88ddaa87b9303643ba88576ba5ad354, type: 3}
+    volume: 0.5
+    pitchVariation: 0
+  - id: music.city.high
+    kind: 1
+    clips:
+    - {fileID: 8300000, guid: d6262babf87cc9e4bb29334601400585, type: 3}
+    volume: 0.5
+    pitchVariation: 0
+  - id: music.store
+    kind: 1
+    clips:
+    - {fileID: 8300000, guid: b4ec2e338657ad2438725e1e3a7520c6, type: 3}
+    volume: 0.45
+    pitchVariation: 0
+  - id: music.store.low
+    kind: 1
+    clips:
+    - {fileID: 8300000, guid: 009140f7297b7de4b919aac25b8d4969, type: 3}
+    volume: 0.45
+    pitchVariation: 0
+  - id: music.store.high
+    kind: 1
+    clips:
+    - {fileID: 8300000, guid: 77b71149163d65041973bc6738af6bc0, type: 3}
+    volume: 0.45
+    pitchVariation: 0
+  - id: music.sorting
+    kind: 1
+    clips:
+    - {fileID: 8300000, guid: b4ec2e338657ad2438725e1e3a7520c6, type: 3}
+    volume: 0.45
+    pitchVariation: 0
+  - id: music.sorting.low
+    kind: 1
+    clips:
+    - {fileID: 8300000, guid: 009140f7297b7de4b919aac25b8d4969, type: 3}
+    volume: 0.45
+    pitchVariation: 0
+  - id: music.sorting.high
+    kind: 1
+    clips:
+    - {fileID: 8300000, guid: 77b71149163d65041973bc6738af6bc0, type: 3}
+    volume: 0.45
+    pitchVariation: 0
+  - id: music.bistro
+    kind: 1
+    clips:
+    - {fileID: 8300000, guid: a20f18b4c40c6f24b92122e4954f22bf, type: 3}
+    volume: 0.5
+    pitchVariation: 0
+  - id: music.bistro.low
+    kind: 1
+    clips:
+    - {fileID: 8300000, guid: 0659f94b0050e9d4da6fe1140c60465e, type: 3}
+    volume: 0.5
+    pitchVariation: 0
+  - id: music.bistro.high
+    kind: 1
+    clips:
+    - {fileID: 8300000, guid: fce6bcbc4779ae041bb670ba53f0936f, type: 3}
+    volume: 0.5
+    pitchVariation: 0
+  - id: music.results
+    kind: 1
+    clips:
+    - {fileID: 8300000, guid: a20f18b4c40c6f24b92122e4954f22bf, type: 3}
+    volume: 0.5
+    pitchVariation: 0
+  - id: music.results.low
+    kind: 1
+    clips:
+    - {fileID: 8300000, guid: 0659f94b0050e9d4da6fe1140c60465e, type: 3}
+    volume: 0.5
+    pitchVariation: 0
+  - id: music.results.high
+    kind: 1
+    clips:
+    - {fileID: 8300000, guid: fce6bcbc4779ae041bb670ba53f0936f, type: 3}
+    volume: 0.5
+    pitchVariation: 0
+  - id: music.ending
+    kind: 1
+    clips:
+    - {fileID: 8300000, guid: f5d29f28c0aaafa4b91db486d888ec86, type: 3}
+    volume: 0.55
+    pitchVariation: 0
+  - id: panel.open
+    kind: 0
+    clips:
+    - {fileID: 8300000, guid: a29f8ed5b405cdc42934200b21075a44, type: 3}
+    - {fileID: 8300000, guid: f5224cbf01e21814faba54a3e64a82a7, type: 3}
+    volume: 0.3
+    pitchVariation: 0.03
+  - id: panel.close
+    kind: 0
+    clips:
+    - {fileID: 8300000, guid: 745e00df0e7739f4686fd9bd7f79aeb7, type: 3}
+    volume: 0.2
+    pitchVariation: 0.03
+  - id: event.news.open
+    kind: 0
+    clips:
+    - {fileID: 8300000, guid: 7382b422b06625a4d85d76c9bd6c30d9, type: 3}
+    volume: 0.48
+    pitchVariation: 0.02
+  - id: event.news.page
+    kind: 0
+    clips:
+    - {fileID: 8300000, guid: 4d79669838f06eb49b54835aa2e8ff93, type: 3}
+    - {fileID: 8300000, guid: 87792d7c1b83e274eb000579b88cf4ea, type: 3}
+    volume: 0.48
+    pitchVariation: 0.02
+  - id: event.news.close
+    kind: 0
+    clips:
+    - {fileID: 8300000, guid: 46f38acf942141246b2044fb39741fd4, type: 3}
+    volume: 0.48
+    pitchVariation: 0.02
+  - id: bistro.enter
+    kind: 0
+    clips:
+    - {fileID: 8300000, guid: a71a06f5fa854d44094acc5d7c654770, type: 3}
+    volume: 0.16
+    pitchVariation: 0
+  - id: result.dish
+    kind: 0
+    clips:
+    - {fileID: 8300000, guid: 0e6a0150b523d3b40b07f11f1e093aca, type: 3}
+    volume: 0.36
+    pitchVariation: 0
+  - id: result.day
+    kind: 0
+    clips:
+    - {fileID: 8300000, guid: 0e6a0150b523d3b40b07f11f1e093aca, type: 3}
+    volume: 0.36
+    pitchVariation: 0

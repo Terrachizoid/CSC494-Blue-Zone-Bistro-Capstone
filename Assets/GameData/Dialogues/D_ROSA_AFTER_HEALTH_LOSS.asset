@@ -18,6 +18,7 @@ MonoBehaviour:
   trigger: 3
   repeatRule: 1
   priority: 190
+  variantOf: 
   randomWeight: 1
   customer: {fileID: 11400000, guid: 96092889bbf9f4e449e789a43c792f70, type: 2}
   minDay: 1
@@ -30,6 +31,13 @@ MonoBehaviour:
   recipeBuildCondition: 1
   mealHealthCondition: 2
   requiredRecipeTiers: 
+  requestCondition: 0
+  missedRequests: 
+  recipeFatigued: 0
+  minIngredientAppeal: -1
+  maxIngredientAppeal: -1
+  delightFull: 0
+  redServed: 2
   minServedMealDelight: -1
   maxServedMealDelight: -1
   requiredFlags: []
@@ -39,7 +47,8 @@ MonoBehaviour:
   lines:
   - lineOrder: 0
     speakerId: U003
-    textTemplate: The dish matches the order, but it wasn't a good fit for me today.
+    textTemplate: It matched the order, but some of those ingredients are the ones
+      I'm trying to cook without.
     claim: {fileID: 0}
     portrait: {fileID: 0}
     backgroundImage: {fileID: 0}
@@ -47,11 +56,20 @@ MonoBehaviour:
     voiceOver: {fileID: 0}
   - lineOrder: 1
     speakerId: U003
-    textTemplate: Could we try a different combination of ingredients next time?
+    textTemplate: Next time, could the plate lean on whole plant foods instead?
     claim: {fileID: 0}
     portrait: {fileID: 0}
     backgroundImage: {fileID: 0}
     emotion: Concerned
+    voiceOver: {fileID: 0}
+  - lineOrder: 2
+    speakerId: Blue Zone Guide
+    textTemplate: '{customerName}''s health went down with this dish. Yellow and
+      red foods can cost health; when you can, put green foods in those slots instead.'
+    claim: {fileID: 0}
+    portrait: {fileID: 0}
+    backgroundImage: {fileID: 0}
+    emotion: 
     voiceOver: {fileID: 0}
   approvalStatus: 0
   reviewNotes: Prototype narrative based on capstone character themes; pending supervisor

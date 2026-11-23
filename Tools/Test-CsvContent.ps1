@@ -110,6 +110,14 @@ foreach ($row in (Read-ContentCsv 'DialogueSequences')) {
     if ($row.customer_id -and !$sequence.customer) { throw 'Missing dialogue customer' }
     $sequence.recipeBuildCondition=[RecipeBuildCondition]$row.recipe_build_condition
     if ($row.meal_health_condition) { $sequence.mealHealthCondition=[MealHealthCondition]$row.meal_health_condition }
+    if ($row.PSObject.Properties['request_condition'] -and $row.request_condition) { $sequence.requestCondition=[RequestCondition]$row.request_condition }
+    if ($row.PSObject.Properties['missed_request'] -and $row.missed_request) { $sequence.missedRequests=@($row.missed_request.Split('|') | Where-Object { $_ } | ForEach-Object { [CravingTag]$_ }) }
+    if ($row.PSObject.Properties['recipe_fatigued'] -and $row.recipe_fatigued) { $sequence.recipeFatigued=[DialogueSwitch]$row.recipe_fatigued }
+    if ($row.PSObject.Properties['min_ingredient_appeal'] -and $row.min_ingredient_appeal) { $sequence.minIngredientAppeal=[float]$row.min_ingredient_appeal }
+    if ($row.PSObject.Properties['max_ingredient_appeal'] -and $row.max_ingredient_appeal) { $sequence.maxIngredientAppeal=[float]$row.max_ingredient_appeal }
+    if ($row.PSObject.Properties['delight_full'] -and $row.delight_full) { $sequence.delightFull=[DialogueSwitch]$row.delight_full }
+    if ($row.PSObject.Properties['red_served'] -and $row.red_served) { $sequence.redServed=[DialogueSwitch]$row.red_served }
+    if ($row.PSObject.Properties['variant_of'] -and $row.variant_of) { $sequence.variantOf=$row.variant_of }
     foreach ($mapping in @(@('min_day','minDay'),@('max_day','maxDay'),@('min_customer_health','minCustomerHealth'),
         @('max_customer_health','maxCustomerHealth'),@('min_customer_delight','minCustomerDelight'),
         @('max_customer_delight','maxCustomerDelight'),@('min_served_meal_delight','minServedMealDelight'),
@@ -158,7 +166,27 @@ foreach ($customer in $customerItems) {
     $context.hasServedMeal=$true; $context.servedRecipeBuilt=$true; $context.servedMealHealthDelta=5; $context.servedMealDelight=3
     $context.servedRecipe=$recipeDb.GetById('R001')
     $reaction=$selector.FindNext([DialogueTrigger]::AfterService,$context)
-    if (!$reaction -or !$reaction.id.EndsWith('_AFTER_OKAY')) { throw 'Successful +5 health/+3 delight selected wrong reaction' }
+    # Variants (_V2) of the same moment tie on priority and alternate.
+    if (!$reaction -or $reaction.id -notmatch '_AFTER_OKAY(_V2)?$') { throw 'Successful +5 health/+3 delight selected wrong reaction' }
+    # Requests (2026-11-22): the closing reaction also reflects how many of the guest's requests the dish met.
+    foreach ($case in @(@(2,2,'_AFTER_OKAY_REQ_ALL'),@(2,1,'_AFTER_OKAY_REQ_SOME'),@(1,0,'_AFTER_OKAY_REQ_NONE'),@(0,0,'_AFTER_OKAY(_V2)?$'))) {
+        $context.requestCount=$case[0]; $context.requestsMet=$case[1]
+        $picked=$selector.FindNext([DialogueTrigger]::AfterService,$context)
+        if (!$picked -or $picked.id -notmatch $case[2]) { throw "Request reaction wrong for $($customer.id): $($case[0]) asked, $($case[1]) met -> $($picked.id)" }
+    }
+    $context.servedMealDelight=9; $context.requestCount=2; $context.requestsMet=0
+    if ($selector.FindNext([DialogueTrigger]::AfterService,$context).id -notmatch '_AFTER_HIGH_REQ_NONE$') { throw "High-delight missed request got the wrong reaction: $($customer.id)" }
+    $context.servedMealDelight=3; $context.requestCount=-1; $context.requestsMet=-1
+    # Reason ladder (2026-11-22): served too often > missed Comfort > requests > low appeal > delight full > plain.
+    $context.recipeFatigued=$true; $context.requestCount=1; $context.requestsMet=0
+    if ($selector.FindNext([DialogueTrigger]::AfterService,$context).id -notmatch '_AFTER_FATIGUED$') { throw "Recipe fatigue did not win: $($customer.id)" }
+    $context.recipeFatigued=$false; $context.requestCount=0; $context.requestsMet=0; $context.ingredientAppeal=4
+    if ($selector.FindNext([DialogueTrigger]::AfterService,$context).id -notmatch '_AFTER_LOW_APPEAL$') { throw "Low appeal reaction missing: $($customer.id)" }
+    $context.ingredientAppeal=6
+    if ($selector.FindNext([DialogueTrigger]::AfterService,$context).id -match '_AFTER_LOW_APPEAL$') { throw "Appeal 6 counted as low (cutoff is 4.5): $($customer.id)" }
+    $context.ingredientAppeal=8; $context.delightFull=$true; $context.servedMealDelight=0
+    if ($selector.FindNext([DialogueTrigger]::AfterService,$context).id -notmatch '_AFTER_DELIGHT_FULL$') { throw "Full-delight reaction missing: $($customer.id)" }
+    $context.delightFull=$false; $context.servedMealDelight=3; $context.ingredientAppeal=-1; $context.requestCount=-1; $context.requestsMet=-1
     $context.servedRecipeBuilt=$false; $context.servedMealDelight=-30; $context.servedMealHealthDelta=20
     if (!$selector.FindNext([DialogueTrigger]::AfterService,$context).id.EndsWith('_AFTER_POOR')) { throw 'Failed recipe got positive reaction' }
     $context.servedMealDelight=0
@@ -171,14 +199,22 @@ $sorting=[FoodSortingService]::new($state,$foodDb)
 foreach ($customer in $customerItems) {
     $context=New-Object DialogueRuntimeContext
     $context.currentDay=[Math]::Max(3,$customer.unlockDay); $context.customerId=$customer.id
-    foreach ($trigger in @([DialogueTrigger]::RushAfterService,[DialogueTrigger]::CrashArrival)) {
-        $special=$selector.FindNext($trigger,$context)
-        if (!$special -or $special.customer.id -ne $customer.id -or !$special.lines.Count) {
-            throw "Missing authored special dialogue: $($customer.id) / $trigger"
-        }
-    }
+    $special=$selector.FindNext([DialogueTrigger]::CrashArrival,$context)
+    if (!$special -or $special.customer.id -ne $customer.id -or !$special.lines.Count) { throw "Missing authored crash greeting: $($customer.id)" }
+    # The rush is a rung of the closing ladder (red food served), not a separate trigger (2026-11-22).
+    $context.hasServedMeal=$true; $context.servedRecipeBuilt=$true; $context.redServed=$true; $context.servedMealHealthDelta=2
+    $context.servedRecipe=$recipeDb.GetById('R001'); $context.servedMealDelight=3; $context.requestCount=0; $context.requestsMet=0
+    $rush=$selector.FindNext([DialogueTrigger]::AfterService,$context)
+    if (!$rush -or $rush.id -notmatch '_RUSH$') { throw "Missing rush reaction: $($customer.id)" }
+    $context.servedMealHealthDelta=-2
+    if ($selector.FindNext([DialogueTrigger]::AfterService,$context).id -notmatch '_RUSH_HEALTH_LOSS$') { throw "Missing rush + health-down reaction: $($customer.id)" }
 }
-Write-Output 'PASS: each customer has authored, character-specific rush and crash conversations.'
+Write-Output 'PASS: each customer has authored crash greetings and rush reactions (with and without health loss).'
+$fancyRecipe=$recipeItems | Where-Object { $_.tier -eq [RecipeTier]::Premium -or $_.tier -eq [RecipeTier]::Luxury } | Select-Object -First 1
+# No Premium/Luxury recipe exists yet (2026-11-22); a stand-in keeps the fancy rungs covered.
+if (!$fancyRecipe) { $fancyRecipe=New-Object RecipeData; $fancyRecipe.id='FANCY_TEST'; $fancyRecipe.displayName='Test fancy dish'; $fancyRecipe.tier=[RecipeTier]::Premium }
+$outcomeTable=Join-Path (Split-Path $PSScriptRoot -Parent) 'Data/DialogueOutcomes.csv'
+Write-Output ([DialogueOutcomeChecks]::Run($selector,$dialogueDb,[string[]]@($customerItems | Where-Object { $_.customerType -ne [CustomerType]::VisitingChef } | ForEach-Object { $_.id }),$recipeDb.GetById('R001'),$fancyRecipe,6,$outcomeTable))
 $loop=[GameLoop]::new($buy,$meals,$days,$visits,$scheduler,$sorting)
 for ($day=1; $day -le 6; $day++) {
     $cart=[System.Collections.Generic.List[CartEntry]]::new()

@@ -77,3 +77,6 @@ All eight were visually inspected and verified as square 1254x1254 RGBA images w
 
 ### Event art import follow-up — 2026-11-20
 The eight new event PNGs already had Unity metadata but the live EventDatabase still had blank image/thumbnail references. A disposable Unity import verified all 13 event illustrations and thumbnails. Filled only those eight missing image/thumbnail pairs with their existing PNG GUIDs; preserved all event text, effects and concurrent data edits. CSV paths remain the source of truth. No live Play Mode news interaction was performed in this pass.
+
+### Event Web compression verified — 2026-11-22
+All 13 event sprites have 1024 Web overrides with automatic compression, quality 75. Original PNGs, GUIDs and CSV paths remain unchanged. Release report shows 1 MiB per event instead of 6 MiB. Disposable WebGL-target captures rendered all 13, passed newspaper/Codex/tower/close checks, and expanded Harvest/Festival were visually reviewed. No event rules or dialogue edits. See SubmissionCleanup_20261120.md for measured build sizes and browser-testing limits.

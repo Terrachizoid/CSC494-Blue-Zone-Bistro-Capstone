@@ -74,6 +74,13 @@ public class DialogueHistoryState
         record.day = currentDay;
     }
 
+    // The day this sequence last played, or -1 (used to avoid playing the same variant twice in a row).
+    public int LastPlayedDay(string dialogueId)
+    {
+        DialogueLastPlayedRecord record = FindRecord(dialogueId);
+        return record != null ? record.day : -1;
+    }
+
     public void Reset()
     {
         completedOnceIds.Clear();

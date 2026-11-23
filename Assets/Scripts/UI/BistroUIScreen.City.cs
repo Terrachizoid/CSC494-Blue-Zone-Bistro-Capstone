@@ -13,7 +13,7 @@ public partial class BistroUIScreen
         viewport.gameObject.AddComponent<RectMask2D>();
         var world=BistroWidgets.Box(viewport,"City world",theme.panel,Vector2.zero,Vector2.one);
         world.sizeDelta=new Vector2(700,500);
-        if(theme.cityBackground!=null){world.GetComponent<Image>().sprite=theme.cityBackground;world.GetComponent<Image>().color=Color.white;}
+        if(theme.cityBackground!=null){world.GetComponent<Image>().sprite=theme.cityBackground;world.GetComponent<Image>().color=Color.white;GradeScenery(world.GetComponent<Image>());}
         else
         {
             // Low-contrast streets and districts remain replaceable with a single city sprite.
