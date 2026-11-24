@@ -58,6 +58,7 @@ public partial class BistroUIScreen
         person.GetComponent<Image>().raycastTarget=false;
         CharacterStage(person); // Expressions, motion and fallbacks: BistroUIScreen.Characters.cs.
         GradeScenery(BistroShelfStyle.Artwork(scene,"Service counter",theme.serviceCounter,Vector2.zero,new Vector2(1,.30f),Color.white).GetComponent<Image>());
+        ResultCard(scene); // The dish result beside the guest, through the reaction dialogue: BistroUIScreen.ResultCard.cs.
         if(playback!=null && playback.IsActive)
         {
             var speaker=game.Queries.GetCustomer(playback.CurrentLine.speakerId);
@@ -71,7 +72,10 @@ public partial class BistroUIScreen
         var customer=game.Queries.GetCustomer(game.Loop.Service.CurrentCustomerId);
         if(game.Loop.Service.awaitingDishAcknowledgement)
         {
-            DialoguePanel(customer?.displayName??"Your guest",DishText(game.Loop.Service.lastDishResult),AfterDishLabel(),()=>{ResetMeal();game.Loop.ContinueAfterDish();});return;
+            // The result card shows the dish, so the guest's reaction follows at once (Owen, 2026-11-23). A lesson that
+            // holds Continue (the first-meal feedback) keeps this short panel up until it has been read.
+            if(game.Loop.Tutorials?.IsText!=true && game.Loop.ContinueAfterDish()){ResetMeal();dirty=true;return;}
+            DialoguePanel(customer?.displayName??"Your guest","Here is how the dish went.",AfterDishLabel(),()=>{ResetMeal();game.Loop.ContinueAfterDish();});return;
         }
         // Header, left-aligned in two bands: who the guest is (name, request, stats), then the dish being built.
         var muted=new Color(.30f,.36f,.33f);
@@ -214,7 +218,7 @@ public partial class BistroUIScreen
         RemoveServing(key);AddServing(toIndex,foodId);
     }
     // Pre-serve review shows only what a cook can see: whether the plate matches the recipe and what is on it.
-    // Health, delight, popularity, payment, tips and cost are revealed after serving (DishText).
+    // Health, delight, popularity, payment, tips and cost are revealed after serving, on the result card (BistroUIScreen.ResultCard.cs).
     private string ReviewText(ServeResult r)=>
         (r.recipeBuilt?"The plate matches the recipe.":"The plate does not match the recipe. A mismatched dish pays less, earns no tip and disappoints the guest.")+
         (r.recipeWarnings.Length==0?"":"\n\n"+string.Join("\n",r.recipeWarnings))+

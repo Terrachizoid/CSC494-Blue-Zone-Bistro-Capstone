@@ -82,7 +82,7 @@ public partial class BistroUIScreen
         var state = game.State;
         if (soundDay >= 0 && state.currentDay != soundDay) BistroAudio.Play("day.start");
         soundDay = state.currentDay;
-        bool dish = game.Loop.Phase == GamePhase.Service && game.Loop.Service.awaitingDishAcknowledgement;
+        bool dish = ResultCardVisible(); // The card stays up through the reaction (2026-11-23).
         bool dayResults = game.Loop.Phase == GamePhase.Results;
         string resultCue = ResultSoundCue(soundDishShown, dish, soundDayResultsShown, dayResults);
         if (resultCue != null) BistroAudio.Play(resultCue);
